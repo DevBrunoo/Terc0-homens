@@ -80,14 +80,14 @@ function navButton(item,cls='nav-button'){
 function renderShell(content){
  const themes=[{id:'light',label:'Claro',ico:'sun'},{id:'dark',label:'Escuro',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
  const themeControl=`<div class="appearance-control" role="group" aria-label="Escolher tema">${themes.map(t=>`<button type="button" class="theme-option ${state.theme===t.id?'selected':''}" data-action="set-theme" data-theme="${t.id}" title="Tema ${t.label}" aria-label="Tema ${t.label}" aria-pressed="${state.theme===t.id}">${icon(t.ico)}<span>${t.label}</span></button>`).join('')}</div>`;
- const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
+ const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
  return `<div class="app-shell">
   <a href="#main-content" class="skip-link">Ir para o conteúdo</a>
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — início"><span class="logo-mark" aria-hidden="true">✝</span><span class="logo-type">cuiúdo<span class="logo-dot">.</span></span></a>
       <nav class="desktop-nav" aria-label="Navegação principal">${navItems.slice(0,4).map(x=>navButton(x)).join('')}<button type="button" class="nav-more ${state.mobileMore?'active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}">Mais ${icon('arrow')}</button></nav>
-      <div class="header-tools">${themeControl}<button type="button" class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div>
+      <div class="header-tools"><button type="button" class="compact-menu" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}" title="Abrir menu">${icon('book')}<span>Menu</span></button>${themeControl}<button type="button" class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div>
     </div>
   </header>
   <main class="main" id="main-content">${content}

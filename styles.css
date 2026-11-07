@@ -6,6 +6,7 @@
  --font:Arial,Helvetica,sans-serif;--radius:11px;
  font-family:var(--font);font-synthesis:none;color-scheme:light
 }
+:root[data-theme="light"]{color-scheme:light}
 :root[data-theme="dark"]{
  --bg:#121212;--surface:#191919;--muted-surface:#181818;--surface-2:#242424;
  --ink:#f3f3f3;--subink:#b4b4b4;--dim:#999;--line:#303030;--hover:#515151;
@@ -286,3 +287,10 @@ textarea::placeholder{color:var(--dim)}
  .btn{padding:11px 12px;font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* Navegação compacta em tablets: nenhuma opção escondida */
+.compact-menu{display:none;align-items:center;justify-content:center;gap:7px;padding:9px 10px;min-height:39px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:600 11px Arial,Helvetica,sans-serif}
+.compact-menu svg{width:17px;height:17px}
+@media(max-width:990px) and (min-width:761px){.desktop-nav{display:none}.compact-menu{display:inline-flex}.header-tools{margin-left:auto}.nav-button:nth-child(3){display:inline-flex}}
+@media(max-width:760px){.compact-menu{display:none}}
