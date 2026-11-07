@@ -50,7 +50,7 @@ assert.match(css,/--bg:#fff/);
 assert.doesNotMatch(css,/Cormorant|DM Sans|Marcellus/);
 assert.match(css,/\.mobile-nav/);
 assert.match(css,/\.appearance-control/);
-assert.match(html,/designVersion==='white-arial-v1'/);
+assert.match(html,/designVersion==='combat-v9'/);
 assert.match(app,/Douay-Rheims/);
 assert.doesNotMatch(app,/Trecho bíblico em tradução livre/);
 assert.ok(devotional.oracoesDevocionario.length>=18);
