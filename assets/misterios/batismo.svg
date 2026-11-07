@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" role="img" aria-label="Arte simbólica do mistério batismo">
-<defs><radialGradient id="bg"><stop stop-color="#402d28"/><stop offset=".75" stop-color="#171b1c"/><stop offset="1" stop-color="#101415"/></radialGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c89e72"/><stop offset="1" stop-color="#94784c"/></linearGradient></defs>
-<rect width="400" height="480" fill="url(#bg)"/>
-<path d="M51 411V170C51 69 117 32 200 32S349 69 349 170v241" fill="none" stroke="#c89e72" opacity=".62" stroke-width="2"/>
-<path d="M67 399V174C67 86 124 49 200 49S333 86 333 174v225" fill="none" stroke="#c89e72" opacity=".23" stroke-width="1.5"/>
-<circle cx="200" cy="242" r="108" fill="none" stroke="#c89e72" stroke-width="1" opacity=".18"/>
-<circle cx="200" cy="242" r="144" fill="none" stroke="#c89e72" stroke-width="1" opacity=".17" stroke-dasharray="4 11"/>
-<g fill="none" stroke="url(#metal)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M109 275q23-28 46 0t46 0 46 0 46 0M109 307q23-28 46 0t46 0 46 0 46 0M200 113v89m-23-26 23 26 23-26"/></g>
-<g font-family="Georgia,serif" fill="#c89e72" opacity=".82" text-anchor="middle"><text x="200" y="385" font-size="21" letter-spacing="7">✦ 16 ✦</text></g>
-<path d="M118 405h164" stroke="#c89e72" stroke-width="1.5" opacity=".65"/><path d="M118 419h164" stroke="#c89e72" stroke-width="1" opacity=".22"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" role="img" aria-label="Arte minimalista do mistério batismo"><rect width="400" height="480" rx="18" fill="#ffffff"/><rect x="22" y="22" width="356" height="436" rx="10" fill="#fafafa" stroke="#e8e8e8" stroke-width="2"/><circle cx="200" cy="220" r="127" fill="#ffffff" stroke="#eaeaea" stroke-width="2"/><g fill="none" stroke="#383838" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M109 275q23-28 46 0t46 0 46 0 46 0M109 307q23-28 46 0t46 0 46 0 46 0M200 113v89m-23-26 23 26 23-26"/></g><path d="M100 385h200" stroke="#dedede" stroke-width="2"/><text x="200" y="420" text-anchor="middle" fill="#777" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" letter-spacing="2">MISTÉRIO 16</text></svg>
