@@ -134,3 +134,12 @@ A linguagem confronta a desculpa e os hábitos, não a dignidade das pessoas. N�
 Referências funcionais: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/design-principles/), [Material Design 3](https://m3.material.io/components/app-bars/), [Hallow](https://help.hallow.com/pt-BR/articles/5834554-o-que-e-o-hallow). A direção estética principal vem dos prints enviados pelo criador.
 
 **Persistência:** escolha manual de tema Claro/Escuro/Auto agora é respeitada nas recargas. O escuro é aplicado somente na primeira migração para v9.
+
+
+## Correção crítica: imagens do feed não apareciam (v10)
+
+Em 7/11/2026, as **14 imagens de fonte** do feed foram baixadas, redimensionadas e enviadas fisicamente para `assets/feed/*.webp` via GitHub Actions. **Nenhuma imagem principal depende agora do CDN do Wikimedia Commons ou Unsplash** no momento em que a página carrega. O código `feed-data.js` aponta exclusivamente para caminhos relativos locais, adequados ao GitHub Pages no subdiretório `/Terc0-homens/`.
+
+O Service Worker `cuiudo-local-art-v10` armazena essas imagens após instalar, invalidando o cache anterior e permitindo visualização offline. Cada card possui uma arte SVG local de segurança se algum arquivo falhar. O comando `npm test` confirma a existência e a assinatura WebP de todos os 14 arquivos.
+
+Para importar novos trabalhos legais do Wikimedia / Unsplash no futuro, altere o script `scripts/cache_feed_art.py` e execute o fluxo `Incorporar imagens locais ao CUIÚDO` no GitHub Actions.

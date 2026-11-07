@@ -26,7 +26,7 @@ function combatPoster(p,i){
  const art=feedArtwork[p.art];
  return `<article class="poster-card ${i===0?'wide':''}" data-feed-id="${escapeHtml(p.id)}">
    <button type="button" class="poster-open" data-action="combat-open" data-id="${p.id}" aria-label="Abrir reflexão ${escapeHtml(p.title)}">
-    <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="this.hidden=true" />
+    <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}" />
     <span class="poster-shade" aria-hidden="true"></span>
     <span class="poster-topline"><span class="poster-label">${escapeHtml(p.kicker)}</span><span class="poster-index">${String(i+1).padStart(2,'0')}</span></span>
     <strong class="poster-words">${escapeHtml(p.title)}</strong>
@@ -42,7 +42,7 @@ function combatPostDetail(p){
  return `<div class="feed-overlay" data-action="combat-close" role="presentation">
    <div class="feed-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(p.title)}">
     <button type="button" data-action="combat-close" class="feed-close" aria-label="Fechar reflexão">×</button>
-    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="this.hidden=true" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
+    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
     <div class="feed-modal-content">
       <span class="feed-modal-kicker">${escapeHtml(p.kicker)} • CUIÚDO</span>
       <h2>SEM DESCULPA. COM FÉ E ATITUDE.</h2>
@@ -64,7 +64,7 @@ function combatHome(){
  const picks=feedPosts.filter(combatMatches),selected=feedPosts.find(p=>p.id===state.feedOpen);
  const lead=feedArtwork['miguel-reni'],daily=feedPosts[(new Date().getDate()+new Date().getDay())%feedPosts.length];
  return `<section class="cuiudo-hero">
-  <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="this.hidden=true">
+  <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}">
   <div class="cuiudo-hero-content">
     <div class="cuiudo-hero-kicker"><span class="cuiudo-star">✠</span> FÉ EM DEUS E PÉ NA TÁBUA</div>
     <h1>TEM QUE SER<em>CUIÚDO.</em></h1>
@@ -97,7 +97,7 @@ function combatBible(){
 const combatOldDevotion=devocionario;
 devocionario=function(){
  const a=feedArtwork['miguel-reni'];
- return `<section class="sao-miguel-cover"><img src="${escapeHtml(a.url)}" alt="São Miguel Arcanjo, pintura de Guido Reni" onerror="this.hidden=true"><div><span>COMBATE ESPIRITUAL</span><h1>SÃO MIGUEL.<br>DEFENDEI-NOS NO COMBATE.</h1><p>Firmeza, oração e conversão. Quem vence o mal é Cristo. São Miguel intercede por nós.</p><a class="btn btn-primary" href="#oracao-miguel">REZAR A ORAÇÃO</a></div></section>`+combatOldDevotion();
+ return `<section class="sao-miguel-cover"><img src="${escapeHtml(a.url)}" alt="São Miguel Arcanjo, pintura de Guido Reni" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}"><div><span>COMBATE ESPIRITUAL</span><h1>SÃO MIGUEL.<br>DEFENDEI-NOS NO COMBATE.</h1><p>Firmeza, oração e conversão. Quem vence o mal é Cristo. São Miguel intercede por nós.</p><a class="btn btn-primary" href="#oracao-miguel">REZAR A ORAÇÃO</a></div></section>`+combatOldDevotion();
 };
 renderShell=function(content){
  const themeItems=[['dark','Escuro','moon'],['light','Claro','sun'],['system','Auto','rotate']];
