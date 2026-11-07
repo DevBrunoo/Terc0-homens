@@ -3,393 +3,309 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f6f2" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="color-scheme" content="dark light" />
-  <meta name="description" content="CUIÚDO: fé, coragem e ação. Terço diário bilíngue, Bíblia católica, temas claro/escuro, ladainha, santos e anjos, exame de consciência e desafios para viver a fé católica com atitudes." />
+  <meta name="description" content="CUIÚDO: fé que se vive. Terço diário, Escritura em português e inglês, santos e anjos, temas claro e escuro." />
   <meta property="og:title" content="CUIÚDO — Fé, Coragem e Ação" />
   <meta property="og:description" content="Reza. Levanta. Faz acontecer." />
   <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
   <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
   <script>
-  try{
-   const s=JSON.parse(localStorage.getItem('cuiudo-v1')||'{}');
-   const p=['light','dark','system'].includes(s.theme)?s.theme:'system';
-   const theme=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;
-   document.documentElement.dataset.theme=theme;
-   document.querySelector('meta[name="theme-color"]').content=theme==='dark'?'#101714':'#f6f6f2';
-  }catch{document.documentElement.dataset.theme='light';}
+  try {
+    const saved=JSON.parse(localStorage.getItem('cuiudo-v1')||'{}');
+    const preference=saved.designVersion==='white-arial-v1'&&['light','dark','system'].includes(saved.theme)?saved.theme:'light';
+    const active=preference==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):preference;
+    document.documentElement.dataset.theme=active;
+    document.querySelector('meta[name="theme-color"]').content=active==='light'?'#ffffff':'#111111';
+  } catch { document.documentElement.dataset.theme='light'; }
   </script>
   <style>
-
-/* CUIÚDO v4 | sistema visual editorial — compatível com todas as páginas */
-:root,
-:root[data-theme="light"] {
- --bg:#f6f6f2;--surface:#ffffff;--surface-2:#f0f3ed;--surface-3:#e8ede5;
- --nav:#fbfcf9;--text:#22312b;--heading:#182721;--muted:#65746c;
- --line:#dfe6df;--line-strong:#cdd9cd;--accent:#315943;--accent-hover:#244934;
- --accent-text:#ffffff;--gold:#916f3f;--gold-soft:#f6eee2;--wine:#8b4b48;
- --soft-shadow:0 10px 35px rgba(21,49,33,.045);
- --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
- --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
- color-scheme:light;
+/* CUIÚDO • Sistema visual minimalista / Arial / Branco */
+:root{
+ --bg:#fff;--surface:#fff;--muted-surface:#fafafa;--surface-2:#f5f5f5;
+ --ink:#171717;--subink:#666;--dim:#858585;--line:#e9e9e9;--hover:#ccc;
+ --accent:#171717;--on-accent:#fff;--warm:#886d51;
+ --font:Arial,Helvetica,sans-serif;--radius:11px;
+ font-family:var(--font);font-synthesis:none;color-scheme:light
 }
-:root[data-theme="dark"] {
- --bg:#101714;--surface:#18211d;--surface-2:#202c25;--surface-3:#2a392e;
- --nav:#131c17;--text:#e5ece5;--heading:#f6f7f2;--muted:#a7b8ab;
- --line:#354539;--line-strong:#4a5f4b;--accent:#b6d1af;--accent-hover:#d4e4cd;
- --accent-text:#15261c;--gold:#dbbb81;--gold-soft:#393327;--wine:#ce9992;
- --soft-shadow:0 14px 42px rgba(0,0,0,.12);
- color-scheme:dark;
+:root[data-theme="dark"]{
+ --bg:#121212;--surface:#191919;--muted-surface:#181818;--surface-2:#242424;
+ --ink:#f3f3f3;--subink:#b4b4b4;--dim:#999;--line:#303030;--hover:#515151;
+ --accent:#eee;--on-accent:#171717;--warm:#ceac8a;color-scheme:dark
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;min-width:320px;background:var(--bg);color:var(--text);font:14px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;min-height:100vh;min-width:320px;background:var(--bg);color:var(--ink);font:400 clamp(14px,1.15vw,16px)/1.65 var(--font);-webkit-font-smoothing:antialiased}
 button,input,textarea{font:inherit}
 button{cursor:pointer}
-button:disabled{cursor:not-allowed;opacity:.48}
-button,a,summary,input,textarea{outline-offset:3px}
-:focus-visible{outline:3px solid var(--gold)}
-a{color:var(--accent)}
-::selection{background:var(--gold);color:#fff}
-.icon{height:18px;width:18px;flex-shrink:0}
-.app-shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
-.main-column{min-width:0}
-.sidebar{height:100vh;position:sticky;top:0;z-index:20;background:var(--nav);border-right:1px solid var(--line);padding:32px 17px 21px;display:flex;flex-direction:column;min-width:0}
-.logo{display:flex;align-items:center;gap:13px;padding:0 14px;text-decoration:none;color:var(--heading)}
-.logo-mark{width:44px;height:44px;display:grid;place-items:center;border-radius:15px;background:var(--accent);color:var(--accent-text);font:29px var(--serif);box-shadow:0 7px 20px #172d201a}
-.logo-type{font:600 31px/1 var(--serif);letter-spacing:-.06em}
-.logo-type small{display:block;font:700 9px/1.8 var(--sans);letter-spacing:.15em;color:var(--muted);margin-top:1px}
-.sidebar-caption{color:var(--muted);font-size:11px;line-height:1.7;padding:18px 14px 25px;border-bottom:1px solid var(--line);margin-bottom:17px}
-.nav{display:flex;flex-direction:column;gap:20px}
-.nav-group{display:flex;flex-direction:column;gap:3px}
-.sidebar-label{padding:0 14px 7px;color:var(--muted);font:800 9px/1.5 var(--sans);letter-spacing:.14em}
-.nav-button,.more-nav-button{border:0;display:flex;align-items:center;gap:12px;text-align:left;background:transparent;color:var(--muted);border-radius:10px;font-size:12px;font-weight:650;min-height:44px;padding:11px 13px;text-decoration:none;transition:background .18s,color .18s}
-.nav-button svg,.more-nav-button svg{width:18px;height:18px}
-.nav-button:hover,.more-nav-button:hover{color:var(--heading);background:var(--surface-2)}
-.nav-button[aria-current="page"],.more-nav-button[aria-current="page"]{background:var(--surface-2);color:var(--accent);font-weight:800}
-.nav-button[aria-current="page"]:before{content:"";position:absolute;transform:translateX(-13px);width:3px;height:22px;border-radius:4px;background:var(--accent)}
-.sidebar-bottom{margin-top:auto;padding:18px 14px 0;border-top:1px solid var(--line)}
-.sidebar-bottom-icon{font-size:21px;color:var(--gold);margin-bottom:8px}
-.sidebar-bottom .motto{font:500 21px/1.15 var(--serif);color:var(--heading)}
-.sidebar-bottom .motto strong{font-weight:650;color:var(--accent)}
-.sidebar-bottom small{display:block;margin-top:17px;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.1em}
-.topbar{height:88px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:0 clamp(24px,3.4vw,62px);background:var(--bg)}
-.topbar-context{display:flex;align-items:center;gap:13px;min-width:0}
-.topbar-cross{font:27px var(--serif);color:var(--gold);display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:10px}
-.topbar-context>div{display:flex;flex-direction:column;min-width:0}
-.topbar-eyebrow{font-size:10px;font-weight:800;color:var(--heading);letter-spacing:.06em}
-.topbar-date{text-transform:capitalize;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.topbar-actions{display:flex;align-items:center;gap:11px}
-.appearance-control{display:flex;align-items:center;gap:3px;background:var(--surface-2);border:1px solid var(--line);padding:4px;border-radius:13px}
-.theme-option{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 9px;border:0;border-radius:9px;background:transparent;color:var(--muted);min-height:33px;font-weight:700;font-size:11px;transition:.15s}
-.theme-option .icon{width:14px;height:14px}
-.theme-option.selected{background:var(--surface);color:var(--heading);box-shadow:0 1px 7px #00000013}
-.theme-option:hover{color:var(--heading)}
-.mode-switch{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:11px;min-height:42px;padding:9px 11px;font-size:11px;font-weight:700;white-space:nowrap}
-.mode-switch .icon{width:15px;height:15px}
-.mode-switch.on{color:var(--wine);border-color:var(--line-strong)}
-.main{max-width:1370px;padding:clamp(24px,3vw,42px) clamp(24px,3.4vw,62px) 46px;margin:auto;min-height:calc(100vh - 88px)}
-.site-footer{border-top:1px solid var(--line);margin-top:54px;padding-top:23px;display:flex;align-items:flex-start;justify-content:space-between;gap:25px}
-.site-footer>span{color:var(--gold);font-size:10px;letter-spacing:.1em;font-weight:800;white-space:nowrap}
-.site-footer b{font-weight:400;color:var(--muted)}
-.site-footer p{color:var(--muted);font-size:10px;line-height:1.7;max-width:600px;margin:0}
-.page-title{font:600 clamp(38px,4.4vw,58px)/.99 var(--serif);letter-spacing:-.03em;color:var(--heading);margin:0 0 12px}
-.page-desc{color:var(--muted);font-size:13px;line-height:1.85;max-width:750px;margin:0 0 24px}
-.section-kicker,.eyebrow,.card-meta{font:800 10px/1.45 var(--sans);letter-spacing:.115em;color:var(--gold);text-transform:uppercase}
-.eyebrow{display:flex;align-items:center;gap:9px}
-.eyebrow:before{content:"";width:18px;height:1px;background:var(--gold)}
-.meta-divider{color:var(--line-strong);padding:0 5px}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:32px 0 16px}
-.section-head h2{font:650 29px/1.15 var(--serif);letter-spacing:-.025em;color:var(--heading);margin:0}
-.section-head>span{font-size:12px;color:var(--muted)}
-.section-head .link-button{flex-shrink:0}
-.text-link,.link-button{display:inline-flex;align-items:center;gap:9px;border:0;background:transparent;padding:6px 0;color:var(--accent);font-size:12px;font-weight:800;text-decoration:none}
-.text-link svg,.link-button svg{width:16px;height:16px}
+button:disabled{cursor:not-allowed;opacity:.42}
+a{color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+::selection{background:#dddddd;color:#111}
+.icon{width:17px;height:17px;flex-shrink:0}
+.skip-link{position:absolute;left:-9999px;padding:12px 16px;background:var(--accent);color:var(--on-accent);z-index:100}
+.skip-link:focus{left:16px;top:16px}
+.app-shell{min-height:100vh}
+.site-header{height:76px;position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.header-inner{display:flex;align-items:center;gap:clamp(18px,2.5vw,38px);height:100%;max-width:1270px;padding:0 clamp(18px,3vw,40px);margin:auto}
+.logo{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;text-decoration:none;color:var(--ink);flex-shrink:0}
+.logo-mark{width:29px;height:29px;display:grid;place-items:center;border-radius:50%;border:1.5px solid var(--ink);font:700 21px/1 var(--font)}
+.logo-type{font:800 25px/1 var(--font);letter-spacing:-.065em}
+.logo-dot{color:var(--warm)}
+.desktop-nav{display:flex;gap:3px;justify-content:center;align-items:center;flex:1;min-width:0}
+.nav-button,.nav-more{border:0;background:transparent;color:var(--subink);display:inline-flex;align-items:center;justify-content:center;gap:5px;border-radius:7px;font:600 12px/1.4 var(--font);min-height:40px;padding:9px 11px;white-space:nowrap}
+.nav-button svg{display:none}
+.nav-more svg{width:13px;height:13px;transform:rotate(90deg)}
+.nav-button:hover,.nav-more:hover,.nav-more.active,.nav-button[aria-current="page"]{background:var(--surface-2);color:var(--ink)}
+.header-tools{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.appearance-control{display:flex;align-items:center;gap:2px;padding:3px;background:var(--surface);border:1px solid var(--line);border-radius:9px}
+.theme-option{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:0;background:transparent;border-radius:6px;min-width:34px;min-height:32px;padding:7px 8px;color:var(--subink);font:600 11px var(--font)}
+.theme-option .icon{height:14px;width:14px}
+.theme-option.selected,.theme-option:hover{background:var(--surface-2);color:var(--ink)}
+.mode-switch{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--subink);min-height:39px;padding:9px 11px;font:600 11px var(--font);white-space:nowrap}
+.mode-switch.on{color:var(--ink)}
+.mode-switch svg{height:15px;width:15px}
+.main{max-width:1160px;margin:auto;padding:clamp(26px,4vw,55px) clamp(19px,3.4vw,38px) 50px}
+.site-footer{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-top:75px;padding:23px 0;border-top:1px solid var(--line)}
+.site-footer>span{font-size:11px;font-weight:700;color:var(--subink);white-space:nowrap}
+.site-footer p{font-size:11px;color:var(--dim);line-height:1.7;max-width:520px;margin:0}
+.kicker,.card-meta,.eyebrow{font:700 10px/1.4 var(--font);letter-spacing:.105em;color:var(--subink);text-transform:uppercase}
+.kicker-mark{color:var(--warm);font-size:14px;margin-right:6px}
+.home-hero{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(245px,.75fr);gap:clamp(28px,5vw,64px);border-bottom:1px solid var(--line);padding:clamp(23px,4vw,56px) 0 clamp(40px,5vw,70px)}
+.hero-main{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0}
+.hero-main h1{font:700 clamp(43px,5.7vw,75px)/1.04 var(--font);letter-spacing:-.065em;margin:20px 0 22px}
+.hero-main h1 span{font-weight:400}
+.hero-main>p{font-size:clamp(14px,1.2vw,16px);line-height:1.8;max-width:570px;margin:0;color:var(--subink)}
+.hero-main>p strong{color:var(--ink);font-weight:700}
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:28px}
+.hero-note{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--dim);margin-top:40px}
+.hero-note-line{height:1px;width:27px;background:var(--warm)}
+.hero-aside{background:var(--muted-surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;min-height:380px}
+.aside-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;font-weight:700;letter-spacing:.09em;color:var(--subink)}
+.aside-top svg{width:16px;height:16px}
+.aside-cross{display:grid;place-items:center;height:145px;font:400 98px var(--font);color:var(--hover)}
+.hero-aside h2{font:700 clamp(20px,2vw,26px)/1.22 var(--font);letter-spacing:-.04em;margin:auto 0 10px}
+.hero-aside p{font-size:12px;line-height:1.7;color:var(--subink);margin:0 0 18px}
+.hero-aside .text-link{align-self:flex-start}
+.btn{border:1px solid var(--accent);border-radius:8px;background:var(--accent);color:var(--on-accent);min-height:45px;padding:11px 17px;display:inline-flex;align-items:center;justify-content:center;gap:9px;font:700 12px/1.4 var(--font);text-decoration:none;transition:transform .15s,opacity .15s}
+.btn svg{height:16px;width:16px}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-secondary,.btn-ghost,.btn-outline{background:var(--surface);color:var(--ink);border-color:var(--hover)}
+.btn-muted{background:var(--surface-2);color:var(--subink);border-color:var(--line)}
+.btn-small{min-height:35px;padding:8px 12px;font-size:11px}
+.text-link,.link-button{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--ink);font:700 12px/1.4 var(--font);padding:4px 0;text-decoration:none;white-space:normal}
+.text-link svg,.link-button svg{height:16px;width:16px}
 .text-link:hover,.link-button:hover{text-decoration:underline;text-underline-offset:4px}
-.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-text);border-radius:11px;min-height:46px;padding:12px 18px;font-size:12px;font-weight:800;display:inline-flex;justify-content:center;align-items:center;gap:9px;text-decoration:none;transition:background .16s,transform .16s}
-.btn svg{width:16px;height:16px}
-.btn:hover{transform:translateY(-1px);background:var(--accent-hover)}
-.btn-primary{background:#f0f0dc;border-color:#f0f0dc;color:#20372c}
-.btn-primary:hover{background:#fffef0}
-.btn-outline,.btn-ghost{background:transparent;border:1px solid var(--line-strong);color:var(--accent)}
-.btn-outline:hover,.btn-ghost:hover{background:var(--surface-2)}
-.btn-muted{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
-.btn-small{min-height:36px;font-size:11px;padding:9px 13px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:24px;min-width:0;box-shadow:var(--soft-shadow)}
-.card-title{font:650 27px/1.08 var(--serif);color:var(--heading);margin:10px 0 13px}
-.card p{font-size:12px;line-height:1.85;color:var(--muted)}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.welcome{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.75fr);border-radius:22px;overflow:hidden;position:relative;background:#233e33;color:#fff;min-height:385px}
-.welcome:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 63% -7%,#65846d55,transparent 55%);pointer-events:none}
-.welcome-copy{padding:clamp(30px,4vw,57px);position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start}
-.welcome-overline{display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.14em;font-weight:800;color:#c8ddca;text-transform:uppercase}
-.overline-dot{width:7px;height:7px;border-radius:50%;background:#e8c98c;box-shadow:0 0 0 4px #e8c98c22}
-.overline-sep{opacity:.5}
-.welcome h1{font:600 clamp(48px,4.7vw,72px)/.94 var(--serif);letter-spacing:-.037em;margin:27px 0 19px;max-width:760px;color:#fff}
-.welcome h1 em{font-weight:400;font-style:italic;color:#e4ce9c}
-.welcome-copy>p{font-size:13px;line-height:1.85;color:#d5e3d7;max-width:510px;margin:0}
-.welcome-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:27px}
-.welcome .btn-outline{border:1px solid #a9bdaf90;color:#f9f7ed}
-.welcome .btn-outline:hover{background:#ffffff15}
-.welcome-signature{display:flex;align-items:center;gap:11px;margin-top:auto;padding-top:31px;color:#c9dbc9;font-size:9px;font-weight:800;letter-spacing:.105em}
-.welcome-signature span{color:#ead09d;font-size:19px}
-.welcome-visual{position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 55% 50%,#456650 0,#1b392f 65%,#19352b 100%);min-width:0}
-.welcome-visual:before{content:"";position:absolute;inset:25px;border:1px solid #e8e9c337;border-radius:150px 150px 14px 14px}
-.visual-halo{position:absolute;width:270px;height:270px;max-width:86%;border-radius:50%;border:1px solid #e9d8aa40;box-shadow:0 0 0 28px #f1e7bc08,0 0 0 55px #f1e7bc05}
-.welcome-visual img{width:min(72%,265px);height:305px;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 20px 18px #06180e80)}
-.visual-caption{position:absolute;bottom:32px;left:33px;right:33px;border-top:1px solid #dae0c55e;padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#e5ead8}
-.visual-caption span{font-size:9px;letter-spacing:.17em;font-weight:800}
-.visual-caption strong{font:italic 24px var(--serif)}
-.home-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:35px 0 17px}
-.home-intro h2{font:600 clamp(30px,3.2vw,42px)/1 var(--serif);letter-spacing:-.022em;color:var(--heading);margin:9px 0 6px}
-.home-intro p{margin:0;color:var(--muted);font-size:12px}
-.home-dashboard{display:grid;grid-template-columns:1.1fr .9fr;gap:17px}
-.rosary-feature{display:grid;grid-template-columns:145px minmax(0,1fr);padding:0;overflow:hidden;min-height:264px}
-.feature-art{display:flex;align-items:center;justify-content:center;background:#233b31}
-.feature-art img{width:135px;height:225px;object-fit:contain}
-.feature-body{padding:24px 23px;display:flex;flex-direction:column;align-items:flex-start}
-.feature-body .card-title{font-size:29px;margin:13px 0 7px}
-.feature-body p{font-size:12px;line-height:1.7;margin:0}
-.feature-progress{width:100%;margin:auto 0 12px;padding-top:16px}
-.progress{background:var(--surface-3);border-radius:99px;height:6px;overflow:hidden;margin:0 0 8px}
-.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .25s}
-.progress-label{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:10px}
-.progress-label strong{color:var(--heading)}
-.feature-body .text-link{margin-top:auto}
-.truth-card{display:flex;flex-direction:column;background:var(--surface-2)}
-.truth-card-top{display:flex;justify-content:space-between;align-items:flex-start}
-.truth-spark{font-size:24px;color:var(--gold);line-height:1}
-.truth-card h3{font:650 23px/1.1 var(--serif);margin:16px 0 11px;color:var(--heading)}
-.truth-card blockquote{font:500 16px/1.55 var(--serif);color:var(--text);margin:0 0 17px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
-.truth-card .text-link{margin-top:auto}
-.home-bottom{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin-top:17px}
-.scripture-card{background:var(--surface);border-left:3px solid var(--gold)}
-.scripture-card blockquote{font:500 24px/1.3 var(--serif);color:var(--heading);margin:18px 0 25px}
-.scripture-card-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--muted)}
-.progress-card{display:flex;flex-direction:column}
-.progress-card h3{font:600 25px var(--serif);color:var(--heading);margin:10px 0 18px}
-.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.stat-row>div{display:flex;flex-direction:column;gap:4px}
-.stat-row strong{font:650 30px/1 var(--serif);color:var(--heading)}
-.stat-row strong small{font:700 15px var(--sans);color:var(--muted)}
-.stat-row span{font-size:10px;line-height:1.5;color:var(--muted)}
-.progress-card .text-link{margin-top:auto;padding-top:21px}
-.grid-3.stats{margin-top:16px}
-.stat{min-height:102px;display:flex;flex-direction:column;justify-content:center;gap:4px}
-.stat-value{font:650 35px/.9 var(--serif);color:var(--heading)}
-.stat-label{font-size:11px;color:var(--muted)}
-/* Terço */
-.group-picker,.devotion-filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 24px}
-.group-button{min-height:38px;border:1px solid var(--line-strong);background:var(--surface);border-radius:10px;padding:8px 15px;font-size:11px;font-weight:800;color:var(--muted);transition:.15s}
-.group-button.active,.group-button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-text)}
-.group-button:not(.active):hover{background:var(--surface-2);color:var(--heading)}
-.mystery-layout{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);gap:18px}
-.mystery-visual{background:#203c31;border-radius:18px;padding:26px;min-height:440px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;overflow:hidden}
-.mystery-visual:before{content:"";position:absolute;inset:21px;border:1px solid #d8cda73e;border-radius:140px 140px 10px 10px;pointer-events:none}
-.mystery-visual .eyebrow{color:#e9d0a1;z-index:1}
-.mystery-visual .eyebrow:before{background:#e9d0a1}
-.mystery-visual img{max-width:100%;width:265px;height:270px;object-fit:contain;z-index:1}
-.mystery-visual h2{font:600 32px/1 var(--serif);max-width:330px;margin:16px 0 8px;z-index:1}
-.mystery-visual small{font-size:11px;color:#e4d6b8;z-index:1}
+.overview-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:47px 0 23px}
+.overview-heading h2{font:700 clamp(22px,2.8vw,32px)/1.25 var(--font);letter-spacing:-.035em;margin:8px 0 0}
+.overview-date{font-size:11px;color:var(--dim);text-transform:capitalize}
+.home-dashboard,.home-bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.home-bottom{margin-top:16px}
+.card{min-width:0;padding:clamp(20px,2.3vw,29px);border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:none}
+.card:hover{border-color:var(--hover)}
+.feature-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.feature-icon{display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;height:35px;width:35px;color:var(--subink)}
+.card-title{font:700 clamp(21px,2.3vw,27px)/1.23 var(--font);letter-spacing:-.04em;margin:20px 0 10px}
+.card p{color:var(--subink);font-size:13px;line-height:1.75}
+.rosary-feature,.truth-card,.scripture-card,.progress-card{display:flex;flex-direction:column;min-height:260px}
+.rosary-feature>p{margin:0}
+.feature-progress{margin:auto 0 15px;padding-top:22px}
+.progress{height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:0 0 10px}
+.progress-fill{height:100%;background:var(--ink);border-radius:99px}
+.progress-label{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:var(--subink)}
+.progress-label strong{color:var(--ink)}
+.truth-topic{font-size:12px!important;font-weight:700!important;color:var(--ink)!important;margin:0!important}
+.truth-card blockquote{font:400 clamp(13px,1.3vw,15px)/1.7 var(--font);margin:11px 0 18px;color:var(--subink);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.truth-card .text-link,.progress-card .text-link{margin-top:auto}
+.scripture-ref{font-size:11px;font-weight:700;color:var(--subink)}
+.scripture-card blockquote{font:400 clamp(17px,1.7vw,21px)/1.5 var(--font);letter-spacing:-.02em;margin:20px 0;flex:1}
+.scripture-card-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-top:13px;border-top:1px solid var(--line);font-size:11px;color:var(--dim)}
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0}
+.stat-row>div{display:flex;flex-direction:column;gap:5px}
+.stat-row strong{font:700 clamp(27px,3vw,37px)/1 var(--font);letter-spacing:-.05em}
+.stat-row strong small{font:600 12px var(--font);color:var(--subink)}
+.stat-row span{font-size:11px;line-height:1.45;color:var(--dim)}
+.prayer-cta{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-top:36px;padding:29px 0;border-top:1px solid var(--line)}
+.prayer-cta h2{font:700 clamp(21px,2.3vw,29px)/1.3 var(--font);letter-spacing:-.03em;margin:7px 0}
+.prayer-cta p{font-size:12px;color:var(--subink);margin:0}
+.prayer-cta .btn{flex-shrink:0}
+.page-title{font:700 clamp(30px,4vw,47px)/1.15 var(--font);letter-spacing:-.052em;margin:3px 0 14px}
+.page-desc{font-size:14px;line-height:1.8;color:var(--subink);max-width:730px;margin:0 0 26px}
+.eyebrow{display:flex;align-items:center;gap:9px}
+.eyebrow:before{content:'';height:1px;width:18px;background:var(--dim)}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:33px 0 17px}
+.section-head h2{font:700 clamp(20px,2.4vw,28px)/1.3 var(--font);letter-spacing:-.035em;margin:0}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.stat{display:flex;justify-content:center;flex-direction:column;gap:5px;min-height:98px}
+.stat-value{font:700 31px/1 var(--font)}
+.stat-label{font-size:11px;color:var(--subink)}
+.group-picker,.devotion-filters{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 26px}
+.group-button{font:700 12px/1.3 var(--font);border:1px solid var(--line);background:var(--surface);color:var(--subink);border-radius:8px;padding:10px 14px;min-height:39px}
+.group-button.active,.group-button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.group-button:hover:not(.active){border-color:var(--hover);color:var(--ink)}
+.mystery-layout{display:grid;grid-template-columns:minmax(240px,.7fr) minmax(0,1.3fr);gap:19px;align-items:start}
+.mystery-visual{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;border:1px solid var(--line);border-radius:var(--radius);background:var(--muted-surface);min-height:380px;padding:24px}
+.mystery-visual img{display:block;width:min(145px,65%);height:169px;object-fit:contain;align-self:center;border-radius:8px;border:1px solid var(--line);margin:15px 0}
+.mystery-visual h2{font:700 clamp(22px,2.2vw,28px)/1.23 var(--font);letter-spacing:-.04em;margin:auto 0 10px}
+.mystery-visual small{font-size:12px;color:var(--subink)}
 .mystery-detail{min-width:0}
-.mystery-detail .card{padding:26px}
-.mystery-detail .card-meta{margin:0 0 9px}
-.scripture-verse{border-radius:13px;border:1px solid var(--line);background:var(--surface-2);padding:20px;margin-bottom:23px}
+.mystery-detail>.card{padding:clamp(20px,2.2vw,29px)}
+.readable{font-size:14px;line-height:1.85;color:var(--subink);margin:11px 0}
+.scripture-verse{border:1px solid var(--line);border-radius:9px;background:var(--muted-surface);padding:20px;margin-bottom:23px}
 .scripture-top,.scripture-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.scripture-verse blockquote{font:500 25px/1.36 var(--serif);color:var(--heading);margin:17px 0}
-.scripture-footer{font-size:10px;color:var(--muted)}
-.scripture-footer a{color:var(--accent);text-underline-offset:3px}
-.verse-switch{display:flex;align-items:center;gap:3px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:3px}
-.verse-switch button{min-width:36px;min-height:28px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:10px;font-weight:800}
-.verse-switch button.active{background:var(--accent);color:var(--accent-text)}
-.readable{font-size:13px;line-height:1.85;color:var(--muted);margin:12px 0}
-.kicker-line{height:1px;background:var(--line);margin:23px 0}
-.confront{font:600 26px/1.2 var(--serif);letter-spacing:-.012em;color:var(--heading);margin:13px 0 21px}
-.question{padding:15px 18px;background:var(--surface-2);border-left:3px solid var(--gold);color:var(--text);border-radius:0 9px 9px 0;font-size:12px;line-height:1.8}
-.prayer-response{background:var(--surface-2);border-left:3px solid var(--accent);border-radius:0 9px 9px 0;padding:16px 19px;margin-top:16px}
-.prayer-response span{font:800 10px var(--sans);letter-spacing:.1em;color:var(--gold)}
-.prayer-response p{font:italic 20px/1.35 var(--serif);color:var(--text);margin:9px 0 0}
-.decade-panel{margin:18px 0 26px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
-.decade-header{display:flex;align-items:center;justify-content:space-between;gap:14px}
-.decade-header strong{font:600 24px var(--serif);color:var(--heading)}
-.decade-panel>p{font-size:12px!important;line-height:1.75!important;color:var(--muted)!important;margin:9px 0 18px}
-.decade-panel .progress{margin-top:9px}
-.count-bubbles{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
-.bead{height:24px;width:24px;border-radius:50%;border:2px solid var(--line-strong);background:var(--surface-2);transition:background .2s}
+.scripture-verse blockquote{font:400 clamp(18px,1.85vw,23px)/1.6 var(--font);letter-spacing:-.017em;margin:18px 0}
+.scripture-footer{font-size:11px;color:var(--dim)}
+.scripture-footer a{color:var(--ink);text-underline-offset:3px}
+.verse-switch{display:flex;gap:3px;border:1px solid var(--line);background:var(--surface);padding:3px;border-radius:7px}
+.verse-switch button{border:0;border-radius:5px;background:transparent;color:var(--subink);padding:6px 9px;min-height:27px;font:700 11px var(--font)}
+.verse-switch button.active{background:var(--accent);color:var(--on-accent)}
+.kicker-line{height:1px;background:var(--line);margin:25px 0}
+.confront{font:700 clamp(19px,2.1vw,25px)/1.4 var(--font);letter-spacing:-.02em;margin:14px 0 19px}
+.question{padding:15px;border-left:2px solid var(--ink);background:var(--muted-surface);font-size:13px;line-height:1.8;color:var(--subink)}
+.question strong{color:var(--ink)}
+.prayer-response{background:var(--muted-surface);border:1px solid var(--line);border-radius:8px;padding:17px;margin-top:16px}
+.prayer-response span{font-size:10px;letter-spacing:.1em;color:var(--subink);font-weight:700}
+.prayer-response p{color:var(--ink);font-size:13px;line-height:1.8;margin:8px 0 0}
+.decade-panel{border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,2.4vw,28px);margin:22px 0 30px;background:var(--surface)}
+.decade-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.decade-header strong{font:700 clamp(18px,2vw,22px) var(--font)}
+.decade-description{font-size:12px;line-height:1.8;color:var(--subink);margin:14px 0}
+.count-bubbles{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:20px 0}
+.bead{display:block;width:22px;height:22px;border:1px solid var(--hover);background:var(--surface);border-radius:50%}
 .bead.done{background:var(--accent);border-color:var(--accent)}
-.decade-buttons,.two-buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
-.stepper{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}
-.step{height:40px;width:40px;border-radius:50%;border:1px solid var(--line-strong);color:var(--muted);background:var(--surface);display:grid;place-items:center;font-weight:800;font-size:12px}
-.step.current{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
-.step.finished:not(.current){background:var(--surface-3);color:var(--accent)}
-.prayer-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 25px}
-.prayer-card{padding:19px;align-self:start;box-shadow:none}
-.prayer-card summary{font-size:12px;font-weight:800;color:var(--heading);cursor:pointer;list-style-position:outside}
-.prayer-card[open]{border-color:var(--line-strong)}
-.prayer-card p{white-space:pre-line;font-size:12px;line-height:1.85;color:var(--muted);margin:16px 0 0}
-.devotional-source a{color:var(--accent)}
-/* Verdade */
-.truth-large{border:1px solid var(--line);border-radius:20px;background:var(--surface);padding:clamp(24px,4.5vw,55px);max-width:1050px;position:relative;overflow:hidden}
-.truth-large:before{content:"✝";position:absolute;right:25px;top:5px;color:var(--line);font:130px var(--serif);pointer-events:none;opacity:.6}
-.truth-large .eyebrow{position:relative}
-.truth-large h2{font:650 clamp(38px,5vw,66px)/.96 var(--serif);color:var(--heading);letter-spacing:-.02em;max-width:720px;margin:23px 0 12px;position:relative}
-.quote-mark{font:500 60px/.6 var(--serif);color:var(--gold);margin:24px 0}
-.truth-large blockquote{font:550 clamp(23px,2.65vw,34px)/1.24 var(--serif);color:var(--text);max-width:800px;margin:0 0 20px;position:relative}
-.truth-large .readable{font-size:13px;color:var(--text);line-height:1.8}
-.action-line{display:flex;align-items:flex-start;gap:12px;padding:15px 17px;margin:16px 0;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;color:var(--text);font-size:12px;line-height:1.8}
-.action-line svg{width:18px;height:18px;color:var(--accent)}
-.truth-footer{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
-.filter-tag{font-size:10px;padding:7px 11px;border-radius:99px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
-.mission-commit{border:1px solid var(--line);padding:17px 20px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--surface-2)}
-.mission-commit p{font-size:11px;color:var(--muted);line-height:1.6;margin:7px 0 0}
-.mission-commit .btn{white-space:nowrap}
-/* Exame, desafios, diário */
-.checklist{display:flex;flex-direction:column;gap:11px}
-.checkrow{display:flex;align-items:flex-start;gap:14px;background:var(--surface);border:1px solid var(--line);padding:17px 19px;border-radius:12px;cursor:pointer}
-.checkrow:hover{border-color:var(--line-strong)}
-.checkrow input{appearance:none;width:21px;height:21px;flex:0 0 21px;border:1.5px solid var(--line-strong);border-radius:6px;background:var(--surface);margin:1px 0 0;display:grid;place-items:center}
+.decade-buttons,.two-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:17px}
+.stepper{display:flex;flex-wrap:wrap;gap:9px;margin:21px 0}
+.step{width:39px;height:39px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--subink);font-size:12px;font-weight:700}
+.step.current{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.step.finished:not(.current){color:var(--ink);background:var(--surface-2)}
+.prayer-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 28px}
+.prayer-card{padding:19px 22px;align-self:start}
+.prayer-card summary{cursor:pointer;color:var(--ink);font-size:13px;font-weight:700}
+.prayer-card p{color:var(--subink);font-size:13px;line-height:1.8;white-space:pre-line;margin:15px 0 0}
+.devotional-source{font-size:11px!important}
+.truth-large{max-width:990px;border:1px solid var(--line);border-radius:var(--radius);padding:clamp(23px,4vw,50px);position:relative}
+.truth-large h2{font:700 clamp(30px,4.2vw,50px)/1.14 var(--font);letter-spacing:-.043em;margin:18px 0}
+.quote-mark{display:none}
+.truth-large blockquote{font:700 clamp(19px,2.5vw,29px)/1.45 var(--font);letter-spacing:-.021em;margin:0 0 20px}
+.truth-large .readable{max-width:750px}
+.action-line{display:flex;align-items:flex-start;gap:12px;padding:15px;background:var(--muted-surface);border:1px solid var(--line);border-radius:9px;color:var(--subink);font-size:13px;line-height:1.75;margin:18px 0}
+.action-line svg{color:var(--ink);width:18px;height:18px;flex-shrink:0}
+.truth-footer{display:flex;flex-wrap:wrap;gap:8px;margin:19px 0}
+.filter-tag{font-size:11px;color:var(--subink);border:1px solid var(--line);border-radius:99px;padding:6px 11px}
+.mission-commit{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:18px;border-top:1px solid var(--line)}
+.mission-commit p{font-size:12px;color:var(--subink);line-height:1.7;margin:8px 0 0}
+.checklist{display:flex;flex-direction:column;gap:10px}
+.checkrow{display:flex;align-items:flex-start;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:18px;cursor:pointer}
+.checkrow:hover{border-color:var(--hover)}
+.checkrow input{appearance:none;flex:0 0 20px;width:20px;height:20px;background:var(--surface);border:1px solid var(--hover);border-radius:5px;margin:2px 0 0;display:grid;place-items:center}
 .checkrow input:checked{background:var(--accent);border-color:var(--accent)}
-.checkrow input:checked:after{content:"✓";font-size:13px;color:var(--accent-text);font-weight:900}
-.checkrow span{font-size:13px;line-height:1.6;color:var(--text)}
-.checkrow small{display:block;margin-top:5px;font-size:11px;color:var(--muted)}
-.completion-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:17px 0;color:var(--muted);font-size:11px}
-textarea{resize:vertical;background:var(--surface-2);color:var(--text);width:100%;padding:15px;border:1px solid var(--line-strong);border-radius:10px;min-height:145px;font-size:13px;line-height:1.75}
-textarea::placeholder{color:var(--muted)}
-.input-label{display:block;margin:12px 0;font-size:12px;color:var(--heading);font-weight:800}
-.note{padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:13px 0}
-.note p{font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
-.note-date{font-size:11px;color:var(--muted);font-weight:800}
-.empty{padding:40px;background:var(--surface-2);border:1px dashed var(--line-strong);border-radius:13px;color:var(--muted);text-align:center}
-/* Santos e anjos */
-.devotional-hero{background:var(--surface);border:1px solid var(--line);border-radius:19px;padding:32px 36px;position:relative;min-height:177px;overflow:hidden}
-.devotional-hero .page-title{margin-top:14px}
-.devotional-hero .page-desc{margin-bottom:0;max-width:700px;position:relative;z-index:1}
-.angel-mark{position:absolute;right:54px;top:41px;width:105px;height:105px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:var(--gold);opacity:.6}
-.angel-mark .icon{width:58px;height:58px}
-.devotion-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.devotion-card{padding:0;align-self:start;box-shadow:none}
-.devotion-card summary{display:flex;align-items:center;gap:14px;padding:21px;cursor:pointer;list-style:none}
+.checkrow input:checked:after{content:"✓";font:700 13px Arial;color:var(--on-accent)}
+.checkrow span{font-size:13px;line-height:1.7;color:var(--ink)}
+.checkrow small{display:block;color:var(--subink);font-size:11px;margin-top:4px}
+.completion-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:16px 0;font-size:11px;color:var(--subink)}
+textarea{width:100%;min-height:140px;border:1px solid var(--hover);border-radius:8px;background:var(--surface);color:var(--ink);padding:14px;resize:vertical;font-size:13px;line-height:1.8}
+textarea::placeholder{color:var(--dim)}
+.input-label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.note{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:20px;margin:13px 0}
+.note p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;color:var(--subink);line-height:1.8;margin:9px 0 0}
+.note-date{font-size:11px;color:var(--subink)}
+.empty{padding:35px;text-align:center;color:var(--subink);font-size:13px;border:1px dashed var(--line);border-radius:9px}
+.devotional-hero{position:relative;padding:0 0 30px;margin-bottom:22px;border-bottom:1px solid var(--line)}
+.devotional-hero .eyebrow{margin-bottom:15px}
+.angel-mark{position:absolute;right:12px;top:14px;display:grid;place-items:center;width:58px;height:58px;border:1px solid var(--line);border-radius:50%;color:var(--dim)}
+.angel-mark svg{width:27px;height:27px}
+.devotion-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.devotion-card{padding:0;align-self:start}
+.devotion-card summary{display:flex;align-items:center;gap:13px;list-style:none;padding:20px;cursor:pointer}
 .devotion-card summary::-webkit-details-marker{display:none}
-.devotion-card summary:after{content:"+";margin-left:auto;font-size:20px;color:var(--gold)}
+.devotion-card summary:after{content:"+";margin-left:auto;font-size:19px;color:var(--subink)}
 .devotion-card[open] summary:after{content:"−"}
-.devotion-card summary strong{display:block;font:600 22px/1.1 var(--serif);color:var(--heading)}
-.devotion-card summary small{display:block;color:var(--muted);margin-top:6px;font-size:10px}
-.devotion-symbol{height:41px;width:41px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;background:var(--surface-2);color:var(--gold);font-size:20px}
-.devotion-symbol .icon{width:23px;height:23px}
-.devotion-text{padding:20px 23px;border-top:1px solid var(--line);font-size:13px;white-space:pre-line;line-height:1.85;color:var(--text)}
-.devotion-link{display:inline-block;margin:0 23px 19px;color:var(--accent);font-size:11px}
-.devotional-note{margin-top:18px}
-.disclaimer{font-size:11px;color:var(--muted);line-height:1.8}
-.boot{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--gold);font-size:12px;letter-spacing:.13em}
-.boot-cross{font:75px var(--serif)}
-/* Mobile navigation */
+.devotion-card summary strong{font-size:15px;color:var(--ink);font-weight:700;display:block}
+.devotion-card summary small{display:block;color:var(--dim);margin-top:5px;font-size:11px}
+.devotion-symbol{height:37px;width:37px;flex-shrink:0;background:var(--surface-2);color:var(--subink);border-radius:8px;display:grid;place-items:center}
+.devotion-symbol svg{width:21px;height:21px}
+.devotion-text{padding:19px 22px;border-top:1px solid var(--line);color:var(--subink);font-size:13px;line-height:1.85;white-space:pre-line}
+.devotion-link{display:inline-block;margin:0 21px 19px;color:var(--ink);font-size:11px}
+.devotional-note{margin-top:19px}
+.disclaimer{font-size:11px;color:var(--dim);line-height:1.8}
+.boot{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;min-height:100vh;letter-spacing:.13em;font-size:11px}
+.boot-cross{font-size:60px}
+.more-backdrop{position:fixed;inset:0;z-index:32;border:0;background:transparent;cursor:default}
+.more-panel{position:fixed;top:66px;right:35px;z-index:33;width:265px;display:flex;flex-direction:column;gap:3px;padding:15px;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:0 15px 40px #0001}
+.more-panel-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 10px}
+.more-panel-head strong{font-size:14px}
+.more-close{border:0;background:transparent;color:var(--subink);font-size:15px}
+.more-nav-button{display:flex;align-items:center;gap:11px;padding:12px;border:0;border-radius:7px;background:var(--surface);color:var(--subink);text-align:left;font-size:13px;font-weight:600}
+.more-nav-button[aria-current="page"],.more-nav-button:hover{color:var(--ink);background:var(--surface-2)}
+.more-nav-button svg{width:18px;height:18px}
 .mobile-nav{display:none}
-.more-backdrop,.more-panel{display:none}
-@media(max-width:1220px){
- .app-shell{grid-template-columns:218px minmax(0,1fr)}
- .sidebar{padding:26px 12px 18px}
- .main{padding:28px 30px 40px}
- .topbar{padding:0 30px}
- .welcome{grid-template-columns:1.2fr .8fr}
- .welcome h1{font-size:clamp(46px,4.6vw,67px)}
- .home-dashboard,.home-bottom{grid-template-columns:1fr 1fr}
- .rosary-feature{grid-template-columns:115px 1fr}
- .feature-art img{width:112px}
+@media(max-width:1120px){
+ .header-inner{padding:0 19px;gap:15px}
+ .nav-button,.nav-more{padding:9px 7px}
+ .mode-switch span{display:none}
+ .mode-switch{min-width:38px;justify-content:center}
 }
-@media(max-width:960px){
- .topbar-date{display:none}
- .topbar{height:74px}
- .welcome h1{font-size:54px}
- .welcome-visual img{width:200px}
- .home-dashboard,.home-bottom,.mystery-layout{grid-template-columns:1fr}
- .rosary-feature{grid-template-columns:148px 1fr;min-height:230px}
- .feature-art img{width:140px}
- .mystery-visual{min-height:370px}
- .devotion-grid{grid-template-columns:1fr}
- .site-footer{display:block}
- .site-footer p{margin-top:12px}
+@media(max-width:950px){
+ .nav-button:nth-child(3){display:none}
+ .home-hero{grid-template-columns:1.4fr .85fr}
+ .hero-aside{min-height:330px}
 }
 @media(max-width:760px){
- .app-shell{display:block}
- .sidebar{display:none}
- .topbar{height:70px;padding:0 18px;gap:8px}
- .topbar-cross{display:none}
- .topbar-eyebrow{font-size:10px}
- .topbar-actions{gap:7px}
- .mode-switch{min-width:39px;min-height:39px;padding:8px 10px}
- .mode-switch span{display:none}
- .appearance-control{padding:3px;gap:2px}
- .theme-option{min-width:42px;min-height:34px;padding:7px 8px;gap:4px;font-size:10px}
- .theme-option .icon{width:14px;height:14px}
- .main{padding:19px 16px 102px}
- .welcome{grid-template-columns:1fr;min-height:0;border-radius:19px}
- .welcome-copy{padding:29px 25px 26px}
- .welcome-overline{font-size:9px}
- .welcome h1{font-size:clamp(47px,10vw,65px);margin:22px 0 17px}
- .welcome-copy>p{font-size:12px;line-height:1.8}
- .welcome-actions{margin-top:21px}
- .welcome-visual{display:none}
- .welcome-signature{margin-top:0;padding-top:26px;font-size:9px}
- .home-intro{align-items:flex-start;margin:29px 0 15px}
- .home-intro h2{font-size:34px}
- .home-intro p{max-width:240px}
- .home-intro .text-link{font-size:10px}
+ .site-header{height:65px}
+ .header-inner{height:65px;padding:0 15px;gap:8px}
+ .logo-type{font-size:23px}
+ .logo-mark{height:26px;width:26px;font-size:18px}
+ .desktop-nav{display:none}
+ .header-tools{margin-left:auto;gap:6px}
+ .appearance-control{padding:3px;gap:1px}
+ .theme-option{padding:6px 7px;min-width:33px;min-height:32px}
+ .theme-option span{display:none}
+ .mode-switch{padding:8px;min-width:36px;min-height:36px}
+ .main{padding:26px 17px 105px}
+ .home-hero{grid-template-columns:1fr;gap:26px;padding:22px 0 37px}
+ .hero-main h1{font-size:clamp(40px,8.6vw,62px);margin:20px 0}
+ .hero-main>p{font-size:14px}
+ .hero-actions{margin-top:23px}
+ .hero-note{margin-top:28px}
+ .hero-aside{min-height:0;display:block;padding:21px}
+ .aside-cross{display:none}
+ .hero-aside h2{margin:15px 0 9px;font-size:20px}
+ .hero-aside p{margin-bottom:14px}
+ .overview-heading{padding:32px 0 19px}
+ .overview-heading h2{font-size:24px}
+ .overview-date{display:none}
  .home-dashboard,.home-bottom{grid-template-columns:1fr;gap:12px}
  .home-bottom{margin-top:12px}
- .rosary-feature{grid-template-columns:120px 1fr;min-height:212px}
- .feature-art img{height:190px;width:114px}
- .feature-body{padding:18px 16px}
- .feature-body .card-title{font-size:24px;margin:9px 0}
- .feature-body p{font-size:11px;line-height:1.55}
- .feature-progress{padding-top:13px}
- .feature-body .text-link{margin-top:8px}
- .truth-card{min-height:195px}
- .card{padding:20px;border-radius:15px}
- .page-title{font-size:45px}
- .section-head h2{font-size:28px}
- .mystery-visual{min-height:340px}
- .mystery-visual img{height:220px}
- .mystery-detail .card{padding:18px}
- .scripture-verse{padding:16px}
- .scripture-verse blockquote{font-size:23px}
- .confront{font-size:24px}
- .prayer-list{grid-template-columns:1fr}
- .devotional-hero{padding:23px 20px}
- .angel-mark{right:-30px;top:10px;opacity:.2}
- .decade-panel{padding:19px}
- .stat-row strong{font-size:28px}
- .site-footer{margin-top:39px}
- .mobile-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;bottom:0;left:0;right:0;height:calc(70px + env(safe-area-inset-bottom));padding:5px 9px calc(5px + env(safe-area-inset-bottom));background:var(--nav);border-top:1px solid var(--line);box-shadow:0 -9px 35px #0a110c12;z-index:35}
- .mobile-nav-button{border:0;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:10px;font-weight:750;min-width:0;border-radius:10px}
- .mobile-nav-button .icon{height:20px;width:20px}
- .mobile-nav-button[aria-current="page"],.mobile-nav-button.more-active{background:var(--surface-2);color:var(--accent)}
- .more-backdrop{display:block;position:fixed;inset:0;background:#07100ab0;z-index:38;border:0}
- .more-panel{display:flex;flex-direction:column;gap:5px;position:fixed;left:10px;right:10px;bottom:calc(81px + env(safe-area-inset-bottom));padding:19px;background:var(--surface);border:1px solid var(--line-strong);border-radius:19px;z-index:39;box-shadow:0 18px 55px #0003}
- .more-panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
- .more-panel-head strong{font:600 24px var(--serif);color:var(--heading)}
- .more-close{border:0;background:var(--surface-2);color:var(--text);border-radius:8px;width:35px;height:35px}
- .more-nav-button{min-height:49px}
-}
-@media(max-width:395px){
- .topbar{padding:0 12px}
- .theme-option{padding:6px 5px;min-width:37px;gap:3px}
- .appearance-control{gap:0}
- .mode-switch{padding:8px}
- .welcome h1{font-size:45px}
- .welcome-actions .btn{font-size:11px;padding:10px 13px}
- .rosary-feature{grid-template-columns:96px 1fr}
- .feature-art img{width:95px}
- .feature-body{padding:15px 13px}
- .feature-body p{font-size:10px}
- .feature-progress{margin-top:6px}
- .group-button{padding:8px 11px}
+ .rosary-feature,.truth-card{min-height:240px}
+ .card{padding:20px}
+ .prayer-cta{flex-direction:column;align-items:flex-start;gap:17px;margin-top:27px;padding:25px 0}
+ .site-footer{display:block;margin-top:40px}
+ .site-footer p{margin-top:10px}
+ .mystery-layout,.devotion-grid,.prayer-list{grid-template-columns:1fr}
+ .mystery-visual{display:grid;grid-template-columns:1fr auto;min-height:0;gap:9px 12px;padding:20px}
+ .mystery-visual .eyebrow{grid-column:1;grid-row:1}
+ .mystery-visual img{width:73px;height:95px;margin:0;grid-column:2;grid-row:1/4}
+ .mystery-visual h2{grid-column:1;grid-row:2;margin:9px 0 0;font-size:22px}
+ .mystery-visual small{grid-column:1;grid-row:3}
  .mission-commit{display:block}
  .mission-commit .btn{margin-top:13px}
- .page-title{font-size:41px}
+ .mobile-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;bottom:0;left:0;right:0;z-index:31;height:calc(68px + env(safe-area-inset-bottom));padding:6px 7px calc(6px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line)}
+ .mobile-nav-button{border:0;background:transparent;color:var(--subink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:8px;font-size:10px;font-weight:600;min-width:0}
+ .mobile-nav-button svg{width:18px;height:18px}
+ .mobile-nav-button[aria-current="page"],.mobile-nav-button.more-active{background:var(--surface-2);color:var(--ink)}
+ .more-backdrop{background:rgba(0,0,0,.28)}
+ .more-panel{left:12px;right:12px;top:auto;bottom:calc(79px + env(safe-area-inset-bottom));width:auto}
+}
+@media(max-width:390px){
+ .header-inner{padding:0 10px}
+ .logo{gap:6px}
+ .logo-type{font-size:21px}
+ .hero-main h1{font-size:39px}
+ .theme-option{padding:6px}
+ .stat-row strong{font-size:27px}
+ .btn{padding:11px 12px;font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
@@ -994,12 +910,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'system',verseLang:'pt',mobileMore:false,...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'light',verseLang:'pt',mobileMore:false,designVersion:'white-arial-v1',...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-state.theme=['light','dark','system'].includes(state.theme)?state.theme:'system';
+if(state.designVersion!=='white-arial-v1'){state.theme='light';state.designVersion='white-arial-v1';save();}
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'light';
 state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
@@ -1042,7 +959,7 @@ function icon(name,extra=''){
 }
 function scriptureText(v){return v[state.verseLang]||v.pt;}
 function resolvedTheme(){return state.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):state.theme;}
-function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111916':'#f6f6f2';}
+function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111111':'#ffffff';}
 function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
 function stats(){
   const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
@@ -1055,47 +972,70 @@ function navButton(item,cls='nav-button'){
   return `<button type="button" class="${cls}" data-action="navigate" data-tab="${item.id}" aria-current="${state.tab===item.id?'page':'false'}">${icon(item.icon)}<span>${cls==='nav-button'?item.label:item.mobile}</span></button>`;
 }
 function renderShell(content){
- const morePanel=state.mobileMore?`<button type='button' class='more-backdrop' data-action='close-more' aria-label='Fechar menu'></button><div class='more-panel' role='dialog' aria-modal='true' aria-label='Mais opções de navegação'><div class='more-panel-head'><strong>Mais caminhos</strong><button class='more-close' data-action='close-more' aria-label='Fechar menu'>✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
- const appearance=[{id:'light',label:'Dia',ico:'sun'},{id:'dark',label:'Noite',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
- const themeControl=`<div class='appearance-control' role='group' aria-label='Aparência do aplicativo'>${appearance.map(x=>`<button type='button' class='theme-option ${state.theme===x.id?'selected':''}' data-action='set-theme' data-theme='${x.id}' aria-pressed='${state.theme===x.id}' title='${x.label}'>${icon(x.ico)}<span>${x.label}</span></button>`).join('')}</div>`;
- const navGroups=[{name:'COMECE AQUI',ids:['inicio','terco']},{name:'SUA VIDA ESPIRITUAL',ids:['devocionario','verdade','desafios']},{name:'SEU CAMINHO',ids:['exame','diario']}];
- return `<div class='app-shell'>
-  <aside class='sidebar' aria-label='Navegação principal'>
-   <a class='logo' href='#inicio' data-action='navigate' data-tab='inicio' aria-label='CUIÚDO - início'><span class='logo-mark'>✝</span><span class='logo-type'>cuiúdo<small>FÉ QUE SE VIVE.</small></span></a>
-   <div class='sidebar-caption'>Um espaço de oração, coragem e verdade.</div>
-   <nav class='nav'>${navGroups.map(g=>`<div class='nav-group'><div class='sidebar-label'>${g.name}</div>${g.ids.map(id=>navButton(navItems.find(x=>x.id===id))).join('')}</div>`).join('')}</nav>
-   <div class='sidebar-bottom'><div class='sidebar-bottom-icon'>✦</div><div class='motto'>Sem desculpas.<br><strong>Com fé e atitude.</strong></div><small>REZA. LEVANTA. VAI PRA CIMA.</small></div>
-  </aside>
-  <div class='main-column'>
-   <header class='topbar'><div class='topbar-context'><span class='topbar-cross'>✝</span><div><span class='topbar-eyebrow'>CUIÚDO / ${navItems.find(x=>x.id===state.tab)?.label||'Início'}</span><span class='topbar-date'>${escapeHtml(dateDisplay())}</span></div></div><div class='topbar-actions'>${themeControl}<button type='button' class='mode-switch ${state.mode==='brutal'?'on':''}' data-action='toggle-mode' aria-pressed='${state.mode==='brutal'}' title='Alternar a intensidade das reflexões'>${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div></header>
-   <main class='main' id='main-content'>${content}<footer class='site-footer'><span>✝ CUIÚDO <b>·</b> FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. As reflexões são autorais; os versículos vêm de traduções católicas históricas em domínio público. Não substitui a Confissão ou a direção espiritual.</p></footer></main>
-  </div>
-  <nav class='mobile-nav' aria-label='Navegação principal no celular'>${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type='button' class='mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}' data-action='toggle-more' aria-expanded='${Boolean(state.mobileMore)}' aria-label='Mais opções'>${icon('book')}<span>Mais</span></button></nav>
-  ${morePanel}
+ const themes=[{id:'light',label:'Claro',ico:'sun'},{id:'dark',label:'Escuro',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
+ const themeControl=`<div class="appearance-control" role="group" aria-label="Escolher tema">${themes.map(t=>`<button type="button" class="theme-option ${state.theme===t.id?'selected':''}" data-action="set-theme" data-theme="${t.id}" title="Tema ${t.label}" aria-label="Tema ${t.label}" aria-pressed="${state.theme===t.id}">${icon(t.ico)}<span>${t.label}</span></button>`).join('')}</div>`;
+ const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
+ return `<div class="app-shell">
+  <a href="#main-content" class="skip-link">Ir para o conteúdo</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — início"><span class="logo-mark" aria-hidden="true">✝</span><span class="logo-type">cuiúdo<span class="logo-dot">.</span></span></a>
+      <nav class="desktop-nav" aria-label="Navegação principal">${navItems.slice(0,4).map(x=>navButton(x)).join('')}<button type="button" class="nav-more ${state.mobileMore?'active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}">Mais ${icon('arrow')}</button></nav>
+      <div class="header-tools">${themeControl}<button type="button" class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div>
+    </div>
+  </header>
+  <main class="main" id="main-content">${content}
+    <footer class="site-footer"><span>© CUIÚDO · FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. Versículos em traduções católicas históricas. As meditações são autorais; o exame não substitui a Confissão.</p></footer>
+  </main>
+  <nav class="mobile-nav" aria-label="Navegação do celular">${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type="button" class="mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}" aria-label="Mais opções">${icon('book')}<span>Mais</span></button></nav>
+  ${more}
  </div>`;
 }
 function home(){
- const g=groups[dayGroup()];const p=readProgress(dayGroup());const s=stats();const truth=getTruth();
- const nextIndex=p.findIndex(x=>x<10);const displayMystery=g.mysteries[Math.max(0,nextIndex)];
- const complete=p.reduce((a,b)=>a+b,0);const scripture=versiculosPorMisterio[displayMystery.id];
- return `<section class='welcome'>
-  <div class='welcome-copy'><div class='welcome-overline'><span class='overline-dot'></span> SEU MOMENTO COM DEUS <span class='overline-sep'>/</span> ${g.days}</div>
-   <h1>Fé para seguir.<br><em>Coragem para agir.</em></h1>
-   <p>Há momentos de silêncio e momentos de decisão. O importante é não fugir do que Deus te chama a viver. Respire, reze e vá pra cima.</p>
-   <div class='welcome-actions'><button class='btn btn-primary' data-action='navigate' data-tab='terco'>Rezar o terço de hoje ${icon('arrow')}</button><button class='btn btn-outline' data-action='navigate' data-tab='verdade'>Ler uma reflexão</button></div>
-   <div class='welcome-signature'><span>✦</span> TEM QUE FAZER ACONTECER. SEJA CUIÚDO.</div>
-  </div>
-  <div class='welcome-visual'><div class='visual-halo'></div><img src='./assets/misterios/${displayMystery.id}.svg' alt='Arte simbólica do mistério do dia'><div class='visual-caption'><span>O SANTO TERÇO</span><strong>${g.short}</strong></div></div>
+ const g=groups[dayGroup()];const progress=readProgress(dayGroup());const statsNow=stats();const truth=getTruth();
+ const count=progress.reduce((a,b)=>a+b,0),pos=progress.findIndex(x=>x<10);
+ const mystery=g.mysteries[Math.max(0,pos)],verse=versiculosPorMisterio[mystery.id];
+ return `<section class="home-hero">
+   <div class="hero-main">
+     <span class="kicker"><span class="kicker-mark">✦</span> SUA FÉ, TODOS OS DIAS</span>
+     <h1>Reza. Levanta.<br><span>Faz acontecer.</span></h1>
+     <p>Um espaço para viver a fé com verdade. Reze o terço, fortaleça a consciência e enfrente a vida com coragem. <strong>Vai pra cima. Seja cuiúdo.</strong></p>
+     <div class="hero-actions"><button class="btn btn-primary" data-action="navigate" data-tab="terco">Rezar o terço ${icon('arrow')}</button><button class="btn btn-secondary" data-action="navigate" data-tab="verdade">Ler reflexão</button></div>
+     <div class="hero-note"><span class="hero-note-line"></span> Fé não é fugir da vida. É vivê-la com Cristo.</div>
+   </div>
+   <aside class="hero-aside">
+     <div class="aside-top"><span>HOJE NO TERÇO</span>${icon('calendar')}</div>
+     <div class="aside-cross" aria-hidden="true">✝</div>
+     <h2>${g.title}</h2>
+     <p>${g.eyebrow}. Reserve um momento para contemplar, rezar e recomeçar.</p>
+     <button class="text-link" data-action="navigate" data-tab="terco">Começar oração ${icon('arrow')}</button>
+   </aside>
  </section>
- <section class='home-intro'><div><span class='section-kicker'>SUA JORNADA</span><h2>Um dia de cada vez.</h2><p>Oração, reflexão e passos concretos para viver melhor a sua fé.</p></div><button class='text-link' data-action='navigate' data-tab='desafios'>Meu plano de ação ${icon('arrow')}</button></section>
- <section class='home-dashboard'>
-  <article class='card rosary-feature'><div class='feature-art'><img src='./assets/misterios/${displayMystery.id}.svg' alt='Mistério do Santo Terço'></div><div class='feature-body'><div class='card-meta'>ORAÇÃO DO DIA <span class='meta-divider'>/</span> ${g.short}</div><h3 class='card-title'>O Santo Terço</h3><p>${g.title}. Faça deste momento um encontro sincero com Cristo.</p><div class='feature-progress'><div class='progress'><div class='progress-fill' style='width:${complete*2}%'></div></div><div class='progress-label'><span>${p.filter(x=>x===10).length} de 5 dezenas concluídas</span><strong>${complete}/50</strong></div></div><button class='text-link' data-action='navigate' data-tab='terco'>${complete===50?'Revisitar oração':'Continuar a oração'} ${icon('arrow')}</button></div></article>
-  <article class='card truth-card'><div class='truth-card-top'><span class='card-meta'>REFLEXÃO DE HOJE</span><span class='truth-spark'>✧</span></div><h3>${escapeHtml(truth.title)}</h3><blockquote>${escapeHtml(truth.quote)}</blockquote><button class='text-link' data-action='navigate' data-tab='verdade'>Encarar a verdade ${icon('arrow')}</button></article>
+ <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Tudo começa com o próximo passo.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
+ <section class="home-dashboard">
+   <article class="card rosary-feature">
+     <div class="feature-top"><span class="card-meta">01 / ORAÇÃO</span><span class="feature-icon">${icon('rosary')}</span></div>
+     <h3 class="card-title">Seu terço de hoje.</h3><p>${g.title}. Uma dezena por vez, um encontro de cada vez.</p>
+     <div class="feature-progress"><div class="progress"><div class="progress-fill" style="width:${count*2}%"></div></div><div class="progress-label"><span>${progress.filter(x=>x===10).length} de 5 dezenas</span><strong>${count}/50</strong></div></div>
+     <button class="text-link" data-action="navigate" data-tab="terco">${count===50?'Revisitar oração':'Continuar rezando'} ${icon('arrow')}</button>
+   </article>
+   <article class="card truth-card">
+     <div class="feature-top"><span class="card-meta">02 / REFLEXÃO</span><span class="feature-icon">${icon('flame')}</span></div>
+     <h3 class="card-title">A verdade transforma.</h3><p class="truth-topic">${escapeHtml(truth.title)}</p><blockquote>${escapeHtml(truth.quote)}</blockquote>
+     <button class="text-link" data-action="navigate" data-tab="verdade">Refletir agora ${icon('arrow')}</button>
+   </article>
  </section>
- <section class='home-bottom'>
-  <article class='card scripture-card'><div class='card-meta'>PALAVRA QUE ORIENTA <span class='meta-divider'>/</span> ${escapeHtml(scripture.ref)}</div><blockquote lang='${state.verseLang==='pt'?'pt-BR':'en'}'>“${escapeHtml(scriptureText(scripture))}”</blockquote><div class='scripture-card-foot'><span>${state.verseLang==='pt'?'Figueiredo':'Douay-Rheims'}</span><button class='text-link' data-action='navigate' data-tab='terco'>Meditar ${icon('arrow')}</button></div></article>
-  <article class='card progress-card'><span class='card-meta'>SEU CAMINHO ATÉ AQUI</span><h3>O que você já viveu.</h3><div class='stat-row'><div><strong>${s.full}</strong><span>Terços rezados</span></div><div><strong>${s.activeDays}</strong><span>Dias em ação</span></div><div><strong>${s.todayChecks}<small>/4</small></strong><span>Hábitos de hoje</span></div></div><button class='text-link' data-action='navigate' data-tab='diario'>Abrir meu diário ${icon('arrow')}</button></article>
- </section>`;
+ <section class="home-bottom">
+   <article class="card scripture-card"><div class="feature-top"><span class="card-meta">03 / PALAVRA DE DEUS</span><span class="scripture-ref">${escapeHtml(verse.ref)}</span></div>
+      <blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(verse))}”</blockquote>
+      <div class="scripture-card-foot"><span>${state.verseLang==='pt'?'Pe. Antônio Pereira de Figueiredo':'Douay-Rheims 1899'}</span><button class="text-link" data-action="navigate" data-tab="terco">Meditar ${icon('arrow')}</button></div>
+   </article>
+   <article class="card progress-card"><div class="feature-top"><span class="card-meta">04 / SEU PROGRESSO</span><span class="feature-icon">${icon('check')}</span></div><h3 class="card-title">Pequenas vitórias.</h3>
+     <div class="stat-row"><div><strong>${statsNow.full}</strong><span>Terços completos</span></div><div><strong>${statsNow.activeDays}</strong><span>Dias de atitude</span></div><div><strong>${statsNow.todayChecks}<small>/4</small></strong><span>Hábitos de hoje</span></div></div>
+     <button class="text-link" data-action="navigate" data-tab="diario">Abrir diário ${icon('arrow')}</button>
+   </article>
+ </section>
+ <section class="prayer-cta"><div><span class="card-meta">ORE COM A IGREJA</span><h2>Santos, anjos e orações.</h2><p>Um lugar para buscar inspiração, intercessão e perseverança.</p></div><button class="btn btn-secondary" data-action="navigate" data-tab="devocionario">Explorar orações ${icon('arrow')}</button></section>`;
 }
 function rosary(){
  const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];const versiculo=versiculosPorMisterio[m.id];
@@ -1103,7 +1043,7 @@ function rosary(){
  <div class="eyebrow">Mistérios de hoje: ${groups[dayGroup()].short}</div><div class="group-picker" role="group" aria-label="Escolher grupo de mistérios">${groupNames.map(id=>`<button type="button" class="group-button ${state.group===id?'active':''}" data-action="group" data-id="${id}" aria-pressed="${state.group===id}">${groups[id].short}</button>`).join('')}</div>
  <section class="mystery-layout"><div class="mystery-visual"><div class="eyebrow">${state.mystery+1}º mistério • ${g.short}</div><img src="./assets/misterios/${m.id}.svg" alt="Arte simbólica: ${escapeHtml(m.title)}"/><h2>${m.title}</h2><small>${m.ref}</small></div>
  <div class="mystery-detail"><div class="card"><div class="scripture-verse"><div class="scripture-top"><span class="card-meta">ESCRITURA SAGRADA · ${escapeHtml(versiculo.ref)}</span><div class="verse-switch" role="group" aria-label="Idioma do versículo"><button type="button" data-action="verse-lang" data-lang="pt" aria-pressed="${state.verseLang==='pt'}" class="${state.verseLang==='pt'?'active':''}">PT</button><button type="button" data-action="verse-lang" data-lang="en" aria-pressed="${state.verseLang==='en'}" class="${state.verseLang==='en'?'active':''}">EN</button></div></div><blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(versiculo))}”</blockquote><div class="scripture-footer"><span>${state.verseLang==='pt'?'Pe. Antônio Pereira de Figueiredo':'Douay-Rheims 1899'} · ${versiculo.excerptPt&&state.verseLang==='pt'?'Excerto literal · ':''}Domínio público</span><a href="${state.verseLang==='pt'?versiculo.ptSource:versiculo.enSource}" rel="noopener noreferrer" target="_blank">Ler capítulo completo ↗</a></div></div><div class="card-meta">Meditação do Evangelho</div><p class="readable">${m.summary}</p><div class="kicker-line"></div><div class="card-meta">${state.mode==='brutal'?'SEM DESCULPAS · A VERDADE QUE DÓI':'Tapa na cara da realidade'}</div><blockquote class="confront">“${escapeHtml(mm.hard)}”</blockquote><div class="question"><strong>Exame de consciência:</strong> ${escapeHtml(mm.question)}</div>${mm.prayer?`<div class="prayer-response"><span>ORAÇÃO DE COMBATE</span><p>${escapeHtml(mm.prayer)}</p></div>`:''}</div></div></section>
- <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p style="color:#b5b7b0;font-size:12px;line-height:1.7">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
+ <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p class="decade-description">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
  <div class="section-head"><h2>Orações do terço</h2></div><p class="page-desc">Comece com o Sinal da Cruz e o Credo; reze um Pai-Nosso, três Ave-Marias e um Glória. Em cada mistério, reze um Pai-Nosso, dez Ave-Marias e um Glória. Conclua com a Salve-Rainha.</p><section class="prayer-list">${prayers.map((p,i)=>`<details class="card prayer-card" ${i===2?'open':''}><summary>${escapeHtml(p.name)}</summary><p>${escapeHtml(p.text)}</p></details>`).join('')}</section><div class="section-head"><h2>Ladainha e orações especiais</h2></div><section class="prayer-list"><details class="card prayer-card" id="ladainha"><summary>Ladainha de Nossa Senhora — versão breve</summary><p>${escapeHtml(ladainhaBreve.join('\n'))}</p><p class="devotional-source">Esta é uma ladainha autoral breve. <a target="_blank" rel="noopener noreferrer" href="${fonteLadainhaOficial}">Ler a Ladainha Lauretana completa no Vaticano</a>.</p></details><details class="card prayer-card"><summary>Oração a São Miguel Arcanjo</summary><p>${escapeHtml(oracoesDevocionario.find(x=>x.id==='miguel').text)}</p><p><a href="#" data-action="navigate" data-tab="devocionario">Mais orações aos santos e anjos ${icon('arrow')}</a></p></details></section>`;
 }
 function truth(){const t=getTruth();return `<h1 class="page-title">${state.mode==='brutal'?'SEM DESCULPAS.':'Tapa na cara da realidade'}</h1><p class="page-desc">${state.mode==='brutal'?'VAI PRA CIMA. SEJA CUIÚDO. O CONFRONTO NÃO É CONTRA VOCÊ. É CONTRA AS SUAS DESCULPAS. Examine-se com coragem e faça o que é certo, sem vender a alma ao comodismo.':'Palavras firmes para sacudir a consciência, sem destruir a dignidade. A verdade conduz à misericórdia e à ação.'}</p>
@@ -1150,7 +1090,7 @@ app.addEventListener('click',evt=>{
  if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
  if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
  if(a==='toggle-theme'){state.theme=state.theme==='light'?'dark':'light';save();}
- if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'system';save();}
+ if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';save();}
  if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
  if(a==='close-more'){state.mobileMore=false;}
  if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';save();}

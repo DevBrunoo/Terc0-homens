@@ -85,3 +85,14 @@ A interface foi recriada com foco em legibilidade e atmosfera de oração: fonte
 **Aparência:** no topo, use **☀ Dia**, **☾ Noite** ou **◌ Auto**. Dia = paleta marfim e verde-escuro, Noite = grafite e verde suave, Auto = acompanha o sistema operacional. A preferência permanece neste navegador.
 
 As mudanças preservam as 20 passagens PT/EN, as orações dos santos e anjos, o terço interativo, o exame, a reflexão e o diário. Referências gerais de acessibilidade: [Apple HIG — Dark Mode](https://developer.apple.com/design/human-interface-guidelines/dark-mode) e [WCAG](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+
+
+## Redesign v5 — Minimalismo branco e Arial
+
+Interface reconstruída usando a simplicidade de [Vercel Geist](https://vercel.com/geist/introduction) e a organização do [redesign da Linear](https://linear.app/now/behind-the-latest-design-refresh) como referências de princípios, sem copiar identidade visual de terceiros.
+
+**Claro por padrão:** branco `#ffffff`, preto e cinzas neutros, botões pretos e fonte **Arial, Helvetica, sans-serif**. Sem Google Fonts. Títulos fluidos usam `clamp()`, com layout responsivo.
+
+**Navegação:** barra superior em vez da antiga sidebar, botão Mais e barra inferior no celular. **Claro / Escuro / Auto** ficam no topo; na primeira abertura da versão v5 o tema volta a Claro, e a escolha posterior fica salva.
+
+O Service Worker passou a priorizar a rede para HTML, CSS e JS, evitando visual antigo em cache após novas publicações. O terço, os versículos PT/EN, as 20 artes, a ladainha, santos e anjos, diário e desafios permanecem.

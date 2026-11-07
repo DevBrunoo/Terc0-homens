@@ -1,5 +1,14 @@
-const CACHE='cuiudo-v6-editorial-day-night';
-const PRECACHE=['./','./index.html','./styles.css','./data.js','./brutal.js','./devocionario.js','./app.js','./manifest.webmanifest','./assets/icon.svg','./assets/misterios/anunciacao.svg','./assets/misterios/visitacao.svg','./assets/misterios/nascimento.svg','./assets/misterios/apresentacao.svg','./assets/misterios/encontro.svg','./assets/misterios/agonia.svg','./assets/misterios/flagelacao.svg','./assets/misterios/espinhos.svg','./assets/misterios/cruz.svg','./assets/misterios/crucificacao.svg','./assets/misterios/ressurreicao.svg','./assets/misterios/ascensao.svg','./assets/misterios/pentecostes.svg','./assets/misterios/assuncao.svg','./assets/misterios/coroacao.svg','./assets/misterios/batismo.svg','./assets/misterios/cana.svg','./assets/misterios/reino.svg','./assets/misterios/transfiguracao.svg','./assets/misterios/eucaristia.svg'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE)));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));}return res;})));});
+const VERSION='cuiudo-white-arial-v7';
+const ASSETS=['./','./index.html','./styles.css','./data.js','./brutal.js','./devocionario.js','./app.js','./manifest.webmanifest','./assets/icon.svg'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(ASSETS)));self.skipWaiting()});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
+self.addEventListener('fetch',e=>{
+ const q=e.request;if(q.method!=='GET'||new URL(q.url).origin!==location.origin)return;
+ const path=new URL(q.url).pathname;
+ const dynamic=q.mode==='navigate'||/\.(html|css|js)$/i.test(path)||path.endsWith('/');
+ e.respondWith((async()=>{
+   if(dynamic){try{const r=await fetch(q);if(r.ok){const cache=await caches.open(VERSION);cache.put(q,r.clone())}return r}catch{return await caches.match(q)||Response.error()}}
+   const cached=await caches.match(q);if(cached)return cached;
+   const r=await fetch(q);if(r.ok){const cache=await caches.open(VERSION);cache.put(q,r.clone())}return r;
+ })());
+});
