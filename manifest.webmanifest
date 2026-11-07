@@ -1,12 +1,12 @@
 {
   "name": "CUIÚDO — Fé, Coragem e Ação",
   "short_name": "CUIÚDO",
-  "description": "Reza. Levanta. Faz acontecer.",
+  "description": "Combate espiritual, fé e coragem. São Miguel, terço, Bíblia e feed.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#08090a",
+  "theme_color": "#08090a",
   "lang": "pt-BR",
   "icons": [
     {

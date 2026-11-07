@@ -94,3 +94,51 @@ assert.match(mount.innerHTML,/more-panel/);
 console.log('✓ Smoke test: 7 telas, tema claro/escuro, PT/EN e menu adicional');
 
 console.log('✓ 20 mistérios, 20 meditações SEM DESCULPAS, 18 confrontos, artes e sintaxe JS');
+
+
+// Validação da camada CUIÚDO v9 / feed, navegação, São Miguel, Bíblia e preferências.
+const feedData=read('feed-data.js'), feedUi=read('feed-ui.js'), feedStyles=read('feed.css');
+assert.match(html,/feed-data\.js/);
+assert.match(html,/feed-ui\.js/);
+assert.match(html,/feed\.css/);
+assert.match(feedStyles,/\.poster-grid/);
+assert.match(feedStyles,/@keyframes cuiudoPunch/);
+const feedInfo=runInNewContext(feedData+'\n;({feedPosts,feedArtwork,feedFilters})');
+assert.equal(feedInfo.feedPosts.length,16);
+assert.ok(Object.keys(feedInfo.feedArtwork).length>=14);
+assert.ok(feedInfo.feedFilters.some(([id])=>id==='miguel'));
+for(const file of ['feed-ui.js','feed-data.js']){
+ const out=spawnSync(process.execPath,['--check',new URL('./'+file,import.meta.url).pathname]);
+ assert.equal(out.status,0,file+': '+out.stderr.toString());
+}
+const feedMount={innerHTML:'',addEventListener(){},querySelectorAll(){return []},querySelector(){return null}};
+const feedMeta={content:'',setAttribute(n,v){this[n]=v}};
+const feedDoc={documentElement:{dataset:{},style:{}},getElementById(){return feedMount},querySelector(){return feedMeta}};
+const storeMap=new Map();
+const feedSandbox={
+ document:feedDoc,
+ window:{scrollTo(){},matchMedia(){return {matches:false,addEventListener(){}}},location:{hash:''}},
+ navigator:{},location:{protocol:'file:'},
+ localStorage:{getItem(k){return storeMap.get(k)||null},setItem(k,v){storeMap.set(k,v)}},
+ confirm(){return true},console
+};
+const feedCtx=createContext(feedSandbox);
+runInContext(data+'\n'+brutal+'\n'+devotion+'\n'+feedData+'\n'+app+'\n'+feedUi,feedCtx,{timeout:3000});
+assert.match(feedMount.innerHTML,/cuiudo-hero/);
+assert.match(feedMount.innerHTML,/TEM QUE SER/);
+assert.match(feedMount.innerHTML,/poster-grid/);
+assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,16);
+assert.equal(feedDoc.documentElement.dataset.theme,'dark');
+for(const [tab,expected] of [['terco','O Santo Terço'],['devocionario','SÃO MIGUEL'],['palavra','PALAVRA DE DEUS'],['diario','Diário'],['desafios','compromissos'],['exame','consciência']]){
+ runInContext("state.tab='"+tab+"';render()",feedCtx);
+ assert.ok(feedMount.innerHTML.includes(expected),'Falhou navegação: '+tab);
+}
+runInContext("state.tab='inicio';state.feedOpen='m01';render()",feedCtx);
+assert.match(feedMount.innerHTML,/feed-modal/);
+runInContext("state.feedOpen=null;state.feedSaved={m01:true};state.feedFilter='salvos';render()",feedCtx);
+assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,1);
+runInContext("state.feedFilter='todos';state.theme='light';render()",feedCtx);
+assert.equal(feedDoc.documentElement.dataset.theme,'light');
+runInContext("state.tab='palavra';state.verseLang='en';render()",feedCtx);
+assert.match(feedMount.innerHTML,/Douay-Rheims/);
+console.log('✓ CUIÚDO V9: 16 posts, 14 fontes de imagem, feed, salvos, modal, temas e 8 telas');

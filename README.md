@@ -105,3 +105,30 @@ A home ganhou fotografia real, com licenças gratuitas do Unsplash: rosário por
 Também foi criada uma microanimação CSS de **punho batendo na palma** como símbolo de determinação — respeitando `prefers-reduced-motion`. O bloco reforça a voz da marca: **“Tem que fazer as coisas dar certo. Vai pra cima.”**
 
 Direção visual baseada em princípios observados no Apple HIG / Apple Design Awards, Linear, Vercel e Hallow: foco no conteúdo, navegação que recua, fotografias com função narrativa, hit targets claros e movimento com propósito.
+
+
+## Feed CUIÚDO — edição de combate v9
+
+Reconstrução baseada nas referências visuais enviadas pelo criador: grade escura estilo Explore, arte clássica de São Miguel e Cristo, pinturas western, texto de alto impacto e interação direta. **Nenhuma captura ou legenda de criador do Instagram foi copiada.** O acervo possui 16 posts autorais e 14 fontes visuais licenciadas, com link de créditos em cada detalhe.
+
+### Experiência
+
+- **Feed** responsivo de dois cards por linha no celular, com busca dinâmica, filtros temáticos, conteúdo salvo, compartilhamento e modal de leitura com reflexão e ação verificável.
+- **Ir pra cima**: gesto animado de punho batendo na palma, sem violência física, e missões concretas de disciplina.
+- **São Miguel**: capa com pintura histórica de Guido Reni, oração tradicional e devocionário com santos e anjos.
+- **Rezar**: terço com calendário, 20 mistérios, contador, versículos e orações incluindo ladainha breve e São Miguel.
+- **Versículos**: 20 passagens com idioma PT/EN, citações verificadas de Figueiredo e Douay-Rheims.
+- **Diário**: anotações e hábitos locais. Tudo permanece no navegador, sem conta e sem servidor.
+- **Tema**: escuro como padrão nesta edição; Claro e Auto continuam disponíveis no topo.
+
+### Fontes visuais e direitos
+
+As obras antigas são reproduções em **domínio público** disponíveis no [Wikimedia Commons](https://commons.wikimedia.org/). Artistas: Guido Reni, Rafael Sanzio, Frederic Remington, Ivan Kramskoi, El Greco e Rembrandt. Fotos de Dolina Modlitwy, Chad Greiter e Julia Taubitz vêm do [Unsplash](https://unsplash.com/license). Cada conteúdo possui ligação à sua página original e licença. As imagens são carregadas do domínio da fonte e podem não aparecer sem internet; nesse caso, o cartão continua legível. Referências históricas são documentadas em `feed-data.js`.
+
+### Limites editoriais
+
+A linguagem confronta a desculpa e os hábitos, não a dignidade das pessoas. Não há promessa de que orar trará sucesso financeiro ou elimine o sofrimento. O combate é interior e espiritual, não uma convocação à violência.
+
+### Design
+
+Referências funcionais: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/design-principles/), [Material Design 3](https://m3.material.io/components/app-bars/), [Hallow](https://help.hallow.com/pt-BR/articles/5834554-o-que-e-o-hallow). A direção estética principal vem dos prints enviados pelo criador.

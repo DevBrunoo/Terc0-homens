@@ -1,5 +1,5 @@
-const VERSION='cuiudo-photo-action-v8';
-const ASSETS=['./','./index.html','./styles.css','./data.js','./brutal.js','./devocionario.js','./app.js','./manifest.webmanifest','./assets/icon.svg'];
+const VERSION='cuiudo-combat-feed-v9';
+const ASSETS=['./','./index.html','./styles.css','./feed.css','./data.js','./brutal.js','./devocionario.js','./feed-data.js','./app.js','./feed-ui.js','./manifest.webmanifest','./assets/icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{
