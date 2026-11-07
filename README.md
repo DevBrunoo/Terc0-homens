@@ -57,3 +57,9 @@ Projeto em desenvolvimento.
 - Referências: [Santo Rosário](https://www.vatican.va/special/rosary/documents/misteri_po.html), [Ladainha oficial](https://www.vatican.va/special/rosary/documents/litanie-lauretane_po.html) e [São Miguel](https://www.vatican.va/content/john-paul-ii/pt/angelus/1981/documents/hf_jp-ii_ang_19810930.html).
 
 **Nota:** orações marcadas "autoral" foram compostas para o app; não se atribuem aos santos como se eles tivessem escrito. A tradução livre dos versículos não é a Bíblia Ave-Maria nem substitui leitura da edição bíblica católica.
+
+## Identidade e lema
+
+**TEM QUE FAZER ACONTECER. IR PRA CIMA. SER CUIÚDO.**
+
+“Ser cuiúdo” neste projeto é rezar, enfrentar as próprias desculpas, cumprir o dever com coragem, admitir erros, recomeçar e tratar as pessoas com caridade. O lema aparece na home, no menu lateral e nas telas de reflexão e desafios.

@@ -114,3 +114,10 @@ textarea{resize:vertical;width:100%;border:1px solid #51514a;background:#111515;
 .devotional-source{font-size:11px!important;line-height:1.7}
 @media(max-width:880px){.devotion-grid{grid-template-columns:1fr}.angel-mark{opacity:.24}}
 @media(max-width:760px){.mobile-nav button{font-size:8px;padding:0 1px}.mobile-nav svg{width:18px;height:18px}.devotional-hero{padding:22px 18px}.devotional-hero .page-desc{position:relative;z-index:1}.angel-mark{right:-15px;top:5px}}
+
+
+/* CUIÚDO: coragem que se converte em ação. */
+.hero-attack{display:inline-flex;align-items:center;flex-wrap:wrap;gap:7px;margin:0 0 18px;padding:9px 13px;background:#411c22;border:1px solid #95554c;border-radius:5px;color:#efddc6;font-size:12px;font-weight:800;letter-spacing:.075em}
+.hero-attack strong{color:#f2c487}
+.battle-cry strong{line-height:1.65}
+@media(max-width:760px){.hero-attack{font-size:10px;line-height:1.5;letter-spacing:.035em}}
