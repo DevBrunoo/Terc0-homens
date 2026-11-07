@@ -76,3 +76,12 @@ A transcrição portuguesa preserva a redação histórica e atualiza grafia em 
 **Tema claro e escuro:** alterne pelo botão sol/lua no canto superior. O app grava a preferência no navegador. Não são necessários login, serviços pagos ou credenciais.
 
 **CUIÚDO**: variante popular de colhudo, com sentido coloquial de coragem e valentia; no aplicativo significa enfrentar as próprias desculpas e fazer o bem, não humilhar ninguém. Pesquisa lexical: [GZH / Cláudio Moreno](https://gauchazh.clicrbs.com.br/cultura-e-lazer/noticia/2013/03/nao-vem-de-cuia-4084233.html) · [Priberam](https://dicionario.priberam.org/colhudo).
+
+
+## Redesign editorial v4 — Dia, Noite e Auto
+
+A interface foi recriada com foco em legibilidade e atmosfera de oração: fonte serifada Cormorant Garamond para títulos, DM Sans para leitura, navegação lateral organizada por seções, barra móvel com botão **Mais**, cartões com hierarquia clara e hero de oração sem excesso de efeitos. A tela inicial destaca a oração do dia, Palavra e o progresso pessoal.
+
+**Aparência:** no topo, use **☀ Dia**, **☾ Noite** ou **◌ Auto**. Dia = paleta marfim e verde-escuro, Noite = grafite e verde suave, Auto = acompanha o sistema operacional. A preferência permanece neste navegador.
+
+As mudanças preservam as 20 passagens PT/EN, as orações dos santos e anjos, o terço interativo, o exame, a reflexão e o diário. Referências gerais de acessibilidade: [Apple HIG — Dark Mode](https://developer.apple.com/design/human-interface-guidelines/dark-mode) e [WCAG](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).

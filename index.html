@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0e1011" />
+  <meta name="theme-color" content="#f6f6f2" />
   <meta name="color-scheme" content="dark light" />
   <meta name="description" content="CUIÚDO: fé, coragem e ação. Terço diário bilíngue, Bíblia católica, temas claro/escuro, ladainha, santos e anjos, exame de consciência e desafios para viver a fé católica com atitudes." />
   <meta property="og:title" content="CUIÚDO — Fé, Coragem e Ação" />
@@ -12,7 +12,16 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script>
+  try{
+   const s=JSON.parse(localStorage.getItem('cuiudo-v1')||'{}');
+   const p=['light','dark','system'].includes(s.theme)?s.theme:'system';
+   const theme=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;
+   document.documentElement.dataset.theme=theme;
+   document.querySelector('meta[name="theme-color"]').content=theme==='dark'?'#101714':'#f6f6f2';
+  }catch{document.documentElement.dataset.theme='light';}
+  </script>
   <link rel="stylesheet" href="./styles.css">
   <title>CUIÚDO — Fé, Coragem e Ação</title>
 </head>

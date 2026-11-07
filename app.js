@@ -16,12 +16,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'dark',verseLang:'pt',...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'system',verseLang:'pt',mobileMore:false,...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-state.theme=state.theme==='light'?'light':'dark';
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'system';
+state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
 function readProgress(group=state.group){return state.progress?.[`${currentDay()}:${group}`] || [0,0,0,0,0];}
@@ -62,7 +63,8 @@ function icon(name,extra=''){
   return `<svg class="icon ${extra}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.home}</svg>`;
 }
 function scriptureText(v){return v[state.verseLang]||v.pt;}
-function setTheme(){document.documentElement.dataset.theme=state.theme;const themeColor=document.querySelector('meta[name="theme-color"]');if(themeColor)themeColor.setAttribute('content',state.theme==='light'?'#f7f3ea':'#0d1011');}
+function resolvedTheme(){return state.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):state.theme;}
+function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111916':'#f6f6f2';}
 function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
 function stats(){
   const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
@@ -75,31 +77,47 @@ function navButton(item,cls='nav-button'){
   return `<button type="button" class="${cls}" data-action="navigate" data-tab="${item.id}" aria-current="${state.tab===item.id?'page':'false'}">${icon(item.icon)}<span>${cls==='nav-button'?item.label:item.mobile}</span></button>`;
 }
 function renderShell(content){
-  return `<div class="app-shell">
-    <aside class="sidebar" aria-label="Navegação principal">
-      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="Ir para o início"><span class="logo-mark">✝</span><span class="logo-type">CUIÚDO<small>FÉ • CORAGEM • AÇÃO</small></span></a>
-      <div class="sidebar-label">Caminho de santidade</div><nav class="nav">${navItems.map(x=>navButton(x)).join('')}</nav>
-      <div class="sidebar-bottom"><div class="motto">Reza. Levanta.<br/><strong>Vai pra cima. Seja cuiúdo.</strong></div><small>FEITO PARA CONVERTER, NÃO PARA AGRADAR.</small></div>
-    </aside>
-    <main class="main" id="main-content"><header class="topbar"><div class="topbar-date">${icon('calendar')}<span>${escapeHtml(dateDisplay())}</span></div><div class="topbar-actions"><button type="button" class="theme-toggle" data-action="toggle-theme" aria-label="${state.theme==='light'?'Ativar tema escuro':'Ativar tema claro'}" title="${state.theme==='light'?'Tema escuro':'Tema claro'}">${icon(state.theme==='light'?'moon':'sun')}<span>${state.theme==='light'?'Escuro':'Claro'}</span></button><button type="button" class="pill-status mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar entre reflexões firmes e modo sem desculpas">${icon('flame')} ${state.mode==='brutal'?'SEM DESCULPAS · ON':'MODO FIRME · ON'}</button></div></header>${content}<p class="disclaimer">CUIÚDO é um projeto independente de formação e prática devocional, não uma publicação oficial da Igreja. Meditações são textos autorais. Os versículos reproduzem traduções católicas históricas em domínio público: Figueiredo (PT) e Douay-Rheims (EN). A leitura da Bíblia não substitui acompanhamento espiritual. O exame não substitui o sacramento da Confissão nem acompanhamento espiritual.</p></main>
-    <nav class="mobile-nav" aria-label="Navegação móvel">${navItems.map(x=>navButton(x,'mobile-nav-button')).join('')}</nav>
-  </div>`;
+ const morePanel=state.mobileMore?`<button type='button' class='more-backdrop' data-action='close-more' aria-label='Fechar menu'></button><div class='more-panel' role='dialog' aria-modal='true' aria-label='Mais opções de navegação'><div class='more-panel-head'><strong>Mais caminhos</strong><button class='more-close' data-action='close-more' aria-label='Fechar menu'>✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
+ const appearance=[{id:'light',label:'Dia',ico:'sun'},{id:'dark',label:'Noite',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
+ const themeControl=`<div class='appearance-control' role='group' aria-label='Aparência do aplicativo'>${appearance.map(x=>`<button type='button' class='theme-option ${state.theme===x.id?'selected':''}' data-action='set-theme' data-theme='${x.id}' aria-pressed='${state.theme===x.id}' title='${x.label}'>${icon(x.ico)}<span>${x.label}</span></button>`).join('')}</div>`;
+ const navGroups=[{name:'COMECE AQUI',ids:['inicio','terco']},{name:'SUA VIDA ESPIRITUAL',ids:['devocionario','verdade','desafios']},{name:'SEU CAMINHO',ids:['exame','diario']}];
+ return `<div class='app-shell'>
+  <aside class='sidebar' aria-label='Navegação principal'>
+   <a class='logo' href='#inicio' data-action='navigate' data-tab='inicio' aria-label='CUIÚDO - início'><span class='logo-mark'>✝</span><span class='logo-type'>cuiúdo<small>FÉ QUE SE VIVE.</small></span></a>
+   <div class='sidebar-caption'>Um espaço de oração, coragem e verdade.</div>
+   <nav class='nav'>${navGroups.map(g=>`<div class='nav-group'><div class='sidebar-label'>${g.name}</div>${g.ids.map(id=>navButton(navItems.find(x=>x.id===id))).join('')}</div>`).join('')}</nav>
+   <div class='sidebar-bottom'><div class='sidebar-bottom-icon'>✦</div><div class='motto'>Sem desculpas.<br><strong>Com fé e atitude.</strong></div><small>REZA. LEVANTA. VAI PRA CIMA.</small></div>
+  </aside>
+  <div class='main-column'>
+   <header class='topbar'><div class='topbar-context'><span class='topbar-cross'>✝</span><div><span class='topbar-eyebrow'>CUIÚDO / ${navItems.find(x=>x.id===state.tab)?.label||'Início'}</span><span class='topbar-date'>${escapeHtml(dateDisplay())}</span></div></div><div class='topbar-actions'>${themeControl}<button type='button' class='mode-switch ${state.mode==='brutal'?'on':''}' data-action='toggle-mode' aria-pressed='${state.mode==='brutal'}' title='Alternar a intensidade das reflexões'>${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div></header>
+   <main class='main' id='main-content'>${content}<footer class='site-footer'><span>✝ CUIÚDO <b>·</b> FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. As reflexões são autorais; os versículos vêm de traduções católicas históricas em domínio público. Não substitui a Confissão ou a direção espiritual.</p></footer></main>
+  </div>
+  <nav class='mobile-nav' aria-label='Navegação principal no celular'>${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type='button' class='mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}' data-action='toggle-more' aria-expanded='${Boolean(state.mobileMore)}' aria-label='Mais opções'>${icon('book')}<span>Mais</span></button></nav>
+  ${morePanel}
+ </div>`;
 }
 function home(){
  const g=groups[dayGroup()];const p=readProgress(dayGroup());const s=stats();const truth=getTruth();
- const nextIndex=p.findIndex(x=>x<10); const displayMystery=g.mysteries[Math.max(0,nextIndex)];
- return `<section class="hero"><div class="hero-inner"><span class="eyebrow">NÃO SE ESCONDA DA VIDA · FÉ QUE AGE</span><h1>REZA.<br/>LEVANTA.<br/><em>FAZ ACONTECER.</em></h1><div class="hero-attack">VAI PRA CIMA. <strong>SEJA CUIÚDO.</strong></div><p>${state.mode==='brutal'?'ACORDA, CUIÚDO! Tá difícil? Vai pra cima com coragem e juízo. Cansaço merece descanso; desculpa exige decisão. Reze, cumpra o seu dever e pare de esperar que a vida ande sozinha.':'A fé não foi feita para enfeitar discurso. Seja cuiúdo: enfrente seus deveres, reze e faça acontecer, com firmeza e caridade.'}</p><button class="btn" data-action="navigate" data-tab="terco">Rezar o terço de hoje ${icon('arrow')}</button></div><div class="hero-art" aria-hidden="true"><div class="hero-cross">✝</div></div></section>
- <div class="battle-cry"><span class="battle-dot">✝</span><strong>TEM QUE FAZER ACONTECER. IR PRA CIMA. SER CUIÚDO.</strong><span>Ser cuiúdo é ter coragem para assumir o dever, levantar depois da queda e agir com fé. Sem desculpa esfarrapada, sem abandonar a caridade.</span></div>
- <div class="manifesto-strip"><span class="manifesto-index">01</span><div><strong>CUIÚDO NÃO É QUEM GRITA MAIS ALTO.</strong><p>É quem tem coragem de fazer o certo quando ninguém está olhando. Reza, trabalha, enfrenta e não desiste.</p></div><span class="manifesto-cross" aria-hidden="true">✝</span></div>
- <div class="section-head"><h2>Seu caminho de hoje</h2><button class="link-button" data-action="navigate" data-tab="desafios">Ver desafios ${icon('arrow')}</button></div>
- <section class="grid-2">
-   <article class="card rosary-feature"><div class="feature-art"><img src="./assets/misterios/${displayMystery.id}.svg" alt="Representação simbólica do mistério de hoje" /></div><div class="feature-body"><div class="card-meta">Terço de hoje • ${g.short}</div><h3 class="card-title">${g.title}</h3><p>${g.eyebrow}. ${p.filter(x=>x===10).length} de 5 dezenas concluídas.</p><div class="progress" role="progressbar" aria-valuenow="${p.reduce((a,b)=>a+b,0)}" aria-valuemin="0" aria-valuemax="50" aria-label="Ave-Marias rezadas"><div class="progress-fill" style="width:${p.reduce((a,b)=>a+b,0)*2}%"></div></div><div class="progress-label">${p.reduce((a,b)=>a+b,0)}/50 Ave-Marias</div><button class="link-button" data-action="navigate" data-tab="terco">${p.every(x=>x===10)?'Revisitar o terço':'Continuar a oração'} ${icon('arrow')}</button></div></article>
-   <article class="card truth-card"><div><div class="card-meta">${state.mode==='brutal'?'A MARRETADA DE HOJE':'O tapa na cara de hoje'}</div><div class="quote-mark">“</div><blockquote>${escapeHtml(truth.quote)}</blockquote></div><button class="link-button" data-action="navigate" data-tab="verdade">Encarar a verdade ${icon('arrow')}</button></article>
+ const nextIndex=p.findIndex(x=>x<10);const displayMystery=g.mysteries[Math.max(0,nextIndex)];
+ const complete=p.reduce((a,b)=>a+b,0);const scripture=versiculosPorMisterio[displayMystery.id];
+ return `<section class='welcome'>
+  <div class='welcome-copy'><div class='welcome-overline'><span class='overline-dot'></span> SEU MOMENTO COM DEUS <span class='overline-sep'>/</span> ${g.days}</div>
+   <h1>Fé para seguir.<br><em>Coragem para agir.</em></h1>
+   <p>Há momentos de silêncio e momentos de decisão. O importante é não fugir do que Deus te chama a viver. Respire, reze e vá pra cima.</p>
+   <div class='welcome-actions'><button class='btn btn-primary' data-action='navigate' data-tab='terco'>Rezar o terço de hoje ${icon('arrow')}</button><button class='btn btn-outline' data-action='navigate' data-tab='verdade'>Ler uma reflexão</button></div>
+   <div class='welcome-signature'><span>✦</span> TEM QUE FAZER ACONTECER. SEJA CUIÚDO.</div>
+  </div>
+  <div class='welcome-visual'><div class='visual-halo'></div><img src='./assets/misterios/${displayMystery.id}.svg' alt='Arte simbólica do mistério do dia'><div class='visual-caption'><span>O SANTO TERÇO</span><strong>${g.short}</strong></div></div>
  </section>
- <section class="daily-scripture"><div><span class="card-meta">A PALAVRA NÃO NEGOCIA COM O MEDO</span><p lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(versiculosPorMisterio[displayMystery.id]))}”</p><small>${versiculosPorMisterio[displayMystery.id].ref} · ${state.verseLang==='pt'?'Figueiredo':'Douay-Rheims'}</small></div><button class="link-button" data-action="navigate" data-tab="terco">Meditar agora ${icon('arrow')}</button></section>
- <section class="grid-3 stats" aria-label="Seu progresso"><div class="card stat"><div class="stat-value">${s.full}</div><div class="stat-label">Terços concluídos</div></div><div class="card stat"><div class="stat-value">${s.activeDays}</div><div class="stat-label">Dias em ação</div></div><div class="card stat"><div class="stat-value">${s.todayChecks}/4</div><div class="stat-label">Desafios de hoje</div></div></section>
- <div class="section-head"><h2>Hoje você escolhe agir</h2><button class="link-button" data-action="navigate" data-tab="diario">Meu diário ${icon('arrow')}</button></div>
- <section class="card"><div class="card-meta">A pequena fidelidade de hoje</div><h3 class="card-title">${escapeHtml(truth.action)}</h3><p>Fé sem obra concreta vira discurso. Faça sua parte sem confundir responsabilidade com merecimento das graças de Deus.</p><div class="two-buttons">${missionButton()}<button class="btn btn-ghost" data-action="navigate" data-tab="desafios">Meu plano de ação ${icon('arrow')}</button></div></section>`;
+ <section class='home-intro'><div><span class='section-kicker'>SUA JORNADA</span><h2>Um dia de cada vez.</h2><p>Oração, reflexão e passos concretos para viver melhor a sua fé.</p></div><button class='text-link' data-action='navigate' data-tab='desafios'>Meu plano de ação ${icon('arrow')}</button></section>
+ <section class='home-dashboard'>
+  <article class='card rosary-feature'><div class='feature-art'><img src='./assets/misterios/${displayMystery.id}.svg' alt='Mistério do Santo Terço'></div><div class='feature-body'><div class='card-meta'>ORAÇÃO DO DIA <span class='meta-divider'>/</span> ${g.short}</div><h3 class='card-title'>O Santo Terço</h3><p>${g.title}. Faça deste momento um encontro sincero com Cristo.</p><div class='feature-progress'><div class='progress'><div class='progress-fill' style='width:${complete*2}%'></div></div><div class='progress-label'><span>${p.filter(x=>x===10).length} de 5 dezenas concluídas</span><strong>${complete}/50</strong></div></div><button class='text-link' data-action='navigate' data-tab='terco'>${complete===50?'Revisitar oração':'Continuar a oração'} ${icon('arrow')}</button></div></article>
+  <article class='card truth-card'><div class='truth-card-top'><span class='card-meta'>REFLEXÃO DE HOJE</span><span class='truth-spark'>✧</span></div><h3>${escapeHtml(truth.title)}</h3><blockquote>${escapeHtml(truth.quote)}</blockquote><button class='text-link' data-action='navigate' data-tab='verdade'>Encarar a verdade ${icon('arrow')}</button></article>
+ </section>
+ <section class='home-bottom'>
+  <article class='card scripture-card'><div class='card-meta'>PALAVRA QUE ORIENTA <span class='meta-divider'>/</span> ${escapeHtml(scripture.ref)}</div><blockquote lang='${state.verseLang==='pt'?'pt-BR':'en'}'>“${escapeHtml(scriptureText(scripture))}”</blockquote><div class='scripture-card-foot'><span>${state.verseLang==='pt'?'Figueiredo':'Douay-Rheims'}</span><button class='text-link' data-action='navigate' data-tab='terco'>Meditar ${icon('arrow')}</button></div></article>
+  <article class='card progress-card'><span class='card-meta'>SEU CAMINHO ATÉ AQUI</span><h3>O que você já viveu.</h3><div class='stat-row'><div><strong>${s.full}</strong><span>Terços rezados</span></div><div><strong>${s.activeDays}</strong><span>Dias em ação</span></div><div><strong>${s.todayChecks}<small>/4</small></strong><span>Hábitos de hoje</span></div></div><button class='text-link' data-action='navigate' data-tab='diario'>Abrir meu diário ${icon('arrow')}</button></article>
+ </section>`;
 }
 function rosary(){
  const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];const versiculo=versiculosPorMisterio[m.id];
@@ -142,7 +160,7 @@ function render(){
 app.addEventListener('click',evt=>{
  const target=evt.target.closest('[data-action]');if(!target)return;
  const a=target.dataset.action;
- if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;window.scrollTo({top:0,behavior:'instant'});}
+ if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;state.mobileMore=false;window.scrollTo({top:0,behavior:'instant'});}
  if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
  if(a==='dev-filter'){state.devFilter=target.dataset.filter;save();}
  if(a==='mystery')state.mystery=Number(target.dataset.index);
@@ -154,6 +172,9 @@ app.addEventListener('click',evt=>{
  if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
  if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
  if(a==='toggle-theme'){state.theme=state.theme==='light'?'dark':'light';save();}
+ if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'system';save();}
+ if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
+ if(a==='close-more'){state.mobileMore=false;}
  if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';save();}
  if(a==='mission-done'){state.missionDays??={};state.missionDays[missionId()]=!missionDone();save();}
  if(a==='delete-note'){
@@ -174,5 +195,6 @@ app.addEventListener('submit',evt=>{
  save();render();
 });
 render();
+if(window.matchMedia){const query=window.matchMedia('(prefers-color-scheme: dark)');if(query.addEventListener)query.addEventListener('change',()=>{if(state.theme==='system')render();});}
 if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
