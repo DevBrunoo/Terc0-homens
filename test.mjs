@@ -25,7 +25,7 @@ assert.equal(Object.keys(devotional.versiculosPorMisterio).length,20);
 for(const v of Object.values(devotional.versiculosPorMisterio)){assert.ok(v.pt&&v.en&&v.ptSource&&v.enSource,'Citação real nos dois idiomas');}
 assert.match(app,/toggle-theme/);
 assert.match(app,/verse-lang/);
-assert.match(app,/data-theme/);
+assert.match(app,/dataset\.theme/);
 assert.match(app,/Douay-Rheims/);
 assert.doesNotMatch(app,/Trecho bíblico em tradução livre/);
 assert.ok(devotional.oracoesDevocionario.length>=18);
