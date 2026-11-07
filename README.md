@@ -96,3 +96,12 @@ Interface reconstruída usando a simplicidade de [Vercel Geist](https://vercel.c
 **Navegação:** barra superior em vez da antiga sidebar, botão Mais e barra inferior no celular. **Claro / Escuro / Auto** ficam no topo; na primeira abertura da versão v5 o tema volta a Claro, e a escolha posterior fica salva.
 
 O Service Worker passou a priorizar a rede para HTML, CSS e JS, evitando visual antigo em cache após novas publicações. O terço, os versículos PT/EN, as 20 artes, a ladainha, santos e anjos, diário e desafios permanecem.
+
+
+## V8 — Fotografia editorial e gesto de atitude
+
+A home ganhou fotografia real, com licenças gratuitas do Unsplash: rosário por [Dolina Modlitwy](https://unsplash.com/photos/a-person-holding-a-rosary-with-a-cross-on-it-CCC0CdEsI7E), Basílica de São Pedro por [Chad Greiter](https://unsplash.com/photos/sunlight-beams-inside-ornate-cathedral--0gBnnMdQPw) e igreja contemporânea por [Julia Taubitz](https://unsplash.com/photos/modern-concrete-church-interior-with-sunlight-streaming-in-ioHO90sxxJA). As imagens ficam remotas e são carregadas diretamente do CDN do Unsplash.
+
+Também foi criada uma microanimação CSS de **punho batendo na palma** como símbolo de determinação — respeitando `prefers-reduced-motion`. O bloco reforça a voz da marca: **“Tem que fazer as coisas dar certo. Vai pra cima.”**
+
+Direção visual baseada em princípios observados no Apple HIG / Apple Design Awards, Linear, Vercel e Hallow: foco no conteúdo, navegação que recua, fotografias com função narrativa, hit targets claros e movimento com propósito.

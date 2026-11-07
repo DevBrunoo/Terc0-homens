@@ -101,23 +101,28 @@ function home(){
  const g=groups[dayGroup()];const progress=readProgress(dayGroup());const statsNow=stats();const truth=getTruth();
  const count=progress.reduce((a,b)=>a+b,0),pos=progress.findIndex(x=>x<10);
  const mystery=g.mysteries[Math.max(0,pos)],verse=versiculosPorMisterio[mystery.id];
- return `<section class="home-hero">
+ return `<section class="home-hero photo-hero">
    <div class="hero-main">
-     <span class="kicker"><span class="kicker-mark">✦</span> SUA FÉ, TODOS OS DIAS</span>
-     <h1>Reza. Levanta.<br><span>Faz acontecer.</span></h1>
-     <p>Um espaço para viver a fé com verdade. Reze o terço, fortaleça a consciência e enfrente a vida com coragem. <strong>Vai pra cima. Seja cuiúdo.</strong></p>
-     <div class="hero-actions"><button class="btn btn-primary" data-action="navigate" data-tab="terco">Rezar o terço ${icon('arrow')}</button><button class="btn btn-secondary" data-action="navigate" data-tab="verdade">Ler reflexão</button></div>
-     <div class="hero-note"><span class="hero-note-line"></span> Fé não é fugir da vida. É vivê-la com Cristo.</div>
+     <span class="kicker"><span class="kicker-mark">✦</span> FÉ QUE VIRA ATITUDE</span>
+     <h1>Reza. Levanta.<br><span>Vai pra cima.</span></h1>
+     <p>Nem tudo depende de você. Mas o que depende, você faz. Reze com verdade, encare o que precisa ser encarado e pare de negociar com a própria desculpa. <strong>Tem que fazer as coisas dar certo.</strong></p>
+     <div class="hero-actions"><button class="btn btn-primary" data-action="navigate" data-tab="terco">Rezar o terço ${icon('arrow')}</button><button class="btn btn-secondary" data-action="navigate" data-tab="desafios">Partir para a ação</button></div>
+     <div class="hero-note"><span class="hero-note-line"></span> SE FODA A DESCULPA. FAÇA A SUA PARTE. COM FÉ, JUÍZO E CARIDADE.</div>
    </div>
-   <aside class="hero-aside">
-     <div class="aside-top"><span>HOJE NO TERÇO</span>${icon('calendar')}</div>
-     <div class="aside-cross" aria-hidden="true">✝</div>
-     <h2>${g.title}</h2>
-     <p>${g.eyebrow}. Reserve um momento para contemplar, rezar e recomeçar.</p>
-     <button class="text-link" data-action="navigate" data-tab="terco">Começar oração ${icon('arrow')}</button>
-   </aside>
+   <figure class="hero-photo-card">
+     <img src="https://images.unsplash.com/photo-1654157632898-858fdbee3087?auto=format&fit=crop&q=86&w=1600" alt="Pessoa segurando um rosário com crucifixo" fetchpriority="high" decoding="async">
+     <div class="hero-photo-shade"></div>
+     <figcaption><span class="photo-kicker">TERÇO DE HOJE · ${g.short}</span><strong>${g.title}</strong><button class="photo-link" data-action="navigate" data-tab="terco">Começar oração ${icon('arrow')}</button></figcaption>
+     <a class="photo-credit" href="https://unsplash.com/photos/a-person-holding-a-rosary-with-a-cross-on-it-CCC0CdEsI7E" target="_blank" rel="noopener noreferrer">Foto: Dolina Modlitwy / Unsplash ↗</a>
+   </figure>
  </section>
- <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Tudo começa com o próximo passo.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
+
+ <section class="action-banner">
+   <div class="action-copy"><span class="card-meta">MENTALIDADE CUIÚDO</span><h2>Tem hora que é oração.<br>Tem hora que é atitude.</h2><p>Ser forte não é bancar o invencível. É rezar, assumir responsabilidade, tomar a decisão difícil e continuar. Caiu? Levanta. Deu errado? Corrige. Ficou com medo? Vai com medo e com prudência.</p><div class="action-tags"><span>REZA</span><span>LEVANTA</span><span>FAZ</span><span>CONTINUA</span></div></div>
+   <div class="fist-palm" aria-label="Animação simbólica de punho batendo na palma, representando determinação"><span class="palm" aria-hidden="true">✋</span><span class="fist" aria-hidden="true">👊</span><span class="impact" aria-hidden="true">✦</span><strong>VAI PRA CIMA.</strong><small>Sem teatrinho. Com atitude.</small></div>
+ </section>
+
+ <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Um próximo passo. Depois outro.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
  <section class="home-dashboard">
    <article class="card rosary-feature">
      <div class="feature-top"><span class="card-meta">01 / ORAÇÃO</span><span class="feature-icon">${icon('rosary')}</span></div>
@@ -131,6 +136,18 @@ function home(){
      <button class="text-link" data-action="navigate" data-tab="verdade">Refletir agora ${icon('arrow')}</button>
    </article>
  </section>
+
+ <section class="photo-story-grid" aria-label="Momentos de fé">
+   <figure class="story-photo story-photo-wide">
+     <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1491566102020-21838225c3c8?auto=format&fit=crop&q=86&w=1600" alt="Feixes de luz entrando no interior da Basílica de São Pedro">
+     <div class="story-overlay"></div><figcaption><span>SILÊNCIO TAMBÉM É FORÇA.</span><strong>Você não precisa correr o tempo todo. Precisa saber por que está correndo.</strong><a href="https://unsplash.com/photos/sunlight-beams-inside-ornate-cathedral--0gBnnMdQPw" target="_blank" rel="noopener noreferrer">Chad Greiter / Unsplash ↗</a></figcaption>
+   </figure>
+   <figure class="story-photo">
+     <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1762967020428-66cdb1a6d789?auto=format&fit=crop&q=86&w=1600" alt="Interior minimalista de uma igreja moderna iluminada pela luz natural">
+     <div class="story-overlay"></div><figcaption><span>VOLTE AO ESSENCIAL.</span><strong>Menos barulho. Mais presença.</strong><a href="https://unsplash.com/photos/modern-concrete-church-interior-with-sunlight-streaming-in-ioHO90sxxJA" target="_blank" rel="noopener noreferrer">Julia Taubitz / Unsplash ↗</a></figcaption>
+   </figure>
+ </section>
+
  <section class="home-bottom">
    <article class="card scripture-card"><div class="feature-top"><span class="card-meta">03 / PALAVRA DE DEUS</span><span class="scripture-ref">${escapeHtml(verse.ref)}</span></div>
       <blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(verse))}”</blockquote>
@@ -141,7 +158,7 @@ function home(){
      <button class="text-link" data-action="navigate" data-tab="diario">Abrir diário ${icon('arrow')}</button>
    </article>
  </section>
- <section class="prayer-cta"><div><span class="card-meta">ORE COM A IGREJA</span><h2>Santos, anjos e orações.</h2><p>Um lugar para buscar inspiração, intercessão e perseverança.</p></div><button class="btn btn-secondary" data-action="navigate" data-tab="devocionario">Explorar orações ${icon('arrow')}</button></section>`;
+ <section class="prayer-cta"><div><span class="card-meta">ORE COM A IGREJA</span><h2>Santos, anjos e orações.</h2><p>Intercessão, perseverança e um coração voltado para Cristo.</p></div><button class="btn btn-secondary" data-action="navigate" data-tab="devocionario">Explorar orações ${icon('arrow')}</button></section>`;
 }
 function rosary(){
  const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];const versiculo=versiculosPorMisterio[m.id];

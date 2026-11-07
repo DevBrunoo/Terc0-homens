@@ -1,4 +1,4 @@
-const VERSION='cuiudo-white-arial-v7';
+const VERSION='cuiudo-photo-action-v8';
 const ASSETS=['./','./index.html','./styles.css','./data.js','./brutal.js','./devocionario.js','./app.js','./manifest.webmanifest','./assets/icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
