@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" role="img" aria-label="Arte simbólica CUIÚDO">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#34231e"/><stop offset=".55" stop-color="#171a22"/><stop offset="1" stop-color="#050608"/></linearGradient><radialGradient id="light"><stop stop-color="#ba9764" stop-opacity=".95"/><stop offset="1" stop-color="#ba9764" stop-opacity="0"/></radialGradient></defs>
+<rect width="720" height="960" fill="url(#bg)"/><ellipse cx="365" cy="335" rx="320" ry="400" fill="url(#light)"/>
+<path d="M360 140v610M190 312h340" stroke="#eed19c" stroke-width="28" stroke-linecap="round" opacity=".8"/>
+<path d="M0 715Q100 620 200 680T400 650T720 640V960H0Z" fill="#0a0b0c"/>
+<path d="M0 792Q165 710 292 790T720 735V960H0Z" fill="#08090a"/>
+<text x="360" y="894" text-anchor="middle" fill="#f4deac" font-family="Arial, sans-serif" font-weight="800" letter-spacing="8" font-size="31">FÉ • CORAGEM • AÇÃO</text></svg>
