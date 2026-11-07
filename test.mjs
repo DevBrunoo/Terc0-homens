@@ -25,8 +25,8 @@ assert.equal(Object.keys(devotional.versiculosPorMisterio).length,20);
 for(const v of Object.values(devotional.versiculosPorMisterio)){assert.ok(v.pt&&v.en&&v.ptSource&&v.enSource,'Citação real nos dois idiomas');}
 assert.match(app,/set-theme/);
 assert.match(app,/appearance-control/);
-assert.match(app,/theme:'light'/);
-assert.match(app,/designVersion:'white-arial-v1'/);
+assert.match(app,/theme:'dark'/);
+assert.match(app,/designVersion:'combat-v9'/);
 assert.match(app,/site-header/);
 assert.match(app,/home-hero/);
 assert.match(app,/hero-photo-card/);

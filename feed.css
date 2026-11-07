@@ -213,3 +213,4 @@ body{font-family:var(--body);letter-spacing:-.005em}
  .cuiudo-punch-strip .punch-fist{transform:translate(0,0)}
  .poster-card,.poster-open img{transition:none!important}
 }
+@media (min-width:991px){.compact-menu{display:none!important}}

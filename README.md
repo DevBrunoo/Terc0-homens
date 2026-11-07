@@ -132,3 +132,5 @@ A linguagem confronta a desculpa e os hábitos, não a dignidade das pessoas. N�
 ### Design
 
 Referências funcionais: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/design-principles/), [Material Design 3](https://m3.material.io/components/app-bars/), [Hallow](https://help.hallow.com/pt-BR/articles/5834554-o-que-e-o-hallow). A direção estética principal vem dos prints enviados pelo criador.
+
+**Persistência:** escolha manual de tema Claro/Escuro/Auto agora é respeitada nas recargas. O escuro é aplicado somente na primeira migração para v9.

@@ -16,13 +16,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'light',verseLang:'pt',mobileMore:false,designVersion:'white-arial-v1',...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'dark',verseLang:'pt',mobileMore:false,designVersion:'combat-v9',...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-if(state.designVersion!=='white-arial-v1'){state.theme='light';state.designVersion='white-arial-v1';save();}
-state.theme=['light','dark','system'].includes(state.theme)?state.theme:'light';
+if(state.designVersion!=='combat-v9'){state.theme='dark';state.designVersion='combat-v9';save();}
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'dark';
 state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
