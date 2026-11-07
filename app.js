@@ -16,12 +16,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'system',verseLang:'pt',mobileMore:false,...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'light',verseLang:'pt',mobileMore:false,designVersion:'white-arial-v1',...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-state.theme=['light','dark','system'].includes(state.theme)?state.theme:'system';
+if(state.designVersion!=='white-arial-v1'){state.theme='light';state.designVersion='white-arial-v1';save();}
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'light';
 state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
@@ -64,7 +65,7 @@ function icon(name,extra=''){
 }
 function scriptureText(v){return v[state.verseLang]||v.pt;}
 function resolvedTheme(){return state.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):state.theme;}
-function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111916':'#f6f6f2';}
+function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111111':'#ffffff';}
 function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
 function stats(){
   const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
@@ -77,47 +78,70 @@ function navButton(item,cls='nav-button'){
   return `<button type="button" class="${cls}" data-action="navigate" data-tab="${item.id}" aria-current="${state.tab===item.id?'page':'false'}">${icon(item.icon)}<span>${cls==='nav-button'?item.label:item.mobile}</span></button>`;
 }
 function renderShell(content){
- const morePanel=state.mobileMore?`<button type='button' class='more-backdrop' data-action='close-more' aria-label='Fechar menu'></button><div class='more-panel' role='dialog' aria-modal='true' aria-label='Mais opções de navegação'><div class='more-panel-head'><strong>Mais caminhos</strong><button class='more-close' data-action='close-more' aria-label='Fechar menu'>✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
- const appearance=[{id:'light',label:'Dia',ico:'sun'},{id:'dark',label:'Noite',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
- const themeControl=`<div class='appearance-control' role='group' aria-label='Aparência do aplicativo'>${appearance.map(x=>`<button type='button' class='theme-option ${state.theme===x.id?'selected':''}' data-action='set-theme' data-theme='${x.id}' aria-pressed='${state.theme===x.id}' title='${x.label}'>${icon(x.ico)}<span>${x.label}</span></button>`).join('')}</div>`;
- const navGroups=[{name:'COMECE AQUI',ids:['inicio','terco']},{name:'SUA VIDA ESPIRITUAL',ids:['devocionario','verdade','desafios']},{name:'SEU CAMINHO',ids:['exame','diario']}];
- return `<div class='app-shell'>
-  <aside class='sidebar' aria-label='Navegação principal'>
-   <a class='logo' href='#inicio' data-action='navigate' data-tab='inicio' aria-label='CUIÚDO - início'><span class='logo-mark'>✝</span><span class='logo-type'>cuiúdo<small>FÉ QUE SE VIVE.</small></span></a>
-   <div class='sidebar-caption'>Um espaço de oração, coragem e verdade.</div>
-   <nav class='nav'>${navGroups.map(g=>`<div class='nav-group'><div class='sidebar-label'>${g.name}</div>${g.ids.map(id=>navButton(navItems.find(x=>x.id===id))).join('')}</div>`).join('')}</nav>
-   <div class='sidebar-bottom'><div class='sidebar-bottom-icon'>✦</div><div class='motto'>Sem desculpas.<br><strong>Com fé e atitude.</strong></div><small>REZA. LEVANTA. VAI PRA CIMA.</small></div>
-  </aside>
-  <div class='main-column'>
-   <header class='topbar'><div class='topbar-context'><span class='topbar-cross'>✝</span><div><span class='topbar-eyebrow'>CUIÚDO / ${navItems.find(x=>x.id===state.tab)?.label||'Início'}</span><span class='topbar-date'>${escapeHtml(dateDisplay())}</span></div></div><div class='topbar-actions'>${themeControl}<button type='button' class='mode-switch ${state.mode==='brutal'?'on':''}' data-action='toggle-mode' aria-pressed='${state.mode==='brutal'}' title='Alternar a intensidade das reflexões'>${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div></header>
-   <main class='main' id='main-content'>${content}<footer class='site-footer'><span>✝ CUIÚDO <b>·</b> FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. As reflexões são autorais; os versículos vêm de traduções católicas históricas em domínio público. Não substitui a Confissão ou a direção espiritual.</p></footer></main>
-  </div>
-  <nav class='mobile-nav' aria-label='Navegação principal no celular'>${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type='button' class='mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}' data-action='toggle-more' aria-expanded='${Boolean(state.mobileMore)}' aria-label='Mais opções'>${icon('book')}<span>Mais</span></button></nav>
-  ${morePanel}
+ const themes=[{id:'light',label:'Claro',ico:'sun'},{id:'dark',label:'Escuro',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
+ const themeControl=`<div class="appearance-control" role="group" aria-label="Escolher tema">${themes.map(t=>`<button type="button" class="theme-option ${state.theme===t.id?'selected':''}" data-action="set-theme" data-theme="${t.id}" title="Tema ${t.label}" aria-label="Tema ${t.label}" aria-pressed="${state.theme===t.id}">${icon(t.ico)}<span>${t.label}</span></button>`).join('')}</div>`;
+ const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.slice(4).map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
+ return `<div class="app-shell">
+  <a href="#main-content" class="skip-link">Ir para o conteúdo</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — início"><span class="logo-mark" aria-hidden="true">✝</span><span class="logo-type">cuiúdo<span class="logo-dot">.</span></span></a>
+      <nav class="desktop-nav" aria-label="Navegação principal">${navItems.slice(0,4).map(x=>navButton(x)).join('')}<button type="button" class="nav-more ${state.mobileMore?'active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}">Mais ${icon('arrow')}</button></nav>
+      <div class="header-tools">${themeControl}<button type="button" class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div>
+    </div>
+  </header>
+  <main class="main" id="main-content">${content}
+    <footer class="site-footer"><span>© CUIÚDO · FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. Versículos em traduções católicas históricas. As meditações são autorais; o exame não substitui a Confissão.</p></footer>
+  </main>
+  <nav class="mobile-nav" aria-label="Navegação do celular">${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type="button" class="mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}" aria-label="Mais opções">${icon('book')}<span>Mais</span></button></nav>
+  ${more}
  </div>`;
 }
 function home(){
- const g=groups[dayGroup()];const p=readProgress(dayGroup());const s=stats();const truth=getTruth();
- const nextIndex=p.findIndex(x=>x<10);const displayMystery=g.mysteries[Math.max(0,nextIndex)];
- const complete=p.reduce((a,b)=>a+b,0);const scripture=versiculosPorMisterio[displayMystery.id];
- return `<section class='welcome'>
-  <div class='welcome-copy'><div class='welcome-overline'><span class='overline-dot'></span> SEU MOMENTO COM DEUS <span class='overline-sep'>/</span> ${g.days}</div>
-   <h1>Fé para seguir.<br><em>Coragem para agir.</em></h1>
-   <p>Há momentos de silêncio e momentos de decisão. O importante é não fugir do que Deus te chama a viver. Respire, reze e vá pra cima.</p>
-   <div class='welcome-actions'><button class='btn btn-primary' data-action='navigate' data-tab='terco'>Rezar o terço de hoje ${icon('arrow')}</button><button class='btn btn-outline' data-action='navigate' data-tab='verdade'>Ler uma reflexão</button></div>
-   <div class='welcome-signature'><span>✦</span> TEM QUE FAZER ACONTECER. SEJA CUIÚDO.</div>
-  </div>
-  <div class='welcome-visual'><div class='visual-halo'></div><img src='./assets/misterios/${displayMystery.id}.svg' alt='Arte simbólica do mistério do dia'><div class='visual-caption'><span>O SANTO TERÇO</span><strong>${g.short}</strong></div></div>
+ const g=groups[dayGroup()];const progress=readProgress(dayGroup());const statsNow=stats();const truth=getTruth();
+ const count=progress.reduce((a,b)=>a+b,0),pos=progress.findIndex(x=>x<10);
+ const mystery=g.mysteries[Math.max(0,pos)],verse=versiculosPorMisterio[mystery.id];
+ return `<section class="home-hero">
+   <div class="hero-main">
+     <span class="kicker"><span class="kicker-mark">✦</span> SUA FÉ, TODOS OS DIAS</span>
+     <h1>Reza. Levanta.<br><span>Faz acontecer.</span></h1>
+     <p>Um espaço para viver a fé com verdade. Reze o terço, fortaleça a consciência e enfrente a vida com coragem. <strong>Vai pra cima. Seja cuiúdo.</strong></p>
+     <div class="hero-actions"><button class="btn btn-primary" data-action="navigate" data-tab="terco">Rezar o terço ${icon('arrow')}</button><button class="btn btn-secondary" data-action="navigate" data-tab="verdade">Ler reflexão</button></div>
+     <div class="hero-note"><span class="hero-note-line"></span> Fé não é fugir da vida. É vivê-la com Cristo.</div>
+   </div>
+   <aside class="hero-aside">
+     <div class="aside-top"><span>HOJE NO TERÇO</span>${icon('calendar')}</div>
+     <div class="aside-cross" aria-hidden="true">✝</div>
+     <h2>${g.title}</h2>
+     <p>${g.eyebrow}. Reserve um momento para contemplar, rezar e recomeçar.</p>
+     <button class="text-link" data-action="navigate" data-tab="terco">Começar oração ${icon('arrow')}</button>
+   </aside>
  </section>
- <section class='home-intro'><div><span class='section-kicker'>SUA JORNADA</span><h2>Um dia de cada vez.</h2><p>Oração, reflexão e passos concretos para viver melhor a sua fé.</p></div><button class='text-link' data-action='navigate' data-tab='desafios'>Meu plano de ação ${icon('arrow')}</button></section>
- <section class='home-dashboard'>
-  <article class='card rosary-feature'><div class='feature-art'><img src='./assets/misterios/${displayMystery.id}.svg' alt='Mistério do Santo Terço'></div><div class='feature-body'><div class='card-meta'>ORAÇÃO DO DIA <span class='meta-divider'>/</span> ${g.short}</div><h3 class='card-title'>O Santo Terço</h3><p>${g.title}. Faça deste momento um encontro sincero com Cristo.</p><div class='feature-progress'><div class='progress'><div class='progress-fill' style='width:${complete*2}%'></div></div><div class='progress-label'><span>${p.filter(x=>x===10).length} de 5 dezenas concluídas</span><strong>${complete}/50</strong></div></div><button class='text-link' data-action='navigate' data-tab='terco'>${complete===50?'Revisitar oração':'Continuar a oração'} ${icon('arrow')}</button></div></article>
-  <article class='card truth-card'><div class='truth-card-top'><span class='card-meta'>REFLEXÃO DE HOJE</span><span class='truth-spark'>✧</span></div><h3>${escapeHtml(truth.title)}</h3><blockquote>${escapeHtml(truth.quote)}</blockquote><button class='text-link' data-action='navigate' data-tab='verdade'>Encarar a verdade ${icon('arrow')}</button></article>
+ <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Tudo começa com o próximo passo.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
+ <section class="home-dashboard">
+   <article class="card rosary-feature">
+     <div class="feature-top"><span class="card-meta">01 / ORAÇÃO</span><span class="feature-icon">${icon('rosary')}</span></div>
+     <h3 class="card-title">Seu terço de hoje.</h3><p>${g.title}. Uma dezena por vez, um encontro de cada vez.</p>
+     <div class="feature-progress"><div class="progress"><div class="progress-fill" style="width:${count*2}%"></div></div><div class="progress-label"><span>${progress.filter(x=>x===10).length} de 5 dezenas</span><strong>${count}/50</strong></div></div>
+     <button class="text-link" data-action="navigate" data-tab="terco">${count===50?'Revisitar oração':'Continuar rezando'} ${icon('arrow')}</button>
+   </article>
+   <article class="card truth-card">
+     <div class="feature-top"><span class="card-meta">02 / REFLEXÃO</span><span class="feature-icon">${icon('flame')}</span></div>
+     <h3 class="card-title">A verdade transforma.</h3><p class="truth-topic">${escapeHtml(truth.title)}</p><blockquote>${escapeHtml(truth.quote)}</blockquote>
+     <button class="text-link" data-action="navigate" data-tab="verdade">Refletir agora ${icon('arrow')}</button>
+   </article>
  </section>
- <section class='home-bottom'>
-  <article class='card scripture-card'><div class='card-meta'>PALAVRA QUE ORIENTA <span class='meta-divider'>/</span> ${escapeHtml(scripture.ref)}</div><blockquote lang='${state.verseLang==='pt'?'pt-BR':'en'}'>“${escapeHtml(scriptureText(scripture))}”</blockquote><div class='scripture-card-foot'><span>${state.verseLang==='pt'?'Figueiredo':'Douay-Rheims'}</span><button class='text-link' data-action='navigate' data-tab='terco'>Meditar ${icon('arrow')}</button></div></article>
-  <article class='card progress-card'><span class='card-meta'>SEU CAMINHO ATÉ AQUI</span><h3>O que você já viveu.</h3><div class='stat-row'><div><strong>${s.full}</strong><span>Terços rezados</span></div><div><strong>${s.activeDays}</strong><span>Dias em ação</span></div><div><strong>${s.todayChecks}<small>/4</small></strong><span>Hábitos de hoje</span></div></div><button class='text-link' data-action='navigate' data-tab='diario'>Abrir meu diário ${icon('arrow')}</button></article>
- </section>`;
+ <section class="home-bottom">
+   <article class="card scripture-card"><div class="feature-top"><span class="card-meta">03 / PALAVRA DE DEUS</span><span class="scripture-ref">${escapeHtml(verse.ref)}</span></div>
+      <blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(verse))}”</blockquote>
+      <div class="scripture-card-foot"><span>${state.verseLang==='pt'?'Pe. Antônio Pereira de Figueiredo':'Douay-Rheims 1899'}</span><button class="text-link" data-action="navigate" data-tab="terco">Meditar ${icon('arrow')}</button></div>
+   </article>
+   <article class="card progress-card"><div class="feature-top"><span class="card-meta">04 / SEU PROGRESSO</span><span class="feature-icon">${icon('check')}</span></div><h3 class="card-title">Pequenas vitórias.</h3>
+     <div class="stat-row"><div><strong>${statsNow.full}</strong><span>Terços completos</span></div><div><strong>${statsNow.activeDays}</strong><span>Dias de atitude</span></div><div><strong>${statsNow.todayChecks}<small>/4</small></strong><span>Hábitos de hoje</span></div></div>
+     <button class="text-link" data-action="navigate" data-tab="diario">Abrir diário ${icon('arrow')}</button>
+   </article>
+ </section>
+ <section class="prayer-cta"><div><span class="card-meta">ORE COM A IGREJA</span><h2>Santos, anjos e orações.</h2><p>Um lugar para buscar inspiração, intercessão e perseverança.</p></div><button class="btn btn-secondary" data-action="navigate" data-tab="devocionario">Explorar orações ${icon('arrow')}</button></section>`;
 }
 function rosary(){
  const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];const versiculo=versiculosPorMisterio[m.id];
@@ -125,7 +149,7 @@ function rosary(){
  <div class="eyebrow">Mistérios de hoje: ${groups[dayGroup()].short}</div><div class="group-picker" role="group" aria-label="Escolher grupo de mistérios">${groupNames.map(id=>`<button type="button" class="group-button ${state.group===id?'active':''}" data-action="group" data-id="${id}" aria-pressed="${state.group===id}">${groups[id].short}</button>`).join('')}</div>
  <section class="mystery-layout"><div class="mystery-visual"><div class="eyebrow">${state.mystery+1}º mistério • ${g.short}</div><img src="./assets/misterios/${m.id}.svg" alt="Arte simbólica: ${escapeHtml(m.title)}"/><h2>${m.title}</h2><small>${m.ref}</small></div>
  <div class="mystery-detail"><div class="card"><div class="scripture-verse"><div class="scripture-top"><span class="card-meta">ESCRITURA SAGRADA · ${escapeHtml(versiculo.ref)}</span><div class="verse-switch" role="group" aria-label="Idioma do versículo"><button type="button" data-action="verse-lang" data-lang="pt" aria-pressed="${state.verseLang==='pt'}" class="${state.verseLang==='pt'?'active':''}">PT</button><button type="button" data-action="verse-lang" data-lang="en" aria-pressed="${state.verseLang==='en'}" class="${state.verseLang==='en'?'active':''}">EN</button></div></div><blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(versiculo))}”</blockquote><div class="scripture-footer"><span>${state.verseLang==='pt'?'Pe. Antônio Pereira de Figueiredo':'Douay-Rheims 1899'} · ${versiculo.excerptPt&&state.verseLang==='pt'?'Excerto literal · ':''}Domínio público</span><a href="${state.verseLang==='pt'?versiculo.ptSource:versiculo.enSource}" rel="noopener noreferrer" target="_blank">Ler capítulo completo ↗</a></div></div><div class="card-meta">Meditação do Evangelho</div><p class="readable">${m.summary}</p><div class="kicker-line"></div><div class="card-meta">${state.mode==='brutal'?'SEM DESCULPAS · A VERDADE QUE DÓI':'Tapa na cara da realidade'}</div><blockquote class="confront">“${escapeHtml(mm.hard)}”</blockquote><div class="question"><strong>Exame de consciência:</strong> ${escapeHtml(mm.question)}</div>${mm.prayer?`<div class="prayer-response"><span>ORAÇÃO DE COMBATE</span><p>${escapeHtml(mm.prayer)}</p></div>`:''}</div></div></section>
- <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p style="color:#b5b7b0;font-size:12px;line-height:1.7">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
+ <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p class="decade-description">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
  <div class="section-head"><h2>Orações do terço</h2></div><p class="page-desc">Comece com o Sinal da Cruz e o Credo; reze um Pai-Nosso, três Ave-Marias e um Glória. Em cada mistério, reze um Pai-Nosso, dez Ave-Marias e um Glória. Conclua com a Salve-Rainha.</p><section class="prayer-list">${prayers.map((p,i)=>`<details class="card prayer-card" ${i===2?'open':''}><summary>${escapeHtml(p.name)}</summary><p>${escapeHtml(p.text)}</p></details>`).join('')}</section><div class="section-head"><h2>Ladainha e orações especiais</h2></div><section class="prayer-list"><details class="card prayer-card" id="ladainha"><summary>Ladainha de Nossa Senhora — versão breve</summary><p>${escapeHtml(ladainhaBreve.join('\n'))}</p><p class="devotional-source">Esta é uma ladainha autoral breve. <a target="_blank" rel="noopener noreferrer" href="${fonteLadainhaOficial}">Ler a Ladainha Lauretana completa no Vaticano</a>.</p></details><details class="card prayer-card"><summary>Oração a São Miguel Arcanjo</summary><p>${escapeHtml(oracoesDevocionario.find(x=>x.id==='miguel').text)}</p><p><a href="#" data-action="navigate" data-tab="devocionario">Mais orações aos santos e anjos ${icon('arrow')}</a></p></details></section>`;
 }
 function truth(){const t=getTruth();return `<h1 class="page-title">${state.mode==='brutal'?'SEM DESCULPAS.':'Tapa na cara da realidade'}</h1><p class="page-desc">${state.mode==='brutal'?'VAI PRA CIMA. SEJA CUIÚDO. O CONFRONTO NÃO É CONTRA VOCÊ. É CONTRA AS SUAS DESCULPAS. Examine-se com coragem e faça o que é certo, sem vender a alma ao comodismo.':'Palavras firmes para sacudir a consciência, sem destruir a dignidade. A verdade conduz à misericórdia e à ação.'}</p>
@@ -172,7 +196,7 @@ app.addEventListener('click',evt=>{
  if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
  if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
  if(a==='toggle-theme'){state.theme=state.theme==='light'?'dark':'light';save();}
- if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'system';save();}
+ if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';save();}
  if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
  if(a==='close-more'){state.mobileMore=false;}
  if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';save();}
