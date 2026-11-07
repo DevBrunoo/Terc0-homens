@@ -201,6 +201,7 @@ function render(){
 app.addEventListener('click',evt=>{
  const target=evt.target.closest('[data-action]');if(!target)return;
  const a=target.dataset.action;
+ if(a.startsWith('combat-'))return; // ações pertencem ao módulo visual v9
  if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;state.mobileMore=false;window.scrollTo({top:0,behavior:'instant'});}
  if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
  if(a==='dev-filter'){state.devFilter=target.dataset.filter;save();}
