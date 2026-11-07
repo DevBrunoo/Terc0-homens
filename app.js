@@ -1,0 +1,155 @@
+const STORE_KEY = 'cuiudo-v1';
+const groupNames = ['gozosos', 'dolorosos', 'gloriosos', 'luminosos'];
+const navItems = [
+  {id:'inicio',label:'Início',mobile:'Início',icon:'home'},
+  {id:'terco',label:'Terço diário',mobile:'Terço',icon:'rosary'},
+  {id:'verdade',label:'Tapa na cara',mobile:'Verdade',icon:'flame'},
+  {id:'desafios',label:'Desafios',mobile:'Ação',icon:'target'},
+  {id:'exame',label:'Exame de consciência',mobile:'Exame',icon:'heart'},
+  {id:'diario',label:'Meu diário',mobile:'Diário',icon:'book'}
+];
+const app = document.getElementById('app');
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function currentDay(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','luminosos','dolorosos','gozosos'][new Date().getDay()];}
+function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
+function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
+function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,...storedState()};
+state.tab='inicio'; // Sempre abrir na home.
+state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
+state.mystery=0;
+state.truthOffset=0;
+function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
+function readProgress(group=state.group){return state.progress?.[`${currentDay()}:${group}`] || [0,0,0,0,0];}
+function changeCount(n){state.progress??={};const key=`${currentDay()}:${state.group}`;let arr=[...readProgress()];arr[state.mystery]=Math.max(0,Math.min(10,n));state.progress[key]=arr;save();}
+function checkChallenge(n,checked){state.challengeDays??={};const key=currentDay();const arr=[...(state.challengeDays[key]||[false,false,false,false])];arr[n]=checked;state.challengeDays[key]=arr;save();}
+function checkExamine(n,checked){state.examineDays??={};const key=currentDay();const arr=[...(state.examineDays[key]||[] )];arr[n]=checked;state.examineDays[key]=arr;save();}
+function getChecks(){return state.challengeDays?.[currentDay()]||[false,false,false,false];}
+function getExamine(){return state.examineDays?.[currentDay()]||[];}
+function getTruth(){const deck=truthDeck();return deck[(dailyIndex()+state.truthOffset)%deck.length];}
+function mysteryText(m){return state.mode==='brutal'?(marteladas[m.id]||m):m;}
+function missionId(){return `${currentDay()}:${state.mode}:${getTruth().title}`;}
+function missionDone(){return Boolean(state.missionDays?.[missionId()]);}
+function missionButton(){return `<button class="btn ${missionDone()?'btn-muted':''}" data-action="mission-done" aria-pressed="${missionDone()}">${icon('check')} ${missionDone()?'Missão cumprida — desfazer':'Marcar missão cumprida'}</button>`;}
+function countDone(){return readProgress().filter(n=>n===10).length;}
+function icon(name,extra=''){
+  const icons={
+    home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+    rosary:'<circle cx="12" cy="12" r="3"/><path d="M12 2v7M12 15v7M2 12h7M15 12h7M5 5l4 4M15 15l4 4M19 5l-4 4M9 15l-4 4"/>',
+    flame:'<path d="M12 22c5 0 8-3.3 8-8 0-3.3-2-6-5-9 .3 3-1.2 4.4-2.6 4.6C13 6 10.5 3.5 9 2 9.1 6.5 4 9.5 4 14c0 4.7 3 8 8 8Z"/><path d="M12 22c2.5 0 4-1.8 4-4 0-1.8-1-3-3-5 0 2-3 3-3 5 0 2.2.7 4 2 4Z"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    heart:'<path d="M20.8 4.6c-2.1-2.1-5.5-2.1-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/>',
+    book:'<path d="M3 5.5C6 4 9 4 12 6c3-2 6-2 9-.5v13c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5zM12 6v13"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',
+    arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    arrowLeft:'<path d="M19 12H5m6-6-6 6 6 6"/>',
+    check:'<path d="m4 12 5 5L20 6"/>',
+    plus:'<path d="M12 4v16M4 12h16"/>',
+    rotate:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/>',
+    sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+    quote:'<path d="M10 11H4V5h6v7l-5 5M20 11h-6V5h6v7l-5 5"/>',
+    save:'<path d="M4 3h14l3 3v15H3V3Zm3 0v6h10V3M7 21v-8h10v8"/>',
+    trash:'<path d="M3 6h18M8 6V4h8v2M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
+    lock:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'
+  };
+  return `<svg class="icon ${extra}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.home}</svg>`;
+}
+function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
+function stats(){
+  const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
+  const full=all.filter(arr=>arr.every(x=>x===10)).length;
+  const activeDays=Object.values(state.challengeDays||{}).filter(arr=>arr.some(Boolean)).length;
+  const todayChecks=getChecks().filter(Boolean).length;
+  return {full,activeDays,todayChecks};
+}
+function navButton(item,cls='nav-button'){
+  return `<button type="button" class="${cls}" data-action="navigate" data-tab="${item.id}" aria-current="${state.tab===item.id?'page':'false'}">${icon(item.icon)}<span>${cls==='nav-button'?item.label:item.mobile}</span></button>`;
+}
+function renderShell(content){
+  return `<div class="app-shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="Ir para o início"><span class="logo-mark">✝</span><span class="logo-type">CUIÚDO<small>FÉ • CORAGEM • AÇÃO</small></span></a>
+      <div class="sidebar-label">Caminho de santidade</div><nav class="nav">${navItems.map(x=>navButton(x)).join('')}</nav>
+      <div class="sidebar-bottom"><div class="motto">Reza. Levanta.<br/><strong>Faz acontecer.</strong></div><small>FEITO PARA CONVERTER, NÃO PARA AGRADAR.</small></div>
+    </aside>
+    <main class="main" id="main-content"><header class="topbar"><div class="topbar-date">${icon('calendar')}<span>${escapeHtml(dateDisplay())}</span></div><button type="button" class="pill-status mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar entre reflexões firmes e modo sem desculpas">${icon('flame')} ${state.mode==='brutal'?'SEM DESCULPAS · ON':'MODO FIRME · ON'}</button></header>${content}<p class="disclaimer">CUIÚDO é um projeto independente de formação e prática devocional, não uma publicação oficial da Igreja. Meditações são textos autorais e paráfrases, com referências bíblicas para consulta em uma tradução católica. O exame não substitui o sacramento da Confissão nem acompanhamento espiritual.</p></main>
+    <nav class="mobile-nav" aria-label="Navegação móvel">${navItems.map(x=>navButton(x,'mobile-nav-button')).join('')}</nav>
+  </div>`;
+}
+function home(){
+ const g=groups[dayGroup()];const p=readProgress(dayGroup());const s=stats();const truth=getTruth();
+ const nextIndex=p.findIndex(x=>x<10); const displayMystery=g.mysteries[Math.max(0,nextIndex)];
+ return `<section class="hero"><div class="hero-inner"><span class="eyebrow">FÉ NÃO É DECORAÇÃO · É COMBATE INTERIOR</span><h1>REZA.<br/>LEVANTA.<br/><em>FAZ ACONTECER.</em></h1><p>${state.mode==='brutal'?'ACORDA. Você não nasceu para desperdiçar os dias enquanto coleciona desculpas. Aqui a verdade incomoda, o Evangelho confronta e a decisão vira ação.':'A fé não foi feita para enfeitar discurso. Hoje é dia de oração, verdade e atitude, sem fugir dos deveres.'}</p><button class="btn" data-action="navigate" data-tab="terco">Rezar o terço de hoje ${icon('arrow')}</button></div><div class="hero-art" aria-hidden="true"><div class="hero-cross">✝</div></div></section>
+ <div class="battle-cry"><span class="battle-dot">✝</span><strong>VOCÊ NÃO PRECISA DE MAIS UMA DESCULPA.</strong><span>Precisa de oração, verdade, graça e uma atitude concreta.</span></div>
+ <div class="section-head"><h2>Seu caminho de hoje</h2><button class="link-button" data-action="navigate" data-tab="desafios">Ver desafios ${icon('arrow')}</button></div>
+ <section class="grid-2">
+   <article class="card rosary-feature"><div class="feature-art"><img src="./assets/misterios/${displayMystery.id}.svg" alt="Representação simbólica do mistério de hoje" /></div><div class="feature-body"><div class="card-meta">Terço de hoje • ${g.short}</div><h3 class="card-title">${g.title}</h3><p>${g.eyebrow}. ${p.filter(x=>x===10).length} de 5 dezenas concluídas.</p><div class="progress" role="progressbar" aria-valuenow="${p.reduce((a,b)=>a+b,0)}" aria-valuemin="0" aria-valuemax="50" aria-label="Ave-Marias rezadas"><div class="progress-fill" style="width:${p.reduce((a,b)=>a+b,0)*2}%"></div></div><div class="progress-label">${p.reduce((a,b)=>a+b,0)}/50 Ave-Marias</div><button class="link-button" data-action="navigate" data-tab="terco">${p.every(x=>x===10)?'Revisitar o terço':'Continuar a oração'} ${icon('arrow')}</button></div></article>
+   <article class="card truth-card"><div><div class="card-meta">${state.mode==='brutal'?'A MARRETADA DE HOJE':'O tapa na cara de hoje'}</div><div class="quote-mark">“</div><blockquote>${escapeHtml(truth.quote)}</blockquote></div><button class="link-button" data-action="navigate" data-tab="verdade">Encarar a verdade ${icon('arrow')}</button></article>
+ </section>
+ <section class="grid-3 stats" aria-label="Seu progresso"><div class="card stat"><div class="stat-value">${s.full}</div><div class="stat-label">Terços concluídos</div></div><div class="card stat"><div class="stat-value">${s.activeDays}</div><div class="stat-label">Dias em ação</div></div><div class="card stat"><div class="stat-value">${s.todayChecks}/4</div><div class="stat-label">Desafios de hoje</div></div></section>
+ <div class="section-head"><h2>Hoje você escolhe agir</h2><button class="link-button" data-action="navigate" data-tab="diario">Meu diário ${icon('arrow')}</button></div>
+ <section class="card"><div class="card-meta">A pequena fidelidade de hoje</div><h3 class="card-title">${escapeHtml(truth.action)}</h3><p>Fé sem obra concreta vira discurso. Faça sua parte sem confundir responsabilidade com merecimento das graças de Deus.</p><div class="two-buttons">${missionButton()}<button class="btn btn-ghost" data-action="navigate" data-tab="desafios">Meu plano de ação ${icon('arrow')}</button></div></section>`;
+}
+function rosary(){
+ const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];
+ return `<h1 class="page-title">O Santo Terço</h1><p class="page-desc">Contemple a vida de Cristo, examine a própria consciência e transforme a oração em caridade. Mistérios tradicionais organizados por dia da semana; você também pode escolher outros.</p>
+ <div class="eyebrow">Mistérios de hoje: ${groups[dayGroup()].short}</div><div class="group-picker" role="group" aria-label="Escolher grupo de mistérios">${groupNames.map(id=>`<button type="button" class="group-button ${state.group===id?'active':''}" data-action="group" data-id="${id}" aria-pressed="${state.group===id}">${groups[id].short}</button>`).join('')}</div>
+ <section class="mystery-layout"><div class="mystery-visual"><div class="eyebrow">${state.mystery+1}º mistério • ${g.short}</div><img src="./assets/misterios/${m.id}.svg" alt="Arte simbólica: ${escapeHtml(m.title)}"/><h2>${m.title}</h2><small>${m.ref}</small></div>
+ <div class="mystery-detail"><div class="card"><div class="card-meta">Meditação do Evangelho</div><p class="readable">${m.summary}</p><div class="kicker-line"></div><div class="card-meta">${state.mode==='brutal'?'SEM DESCULPAS · A VERDADE QUE DÓI':'Tapa na cara da realidade'}</div><blockquote class="confront">“${escapeHtml(mm.hard)}”</blockquote><div class="question"><strong>Exame de consciência:</strong> ${escapeHtml(mm.question)}</div><div class="action-line">${icon('target')}<span><strong>MISSÃO DE HOJE:</strong> ${escapeHtml(mm.action)}</span></div>${mm.prayer?`<div class="prayer-response"><span>ORAÇÃO DE COMBATE</span><p>${escapeHtml(mm.prayer)}</p></div>`:''}</div></div></section>
+ <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p style="color:#b5b7b0;font-size:12px;line-height:1.7">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
+ <div class="section-head"><h2>Orações do terço</h2></div><p class="page-desc">Comece com o Sinal da Cruz e o Credo; reze um Pai-Nosso, três Ave-Marias e um Glória. Em cada mistério, reze um Pai-Nosso, dez Ave-Marias e um Glória. Conclua com a Salve-Rainha.</p><section class="prayer-list">${prayers.map((p,i)=>`<details class="card prayer-card" ${i===2?'open':''}><summary>${escapeHtml(p.name)}</summary><p>${escapeHtml(p.text)}</p></details>`).join('')}</section>`;
+}
+function truth(){const t=getTruth();return `<h1 class="page-title">${state.mode==='brutal'?'SEM DESCULPAS.':'Tapa na cara da realidade'}</h1><p class="page-desc">${state.mode==='brutal'?'O CONFRONTO NÃO É CONTRA VOCÊ. É CONTRA AS SUAS DESCULPAS. Leia, examine-se e faça uma coisa concreta.':'Palavras firmes para sacudir a consciência, sem destruir a dignidade. A verdade conduz à misericórdia e à ação.'}</p>
+ <section class="truth-large"><div class="eyebrow">Confronto nº ${String(((dailyIndex()+state.truthOffset)%truthDeck().length)+1).padStart(2,'0')} • ${escapeHtml(t.topic)}</div><h2>${escapeHtml(t.title)}</h2><div class="quote-mark">“</div><blockquote>${escapeHtml(t.quote)}</blockquote><div class="kicker-line"></div><p class="readable"><strong style="color:var(--gold)">A verdade:</strong> ${escapeHtml(t.truth)}</p><div class="action-line">${icon('target')}<span><strong>Sua missão:</strong> ${escapeHtml(t.action)}</span></div><div class="truth-footer"><span class="filter-tag">${escapeHtml(t.ref)}</span><span class="filter-tag">Sem desculpas. Com caridade.</span></div><div class="mission-commit"><div><span class="card-meta">NÃO É FRASE BONITA. É DECISÃO.</span><p>${missionDone()?'Você marcou esta missão como cumprida. Continue com humildade.':'Só marque depois que cumprir a ação de verdade. Sem mentir para si mesmo.'}</p></div>${missionButton()}</div><div class="two-buttons"><button class="btn btn-ghost" data-action="next-truth">Outro confronto ${icon('arrow')}</button><button class="btn btn-ghost" data-action="navigate" data-tab="desafios">Partir para a ação ${icon('arrow')}</button></div></section>`;}
+function challenges(){const checks=getChecks();const done=checks.filter(Boolean).length;return `<h1 class="page-title">Fé que se move</h1><p class="page-desc">Quatro compromissos simples para hoje. Sua vida não muda só porque você pensou bonito. Faça o bem possível, sem espetáculo e sem fugir das responsabilidades.</p><div class="card" style="margin-bottom:20px"><div class="decade-header"><div><div class="card-meta">Disciplina do dia</div><h2 class="card-title">${done} de 4 compromissos cumpridos</h2></div><div class="stat-value">${done===4?'✝':`${Math.round(done/4*100)}%`}</div></div><div class="progress"><div class="progress-fill" style="width:${done*25}%"></div></div><p>${done===4?'Você cumpriu os compromissos de hoje. Agradeça a Deus e mantenha o coração humilde.':'A prática diária, mesmo pequena, constrói constância.'}</p></div>
+ <section class="checklist">${baseChallenges.map((x,i)=>`<label class="checkrow"><input type="checkbox" data-kind="challenge" data-index="${i}" ${checks[i]?'checked':''}/><span><strong>${escapeHtml(x.label)}</strong><small>${escapeHtml(x.details)} • ${escapeHtml(x.type)}</small></span></label>`).join('')}</section><div class="section-head"><h2>Missão extra</h2></div><div class="card"><div class="card-meta">Não adie</div><h3 class="card-title">${escapeHtml(getTruth().action)}</h3><p>Esta missão é uma proposta de ação, não uma cobrança impossível. Priorize o que é seguro, justo e compatível com seus deveres.</p></div>`;}
+function examine(){const arr=getExamine();const selected=arr.filter(Boolean).length;return `<h1 class="page-title">Exame de consciência</h1><p class="page-desc">Não é um tribunal para esmagar você. É um encontro honesto com a verdade diante de Deus. Marque os pontos que precisam de revisão, reze e planeje um passo de conversão.</p>
+ <div class="card" style="margin-bottom:18px"><div class="card-meta">Pelo amor à verdade</div><h2 class="card-title">“Senhor, mostra-me o que preciso mudar.”</h2><p>Faça silêncio. Examine atitudes, omissões e intenções. Diferencie tentações de escolhas conscientes; procure o sacramento da Reconciliação quando necessário.</p></div>
+ <section class="checklist">${examineItems.map((x,i)=>`<label class="checkrow"><input type="checkbox" data-kind="examine" data-index="${i}" ${arr[i]?'checked':''}/><span>${escapeHtml(x)}</span></label>`).join('')}</section>
+ <div class="completion-row"><span>${selected} ponto(s) selecionado(s) para refletir</span><span>Privado • salvo somente neste navegador</span></div>
+ <div class="card"><div class="card-meta">Oração de arrependimento</div><blockquote class="confront" style="font-size:21px">Meu Deus, reconheço minhas faltas. Dai-me humildade para pedir perdão, coragem para reparar o mal e força para recomeçar na vossa graça. Amém.</blockquote><p>Se você reconheceu um pecado grave, procure a Confissão sacramental. Nenhum checklist substitui a conversa com um sacerdote.</p><button class="btn btn-ghost" data-action="navigate" data-tab="diario">Registrar meu propósito ${icon('arrow')}</button></div>`;}
+function diary(){const notes=Array.isArray(state.notes)?state.notes:[];return `<h1 class="page-title">Diário de conversão</h1><p class="page-desc">A mudança ganha forma quando você assume sua história. Escreva com sinceridade o que precisa enfrentar e qual será seu próximo passo.</p>
+ <section class="grid-2"><div class="card"><div class="card-meta">Meu compromisso com a verdade</div><h2 class="card-title">O que eu preciso mudar hoje?</h2><form id="journal-form"><label class="input-label" for="journal-text">Escreva uma reflexão ou resolução concreta</label><textarea id="journal-text" name="journal-text" maxlength="2000" placeholder="Hoje eu percebi que... A partir de agora vou..." required></textarea><div class="two-buttons"><button class="btn" type="submit">${icon('save')} Salvar reflexão</button></div></form><p class="disclaimer">${icon('lock')} Suas anotações ficam apenas no armazenamento local deste navegador. Não escreva dados extremamente sensíveis; limpar os dados do navegador pode apagá-las.</p></div>
+ <div class="card"><div class="card-meta">Um princípio inegociável</div><h2 class="card-title">Arrependimento sem atitude vira promessa vazia.</h2><p>Não escreva para impressionar ninguém. Reconheça uma decisão objetiva, possível e caridosa. Amanhã, volte e avalie se cumpriu.</p><div class="action-line">${icon('sun')}<span>Uma queda não torna você incapaz de recomeçar. Graça, oração e um passo de cada vez.</span></div></div></section>
+ <div class="section-head"><h2>Reflexões salvas</h2><span class="card-meta">${notes.length} registro(s)</span></div>${notes.length?notes.map((n,i)=>`<article class="note"><div class="decade-header"><span class="note-date">${escapeHtml(new Date(n.time).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}))}</span><button class="link-button" data-action="delete-note" data-index="${i}" aria-label="Excluir esta anotação">${icon('trash')} Excluir</button></div><p>${escapeHtml(n.text)}</p></article>`).join(''):'<div class="empty">Seu diário está vazio. O primeiro passo é admitir a verdade e escolher uma atitude.</div>'}`;}
+function render(){
+ const pages={inicio:home,terco:rosary,verdade:truth,desafios:challenges,exame:examine,diario:diary};
+ app.innerHTML=renderShell((pages[state.tab]||home)());
+ document.title=`${navItems.find(n=>n.id===state.tab)?.label||'Início'} | CUIÚDO`;
+}
+app.addEventListener('click',evt=>{
+ const target=evt.target.closest('[data-action]');if(!target)return;
+ const a=target.dataset.action;
+ if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;window.scrollTo({top:0,behavior:'instant'});}
+ if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
+ if(a==='mystery')state.mystery=Number(target.dataset.index);
+ if(a==='next-mystery')state.mystery=Math.min(4,state.mystery+1);
+ if(a==='prev-mystery')state.mystery=Math.max(0,state.mystery-1);
+ if(a==='add-bead')changeCount(readProgress()[state.mystery]+1);
+ if(a==='undo-bead')changeCount(readProgress()[state.mystery]-1);
+ if(a==='reset-decade'&&confirm('Reiniciar a contagem desta dezena?'))changeCount(0);
+ if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
+ if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
+ if(a==='mission-done'){state.missionDays??={};state.missionDays[missionId()]=!missionDone();save();}
+ if(a==='delete-note'){
+   const i=Number(target.dataset.index);
+   if(confirm('Excluir esta reflexão do diário?')){state.notes.splice(i,1);save();}else return;
+ }
+ render();
+});
+app.addEventListener('change',evt=>{
+ const t=evt.target;if(t.dataset.kind==='challenge'){checkChallenge(Number(t.dataset.index),t.checked);render();}
+ if(t.dataset.kind==='examine'){checkExamine(Number(t.dataset.index),t.checked);render();}
+});
+app.addEventListener('submit',evt=>{
+ if(evt.target.id!=='journal-form')return;
+ evt.preventDefault();const text=evt.target.querySelector('textarea')?.value.trim();
+ if(!text)return;
+ state.notes??=[];state.notes.unshift({time:new Date().toISOString(),text:text.slice(0,2000)});state.notes=state.notes.slice(0,100);
+ save();render();
+});
+render();
+if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+

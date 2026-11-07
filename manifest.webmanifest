@@ -1,0 +1,19 @@
+{
+  "name": "CUIÚDO — Fé, Coragem e Ação",
+  "short_name": "CUIÚDO",
+  "description": "Reza. Levanta. Faz acontecer.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1011",
+  "theme_color": "#0d1011",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

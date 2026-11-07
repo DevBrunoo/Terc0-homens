@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e1011" />
+  <meta name="description" content="CUIÚDO: fé, coragem e ação. Terço diário, reflexões diretas, exame de consciência e desafios para viver a fé católica com atitudes." />
+  <meta property="og:title" content="CUIÚDO — Fé, Coragem e Ação" />
+  <meta property="og:description" content="Reza. Levanta. Faz acontecer." />
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Marcellus&display=swap" rel="stylesheet" />
+  <style>
+:root{
+  --bg:#0d1011; --surface:#171a1b; --surface2:#1d2021; --line:#353735; --text:#f3efe8;
+  --muted:#a5a59f; --gold:#d6b67b; --gold-dim:#957b51; --wine:#6f242e;
+  --serif:'Marcellus',Georgia,serif; --sans:'DM Sans',system-ui,-apple-system,sans-serif;
+  font-family:var(--sans); font-synthesis:none; color:var(--text); background:var(--bg); color-scheme:dark;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-width:320px;min-height:100vh;background:var(--bg)}
+button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.48}a{color:var(--gold)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+::selection{background:var(--gold);color:#17110a}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:253px minmax(0,1fr)}
+.sidebar{position:sticky;top:0;max-height:100vh;min-height:100vh;padding:31px 17px 20px 22px;border-right:1px solid #292c2b;background:#101314;display:flex;flex-direction:column;z-index:4}
+.logo{display:flex;align-items:center;gap:11px;padding:0 8px 34px;text-decoration:none;color:var(--text)}
+.logo-mark{height:39px;width:39px;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);border-radius:6px;font:28px var(--serif);background:linear-gradient(145deg,#30251c,#101314)}
+.logo-type{font-weight:800;font-size:19px;letter-spacing:.155em;line-height:1}.logo-type small{display:block;color:var(--muted);font-size:8px;letter-spacing:.22em;font-weight:700;margin-top:8px}
+.sidebar-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#787c79;padding:8px 15px 13px;font-weight:800}
+.nav{display:flex;flex-direction:column;gap:6px}.nav-button{display:flex;align-items:center;gap:12px;padding:13px 14px;background:transparent;border:1px solid transparent;border-radius:7px;color:#b1b2ac;text-align:left;font-size:13px;font-weight:600;transition:.2s}
+.nav-button:hover{background:#202424;color:#fff}.nav-button[aria-current="page"]{color:var(--gold);background:#29241f;border-color:#4d4030}.nav-button svg{height:17px;width:17px;flex-shrink:0}
+.sidebar-bottom{margin-top:auto;padding:17px 12px 5px;border-top:1px solid var(--line)}
+.sidebar-bottom .motto{font-family:var(--serif);line-height:1.55;font-size:17px;color:#d2c0a2}.sidebar-bottom .motto strong{color:#e6c381;font-weight:400}
+.sidebar-bottom small{display:block;color:#777e7a;font-size:10px;margin-top:18px}
+.main{min-width:0;padding:0 clamp(20px,4.5vw,76px) 55px;max-width:1570px;width:100%;margin:auto}
+.topbar{height:97px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #292b2a;gap:12px}
+.topbar-date{display:flex;align-items:center;gap:12px;color:#a8aaa5;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:capitalize}
+.topbar-date svg{height:16px;width:16px;color:var(--gold)}
+.pill-status{border:1px solid #4b4335;border-radius:99px;padding:9px 13px;color:var(--gold);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;background:#211e19;white-space:nowrap}
+.page-title{font:clamp(34px,4vw,54px)/1.12 var(--serif);margin:28px 0 8px;letter-spacing:-.035em;font-weight:400}.page-desc{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 25px;max-width:760px}
+.eyebrow{font-weight:800;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase;display:flex;align-items:center;gap:10px}.eyebrow:before{content:'';width:19px;height:1px;background:currentColor}
+.hero{margin:32px 0 27px;position:relative;min-height:334px;border:1px solid #694639;border-radius:11px;overflow:hidden;background:radial-gradient(circle at 79% 55%,#4d2830 0%,#261b1d 28%,transparent 55%),linear-gradient(125deg,#211a19,#141718 78%)}
+.hero:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(110deg,transparent 0,transparent 5px,#fff1 6px,#fff0 7px);pointer-events:none}
+.hero-inner{position:relative;z-index:2;padding:45px clamp(25px,4vw,65px);width:min(100%,640px)}
+.hero h1{font:clamp(43px,5.3vw,73px)/1.06 var(--serif);margin:16px 0 14px;letter-spacing:-.045em;font-weight:400}
+.hero h1 em{font-style:normal;color:#e0b981}.hero p{font-size:14px;line-height:1.8;color:#c6c0b9;max-width:440px;margin:0 0 25px}
+.hero-art{position:absolute;right:5%;top:50%;width:min(31vw,350px);height:min(31vw,350px);transform:translateY(-50%);border:1px solid #bc8f5340;border-radius:50%;display:grid;place-items:center;pointer-events:none}
+.hero-art:before,.hero-art:after{content:'';position:absolute;inset:11%;border:1px solid #be98653e;border-radius:50%}.hero-art:after{inset:23%;border-color:#be98652b}
+.hero-cross{font:clamp(115px,17vw,230px) var(--serif);color:#c9a165;text-shadow:0 0 70px #e4a85850;line-height:1;transform:translateY(-7px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:6px;font-weight:800;letter-spacing:.035em;font-size:12px;min-height:43px;padding:11px 17px;border:1px solid #8f754f;background:linear-gradient(#dabc87,#cda96d);color:#1b1712;transition:transform .15s,filter .15s;text-decoration:none}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn svg{width:16px;height:16px}.btn-ghost{background:transparent;color:var(--gold);border:1px solid #68543b}.btn-muted{background:#272929;border-color:#444744;color:#ddd9d0}.btn-small{padding:7px 12px;min-height:35px;font-size:11px}
+.grid-2{display:grid;grid-template-columns:1.12fr .88fr;gap:19px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:21px 0 14px}
+.section-head h2{font:24px var(--serif);margin:0;letter-spacing:-.02em}.section-head a,.link-button{font-size:12px;color:var(--gold);background:none;border:0;padding:8px 0;text-decoration:none;font-weight:700}
+.card{background:#181b1c;border:1px solid #373937;border-radius:10px;padding:22px;min-width:0}.card-title{font:23px/1.25 var(--serif);margin:8px 0 12px}.card p{font-size:13px;color:#b5b6b0;line-height:1.75}
+.card-meta{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.rosary-feature{padding:0;overflow:hidden;display:grid;grid-template-columns:145px minmax(0,1fr);min-height:210px}
+.feature-art{background:linear-gradient(155deg,#35231f,#111516);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.feature-art img{height:180px;width:140px;object-fit:contain;filter:saturate(.86)}.feature-body{padding:24px 23px}
+.progress{height:5px;background:#363838;border-radius:5px;overflow:hidden;margin:16px 0 8px}.progress-fill{background:linear-gradient(90deg,#98774b,#e8cc95);height:100%;border-radius:4px;transition:width .2s}.progress-label{font-size:11px;color:#939790}
+.truth-card{background:linear-gradient(145deg,#322025,#20191c 68%);border-color:#573740;display:flex;flex-direction:column;justify-content:space-between;min-height:210px}
+.quote-mark{font-size:38px;line-height:1;font-family:Georgia,serif;color:#c79c62}.truth-card blockquote{font:clamp(16px,1.4vw,20px)/1.52 var(--serif);color:#efdfcb;margin:5px 0 16px}.truth-card .card-meta{color:#d3a9a2}
+.stats{margin-top:20px}.stat{display:flex;flex-direction:column;gap:4px;min-height:107px;justify-content:center}.stat-value{font:33px var(--serif);color:#e1bf85}.stat-label{color:#9e9f9a;font-size:12px}
+.kicker-line{height:1px;background:#383a37;margin:25px 0}
+.group-picker{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 22px}.group-button{border:1px solid #454540;border-radius:6px;background:#202322;color:#adaea8;font-size:12px;padding:10px 14px;font-weight:700}.group-button.active{border-color:#c5a369;color:#e9c78c;background:#3a3026}
+.mystery-layout{display:grid;grid-template-columns:minmax(260px,.87fr) minmax(0,1.13fr);gap:20px}
+.mystery-visual{background:radial-gradient(circle at 50% 40%,#392b27,#161a1b 70%);border:1px solid #66513e;min-height:430px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:27px;text-align:center}
+.mystery-visual img{width:100%;max-width:280px;max-height:290px;object-fit:contain}.mystery-visual .eyebrow:before{display:none}.mystery-visual h2{font:25px/1.3 var(--serif);max-width:360px;margin:13px 0 4px}.mystery-visual small{color:#cfb184;font-size:12px}
+.mystery-detail{display:flex;flex-direction:column;gap:17px}.mystery-detail .card{padding:23px}.readable{font-size:14px;color:#c1c1ba;line-height:1.85;margin:12px 0}.confront{font:clamp(20px,2.1vw,26px)/1.45 var(--serif);color:#eee1d2;margin:14px 0}.question{color:#d0b286;font-size:13px;line-height:1.7}
+.action-line{display:flex;align-items:flex-start;gap:10px;color:#d6c9b1;font-size:13px;line-height:1.55;padding:14px 15px;background:#292721;border:1px solid #52432f;border-radius:7px;margin-top:15px}.action-line svg{width:18px;height:18px;flex-shrink:0;color:var(--gold)}
+.decade-panel{margin-top:22px;border:1px solid #4a4439;background:#242322;border-radius:10px;padding:21px}.decade-header{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.decade-header strong{font:20px var(--serif)}.count-bubbles{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}.bead{width:22px;height:22px;border:1px solid #7c6b4d;border-radius:50%;background:#33302a;transition:.2s}.bead.done{background:var(--gold);box-shadow:0 0 14px #d9b87644}.decade-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.stepper{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.step{height:38px;width:38px;border-radius:50%;display:grid;place-items:center;border:1px solid #51483c;background:#202222;color:#b6aba0;font-size:12px;font-weight:800}.step.current{background:#6d5338;color:#fff;border-color:var(--gold)}.step.finished{background:#2a4036;color:#c0e4c6;border-color:#4e795d}
+.prayer-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}.prayer-card summary{font-weight:700;color:#e3c898;cursor:pointer;font-size:13px}.prayer-card p{white-space:pre-line;font-size:13px;line-height:1.9;color:#c9cac5}
+.truth-large{background:linear-gradient(140deg,#382129,#151718 70%);border:1px solid #694049;border-radius:12px;padding:clamp(23px,4vw,48px);position:relative;overflow:hidden}.truth-large:after{content:'✝';position:absolute;right:-11px;bottom:-90px;color:#b48b6030;font:240px var(--serif);pointer-events:none}
+.truth-large h2{font:clamp(30px,4vw,53px)/1.18 var(--serif);margin:13px 0 20px;max-width:730px}.truth-large blockquote{font:clamp(21px,2.8vw,33px)/1.44 var(--serif);color:#f1e1ce;margin:22px 0;max-width:850px;position:relative;z-index:1}.truth-large p{max-width:690px}.truth-large .btn{position:relative;z-index:2}
+.truth-footer{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.filter-tag{border:1px solid #67513e;border-radius:99px;color:#d7bb92;font-size:11px;padding:7px 11px;font-weight:700}
+.checklist{display:flex;flex-direction:column;gap:11px}.checkrow{display:flex;align-items:flex-start;gap:13px;background:#202323;border:1px solid #3d403d;padding:17px;border-radius:7px;cursor:pointer;transition:.15s}.checkrow:hover{border-color:#73664e}.checkrow input{appearance:none;flex-shrink:0;width:20px;height:20px;border:1px solid #958366;border-radius:5px;background:#141615;margin:2px 0 0;display:grid;place-items:center}.checkrow input:checked{background:#cda86e;border-color:#cda86e}.checkrow input:checked:after{content:'✓';color:#171818;font-weight:800;font-size:15px}.checkrow span{font-size:13px;color:#dfdfd8;line-height:1.6}.checkrow small{font-size:11px;color:#9ca09b;display:block;margin-top:4px}
+.checkrow:has(input:checked) span{color:#e0c99f}.completion-row{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:17px 0;font-size:12px;color:var(--muted)}
+textarea{resize:vertical;width:100%;border:1px solid #51514a;background:#111515;color:var(--text);border-radius:7px;padding:16px;line-height:1.65;min-height:140px;font-size:13px} textarea::placeholder{color:#7a807c}
+.input-label{font-size:12px;font-weight:800;color:#d7c3a1;display:block;margin-bottom:10px}
+.note{padding:18px;border:1px solid #3f413d;background:#1d2020;border-radius:8px;margin-top:12px}.note-date{color:#c7aa76;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:700}.note p{white-space:pre-wrap;overflow-wrap:anywhere;color:#d0d0c9;font-size:13px;line-height:1.7;margin:9px 0}
+.empty{border:1px dashed #494c47;border-radius:9px;padding:34px 24px;text-align:center;color:#a8aaa3;font-size:13px;line-height:1.7}
+.disclaimer{font-size:11px;color:#8a918b;line-height:1.75;margin:18px 0}.two-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
+.mobile-nav{display:none}.boot{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;color:#d8b67e;letter-spacing:.3em;font-size:11px}.boot-cross{font:85px var(--serif)}
+@media(max-width:1130px){.main{padding:0 30px 50px}.sidebar{padding:25px 11px 18px}.app-shell{grid-template-columns:210px minmax(0,1fr)}.hero-art{right:0}.hero-inner{width:80%}.grid-2{grid-template-columns:1fr}.truth-card{min-height:unset}}
+@media(max-width:760px){.app-shell{display:block}.sidebar{display:none}.main{padding:0 16px 98px}.topbar{height:67px}.topbar-date{font-size:11px}.pill-status{font-size:9px;padding:7px 9px}.hero{min-height:335px;margin-top:19px}.hero-inner{padding:28px 22px;width:100%;background:linear-gradient(90deg,#211a19 40%,#211a1999 100%)}.hero h1{font-size:48px}.hero p{font-size:12px;max-width:320px}.hero-art{right:-60px;width:230px;height:230px;opacity:.31}.hero-cross{font-size:145px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{min-height:87px;padding:10px}.stat-value{font-size:28px}.stat-label{font-size:10px}.section-head h2{font-size:22px}.rosary-feature{grid-template-columns:108px minmax(0,1fr)}.feature-art img{width:100px}.feature-body{padding:17px 13px}.feature-body .card-title{font-size:19px}.feature-body p{font-size:11px}.mystery-layout{grid-template-columns:1fr}.mystery-visual{min-height:300px;padding:19px}.mystery-visual img{max-height:175px}.mystery-visual h2{font-size:23px}.prayer-list{grid-template-columns:1fr}.page-title{font-size:40px}.mobile-nav{position:fixed;bottom:0;left:0;right:0;height:calc(66px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);z-index:10;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:#111414f5;border-top:1px solid #42413b;backdrop-filter:blur(13px)}.mobile-nav button{border:0;background:transparent;color:#919792;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;font-size:9px;font-weight:700}.mobile-nav button[aria-current="page"]{color:#e0ba7e}.mobile-nav svg{width:19px;height:19px}.truth-large h2{font-size:32px}.truth-large blockquote{font-size:23px}}
+@media(max-width:370px){.hero h1{font-size:42px}.topbar-date{font-size:10px}.pill-status{font-size:8px}.grid-3{grid-template-columns:1fr 1fr}.grid-3>.stat:last-child{grid-column:span 2}.feature-art{display:none}.rosary-feature{display:block}.decade-buttons .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Versão 2: identidade firme e ações sem desculpas */
+.mode-switch{display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:.18s;max-width:55%}
+.mode-switch svg{width:14px;height:14px}.mode-switch.on{background:#451d24;color:#f4cfab;border-color:#a95c57;box-shadow:0 0 0 2px #551e241f}
+.mode-switch:hover{filter:brightness(1.19)}
+.battle-cry{display:flex;align-items:center;gap:11px;flex-wrap:wrap;background:#24171b;border:1px solid #71373e;border-left:4px solid #bc6e61;border-radius:7px;padding:13px 18px;margin:-4px 0 22px;font-size:11px;color:#d4c1b7;letter-spacing:.02em}
+.battle-cry strong{color:#f0d7ba;letter-spacing:.06em}.battle-cry .battle-dot{color:#dfab73;font-size:17px}
+.prayer-response{padding:15px 18px;margin-top:16px;border-left:3px solid #c5a06e;background:#262522;border-radius:0 6px 6px 0}
+.prayer-response span{font-size:10px;font-weight:800;letter-spacing:.15em;color:#dec494}
+.prayer-response p{font-style:italic;color:#d5cbb9;font-size:13px;line-height:1.75;margin:8px 0 0}
+.mission-commit{margin-top:22px;padding:18px;display:flex;justify-content:space-between;gap:16px;align-items:center;border:1px solid #655042;border-radius:8px;background:#261f1e}
+.mission-commit p{margin:7px 0 0;font-size:12px;color:#c3b8aa;line-height:1.6}
+@media(max-width:760px){.mode-switch{padding:9px 9px;font-size:9px;letter-spacing:.02em;white-space:normal;text-align:center}.mode-switch svg{display:none}.battle-cry{gap:7px}.battle-cry strong{font-size:10px}.mission-commit{flex-direction:column;align-items:stretch}.mission-commit .btn{width:100%}}
+
+</style>
+  <title>CUIÚDO — Fé, Coragem e Ação</title>
+</head>
+<body>
+  <div id="app"><div class="boot"><div class="boot-cross">✝</div><span>FÉ. CORAGEM. AÇÃO.</span></div></div>
+  <noscript>Este aplicativo precisa de JavaScript habilitado.</noscript>
+  <script>
+// CUIÚDO — Conteúdo de meditação original, com referências bíblicas.
+// As descrições abaixo são paráfrases, NÃO citações literais da Bíblia Ave-Maria.
+const groups = {
+  gozosos: {
+    title: 'Mistérios Gozosos', short: 'Gozosos', days: 'Segundas e sábados', eyebrow: 'A coragem de dizer sim', theme: 'Nascimento da esperança', color: '#d9b777',
+    mysteries: [
+      {id:'anunciacao',title:'A Anunciação do Anjo a Maria',ref:'Lucas 1,26–38',summary:'Maria acolhe o chamado de Deus mesmo sem conhecer todos os caminhos.',hard:'Você quer garantias para obedecer? Maria disse sim antes de enxergar o final. Pare de usar o medo como desculpa para ficar parado.',question:'Em que decisão você está adiando um sim honesto?',action:'Assuma hoje uma responsabilidade que você tem evitado.',symbol:'lily'},
+      {id:'visitacao',title:'A Visitação de Maria a Isabel',ref:'Lucas 1,39–56',summary:'Maria se levanta, parte apressadamente e coloca sua fé a serviço.',hard:'Fé que não se move vira discurso bonito. Você fala de amor, mas quando foi a última vez que se levantou para ajudar alguém?',question:'Sua fé beneficia alguém além de você?',action:'Faça um serviço concreto por alguém, sem anunciar.',symbol:'heart-hand'},
+      {id:'nascimento',title:'O Nascimento de Jesus',ref:'Lucas 2,1–20',summary:'O Salvador nasce na humildade, longe dos privilégios que o mundo costuma admirar.',hard:'Você se acha importante demais para começar pequeno? O próprio Cristo veio na pobreza. Desça do pedestal e comece com o que tem.',question:'Qual vaidade está impedindo seu primeiro passo?',action:'Conclua uma tarefa simples com humildade e capricho.',symbol:'star'},
+      {id:'apresentacao',title:'A Apresentação de Jesus no Templo',ref:'Lucas 2,22–35',summary:'Maria e José apresentam Jesus, vivendo a fidelidade nas pequenas obrigações.',hard:'Você quer uma missão grandiosa, mas despreza seus compromissos básicos. Santidade também é cumprir o dever quando ninguém está vendo.',question:'Que dever cotidiano você trata com descaso?',action:'Cumpra pontualmente a obrigação mais negligenciada do dia.',symbol:'candle'},
+      {id:'encontro',title:'O Encontro de Jesus no Templo',ref:'Lucas 2,41–52',summary:'Após procurá-lo com aflição, Maria e José encontram Jesus no Templo.',hard:'Você diz que perdeu o rumo, mas não reserva cinco minutos para buscar Cristo. O problema talvez não seja falta de sinal, mas falta de prioridade.',question:'Onde Deus está na sua agenda real?',action:'Separe dez minutos sem telas para oração e leitura do Evangelho.',symbol:'book'}
+    ]
+  },
+  dolorosos: {
+    title: 'Mistérios Dolorosos', short: 'Dolorosos', days: 'Terças e sextas', eyebrow: 'Fidelidade quando dói', theme: 'A escola da cruz', color: '#c67f78',
+    mysteries: [
+      {id:'agonia',title:'A Agonia de Jesus no Horto',ref:'Lucas 22,39–46',summary:'Jesus enfrenta a angústia em oração e entrega sua vontade ao Pai.',hard:'Coragem não é sentir nada; é fazer o certo mesmo tremendo. Pare de exigir que o medo desapareça antes de agir.',question:'Qual compromisso justo você evita por medo?',action:'Dê hoje o primeiro passo em algo difícil, mas necessário.',symbol:'chalice'},
+      {id:'flagelacao',title:'A Flagelação de Jesus',ref:'João 19,1',summary:'Jesus suporta a violência sem abandonar o amor nem a sua missão.',hard:'Você quer um caminho sem esforço? A vida cristã não é uma máquina de conforto. Chega de entregar sua vontade à primeira dificuldade.',question:'Qual desconforto pequeno tem governado suas escolhas?',action:'Faça sua obrigação sem reclamar e ofereça esse esforço.',symbol:'cord'},
+      {id:'espinhos',title:'A Coroação de Espinhos',ref:'Mateus 27,27–31',summary:'Cristo é ridicularizado e coroado de espinhos.',hard:'Enquanto Cristo aceita a humilhação por amor, você sacrifica a paz para vencer discussões inúteis. Seu orgulho não é um trono; é uma prisão.',question:'De quem você precisa parar de buscar aprovação?',action:'Recuse hoje uma discussão movida apenas pelo ego.',symbol:'crown'},
+      {id:'cruz',title:'Jesus Carrega a Cruz',ref:'Lucas 23,26–32',summary:'Jesus caminha para o Calvário e Simão de Cirene o ajuda a levar a cruz.',hard:'Não espere que alguém viva sua responsabilidade por você. Levante, carregue o que lhe cabe e aceite ajuda sem fazer do sofrimento um espetáculo.',question:'Você está fugindo de qual responsabilidade?',action:'Resolva uma pendência objetiva que depende de você.',symbol:'cross'},
+      {id:'crucificacao',title:'A Crucificação e Morte de Jesus',ref:'João 19,25–30',summary:'Na cruz, Cristo entrega a própria vida por amor.',hard:'O amor não é só sentimento bonito; exige entrega e fidelidade. Pare de chamar de amor aquilo que só funciona quando você ganha algo.',question:'Seu amor se transforma em sacrifício concreto?',action:'Faça um gesto generoso que custe tempo ou comodidade.',symbol:'cross-rays'}
+    ]
+  },
+  gloriosos: {
+    title: 'Mistérios Gloriosos', short: 'Gloriosos', days: 'Quartas e domingos', eyebrow: 'A esperança vence', theme: 'Vida nova em Cristo', color: '#d7c58f',
+    mysteries: [
+      {id:'ressurreicao',title:'A Ressurreição de Jesus',ref:'Mateus 28,1–10',summary:'O túmulo vazio anuncia que Cristo ressuscitou.',hard:'Seu fracasso de ontem não é desculpa para desistir hoje. Arrependa-se, recomece e pare de tratar a derrota como identidade.',question:'Qual erro você precisa enfrentar e corrigir?',action:'Recomece uma boa prática que abandonou.',symbol:'sun'},
+      {id:'ascensao',title:'A Ascensão de Jesus ao Céu',ref:'Atos 1,6–11',summary:'Cristo ascende e confia aos discípulos a continuidade da missão.',hard:'Ficar olhando para o céu não substitui a missão na terra. Reze de verdade e depois faça o trabalho que está nas suas mãos.',question:'Que missão concreta está esquecida?',action:'Dê um passo verificável em seu dever principal.',symbol:'up'},
+      {id:'pentecostes',title:'A Vinda do Espírito Santo',ref:'Atos 2,1–13',summary:'O Espírito Santo fortalece os discípulos para anunciar o Evangelho.',hard:'Você pede coragem e vive se escondendo atrás da opinião alheia. Faça o bem com firmeza, sem transformar a fé em teatro.',question:'O medo do julgamento tem calado sua consciência?',action:'Defenda uma atitude correta com respeito e coragem.',symbol:'flame'},
+      {id:'assuncao',title:'A Assunção de Nossa Senhora',ref:'Apocalipse 12,1 (imagem simbólica); tradição da Igreja',summary:'A Igreja celebra Maria elevada à glória celeste por graça de Deus.',hard:'Você foi chamado ao céu, mas entrega horas preciosas ao que não alimenta nem a alma nem a vida. Cuide do destino eterno sem abandonar seus deveres de hoje.',question:'O que ocupa seu coração em lugar desproporcional?',action:'Abra mão de uma distração e use esse tempo para algo bom.',symbol:'star-halo'},
+      {id:'coroacao',title:'A Coroação de Maria no Céu',ref:'Apocalipse 12,1 (imagem simbólica); tradição da Igreja',summary:'A devoção cristã contempla Maria glorificada junto a seu Filho.',hard:'Grandeza diante de Deus nasce da humildade, não do aplauso. Você quer ser admirado ou quer realmente ser fiel?',question:'Qual atitude sua busca mais aparência que verdade?',action:'Pratique uma virtude em segredo.',symbol:'crown'}
+    ]
+  },
+  luminosos: {
+    title: 'Mistérios Luminosos', short: 'Luminosos', days: 'Quintas', eyebrow: 'A verdade ilumina', theme: 'O caminho do discípulo', color: '#dec58b',
+    mysteries: [
+      {id:'batismo',title:'O Batismo de Jesus no Jordão',ref:'Mateus 3,13–17',summary:'Jesus se apresenta ao batismo e o Pai o revela como Filho amado.',hard:'Ser cristão não é colecionar rótulos religiosos. É viver como quem pertence a Cristo — inclusive quando ninguém vê.',question:'Suas escolhas confirmam a fé que você declara?',action:'Renuncie hoje, conscientemente, a um hábito que fere seus valores.',symbol:'water'},
+      {id:'cana',title:'As Bodas de Caná',ref:'João 2,1–11',summary:'Maria percebe a necessidade dos noivos e convida à confiança em Jesus.',hard:'Você pede um milagre, mas ignora as pequenas instruções do bem. Faça sua parte: encha as talhas antes de reclamar que falta vinho.',question:'Qual passo simples está faltando da sua parte?',action:'Execute a primeira etapa de um plano importante.',symbol:'jar'},
+      {id:'reino',title:'O Anúncio do Reino de Deus',ref:'Marcos 1,14–15',summary:'Jesus anuncia a proximidade do Reino e chama à conversão.',hard:'Conversão não é repetir "amanhã eu mudo" por seis meses. Se você sabe o que precisa corrigir, comece hoje. Chega dessa enrolação.',question:'Qual desculpa você repete para não mudar?',action:'Elimine um gatilho concreto de um mau hábito.',symbol:'book-rays'},
+      {id:'transfiguracao',title:'A Transfiguração de Jesus',ref:'Mateus 17,1–8',summary:'Jesus revela sua glória e os discípulos são chamados a ouvi-lo.',hard:'Você escuta dez opiniões por dia e não escuta o Evangelho. Não é falta de conteúdo: é falta de silêncio e obediência.',question:'Qual barulho ocupa o lugar da escuta de Deus?',action:'Fique quinze minutos sem estímulos digitais e medite no Evangelho.',symbol:'mountain'},
+      {id:'eucaristia',title:'A Instituição da Eucaristia',ref:'Lucas 22,14–20',summary:'Na Última Ceia, Cristo oferece seu Corpo e Sangue como dom de amor.',hard:'Não trate o sagrado como enfeite de agenda. Sua vida precisa responder com gratidão, reverência e compromisso real.',question:'O que precisa mudar para sua fé ser mais coerente?',action:'Prepare-se com atenção para a próxima missa; considere a confissão se necessário.',symbol:'chalice-bread'}
+    ]
+  }
+};
+
+const confrontos = [
+  {title:'Preguiça não é projeto de vida',topic:'Disciplina',ref:'Provérbios 6,6–11',quote:'Você pede graças a Deus, mas entrega o dia inteiro à preguiça dos infernos. ACORDA! Não adianta pedir que Deus abençoe um esforço que você nem começou.',truth:'Orar não substitui trabalhar. Graça e responsabilidade não são rivais.',action:'Escolha uma tarefa adiada e trabalhe nela por 25 minutos, sem celular.'},
+  {title:'Chega de terceirizar sua vida',topic:'Responsabilidade',ref:'Tiago 2,14–17',quote:'Você quer que tudo aconteça, mas está parado esperando o mundo se ajoelhar na sua frente? Vai se ferrar insistindo nas mesmas desculpas. Levante e faça a parte que é sua.',truth:'A fé se expressa em obras concretas e amor ativo.',action:'Resolva hoje uma pendência que depende apenas de você.'},
+  {title:'Sua santidade não cabe só no domingo',topic:'Coerência',ref:'Mateus 7,21',quote:'É fácil dizer “Senhor, Senhor”. Difícil é fechar a boca quando vai humilhar alguém, cumprir sua palavra e abandonar o pecado de estimação. Religião sem conversão vira fachada.',truth:'A vida espiritual exige coerência entre oração e ação.',action:'Reconheça um comportamento errado e corrija-o na próxima oportunidade.'},
+  {title:'Você não é refém do ontem',topic:'Recomeço',ref:'Lucas 15,11–24',quote:'Caiu? Levante. Pecou? Arrependa-se e procure a reconciliação. Mas pare de usar a culpa como esconderijo para não mudar. Autopiedade não é penitência.',truth:'Deus oferece misericórdia e chama à mudança real.',action:'Escreva um passo concreto de reparação ou recomeço e execute-o.'},
+  {title:'O celular virou seu altar?',topic:'Foco',ref:'Mateus 6,21',quote:'Você diz que não tem tempo para Deus nem para estudar, mas conhece cada vídeo inútil da internet. Não falta hora. Falta prioridade. Acorda para o que está roubando sua vida.',truth:'Nossas escolhas revelam o que valorizamos.',action:'Passe 60 minutos longe de redes sociais e invista esse tempo em algo importante.'},
+  {title:'Seu orgulho custa caro',topic:'Humildade',ref:'Filipenses 2,3–5',quote:'Você prefere perder a paz, a amizade e a razão a admitir um erro. E ainda chama isso de personalidade forte? Não: é orgulho precisando de conversão.',truth:'Ser humilde não é ser fraco; é amar a verdade acima do próprio ego.',action:'Peça desculpas, sem justificativas, por uma atitude concreta.'},
+  {title:'Vontade não é compromisso',topic:'Constância',ref:'Lucas 9,23',quote:'A motivação sumiu e você já quer abandonar tudo? Santidade não é um arrepio bonito no peito. É escolher o bem também nos dias sem vontade.',truth:'A perseverança se constrói com decisões repetidas.',action:'Cumpra a menor versão possível de um hábito bom, hoje.'},
+  {title:'Não use Deus como desculpa',topic:'Ação',ref:'Colossenses 3,23',quote:'“Estou esperando Deus agir.” E o currículo? E o estudo? E a ligação? E a obrigação? Ore com confiança, mas pare de chamar de espera aquilo que é fuga.',truth:'A providência divina não dispensa prudência e esforço humano.',action:'Tome uma iniciativa prática em uma área da vida que está parada.'},
+  {title:'Pureza exige decisão',topic:'Santidade',ref:'1 Coríntios 6,18–20',quote:'Você conhece seus limites e continua brincando na beira do abismo. Depois age como se a queda fosse surpresa. Tenha respeito pela própria consciência e crie limites reais.',truth:'A liberdade cresce quando aprendemos a escolher o bem.',action:'Afaste hoje um gatilho de um hábito que contraria seus valores.'},
+  {title:'Perdoar não é fingir',topic:'Perdão',ref:'Mateus 18,21–22',quote:'Você repete a ofensa na cabeça para manter a raiva acesa. A dor pode ser legítima, mas alimentar vingança não cura ferida nenhuma.',truth:'Perdoar é um caminho; não significa aceitar abusos nem abandonar limites.',action:'Faça uma oração sincera por alguém de quem você guarda mágoa.'},
+  {title:'Caridade sem plateia',topic:'Serviço',ref:'Mateus 6,1–4',quote:'Você quer ser visto como alguém de fé? Então experimente fazer o bem quando não houver curtida, elogio ou testemunha. A vaidade adora vestir roupa de virtude.',truth:'A caridade verdadeira procura o bem do outro, não o próprio palco.',action:'Ajude alguém anonimamente ou sem publicar nada.'},
+  {title:'Controle sua língua',topic:'Domínio próprio',ref:'Tiago 3,5–10',quote:'Você chama grosseria de sinceridade e falta de freio de coragem. Não confunda firmeza com ferir os outros. A verdade não precisa de crueldade para ter força.',truth:'A palavra deve ser firme quando necessário, mas sempre responsável.',action:'Antes de responder com raiva, espere dois minutos e escolha uma fala justa.'},
+  {title:'Coragem para começar pequeno',topic:'Iniciativa',ref:'Zacarias 4,10',quote:'O plano perfeito virou seu esconderijo favorito. Você sonha gigante e despreza o primeiro passo. Pare de planejar como herói e agir como espectador.',truth:'O crescimento frequentemente nasce da fidelidade em coisas pequenas.',action:'Entregue uma parte concreta, ainda que pequena, de um projeto importante.'},
+  {title:'A cruz não é desculpa para desistir',topic:'Esperança',ref:'Romanos 5,3–5',quote:'A vida está pesada? Isso merece cuidado, oração e ajuda — não a cobrança de ser uma máquina. Mas, onde você ainda pode agir, não entregue a última palavra ao desânimo.',truth:'Esperança cristã é perseverança com confiança, não negação da dor.',action:'Faça uma tarefa possível hoje e peça ajuda para o que não consegue carregar sozinho.'}
+];
+
+const examineItems = [
+  'Deixei de rezar por comodismo, sem buscar retomar?',
+  'Fui desonesto, mesmo em algo pequeno?',
+  'Usei palavras para ferir, humilhar ou difamar?',
+  'Alimentei orgulho ou recusei reconhecer um erro?',
+  'Negligenciei deveres por preguiça ou distração?',
+  'Tratei outras pessoas como objetos dos meus desejos?',
+  'Deixei de ajudar alguém quando podia agir com caridade?',
+  'Fugi da verdade para preservar minha aparência?'
+];
+
+const baseChallenges = [
+  {label:'Rezar com atenção por pelo menos 10 minutos',details:'Sem celular e sem pressa.',type:'oração'},
+  {label:'Trabalhar 25 minutos numa tarefa adiada',details:'Cronômetro ligado, desculpas desligadas.',type:'disciplina'},
+  {label:'Fazer um gesto concreto de caridade',details:'Com alguém real, sem buscar aplauso.',type:'caridade'},
+  {label:'Examinar a consciência antes de dormir',details:'Reconhecer, agradecer e recomeçar.',type:'santidade'}
+];
+
+const prayers = [
+  {name:'Sinal da Cruz',text:'Em nome do Pai, do Filho e do Espírito Santo. Amém.'},
+  {name:'Credo (Símbolo dos Apóstolos)',text:'Creio em Deus Pai todo-poderoso, criador do céu e da terra; e em Jesus Cristo, seu único Filho, nosso Senhor; que foi concebido pelo poder do Espírito Santo; nasceu da Virgem Maria; padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu à mansão dos mortos; ressuscitou ao terceiro dia; subiu aos céus; está sentado à direita de Deus Pai todo-poderoso, donde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo; na santa Igreja Católica; na comunhão dos santos; na remissão dos pecados; na ressurreição da carne; na vida eterna. Amém.'},
+  {name:'Pai-Nosso',text:'Pai nosso, que estais nos céus, santificado seja o vosso nome; venha a nós o vosso Reino; seja feita a vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje; perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido; e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.'},
+  {name:'Ave-Maria',text:'Ave Maria, cheia de graça, o Senhor é convosco; bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós, pecadores, agora e na hora de nossa morte. Amém.'},
+  {name:'Glória ao Pai',text:'Glória ao Pai, ao Filho e ao Espírito Santo. Como era no princípio, agora e sempre. Amém.'},
+  {name:'Salve-Rainha',text:'Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei; e, depois deste desterro, mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Amém.'}
+];
+
+// CUIÚDO | Modo SEM DESCULPAS
+// Reflexões originais, firmes e voluntariamente provocadoras.
+// Não são citações literais nem palavras atribuídas diretamente a Jesus ou aos santos.
+// A contundência recai sobre hábitos e escolhas, jamais sobre dignidade, sofrimento ou condições de saúde.
+const marteladas = {
+  anunciacao: {
+    hard: 'MARIA DISSE SIM. VOCÊ AINDA ESTÁ INVENTANDO DESCULPAS. Quer que Deus te mostre a estrada inteira antes de dar um passo? Isso não é prudência: muitas vezes é medo fantasiado de sabedoria. CHEGA. O sim de hoje não depende de você controlar o amanhã.',
+    question: 'Qual decisão correta você já sabe que deve tomar, mas vem empurrando com a barriga?',
+    action: 'Tome uma decisão pendente e execute a primeira ação verificável em até 15 minutos.',
+    prayer: 'Senhor, quebra minha mania de negociar com o dever. Dá-me a coragem humilde do sim.'
+  },
+  visitacao: {
+    hard: 'MARIA SE LEVANTOU E FOI. E VOCÊ? Vai continuar dizendo que ama todo mundo enquanto ninguém pode contar com você? Fé de boca é confortável pra caramba. Caridade de verdade custa tempo, cansa as pernas e não rende curtida.',
+    question: 'Quem precisou de você recentemente e recebeu apenas uma promessa bonita?',
+    action: 'Ajude alguém hoje com um serviço concreto, sem tirar foto e sem cobrar reconhecimento.',
+    prayer: 'Senhor, tira minha fé do discurso e coloca minhas mãos a serviço.'
+  },
+  nascimento: {
+    hard: 'O REI DO UNIVERSO NASCEU NUMA MANJEDOURA. Você, não: quer começar já sendo aplaudido. Quer projeto perfeito, condição perfeita e caminho sem vergonha. Que orgulho dos infernos é esse? Pare de desprezar o pequeno começo.',
+    question: 'Qual tarefa simples você considera pequena demais para sua vaidade?',
+    action: 'Entregue hoje uma primeira versão honesta de algo que está adiando.',
+    prayer: 'Jesus humilde, arranca de mim a necessidade de parecer grande.'
+  },
+  apresentacao: {
+    hard: 'QUER SER SANTO, MAS NÃO CUMPRE A PALAVRA? Você promete, atrasa, desaparece e depois pede uma missão grandiosa. A vida espiritual não é fuga das obrigações. COMEÇA honrando o que você já assumiu.',
+    question: 'Que compromisso seu está sem cumprimento por puro descuido?',
+    action: 'Quite uma obrigação pequena e peça desculpas se prejudicou alguém.',
+    prayer: 'Senhor, faz de mim alguém fiel no ordinário, sem plateia.'
+  },
+  encontro: {
+    hard: 'VOCÊ DIZ QUE DEUS SUMIU, MAS FOI VOCÊ QUE SUMIU DA ORAÇÃO. Seu celular recebeu horas. O Evangelho recebeu migalhas. Não chama de silêncio de Deus aquilo que pode ser barulho demais na sua vida.',
+    question: 'O que ocupa seus melhores minutos e deixa para Deus só o resto?',
+    action: 'Desligue notificações e faça 15 minutos reais de oração e leitura do Evangelho.',
+    prayer: 'Jesus, ensina-me a te procurar antes de procurar distração.'
+  },
+  agonia: {
+    hard: 'JESUS SENTIU ANGÚSTIA E NÃO FUGIU DA VONTADE DO PAI. E VOCÊ? Está esperando nunca sentir medo para fazer o certo? Acorda: coragem é obedecer ao bem mesmo com o peito apertado. Não confunda sofrimento real com covardia; peça ajuda quando precisar, mas não abandone o que pode fazer.',
+    question: 'Qual dever justo está parado porque você exige estar emocionalmente pronto?',
+    action: 'Faça hoje uma etapa de 10 minutos da tarefa difícil; procure apoio onde precisar.',
+    prayer: 'Pai, não a minha vontade, mas a vossa. Sustenta meus passos.'
+  },
+  flagelacao: {
+    hard: 'VOCÊ QUER VITÓRIA SEM SACRIFÍCIO? A primeira dificuldade aparece e sua disciplina vai embora. Ninguém amadurece só colecionando vontade. Para de fazer acordo com o conforto toda vez que o dever bate na porta.',
+    question: 'Qual desconforto pequeno você transformou numa desculpa gigantesca?',
+    action: 'Termine uma obrigação concreta antes de procurar entretenimento.',
+    prayer: 'Cristo sofredor, dá-me perseverança sem endurecer meu coração.'
+  },
+  espinhos: {
+    hard: 'CRISTO FOI COROADO DE ESPINHOS. VOCÊ QUER SER COROADO DE ELOGIOS. Uma crítica e você perde a paz; uma discussão e você precisa vencer. Seu ego está custando caro demais. Desce desse trono, porra. A verdade não precisa que você esmague ninguém.',
+    question: 'Que discussão você alimenta mais por vaidade do que por justiça?',
+    action: 'Peça perdão por uma palavra injusta ou encerre uma discussão inútil.',
+    prayer: 'Jesus manso e humilde de coração, livra-me do orgulho que fere.'
+  },
+  cruz: {
+    hard: 'CRISTO CAMINHOU COM A CRUZ. VOCÊ FICA OLHANDO PARA A SUA LISTA DE PROBLEMAS ATÉ ELA VIRAR UM MURO. Nem tudo depende de você, mas alguma coisa depende. LEVANTA E FAZ ESSA PARTE. E aceite seu Simão de Cirene quando precisar.',
+    question: 'Qual parte do problema está sob sua responsabilidade hoje?',
+    action: 'Escreva o problema, separe o que você controla e execute só o primeiro passo.',
+    prayer: 'Senhor, dá-me coragem para agir e humildade para receber ajuda.'
+  },
+  crucificacao: {
+    hard: 'VOCÊ DIZ QUE AMA, MAS SÓ ENQUANTO NÃO CUSTA NADA? Na cruz, Cristo revelou um amor que se entrega. Seu amor não pode acabar quando começa a exigir paciência, verdade ou serviço. Pare de confundir sentimento forte com fidelidade.',
+    question: 'Quem recebe suas palavras de amor, mas não encontra seus gestos?',
+    action: 'Sacrifique tempo ou comodidade para servir alguém com respeito e liberdade.',
+    prayer: 'Jesus crucificado, ensina-me a amar de verdade, sem interesse.'
+  },
+  ressurreicao: {
+    hard: 'CRISTO RESSUSCITOU. ENTÃO PARA DE SEPULTAR O SEU AMANHÃ NO ERRO DE ONTEM. Caiu? Reconhece. Pecou? Arrepende-te. Machucou alguém? Repara. E DEPOIS LEVANTA. A culpa que nunca se transforma em conversão vira outra forma de paralisia.',
+    question: 'Qual erro exige reparação concreta em vez de mais um discurso de culpa?',
+    action: 'Faça uma reparação possível ou retome imediatamente uma boa prática.',
+    prayer: 'Senhor ressuscitado, faz-me recomeçar com verdade e esperança.'
+  },
+  ascensao: {
+    hard: 'OS DISCÍPULOS RECEBERAM UMA MISSÃO, NÃO UMA DESCULPA PARA FICAR PARADOS. Você pede que Deus abra portas, mas não bate em nenhuma. Oração não é atalho para fugir da iniciativa. Reza. Planeja. TRABALHA.',
+    question: 'Que iniciativa concreta você vem chamando de “esperar a hora certa”?',
+    action: 'Envie a mensagem, faça a inscrição ou avance uma etapa de trabalho hoje.',
+    prayer: 'Cristo Senhor, firma meus olhos no céu e meus pés na missão.'
+  },
+  pentecostes: {
+    hard: 'VOCÊ PEDE O ESPÍRITO SANTO, MAS DEIXA O MEDO DO QUE VÃO PENSAR MANDAR NA SUA CONSCIÊNCIA. Basta. Nem toda coragem faz barulho; muitas vezes ela é a decisão silenciosa de não vender seus princípios.',
+    question: 'Que boa atitude você abandona para ser aceito?',
+    action: 'Faça uma escolha correta hoje mesmo sem aprovação externa.',
+    prayer: 'Espírito Santo, dá-me firmeza sem arrogância e verdade sem violência.'
+  },
+  assuncao: {
+    hard: 'VOCÊ FOI FEITO PARA A ETERNIDADE E ESTÁ TROCANDO HORAS DA SUA VIDA POR LIXO QUE NÃO TE EDIFICA. Não adianta falar de céu enquanto entrega todas as prioridades ao impulso do momento. O tempo que passou não volta.',
+    question: 'Que hábito ocupa seu dia e esvazia sua atenção, fé e responsabilidade?',
+    action: 'Recupere meia hora de distrações e use-a para oração ou dever concreto.',
+    prayer: 'Maria, Mãe da esperança, ajuda-me a viver hoje com os olhos na eternidade.'
+  },
+  coroacao: {
+    hard: 'MARIA É HONRADA POR DEUS. VOCÊ QUER SER HONRADO PELA PLATEIA. Faz o bem e já procura quem viu. Fala de humildade e exige reconhecimento. Desculpa, mas isso não é santidade: é vaidade usando roupa de religião.',
+    question: 'Que boa ação sua você transformou em publicidade de si mesmo?',
+    action: 'Faça um bem hoje que só Deus e a pessoa beneficiada saberão.',
+    prayer: 'Rainha do Céu, ensina-me a escolher a fidelidade acima da fama.'
+  },
+  batismo: {
+    hard: 'NÃO É POR CHAMAR-SE CATÓLICO QUE VOCÊ ESTÁ VIVENDO COMO DISCÍPULO. Terço na mão e desonestidade nas escolhas não combinam. A fé precisa aparecer na agenda, na boca, no trabalho e na forma como você trata os outros.',
+    question: 'Qual escolha escondida contradiz aquilo que você professa em público?',
+    action: 'Corrija um comportamento concreto, sobretudo quando ninguém estiver vendo.',
+    prayer: 'Pai, renova em mim a graça de viver como vosso filho.'
+  },
+  cana: {
+    hard: 'VOCÊ QUER QUE JESUS TRANSFORME A ÁGUA EM VINHO, MAS NEM AS TALHAS QUER ENCHER. Quer resultado, mas foge do básico. Quer graça, mas não coopera. CHEGA DE PREGUIÇA DOS INFERNOS. Faça o que está ao seu alcance sem tratar Deus como máquina de favores.',
+    question: 'Qual providência humana simples você está deixando de tomar?',
+    action: 'Comece agora a tarefa que prepara o caminho para o resultado desejado.',
+    prayer: 'Senhor, livra-me da fé interesseira e dá-me prontidão para servir.'
+  },
+  reino: {
+    hard: '“AMANHÃ EU ME CONVERTO.” MENTIRA QUE VOCÊ JÁ REPETIU DEMAIS. Enquanto o amanhã não chega, o hábito cresce. Arrependimento sincero não é teatro nem perfeição instantânea: é parar de defender o erro e começar a combatê-lo HOJE.',
+    question: 'Que mudança você já prometeu tantas vezes que a promessa perdeu o peso?',
+    action: 'Retire um gatilho do mau hábito e estabeleça um compromisso viável para hoje.',
+    prayer: 'Jesus, dai-me coração contrito e coragem para mudar de direção.'
+  },
+  transfiguracao: {
+    hard: 'O PAI DISSE PARA ESCUTAR JESUS. E VOCÊ ESCUTA QUEM? Um monte de vozes na internet, todas urgentes, todas querendo seu tempo. O Evangelho fica para depois. Acorda: você não precisa de mais barulho, precisa de obediência ao bem.',
+    question: 'Qual voz tem mais autoridade prática na sua rotina que o Evangelho?',
+    action: 'Leia Mateus 17,1–8 e fique 15 minutos longe de redes sociais.',
+    prayer: 'Senhor, dá-me ouvidos atentos à vossa Palavra e mãos prontas para obedecer.'
+  },
+  eucaristia: {
+    hard: 'A EUCARISTIA NÃO É CENÁRIO PARA SUA VIDA RELIGIOSA DE APARÊNCIA. Cristo se oferece inteiramente. Você responde com reverência ou com piloto automático? Pare de tratar o sagrado como item de checklist e o próximo como descartável.',
+    question: 'Que incoerência concreta existe entre sua participação na missa e sua vida?',
+    action: 'Prepare a próxima missa com atenção e pratique hoje um gesto de reconciliação.',
+    prayer: 'Jesus Eucarístico, faz da minha vida uma resposta verdadeira ao vosso amor.'
+  }
+};
+
+const confrontosBrutais = [
+  {title:'ACORDA. A VIDA NÃO VAI ESPERAR.',topic:'Disciplina',ref:'Provérbios 6,6–11',quote:'VOCÊ PEDE GRAÇAS A DEUS E ENTREGA O DIA À PREGUIÇA DOS INFERNOS. Quer milagre sem levantar a bunda da cadeira? Para com essa palhaçada. Reze com fé, abra o trabalho e faça sua parte. O mundo não te deve o primeiro passo.',truth:'Providência não é autorização para negligência; não podemos comprar as graças de Deus pelo esforço.',action:'25 minutos ininterruptos na pendência mais importante. Comece agora.'},
+  {title:'ORAÇÃO NÃO É TERCEIRIZAÇÃO.',topic:'Responsabilidade',ref:'Tiago 2,14–17',quote:'“EU ENTREGUEI NAS MÃOS DE DEUS.” Entregou mesmo ou usou uma frase religiosa para fugir da responsabilidade? Deus não te chamou para assistir à própria vida de camarote. Levanta, porra. Age com prudência e sem esperar aplauso.',truth:'Fé viva se manifesta em obras; ação não substitui graça nem graça dispensa ação.',action:'Anote três atitudes sob seu controle. Execute a primeira hoje.'},
+  {title:'SEU EGO NÃO É SEU DEUS.',topic:'Orgulho',ref:'Filipenses 2,3–5',quote:'VOCÊ QUER TER RAZÃO ATÉ QUANDO ESTÁ ERRADO. Prefere perder a paz a dizer “me desculpa”. Ainda quer chamar isso de personalidade forte? Seu orgulho é barulhento, mas a humildade é que salva suas relações.',truth:'A humildade não é humilhação; é submissão voluntária à verdade.',action:'Reconheça um erro e peça desculpas, sem colocar um “mas” no final.'},
+  {title:'PARE DE NEGOCIAR COM O PECADO.',topic:'Conversão',ref:'Marcos 1,14–15',quote:'VOCÊ SABE QUE AQUILO TE AFASTA DE DEUS E CONTINUA ABRINDO A MESMA PORTA. Depois se espanta com a queda? CHEGA. Não espere desejar a virtude para construir limites. Arrependimento começa quando você para de justificar o erro.',truth:'Conversão é voltar-se a Deus; uma queda não elimina a possibilidade do perdão.',action:'Corte um gatilho concreto e considere a Confissão quando for necessário.'},
+  {title:'SEU CELULAR VIROU UM ALTAR.',topic:'Prioridades',ref:'Mateus 6,21',quote:'VOCÊ DIZ QUE NÃO TEM DEZ MINUTOS PARA REZAR, MAS A TELA ENGOLIU SUA MANHÃ. Vai fingir que não percebeu? O problema não é o aparelho: é o senhorio que você entregou aos seus impulsos.',truth:'O tempo e a atenção revelam parte importante das nossas prioridades.',action:'Silencie o celular por 45 minutos e use esse tempo para um dever real.'},
+  {title:'UMA PROMESSA NÃO É UMA ENTREGA.',topic:'Constância',ref:'Lucas 9,23',quote:'PROMETEU QUE IA MUDAR NA SEGUNDA. DEPOIS NA OUTRA. E NA OUTRA. QUANTAS MAIS? Disciplina não aparece quando você se sente pronto. Aparece quando você honra uma pequena decisão mesmo sem entusiasmo.',truth:'A fidelidade cotidiana pesa mais que grandes discursos sem continuidade.',action:'Defina uma tarefa de 15 minutos e conclua antes de abrir redes sociais.'},
+  {title:'CRISTÃO DE FACHADA? NÃO.',topic:'Coerência',ref:'Mateus 7,21',quote:'VOCÊ REZA BONITO E FALA FEIO COM QUEM DEPENDE DE VOCÊ? Defende princípios e passa por cima das pessoas? Então o problema não é falta de devoção na aparência. É a conversão que ainda precisa chegar à sua maneira de agir.',truth:'A prática religiosa pede compromisso real com justiça, caridade e verdade.',action:'Corrija um ato de incoerência que só você pode reparar.'},
+  {title:'PARE DE USAR O PASSADO COMO CADEADO.',topic:'Recomeço',ref:'Lucas 15,11–24',quote:'ERROU? ASSUME. MAGOOU? REPARA. CAIU? LEVANTA. Mas pare de transformar o remorso num lugar confortável de imobilidade. Deus chama à conversão, não a uma prisão perpétua dentro da própria culpa.',truth:'A misericórdia de Deus é maior que nossos fracassos e nos move a uma vida nova.',action:'Escolha uma reparação possível e marque o primeiro passo hoje.'},
+  {title:'PARA QUEM É A SUA CARIDADE?',topic:'Serviço',ref:'Mateus 6,1–4',quote:'SE NINGUÉM VISSE, VOCÊ AINDA AJUDARIA? Se toda boa ação precisa de foto, aplauso e elogio, tem algo errado no altar do seu coração. Caridade não é campanha de marketing da própria santidade.',truth:'A caridade deve colocar o bem do outro antes do desejo de reconhecimento.',action:'Ajude discretamente uma pessoa, sem postar.'},
+  {title:'SEM CORAGEM NÃO HÁ PRIMEIRO PASSO.',topic:'Coragem',ref:'Josué 1,9',quote:'VOCÊ FICA ENSAIANDO A VIDA PERFEITA ENQUANTO O DIA PASSA. Não vai se tornar destemido do nada. Faça o certo com medo mesmo, sem imprudência. A coragem cresce com passos verdadeiros, não com frases de efeito.',truth:'Ser forte não significa negar limites, riscos ou a necessidade de apoio.',action:'Dê um passo verificável em uma decisão que você vem adiando.'},
+  {title:'DISCUSSÃO NÃO É VOCAÇÃO.',topic:'Paz',ref:'Tiago 1,19–20',quote:'VOCÊ ESTÁ MAIS EMPENHADO EM VENCER DISCUSSÃO DO QUE EM VENCER A SI MESMO. Horas gastas com briga e zero minutos com dever, oração ou caridade. ACORDA. Nem toda provocação merece resposta.',truth:'Domínio próprio vale mais que a vitória numa discussão inútil.',action:'Saia de uma disputa improdutiva e use o tempo para algo construtivo.'},
+  {title:'NÃO CHAME FUGA DE DESCANSO.',topic:'Equilíbrio',ref:'Eclesiastes 3,1',quote:'DESCANSAR É NECESSÁRIO. MAS VOCÊ SABE QUANDO A PAUSA VIROU FUGA. A distração não conserta a tarefa que você tem medo de encarar. Sem crueldade consigo mesmo: organize seu limite e volte ao que é possível.',truth:'Disciplina precisa conviver com sono, saúde, prudência e descanso legítimo.',action:'Planeje uma pausa real e um bloco possível de 20 minutos de trabalho.'},
+  {title:'PECADO NÃO É BRINCADEIRA.',topic:'Vigilância',ref:'1 Coríntios 6,18–20',quote:'VOCÊ CONHECE SEUS GATILHOS E INSISTE EM SE EXPOR A ELES. Depois chama o tropeço de surpresa? Seja adulto com a própria consciência. Não para alimentar vergonha, mas para parar de dar ao erro as condições perfeitas.',truth:'Liberdade cristã envolve consciência, autocontrole e cuidado com a dignidade de todos.',action:'Ajuste hoje uma fronteira pessoal e respeite também a dos outros.'},
+  {title:'DEUS NÃO É CAIXA ELETRÔNICO.',topic:'Maturidade espiritual',ref:'Mateus 6,9–13',quote:'“EU REZO E AS COISAS PRECISAM DAR CERTO.” NÃO. Deus não é máquina que entrega prêmio por devoção. Fé não compra prosperidade. Às vezes o caminho passa pela cruz, e você continua chamado à fidelidade.',truth:'Oração é relação com Deus, não garantia contratual de sucesso material.',action:'Agradeça por algo real e faça uma escolha correta sem exigir recompensa.'},
+  {title:'PARE DE TRATAR TODOS COMO INIMIGOS.',topic:'Caridade',ref:'Mateus 5,44',quote:'VOCÊ QUER PREGAR A VERDADE E AO MESMO TEMPO ESMAGAR QUEM DISCORDA? Isso não é coragem católica. É falta de caridade fantasiada de zelo. Fale com firmeza, mas não arranque a dignidade de ninguém.',truth:'A verdade e a caridade não se anulam; ambas exigem conversão.',action:'Discorde de alguém hoje sem ofender sua pessoa.'},
+  {title:'NÃO DESISTA DO QUE VOCÊ PODE FAZER.',topic:'Perseverança',ref:'Romanos 5,3–5',quote:'A VIDA ESTÁ PESADA? A DOR É REAL E MERECE RESPEITO. Mas não permita que a única coisa possível hoje também seja abandonada. Você não precisa vencer a vida inteira agora. Precisa encontrar o próximo passo possível — e buscar ajuda quando a carga for demais.',truth:'Perseverar não é se destruir nem negar o sofrimento.',action:'Escolha uma ação mínima e viável; para o restante, peça apoio sem vergonha.'},
+  {title:'PARE DE ESCONDER A VERDADE.',topic:'Honestidade',ref:'Efésios 4,25',quote:'VOCÊ QUER PAZ, MAS VIVE EMPILHANDO MEIAS VERDADES. Mentira pequena também corrói confiança. A coragem começa quando você prefere uma conversa difícil a mais uma desculpa conveniente.',truth:'A verdade pede responsabilidade, reparação e respeito ao próximo.',action:'Corrija uma informação enganosa ou esclareça um compromisso.'},
+  {title:'VOCÊ PRECISA DE ATITUDE, NÃO DE PALCO.',topic:'Serviço',ref:'Colossenses 3,23',quote:'QUER SER EXEMPLO? ENTÃO SEJA FIEL QUANDO NÃO TEM NINGUÉM OLHANDO. O trabalho honesto, a oração secreta e a palavra cumprida não viralizam. Mas é neles que seu caráter se revela.',truth:'O valor da boa ação não depende da quantidade de testemunhas.',action:'Conclua uma obrigação silenciosa com atenção e sem procurar elogios.'}
+];
+
+
+const STORE_KEY = 'cuiudo-v1';
+const groupNames = ['gozosos', 'dolorosos', 'gloriosos', 'luminosos'];
+const navItems = [
+  {id:'inicio',label:'Início',mobile:'Início',icon:'home'},
+  {id:'terco',label:'Terço diário',mobile:'Terço',icon:'rosary'},
+  {id:'verdade',label:'Tapa na cara',mobile:'Verdade',icon:'flame'},
+  {id:'desafios',label:'Desafios',mobile:'Ação',icon:'target'},
+  {id:'exame',label:'Exame de consciência',mobile:'Exame',icon:'heart'},
+  {id:'diario',label:'Meu diário',mobile:'Diário',icon:'book'}
+];
+const app = document.getElementById('app');
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function currentDay(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','luminosos','dolorosos','gozosos'][new Date().getDay()];}
+function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
+function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
+function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,...storedState()};
+state.tab='inicio'; // Sempre abrir na home.
+state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
+state.mystery=0;
+state.truthOffset=0;
+function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
+function readProgress(group=state.group){return state.progress?.[`${currentDay()}:${group}`] || [0,0,0,0,0];}
+function changeCount(n){state.progress??={};const key=`${currentDay()}:${state.group}`;let arr=[...readProgress()];arr[state.mystery]=Math.max(0,Math.min(10,n));state.progress[key]=arr;save();}
+function checkChallenge(n,checked){state.challengeDays??={};const key=currentDay();const arr=[...(state.challengeDays[key]||[false,false,false,false])];arr[n]=checked;state.challengeDays[key]=arr;save();}
+function checkExamine(n,checked){state.examineDays??={};const key=currentDay();const arr=[...(state.examineDays[key]||[] )];arr[n]=checked;state.examineDays[key]=arr;save();}
+function getChecks(){return state.challengeDays?.[currentDay()]||[false,false,false,false];}
+function getExamine(){return state.examineDays?.[currentDay()]||[];}
+function getTruth(){const deck=truthDeck();return deck[(dailyIndex()+state.truthOffset)%deck.length];}
+function mysteryText(m){return state.mode==='brutal'?(marteladas[m.id]||m):m;}
+function missionId(){return `${currentDay()}:${state.mode}:${getTruth().title}`;}
+function missionDone(){return Boolean(state.missionDays?.[missionId()]);}
+function missionButton(){return `<button class="btn ${missionDone()?'btn-muted':''}" data-action="mission-done" aria-pressed="${missionDone()}">${icon('check')} ${missionDone()?'Missão cumprida — desfazer':'Marcar missão cumprida'}</button>`;}
+function countDone(){return readProgress().filter(n=>n===10).length;}
+function icon(name,extra=''){
+  const icons={
+    home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+    rosary:'<circle cx="12" cy="12" r="3"/><path d="M12 2v7M12 15v7M2 12h7M15 12h7M5 5l4 4M15 15l4 4M19 5l-4 4M9 15l-4 4"/>',
+    flame:'<path d="M12 22c5 0 8-3.3 8-8 0-3.3-2-6-5-9 .3 3-1.2 4.4-2.6 4.6C13 6 10.5 3.5 9 2 9.1 6.5 4 9.5 4 14c0 4.7 3 8 8 8Z"/><path d="M12 22c2.5 0 4-1.8 4-4 0-1.8-1-3-3-5 0 2-3 3-3 5 0 2.2.7 4 2 4Z"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    heart:'<path d="M20.8 4.6c-2.1-2.1-5.5-2.1-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/>',
+    book:'<path d="M3 5.5C6 4 9 4 12 6c3-2 6-2 9-.5v13c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5zM12 6v13"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',
+    arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    arrowLeft:'<path d="M19 12H5m6-6-6 6 6 6"/>',
+    check:'<path d="m4 12 5 5L20 6"/>',
+    plus:'<path d="M12 4v16M4 12h16"/>',
+    rotate:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/>',
+    sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+    quote:'<path d="M10 11H4V5h6v7l-5 5M20 11h-6V5h6v7l-5 5"/>',
+    save:'<path d="M4 3h14l3 3v15H3V3Zm3 0v6h10V3M7 21v-8h10v8"/>',
+    trash:'<path d="M3 6h18M8 6V4h8v2M5 6l1 15h12l1-15M10 10v7m4-7v7"/>',
+    lock:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'
+  };
+  return `<svg class="icon ${extra}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.home}</svg>`;
+}
+function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
+function stats(){
+  const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
+  const full=all.filter(arr=>arr.every(x=>x===10)).length;
+  const activeDays=Object.values(state.challengeDays||{}).filter(arr=>arr.some(Boolean)).length;
+  const todayChecks=getChecks().filter(Boolean).length;
+  return {full,activeDays,todayChecks};
+}
+function navButton(item,cls='nav-button'){
+  return `<button type="button" class="${cls}" data-action="navigate" data-tab="${item.id}" aria-current="${state.tab===item.id?'page':'false'}">${icon(item.icon)}<span>${cls==='nav-button'?item.label:item.mobile}</span></button>`;
+}
+function renderShell(content){
+  return `<div class="app-shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="Ir para o início"><span class="logo-mark">✝</span><span class="logo-type">CUIÚDO<small>FÉ • CORAGEM • AÇÃO</small></span></a>
+      <div class="sidebar-label">Caminho de santidade</div><nav class="nav">${navItems.map(x=>navButton(x)).join('')}</nav>
+      <div class="sidebar-bottom"><div class="motto">Reza. Levanta.<br/><strong>Faz acontecer.</strong></div><small>FEITO PARA CONVERTER, NÃO PARA AGRADAR.</small></div>
+    </aside>
+    <main class="main" id="main-content"><header class="topbar"><div class="topbar-date">${icon('calendar')}<span>${escapeHtml(dateDisplay())}</span></div><button type="button" class="pill-status mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar entre reflexões firmes e modo sem desculpas">${icon('flame')} ${state.mode==='brutal'?'SEM DESCULPAS · ON':'MODO FIRME · ON'}</button></header>${content}<p class="disclaimer">CUIÚDO é um projeto independente de formação e prática devocional, não uma publicação oficial da Igreja. Meditações são textos autorais e paráfrases, com referências bíblicas para consulta em uma tradução católica. O exame não substitui o sacramento da Confissão nem acompanhamento espiritual.</p></main>
+    <nav class="mobile-nav" aria-label="Navegação móvel">${navItems.map(x=>navButton(x,'mobile-nav-button')).join('')}</nav>
+  </div>`;
+}
+function home(){
+ const g=groups[dayGroup()];const p=readProgress(dayGroup());const s=stats();const truth=getTruth();
+ const nextIndex=p.findIndex(x=>x<10); const displayMystery=g.mysteries[Math.max(0,nextIndex)];
+ return `<section class="hero"><div class="hero-inner"><span class="eyebrow">FÉ NÃO É DECORAÇÃO · É COMBATE INTERIOR</span><h1>REZA.<br/>LEVANTA.<br/><em>FAZ ACONTECER.</em></h1><p>${state.mode==='brutal'?'ACORDA. Você não nasceu para desperdiçar os dias enquanto coleciona desculpas. Aqui a verdade incomoda, o Evangelho confronta e a decisão vira ação.':'A fé não foi feita para enfeitar discurso. Hoje é dia de oração, verdade e atitude, sem fugir dos deveres.'}</p><button class="btn" data-action="navigate" data-tab="terco">Rezar o terço de hoje ${icon('arrow')}</button></div><div class="hero-art" aria-hidden="true"><div class="hero-cross">✝</div></div></section>
+ <div class="battle-cry"><span class="battle-dot">✝</span><strong>VOCÊ NÃO PRECISA DE MAIS UMA DESCULPA.</strong><span>Precisa de oração, verdade, graça e uma atitude concreta.</span></div>
+ <div class="section-head"><h2>Seu caminho de hoje</h2><button class="link-button" data-action="navigate" data-tab="desafios">Ver desafios ${icon('arrow')}</button></div>
+ <section class="grid-2">
+   <article class="card rosary-feature"><div class="feature-art"><img src="./assets/misterios/${displayMystery.id}.svg" alt="Representação simbólica do mistério de hoje" /></div><div class="feature-body"><div class="card-meta">Terço de hoje • ${g.short}</div><h3 class="card-title">${g.title}</h3><p>${g.eyebrow}. ${p.filter(x=>x===10).length} de 5 dezenas concluídas.</p><div class="progress" role="progressbar" aria-valuenow="${p.reduce((a,b)=>a+b,0)}" aria-valuemin="0" aria-valuemax="50" aria-label="Ave-Marias rezadas"><div class="progress-fill" style="width:${p.reduce((a,b)=>a+b,0)*2}%"></div></div><div class="progress-label">${p.reduce((a,b)=>a+b,0)}/50 Ave-Marias</div><button class="link-button" data-action="navigate" data-tab="terco">${p.every(x=>x===10)?'Revisitar o terço':'Continuar a oração'} ${icon('arrow')}</button></div></article>
+   <article class="card truth-card"><div><div class="card-meta">${state.mode==='brutal'?'A MARRETADA DE HOJE':'O tapa na cara de hoje'}</div><div class="quote-mark">“</div><blockquote>${escapeHtml(truth.quote)}</blockquote></div><button class="link-button" data-action="navigate" data-tab="verdade">Encarar a verdade ${icon('arrow')}</button></article>
+ </section>
+ <section class="grid-3 stats" aria-label="Seu progresso"><div class="card stat"><div class="stat-value">${s.full}</div><div class="stat-label">Terços concluídos</div></div><div class="card stat"><div class="stat-value">${s.activeDays}</div><div class="stat-label">Dias em ação</div></div><div class="card stat"><div class="stat-value">${s.todayChecks}/4</div><div class="stat-label">Desafios de hoje</div></div></section>
+ <div class="section-head"><h2>Hoje você escolhe agir</h2><button class="link-button" data-action="navigate" data-tab="diario">Meu diário ${icon('arrow')}</button></div>
+ <section class="card"><div class="card-meta">A pequena fidelidade de hoje</div><h3 class="card-title">${escapeHtml(truth.action)}</h3><p>Fé sem obra concreta vira discurso. Faça sua parte sem confundir responsabilidade com merecimento das graças de Deus.</p><div class="two-buttons">${missionButton()}<button class="btn btn-ghost" data-action="navigate" data-tab="desafios">Meu plano de ação ${icon('arrow')}</button></div></section>`;
+}
+function rosary(){
+ const g=groups[state.group]; const arr=readProgress(); const m=g.mysteries[state.mystery];const mm=mysteryText(m);const n=arr[state.mystery];
+ return `<h1 class="page-title">O Santo Terço</h1><p class="page-desc">Contemple a vida de Cristo, examine a própria consciência e transforme a oração em caridade. Mistérios tradicionais organizados por dia da semana; você também pode escolher outros.</p>
+ <div class="eyebrow">Mistérios de hoje: ${groups[dayGroup()].short}</div><div class="group-picker" role="group" aria-label="Escolher grupo de mistérios">${groupNames.map(id=>`<button type="button" class="group-button ${state.group===id?'active':''}" data-action="group" data-id="${id}" aria-pressed="${state.group===id}">${groups[id].short}</button>`).join('')}</div>
+ <section class="mystery-layout"><div class="mystery-visual"><div class="eyebrow">${state.mystery+1}º mistério • ${g.short}</div><img src="./assets/misterios/${m.id}.svg" alt="Arte simbólica: ${escapeHtml(m.title)}"/><h2>${m.title}</h2><small>${m.ref}</small></div>
+ <div class="mystery-detail"><div class="card"><div class="card-meta">Meditação do Evangelho</div><p class="readable">${m.summary}</p><div class="kicker-line"></div><div class="card-meta">${state.mode==='brutal'?'SEM DESCULPAS · A VERDADE QUE DÓI':'Tapa na cara da realidade'}</div><blockquote class="confront">“${escapeHtml(mm.hard)}”</blockquote><div class="question"><strong>Exame de consciência:</strong> ${escapeHtml(mm.question)}</div><div class="action-line">${icon('target')}<span><strong>MISSÃO DE HOJE:</strong> ${escapeHtml(mm.action)}</span></div>${mm.prayer?`<div class="prayer-response"><span>ORAÇÃO DE COMBATE</span><p>${escapeHtml(mm.prayer)}</p></div>`:''}</div></div></section>
+ <section class="decade-panel"><div class="decade-header"><strong>Contador da dezena</strong><span class="card-meta">${n} / 10 Ave-Marias</span></div><p style="color:#b5b7b0;font-size:12px;line-height:1.7">Antes de cada dezena, reze um Pai-Nosso. Reze 10 Ave-Marias e encerre com o Glória ao Pai. O contador registra apenas as Ave-Marias.</p><div class="count-bubbles" aria-label="${n} de 10 Ave-Marias rezadas">${Array.from({length:10},(_,i)=>`<span class="bead ${i<n?'done':''}" aria-hidden="true"></span>`).join('')}</div><div class="decade-buttons"><button class="btn" data-action="add-bead" ${n>=10?'disabled':''}>${icon('plus')} ${n===10?'Dezena concluída':'Rezei uma Ave-Maria'}</button><button class="btn btn-muted" data-action="undo-bead" ${n===0?'disabled':''}>Desfazer 1</button><button class="btn btn-ghost" data-action="reset-decade">Reiniciar dezena</button></div><div class="stepper" role="group" aria-label="Selecionar mistério">${g.mysteries.map((x,i)=>`<button class="step ${i===state.mystery?'current':''} ${arr[i]===10?'finished':''}" data-action="mystery" data-index="${i}" aria-label="${i+1}º mistério: ${x.title}" aria-current="${i===state.mystery?'step':'false'}">${arr[i]===10?icon('check'):i+1}</button>`).join('')}</div><div class="two-buttons"><button class="btn btn-muted" data-action="prev-mystery" ${state.mystery===0?'disabled':''}>${icon('arrowLeft')} Anterior</button><button class="btn btn-ghost" data-action="next-mystery" ${state.mystery===4?'disabled':''}>Próximo mistério ${icon('arrow')}</button></div>${arr.every(x=>x===10)?'<div class="action-line">'+icon('check')+'<span>Terço concluído! Ofereça esta oração a Deus e leve um gesto de amor ao seu dia.</span></div>':''}</section>
+ <div class="section-head"><h2>Orações do terço</h2></div><p class="page-desc">Comece com o Sinal da Cruz e o Credo; reze um Pai-Nosso, três Ave-Marias e um Glória. Em cada mistério, reze um Pai-Nosso, dez Ave-Marias e um Glória. Conclua com a Salve-Rainha.</p><section class="prayer-list">${prayers.map((p,i)=>`<details class="card prayer-card" ${i===2?'open':''}><summary>${escapeHtml(p.name)}</summary><p>${escapeHtml(p.text)}</p></details>`).join('')}</section>`;
+}
+function truth(){const t=getTruth();return `<h1 class="page-title">${state.mode==='brutal'?'SEM DESCULPAS.':'Tapa na cara da realidade'}</h1><p class="page-desc">${state.mode==='brutal'?'O CONFRONTO NÃO É CONTRA VOCÊ. É CONTRA AS SUAS DESCULPAS. Leia, examine-se e faça uma coisa concreta.':'Palavras firmes para sacudir a consciência, sem destruir a dignidade. A verdade conduz à misericórdia e à ação.'}</p>
+ <section class="truth-large"><div class="eyebrow">Confronto nº ${String(((dailyIndex()+state.truthOffset)%truthDeck().length)+1).padStart(2,'0')} • ${escapeHtml(t.topic)}</div><h2>${escapeHtml(t.title)}</h2><div class="quote-mark">“</div><blockquote>${escapeHtml(t.quote)}</blockquote><div class="kicker-line"></div><p class="readable"><strong style="color:var(--gold)">A verdade:</strong> ${escapeHtml(t.truth)}</p><div class="action-line">${icon('target')}<span><strong>Sua missão:</strong> ${escapeHtml(t.action)}</span></div><div class="truth-footer"><span class="filter-tag">${escapeHtml(t.ref)}</span><span class="filter-tag">Sem desculpas. Com caridade.</span></div><div class="mission-commit"><div><span class="card-meta">NÃO É FRASE BONITA. É DECISÃO.</span><p>${missionDone()?'Você marcou esta missão como cumprida. Continue com humildade.':'Só marque depois que cumprir a ação de verdade. Sem mentir para si mesmo.'}</p></div>${missionButton()}</div><div class="two-buttons"><button class="btn btn-ghost" data-action="next-truth">Outro confronto ${icon('arrow')}</button><button class="btn btn-ghost" data-action="navigate" data-tab="desafios">Partir para a ação ${icon('arrow')}</button></div></section>`;}
+function challenges(){const checks=getChecks();const done=checks.filter(Boolean).length;return `<h1 class="page-title">Fé que se move</h1><p class="page-desc">Quatro compromissos simples para hoje. Sua vida não muda só porque você pensou bonito. Faça o bem possível, sem espetáculo e sem fugir das responsabilidades.</p><div class="card" style="margin-bottom:20px"><div class="decade-header"><div><div class="card-meta">Disciplina do dia</div><h2 class="card-title">${done} de 4 compromissos cumpridos</h2></div><div class="stat-value">${done===4?'✝':`${Math.round(done/4*100)}%`}</div></div><div class="progress"><div class="progress-fill" style="width:${done*25}%"></div></div><p>${done===4?'Você cumpriu os compromissos de hoje. Agradeça a Deus e mantenha o coração humilde.':'A prática diária, mesmo pequena, constrói constância.'}</p></div>
+ <section class="checklist">${baseChallenges.map((x,i)=>`<label class="checkrow"><input type="checkbox" data-kind="challenge" data-index="${i}" ${checks[i]?'checked':''}/><span><strong>${escapeHtml(x.label)}</strong><small>${escapeHtml(x.details)} • ${escapeHtml(x.type)}</small></span></label>`).join('')}</section><div class="section-head"><h2>Missão extra</h2></div><div class="card"><div class="card-meta">Não adie</div><h3 class="card-title">${escapeHtml(getTruth().action)}</h3><p>Esta missão é uma proposta de ação, não uma cobrança impossível. Priorize o que é seguro, justo e compatível com seus deveres.</p></div>`;}
+function examine(){const arr=getExamine();const selected=arr.filter(Boolean).length;return `<h1 class="page-title">Exame de consciência</h1><p class="page-desc">Não é um tribunal para esmagar você. É um encontro honesto com a verdade diante de Deus. Marque os pontos que precisam de revisão, reze e planeje um passo de conversão.</p>
+ <div class="card" style="margin-bottom:18px"><div class="card-meta">Pelo amor à verdade</div><h2 class="card-title">“Senhor, mostra-me o que preciso mudar.”</h2><p>Faça silêncio. Examine atitudes, omissões e intenções. Diferencie tentações de escolhas conscientes; procure o sacramento da Reconciliação quando necessário.</p></div>
+ <section class="checklist">${examineItems.map((x,i)=>`<label class="checkrow"><input type="checkbox" data-kind="examine" data-index="${i}" ${arr[i]?'checked':''}/><span>${escapeHtml(x)}</span></label>`).join('')}</section>
+ <div class="completion-row"><span>${selected} ponto(s) selecionado(s) para refletir</span><span>Privado • salvo somente neste navegador</span></div>
+ <div class="card"><div class="card-meta">Oração de arrependimento</div><blockquote class="confront" style="font-size:21px">Meu Deus, reconheço minhas faltas. Dai-me humildade para pedir perdão, coragem para reparar o mal e força para recomeçar na vossa graça. Amém.</blockquote><p>Se você reconheceu um pecado grave, procure a Confissão sacramental. Nenhum checklist substitui a conversa com um sacerdote.</p><button class="btn btn-ghost" data-action="navigate" data-tab="diario">Registrar meu propósito ${icon('arrow')}</button></div>`;}
+function diary(){const notes=Array.isArray(state.notes)?state.notes:[];return `<h1 class="page-title">Diário de conversão</h1><p class="page-desc">A mudança ganha forma quando você assume sua história. Escreva com sinceridade o que precisa enfrentar e qual será seu próximo passo.</p>
+ <section class="grid-2"><div class="card"><div class="card-meta">Meu compromisso com a verdade</div><h2 class="card-title">O que eu preciso mudar hoje?</h2><form id="journal-form"><label class="input-label" for="journal-text">Escreva uma reflexão ou resolução concreta</label><textarea id="journal-text" name="journal-text" maxlength="2000" placeholder="Hoje eu percebi que... A partir de agora vou..." required></textarea><div class="two-buttons"><button class="btn" type="submit">${icon('save')} Salvar reflexão</button></div></form><p class="disclaimer">${icon('lock')} Suas anotações ficam apenas no armazenamento local deste navegador. Não escreva dados extremamente sensíveis; limpar os dados do navegador pode apagá-las.</p></div>
+ <div class="card"><div class="card-meta">Um princípio inegociável</div><h2 class="card-title">Arrependimento sem atitude vira promessa vazia.</h2><p>Não escreva para impressionar ninguém. Reconheça uma decisão objetiva, possível e caridosa. Amanhã, volte e avalie se cumpriu.</p><div class="action-line">${icon('sun')}<span>Uma queda não torna você incapaz de recomeçar. Graça, oração e um passo de cada vez.</span></div></div></section>
+ <div class="section-head"><h2>Reflexões salvas</h2><span class="card-meta">${notes.length} registro(s)</span></div>${notes.length?notes.map((n,i)=>`<article class="note"><div class="decade-header"><span class="note-date">${escapeHtml(new Date(n.time).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}))}</span><button class="link-button" data-action="delete-note" data-index="${i}" aria-label="Excluir esta anotação">${icon('trash')} Excluir</button></div><p>${escapeHtml(n.text)}</p></article>`).join(''):'<div class="empty">Seu diário está vazio. O primeiro passo é admitir a verdade e escolher uma atitude.</div>'}`;}
+function render(){
+ const pages={inicio:home,terco:rosary,verdade:truth,desafios:challenges,exame:examine,diario:diary};
+ app.innerHTML=renderShell((pages[state.tab]||home)());
+ document.title=`${navItems.find(n=>n.id===state.tab)?.label||'Início'} | CUIÚDO`;
+}
+app.addEventListener('click',evt=>{
+ const target=evt.target.closest('[data-action]');if(!target)return;
+ const a=target.dataset.action;
+ if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;window.scrollTo({top:0,behavior:'instant'});}
+ if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
+ if(a==='mystery')state.mystery=Number(target.dataset.index);
+ if(a==='next-mystery')state.mystery=Math.min(4,state.mystery+1);
+ if(a==='prev-mystery')state.mystery=Math.max(0,state.mystery-1);
+ if(a==='add-bead')changeCount(readProgress()[state.mystery]+1);
+ if(a==='undo-bead')changeCount(readProgress()[state.mystery]-1);
+ if(a==='reset-decade'&&confirm('Reiniciar a contagem desta dezena?'))changeCount(0);
+ if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
+ if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
+ if(a==='mission-done'){state.missionDays??={};state.missionDays[missionId()]=!missionDone();save();}
+ if(a==='delete-note'){
+   const i=Number(target.dataset.index);
+   if(confirm('Excluir esta reflexão do diário?')){state.notes.splice(i,1);save();}else return;
+ }
+ render();
+});
+app.addEventListener('change',evt=>{
+ const t=evt.target;if(t.dataset.kind==='challenge'){checkChallenge(Number(t.dataset.index),t.checked);render();}
+ if(t.dataset.kind==='examine'){checkExamine(Number(t.dataset.index),t.checked);render();}
+});
+app.addEventListener('submit',evt=>{
+ if(evt.target.id!=='journal-form')return;
+ evt.preventDefault();const text=evt.target.querySelector('textarea')?.value.trim();
+ if(!text)return;
+ state.notes??=[];state.notes.unshift({time:new Date().toISOString(),text:text.slice(0,2000)});state.notes=state.notes.slice(0,100);
+ save();render();
+});
+render();
+if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+</script>
+</body>
+</html>

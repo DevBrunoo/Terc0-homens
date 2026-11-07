@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" role="img" aria-label="Arte simbólica do mistério nascimento">
+<defs><radialGradient id="bg"><stop stop-color="#402d28"/><stop offset=".75" stop-color="#171b1c"/><stop offset="1" stop-color="#101415"/></radialGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e3c78d"/><stop offset="1" stop-color="#94784c"/></linearGradient></defs>
+<rect width="400" height="480" fill="url(#bg)"/>
+<path d="M51 411V170C51 69 117 32 200 32S349 69 349 170v241" fill="none" stroke="#e3c78d" opacity=".62" stroke-width="2"/>
+<path d="M67 399V174C67 86 124 49 200 49S333 86 333 174v225" fill="none" stroke="#e3c78d" opacity=".23" stroke-width="1.5"/>
+<circle cx="200" cy="242" r="108" fill="none" stroke="#e3c78d" stroke-width="1" opacity=".18"/>
+<circle cx="200" cy="242" r="144" fill="none" stroke="#e3c78d" stroke-width="1" opacity=".17" stroke-dasharray="4 11"/>
+<g fill="none" stroke="url(#metal)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="m200 123 9 31 31 1-25 19 9 31-24-19-24 19 9-31-25-19 31-1zM136 286l64-43 64 43m-111-11v48h94v-48m-65 48v-29h36v29"/></g>
+<g font-family="Georgia,serif" fill="#e3c78d" opacity=".82" text-anchor="middle"><text x="200" y="385" font-size="21" letter-spacing="7">✦ 03 ✦</text></g>
+<path d="M118 405h164" stroke="#e3c78d" stroke-width="1.5" opacity=".65"/><path d="M118 419h164" stroke="#e3c78d" stroke-width="1" opacity=".22"/>
+</svg>
