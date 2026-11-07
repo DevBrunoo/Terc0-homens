@@ -47,3 +47,13 @@ Segunda e sábado: Gozosos. Terça e sexta: Dolorosos. Quarta e domingo: Glorios
 O histórico pessoal fica no `localStorage` deste navegador; não há contas, servidor, sincronização nem IA gerativa nesta versão. Os textos bíblicos são **paráfrases referenciadas**, não transcrições atribuídas a uma edição da Bíblia Ave-Maria. Orações e conteúdo de formação devem receber revisão antes de uma publicação oficial. O exame não substitui a confissão sacramental e as orientações não substituem acompanhamento profissional quando necessário.
 
 Projeto em desenvolvimento.
+
+## Novidade: Bíblia e devocionário (v3)
+
+- 20 trechos bíblicos **em tradução livre**, um por mistério, com referência canônica.
+- Ladainha mariana breve **autoral** após o terço, com link à Ladainha Lauretana completa no Vaticano.
+- Oração tradicional de São Miguel e menu **Santos e Anjos**, com 18 orações pesquisáveis por categoria (4 angélicas, 1 mariana, 13 de santos).
+- O bloco "MISSÃO DE HOJE" foi retirado de cada mistério, preservando as reflexões e o exame de consciência.
+- Referências: [Santo Rosário](https://www.vatican.va/special/rosary/documents/misteri_po.html), [Ladainha oficial](https://www.vatican.va/special/rosary/documents/litanie-lauretane_po.html) e [São Miguel](https://www.vatican.va/content/john-paul-ii/pt/angelus/1981/documents/hf_jp-ii_ang_19810930.html).
+
+**Nota:** orações marcadas "autoral" foram compostas para o app; não se atribuem aos santos como se eles tivessem escrito. A tradução livre dos versículos não é a Bíblia Ave-Maria nem substitui leitura da edição bíblica católica.

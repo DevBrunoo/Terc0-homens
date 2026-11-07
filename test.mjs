@@ -4,6 +4,7 @@ import { runInNewContext } from 'node:vm';
 import { spawnSync } from 'node:child_process';
 const read=n=>readFileSync(new URL('./'+n,import.meta.url),'utf8');
 const data=read('data.js'), brutal=read('brutal.js'), app=read('app.js'), html=read('index.html');
+const devotion=read('devocionario.js');
 const context={};
 const groups=runInNewContext(data+'\n;groups',context);
 assert.equal(Object.keys(groups).length,4);
@@ -12,11 +13,19 @@ const hard=runInNewContext(data+'\n'+brutal+'\n;({marteladas,confrontosBrutais})
 assert.equal(Object.keys(hard.marteladas).length,20);
 assert.equal(hard.confrontosBrutais.length,18);
 for(const g of Object.values(groups)) for(const m of g.mysteries) assert.ok(existsSync(new URL('./assets/misterios/'+m.id+'.svg',import.meta.url)),m.id);
-for(const f of ['data.js','brutal.js','app.js','sw.js','server.mjs']){
+for(const f of ['data.js','brutal.js','devocionario.js','app.js','sw.js','server.mjs']){
  const p=spawnSync(process.execPath,['--check',new URL('./'+f,import.meta.url).pathname]);
  assert.equal(p.status,0,f+': '+p.stderr.toString());
 }
 assert.match(html,/styles\.css/);
 assert.match(html,/app\.js/);
 assert.match(app,/mission-done/);
+const devotional=runInNewContext(devotion+'\n;({versiculosPorMisterio,oracoesDevocionario,ladainhaBreve})');
+assert.equal(Object.keys(devotional.versiculosPorMisterio).length,20);
+assert.ok(devotional.oracoesDevocionario.length>=18);
+assert.ok(devotional.ladainhaBreve.length>=15);
+assert.match(app,/devocionario:devocionario/);
+assert.match(app,/angel:/);
+assert.doesNotMatch(app,/MISSÃO DE HOJE:/);
+assert.match(html,/devocionario\.js/);
 console.log('✓ 20 mistérios, 20 meditações SEM DESCULPAS, 18 confrontos, artes e sintaxe JS');

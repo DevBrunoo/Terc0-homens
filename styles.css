@@ -71,7 +71,7 @@ textarea{resize:vertical;width:100%;border:1px solid #51514a;background:#111515;
 .disclaimer{font-size:11px;color:#8a918b;line-height:1.75;margin:18px 0}.two-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
 .mobile-nav{display:none}.boot{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;color:#d8b67e;letter-spacing:.3em;font-size:11px}.boot-cross{font:85px var(--serif)}
 @media(max-width:1130px){.main{padding:0 30px 50px}.sidebar{padding:25px 11px 18px}.app-shell{grid-template-columns:210px minmax(0,1fr)}.hero-art{right:0}.hero-inner{width:80%}.grid-2{grid-template-columns:1fr}.truth-card{min-height:unset}}
-@media(max-width:760px){.app-shell{display:block}.sidebar{display:none}.main{padding:0 16px 98px}.topbar{height:67px}.topbar-date{font-size:11px}.pill-status{font-size:9px;padding:7px 9px}.hero{min-height:335px;margin-top:19px}.hero-inner{padding:28px 22px;width:100%;background:linear-gradient(90deg,#211a19 40%,#211a1999 100%)}.hero h1{font-size:48px}.hero p{font-size:12px;max-width:320px}.hero-art{right:-60px;width:230px;height:230px;opacity:.31}.hero-cross{font-size:145px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{min-height:87px;padding:10px}.stat-value{font-size:28px}.stat-label{font-size:10px}.section-head h2{font-size:22px}.rosary-feature{grid-template-columns:108px minmax(0,1fr)}.feature-art img{width:100px}.feature-body{padding:17px 13px}.feature-body .card-title{font-size:19px}.feature-body p{font-size:11px}.mystery-layout{grid-template-columns:1fr}.mystery-visual{min-height:300px;padding:19px}.mystery-visual img{max-height:175px}.mystery-visual h2{font-size:23px}.prayer-list{grid-template-columns:1fr}.page-title{font-size:40px}.mobile-nav{position:fixed;bottom:0;left:0;right:0;height:calc(66px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);z-index:10;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:#111414f5;border-top:1px solid #42413b;backdrop-filter:blur(13px)}.mobile-nav button{border:0;background:transparent;color:#919792;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;font-size:9px;font-weight:700}.mobile-nav button[aria-current="page"]{color:#e0ba7e}.mobile-nav svg{width:19px;height:19px}.truth-large h2{font-size:32px}.truth-large blockquote{font-size:23px}}
+@media(max-width:760px){.app-shell{display:block}.sidebar{display:none}.main{padding:0 16px 98px}.topbar{height:67px}.topbar-date{font-size:11px}.pill-status{font-size:9px;padding:7px 9px}.hero{min-height:335px;margin-top:19px}.hero-inner{padding:28px 22px;width:100%;background:linear-gradient(90deg,#211a19 40%,#211a1999 100%)}.hero h1{font-size:48px}.hero p{font-size:12px;max-width:320px}.hero-art{right:-60px;width:230px;height:230px;opacity:.31}.hero-cross{font-size:145px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{min-height:87px;padding:10px}.stat-value{font-size:28px}.stat-label{font-size:10px}.section-head h2{font-size:22px}.rosary-feature{grid-template-columns:108px minmax(0,1fr)}.feature-art img{width:100px}.feature-body{padding:17px 13px}.feature-body .card-title{font-size:19px}.feature-body p{font-size:11px}.mystery-layout{grid-template-columns:1fr}.mystery-visual{min-height:300px;padding:19px}.mystery-visual img{max-height:175px}.mystery-visual h2{font-size:23px}.prayer-list{grid-template-columns:1fr}.page-title{font-size:40px}.mobile-nav{position:fixed;bottom:0;left:0;right:0;height:calc(66px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);z-index:10;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:#111414f5;border-top:1px solid #42413b;backdrop-filter:blur(13px)}.mobile-nav button{border:0;background:transparent;color:#919792;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;font-size:9px;font-weight:700}.mobile-nav button[aria-current="page"]{color:#e0ba7e}.mobile-nav svg{width:19px;height:19px}.truth-large h2{font-size:32px}.truth-large blockquote{font-size:23px}}
 @media(max-width:370px){.hero h1{font-size:42px}.topbar-date{font-size:10px}.pill-status{font-size:8px}.grid-3{grid-template-columns:1fr 1fr}.grid-3>.stat:last-child{grid-column:span 2}.feature-art{display:none}.rosary-feature{display:block}.decade-buttons .btn{flex:1}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
@@ -88,3 +88,29 @@ textarea{resize:vertical;width:100%;border:1px solid #51514a;background:#111515;
 .mission-commit p{margin:7px 0 0;font-size:12px;color:#c3b8aa;line-height:1.6}
 @media(max-width:760px){.mode-switch{padding:9px 9px;font-size:9px;letter-spacing:.02em;white-space:normal;text-align:center}.mode-switch svg{display:none}.battle-cry{gap:7px}.battle-cry strong{font-size:10px}.mission-commit{flex-direction:column;align-items:stretch}.mission-commit .btn{width:100%}}
 
+
+/* Sagrada Escritura e devocionário dos santos */
+.scripture-verse{border:1px solid #675741;border-radius:8px;background:linear-gradient(120deg,#332923,#201f1e);padding:20px;margin-bottom:23px}
+.scripture-verse blockquote{font:clamp(19px,2.1vw,25px)/1.48 var(--serif);color:#f4dfb4;margin:13px 0}
+.scripture-verse small{font-size:10px;color:#b6a48d;line-height:1.6}
+.devotional-hero{margin:27px 0 23px;padding:25px 28px 22px;border:1px solid #69543b;border-radius:12px;background:radial-gradient(circle at 91% 50%,#3b2b29,#15191a 55%);position:relative;overflow:hidden;min-height:176px}
+.devotional-hero .page-title{margin:15px 0 14px}.devotional-hero .page-desc{max-width:660px;margin-bottom:0}
+.angel-mark{position:absolute;right:28px;top:45px;width:115px;height:115px;border:1px solid #bda16a5e;border-radius:50%;display:grid;place-items:center;opacity:.5;pointer-events:none}
+.angel-mark svg{width:64px;height:64px;color:#e4c78b}
+.devotion-filters{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 25px}
+.devotion-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.devotion-card{padding:0;overflow:hidden;align-self:start}
+.devotion-card summary{padding:22px;display:flex;align-items:center;gap:14px;cursor:pointer;list-style:none}
+.devotion-card summary::-webkit-details-marker{display:none}
+.devotion-card summary:after{content:'+';margin-left:auto;color:var(--gold);font-size:23px;font-weight:300}
+.devotion-card[open] summary:after{content:'−'}
+.devotion-card summary strong{display:block;color:#f0ddbe;font:20px/1.3 var(--serif)}
+.devotion-card summary small{display:block;color:#aaa59b;font-size:10px;margin-top:8px}
+.devotion-symbol{width:43px;height:43px;border:1px solid #7b654b;border-radius:50%;color:var(--gold);background:#2f2a24;display:grid;place-items:center;font-size:21px;flex-shrink:0}
+.devotion-symbol svg{height:25px;width:25px}
+.devotion-text{border-top:1px solid #454039;padding:20px 22px;line-height:1.95;white-space:pre-line;color:#e2d6c6;font-size:14px}
+.devotion-link{display:inline-block;margin:0 22px 22px;font-size:12px}
+.devotional-note{margin-top:23px}
+.devotional-source{font-size:11px!important;line-height:1.7}
+@media(max-width:880px){.devotion-grid{grid-template-columns:1fr}.angel-mark{opacity:.24}}
+@media(max-width:760px){.mobile-nav button{font-size:8px;padding:0 1px}.mobile-nav svg{width:18px;height:18px}.devotional-hero{padding:22px 18px}.devotional-hero .page-desc{position:relative;z-index:1}.angel-mark{right:-15px;top:5px}}
