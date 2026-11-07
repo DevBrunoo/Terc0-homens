@@ -1,25 +1,169 @@
-// Textos devocionais do CUIÚDO. Orações autorais identificadas; trechos bíblicos em tradução livre.
-// Não são transcrições da Bíblia Ave-Maria e não substituem o texto litúrgico oficial.
-const versiculosPorMisterio = Object.freeze({"anunciacao":{ref:"Lc 1,38",text:"Eis aqui a serva do Senhor; faça-se em mim segundo a tua palavra."},
-"visitacao":{ref:"Lc 1,39",text:"Maria levantou-se e partiu apressadamente para a região montanhosa."},
-"nascimento":{ref:"Lc 2,11",text:"Hoje nasceu para vós um Salvador, que é Cristo, o Senhor."},
-"apresentacao":{ref:"Lc 2,30",text:"Os meus olhos viram a tua salvação."},
-"encontro":{ref:"Lc 2,49",text:"Não sabíeis que devo ocupar-me das coisas de meu Pai?"},
-"agonia":{ref:"Lc 22,42",text:"Pai, não se faça a minha vontade, mas a tua."},
-"flagelacao":{ref:"Jo 19,1",text:"Então Pilatos mandou açoitar Jesus."},
-"espinhos":{ref:"Mt 27,29",text:"Teceram uma coroa de espinhos e a colocaram sobre a sua cabeça."},
-"cruz":{ref:"Lc 23,26",text:"Puseram a cruz sobre Simão, para que a levasse atrás de Jesus."},
-"crucificacao":{ref:"Jo 19,30",text:"Tudo está consumado."},
-"ressurreicao":{ref:"Mt 28,6",text:"Ele não está aqui, pois ressuscitou, como havia dito."},
-"ascensao":{ref:"At 1,9",text:"Jesus foi elevado, e uma nuvem o encobriu aos olhos deles."},
-"pentecostes":{ref:"At 2,4",text:"Todos ficaram cheios do Espírito Santo."},
-"assuncao":{ref:"Ap 12,1",text:"Apareceu no céu um grande sinal: uma mulher revestida do sol."},
-"coroacao":{ref:"Ap 12,1",text:"Sobre a sua cabeça, uma coroa de doze estrelas."},
-"batismo":{ref:"Mt 3,17",text:"Este é meu Filho amado, em quem ponho a minha alegria."},
-"cana":{ref:"Jo 2,5",text:"Fazei tudo o que ele vos disser."},
-"reino":{ref:"Mc 1,15",text:"Convertei-vos e crede no Evangelho."},
-"transfiguracao":{ref:"Mt 17,5",text:"Este é meu Filho amado. Escutai-o."},
-"eucaristia":{ref:"Lc 22,19",text:"Isto é o meu corpo, que é dado por vós."}});
+// Textos devocionais do CUIÚDO. Orações autorais identificadas; versículos bíblicos em traduções católicas históricas de domínio público.
+// Figueiredo e Douay-Rheims não são a Bíblia Ave-Maria; trechos longos podem ter excertos literais.
+// Citações bíblicas reais, conferidas na tradução católica histórica de Figueiredo e na Douay-Rheims 1899.
+// A ortografia portuguesa segue formas atualizadas; algumas entradas são excertos literais identificados.
+const versiculosPorMisterio = Object.freeze({
+  "anunciacao": {
+    "ref": "Lc 1,38",
+    "pt": "Então disse Maria: Eis-aqui a escrava do Senhor, faça-se em mim, segundo a tua palavra. E o anjo se apartou dela.",
+    "en": "And Mary said: Behold the handmaid of the Lord; be it done to me according to thy word. And the angel departed from her.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/1",
+    "enSource": "https://ebible.org/engDRA/LUK01.htm"
+  },
+  "visitacao": {
+    "ref": "Lc 1,39",
+    "pt": "E naqueles dias levantando-se Maria foi com pressa às montanhas, a uma cidade de Judá;",
+    "en": "And Mary rising up in those days, went into the hill country with haste into a city of Juda.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/1",
+    "enSource": "https://ebible.org/engDRA/LUK01.htm"
+  },
+  "nascimento": {
+    "ref": "Lc 2,11",
+    "pt": "E é que hoje vos nasceu na cidade de Davi o Salvador que é o Cristo Senhor.",
+    "en": "For, this day, is born to you a Saviour, who is Christ the Lord, in the city of David.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/2",
+    "enSource": "https://ebible.org/engDRA/LUK02.htm"
+  },
+  "apresentacao": {
+    "ref": "Lc 2,30",
+    "pt": "Porque já os meus olhos viram o Salvador que tu nos deste,",
+    "en": "Because my eyes have seen thy salvation,",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/2",
+    "enSource": "https://ebible.org/engDRA/LUK02.htm"
+  },
+  "encontro": {
+    "ref": "Lc 2,49",
+    "pt": "E ele lhes respondeu: Para que me buscáveis? não sabíeis que importa ocupar-me nas coisas que são do serviço de meu Pai?",
+    "en": "And he said to them: How is it that you sought me? did you not know, that I must be about my father’s business?",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/2",
+    "enSource": "https://ebible.org/engDRA/LUK02.htm"
+  },
+  "agonia": {
+    "ref": "Lc 22,42",
+    "pt": "Não se faça contudo a minha vontade, senão a tua,",
+    "en": "Saying: Father, if thou wilt, remove this chalice from me: but yet not my will, but thine be done.",
+    "excerptPt": true,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/22",
+    "enSource": "https://ebible.org/engDRA/LUK22.htm"
+  },
+  "flagelacao": {
+    "ref": "Jo 19,1",
+    "pt": "Pilatos pois tomou então a Jesus e o mandou açoitar.",
+    "en": "Then therefore, Pilate took Jesus, and scourged him.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/joao/19",
+    "enSource": "https://ebible.org/engDRA/JHN19.htm"
+  },
+  "espinhos": {
+    "ref": "Mt 27,29",
+    "pt": "E tecendo uma coroa de espinhos, lha puseram sobre a cabeça, e na sua mão direita uma cana. E ajoelhando diante dele, o escarneciam, dizendo: Deus te salve, rei dos judeus.",
+    "en": "And platting a crown of thorns, they put it upon his head, and a reed in his right hand. And bowing the knee before him, they mocked him, saying: Hail, king of the Jews.",
+    "excerptPt": false,
+    "ptSource": "https://bibliatraduzida.com/figueiredo/mateus/27/",
+    "enSource": "https://ebible.org/engDRA/MAT27.htm"
+  },
+  "cruz": {
+    "ref": "Mt 27,32",
+    "pt": "E ao sair da cidade acharam um homem de Cirene, por nome Simão: A este constrangeram a que levasse a cruz dele padecente.",
+    "en": "And going out, they found a man of Cyrene, named Simon: him they forced to take up his cross.",
+    "excerptPt": false,
+    "ptSource": "https://bibliatraduzida.com/figueiredo/mateus/27/",
+    "enSource": "https://ebible.org/engDRA/MAT27.htm"
+  },
+  "crucificacao": {
+    "ref": "Jo 19,30",
+    "pt": "Jesus porém havendo tomado o vinagre, disse: Tudo está cumprido. E abaixando a cabeça, rendeu o espírito.",
+    "en": "Jesus therefore, when he had taken the vinegar, said: It is consummated. And bowing his head, he gave up the ghost.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/joao/19",
+    "enSource": "https://ebible.org/engDRA/JHN19.htm"
+  },
+  "ressurreicao": {
+    "ref": "Mt 28,6",
+    "pt": "Ele já aqui não está, porque ressuscitou como tinha dito; vinde e vede o lugar, onde o Senhor estava posto.",
+    "en": "He is not here, for he is risen, as he said. Come, and see the place where the Lord was laid.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/mateus/28",
+    "enSource": "https://ebible.org/engDRA/MAT28.htm"
+  },
+  "ascensao": {
+    "ref": "At 1,9",
+    "pt": "E tendo dito isto, vendo-o eles, se foi elevando; e o recebeu uma nuvem que o ocultou a seus olhos.",
+    "en": "And when he had said these things, while they looked on, he was raised up: and a cloud received him out of their sight.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/atos-dos-apostolos/1",
+    "enSource": "https://ebible.org/engDRA/ACT01.htm"
+  },
+  "pentecostes": {
+    "ref": "At 2,4",
+    "pt": "E foram todos cheios do Espírito Santo, e começaram a falar em várias línguas, conforme o Espírito Santo lhes concedia que falassem.",
+    "en": "And they were all filled with the Holy Ghost, and they began to speak with divers tongues, according as the Holy Ghost gave them to speak.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/atos-dos-apostolos/2",
+    "enSource": "https://ebible.org/engDRA/ACT02.htm"
+  },
+  "assuncao": {
+    "ref": "Ap 12,1",
+    "pt": "Apareceu, outrossim, um grande sinal no céu: Uma mulher vestida do sol que tinha a lua debaixo de seus pés e uma coroa de doze estrelas sobre a sua cabeça;",
+    "en": "And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars:",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/apocalipse/12",
+    "enSource": "https://ebible.org/engDRA/REV12.htm"
+  },
+  "coroacao": {
+    "ref": "Ap 12,1",
+    "pt": "Apareceu, outrossim, um grande sinal no céu: Uma mulher vestida do sol que tinha a lua debaixo de seus pés e uma coroa de doze estrelas sobre a sua cabeça;",
+    "en": "And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars:",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/apocalipse/12",
+    "enSource": "https://ebible.org/engDRA/REV12.htm"
+  },
+  "batismo": {
+    "ref": "Mt 3,17",
+    "pt": "E eis uma voz dos céus, que dizia: Este é meu filho amado, no qual tenho posto toda a minha complacência.",
+    "en": "And behold a voice from heaven, saying: This is my beloved Son, in whom I am well pleased.",
+    "excerptPt": false,
+    "ptSource": "https://bibliatraduzida.com/figueiredo/mateus/3/",
+    "enSource": "https://ebible.org/engDRA/MAT03.htm"
+  },
+  "cana": {
+    "ref": "Jo 2,5",
+    "pt": "Disse a Mãe de Jesus aos que serviam: Fazei tudo o que ele vos disser.",
+    "en": "His mother saith to the waiters: Whatsoever he shall say to you, do ye.",
+    "excerptPt": false,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/joao/2",
+    "enSource": "https://ebible.org/engDRA/JHN02.htm"
+  },
+  "reino": {
+    "ref": "Mc 1,15",
+    "pt": "e dizendo: Pois que o tempo está cumprido, e se aproximou o reino de Deus: Fazei penitência, e crede no Evangelho.",
+    "en": "And saying: The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel.",
+    "excerptPt": false,
+    "ptSource": "https://bibliatraduzida.com/figueiredo/marcos/1/",
+    "enSource": "https://ebible.org/engDRA/MRK01.htm"
+  },
+  "transfiguracao": {
+    "ref": "Mt 17,5",
+    "pt": "Estando ele ainda falando, eis que uma lúcida nuvem os cobriu. E eis que saiu uma voz da nuvem que dizia: Este é aquele, meu querido Filho, em quem tenho posto toda a minha complacência: Ouvi-o.",
+    "en": "And as he was yet speaking, behold a bright cloud overshadowed them. And lo, a voice out of the cloud, saying: This is my beloved Son, in whom I am well pleased: hear ye him.",
+    "excerptPt": false,
+    "ptSource": "https://bibliatraduzida.com/figueiredo/mateus/17/",
+    "enSource": "https://ebible.org/engDRA/MAT17.htm"
+  },
+  "eucaristia": {
+    "ref": "Lc 22,19",
+    "pt": "Este é o meu corpo, que se dá por vós: Fazei isto em memória de mim.",
+    "en": "And taking bread, he gave thanks, and brake; and gave to them, saying: This is my body, which is given for you. Do this for a commemoration of me.",
+    "excerptPt": true,
+    "ptSource": "https://fidesviva.org/pt-BR/biblia/lucas/22",
+    "enSource": "https://ebible.org/engDRA/LUK22.htm"
+  }
+});
 const oracoesDevocionario = [
   {
     "id": "miguel",
