@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#08090a" />
   <meta name="color-scheme" content="dark light" />
-  <meta name="description" content="CUIÚDO: fé que se vive. Terço diário, Escritura em português e inglês, santos e anjos, temas claro e escuro." />
+  <meta name="description" content="CUIÚDO: fé, coragem e ação. Feed dark com São Miguel e cowboys, terço diário, Bíblia PT/EN, orações e desafios." />
   <meta property="og:title" content="CUIÚDO — Fé, Coragem e Ação" />
-  <meta property="og:description" content="Reza. Levanta. Faz acontecer." />
+  <meta property="og:description" content="TEM QUE SER CUIÚDO. Fé em Deus e pé na tábua." />
   <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <script>
   try {
     const saved=JSON.parse(localStorage.getItem('cuiudo-v1')||'{}');
-    const preference=saved.designVersion==='white-arial-v1'&&['light','dark','system'].includes(saved.theme)?saved.theme:'light';
+    const preference=saved.designVersion==='combat-v9'&&['light','dark','system'].includes(saved.theme)?saved.theme:'dark';
     const active=preference==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):preference;
     document.documentElement.dataset.theme=active;
-    document.querySelector('meta[name="theme-color"]').content=active==='light'?'#ffffff':'#111111';
-  } catch { document.documentElement.dataset.theme='light'; }
+    document.querySelector('meta[name="theme-color"]').content=active==='light'?'#f7f7f5':'#08090a';
+  } catch { document.documentElement.dataset.theme='dark'; }
   </script>
   <style>
 /* CUIÚDO • Sistema visual minimalista / Arial / Branco */
@@ -365,6 +365,225 @@ textarea::placeholder{color:var(--dim)}
 @media(prefers-reduced-motion:reduce){.fist-palm .fist,.fist-palm .impact{animation:none}.fist-palm .fist{transform:translate(-50%,45px) rotate(5deg)}.fist-palm .impact{opacity:.8}}
 
 </style>
+  <style>
+/* CUIÚDO 2026 / design system: feed de atitude, arte clássica e vida real */
+/* Dark é o padrão de marca. Claro e automático continuam disponíveis. */
+:root[data-theme="dark"]{
+ --bg:#08090a;--surface:#121416;--muted-surface:#121416;--surface-2:#202225;
+ --ink:#f7f7f4;--subink:#b6b7b8;--dim:#888d93;--line:#282c30;--hover:#50565e;
+ --accent:#f2f1ec;--on-accent:#0c1013;--warm:#e5b56f;
+ --radius:14px;color-scheme:dark
+}
+:root[data-theme="light"]{
+ --bg:#f7f7f5;--surface:#ffffff;--muted-surface:#f1f1ef;--surface-2:#e6e6e4;
+ --ink:#141414;--subink:#535456;--dim:#74767a;--line:#d9dade;--hover:#a8acb0;
+ --accent:#161717;--on-accent:#ffffff;--warm:#925d27;
+ --radius:14px;color-scheme:light
+}
+:root { --impact:'Arial Black',Impact,Arial,Helvetica,sans-serif; --body:Arial,Helvetica,sans-serif }
+body{font-family:var(--body);letter-spacing:-.005em}
+.site-header{background:var(--bg);height:70px;border-color:var(--line)}
+.header-inner{height:70px;max-width:1480px}
+.logo-mark{width:29px;height:29px;border-radius:5px;background:var(--ink);color:var(--bg);font-weight:800;border:0}
+.logo-type{font-weight:900;letter-spacing:-.09em}
+.logo-dot{color:var(--warm)}
+.desktop-nav .nav-button{font-weight:800;letter-spacing:.025em}
+.desktop-nav .nav-button[aria-current="page"]{background:var(--surface-2);color:var(--ink)}
+.theme-option{font-weight:700}
+.mode-switch{font-weight:800}
+.main{max-width:1360px;padding:30px clamp(18px,3vw,44px) 65px}
+.site-footer{border-top-color:var(--line)}
+.site-footer p{max-width:610px}
+.compact-menu{display:inline-flex!important}
+.compact-menu span{font-weight:800}
+.btn-primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn-secondary{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.btn{min-height:44px;border-radius:9px;font-weight:800}
+.btn:hover{opacity:.95}
+.card{border:1px solid var(--line);background:var(--surface);border-radius:14px}
+.card:hover{border-color:var(--hover)}
+.page-title{font-weight:900}
+.group-button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* Home: capa de batalha. Foto é plano de fundo narrativo, nunca ruído. */
+.cuiudo-hero{min-height:430px;position:relative;display:flex;align-items:stretch;border:1px solid #33383e;background:#0c0d0e;overflow:hidden;border-radius:17px;isolation:isolate}
+.cuiudo-hero-photo{position:absolute;right:0;top:0;height:100%;width:72%;object-fit:cover;object-position:center 25%;filter:saturate(.75) contrast(1.08);z-index:-2}
+.cuiudo-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b0c0d 0%,#0b0c0dee 24%,#08090a8a 52%,#08090a18 100%),linear-gradient(0deg,#090909ba,transparent 50%);z-index:-1}
+.cuiudo-hero-content{display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4.2vw,60px);max-width:770px;color:#fff}
+.cuiudo-hero-kicker{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:900;letter-spacing:.14em;color:#ecc68b}
+.cuiudo-hero-kicker .cuiudo-star{font-size:18px}
+.cuiudo-hero h1{font:900 clamp(48px,6.6vw,96px)/.92 var(--impact);letter-spacing:-.078em;margin:21px 0 18px;text-transform:uppercase;text-wrap:balance}
+.cuiudo-hero h1 em{font-style:normal;color:#f6cc87;display:block}
+.cuiudo-hero-content>p{font-size:clamp(13px,1.25vw,16px);line-height:1.74;color:#ece9e2;max-width:500px;margin:0}
+.cuiudo-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.cuiudo-hero-actions .btn-primary{background:#f3e7d3;color:#151413;border-color:#f3e7d3}
+.cuiudo-hero-actions .btn-secondary{border:1px solid #ffffff70;background:#ffffff16;color:#fff}
+.cuiudo-hero-footer{font-size:10px;color:#e0d7c9;letter-spacing:.12em;font-weight:800;margin-top:31px}
+.cuiudo-hero-credit{position:absolute;bottom:12px;right:15px;font-size:9px;color:#e9e9e9ba;text-shadow:0 1px 3px #000;z-index:3}
+.cuiudo-hero-credit a{color:inherit}
+.cuiudo-punch-strip{margin:19px 0 25px;background:#1b1b1c;border:1px solid #363435;display:flex;align-items:center;gap:20px;padding:16px 23px;border-radius:12px;color:#fff}
+.cuiudo-punch-strip .punch-symbol{position:relative;display:grid;place-items:center;font-size:42px;line-height:1;min-width:78px;height:70px}
+.cuiudo-punch-strip .punch-fist{position:absolute;transform:translate(-17px,-9px);animation:cuiudoPunch 1.65s cubic-bezier(.4,0,.25,1) infinite}
+.cuiudo-punch-strip .punch-palm{position:absolute;transform:translate(18px,9px) rotate(-10deg)}
+.cuiudo-punch-strip .punch-spark{position:absolute;transform:translate(2px,0);font-size:20px;color:#e6bd70;opacity:0;animation:cuiudoSpark 1.65s ease-out infinite}
+@keyframes cuiudoPunch{0%,24%,100%{transform:translate(-22px,-13px) rotate(-8deg)}45%,51%{transform:translate(4px,8px) rotate(5deg)}64%{transform:translate(-13px,-5px) rotate(-3deg)}}
+@keyframes cuiudoSpark{0%,41%,65%,100%{opacity:0;scale:.7}48%{opacity:1;scale:1.3}}
+.cuiudo-punch-strip strong{display:block;font:900 clamp(15px,2vw,23px)/1.16 var(--impact);letter-spacing:-.025em}
+.cuiudo-punch-strip small{display:block;font-size:11px;color:#c4c4c7;margin-top:5px}
+.cuiudo-punch-strip .punch-link{margin-left:auto;background:#f8ead4;color:#1c1b17;border:0;border-radius:8px;padding:12px 15px;white-space:nowrap;font-weight:900;font-size:11px}
+.cuiudo-feed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:31px 0 18px}
+.cuiudo-feed-toolbar h2{font:900 clamp(27px,3vw,38px)/1 var(--impact);letter-spacing:-.055em;margin:0;text-transform:uppercase}
+.cuiudo-feed-toolbar p{font-size:12px;color:var(--dim);margin:7px 0 0}
+.feed-searchbar{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:8px 14px;min-width:min(300px,36vw)}
+.feed-searchbar .icon{width:16px;height:16px;color:var(--subink)}
+.feed-searchbar input{background:transparent;border:0;outline:0;width:100%;min-width:0;color:var(--ink);font-size:12px}
+.feed-searchbar input::placeholder{color:var(--dim)}
+.feed-filters{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding:1px 0 14px;-webkit-overflow-scrolling:touch}
+.feed-filters::-webkit-scrollbar{display:none}
+.feed-filter{flex:0 0 auto;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:10px 14px;color:var(--subink);min-height:40px;font-weight:800;font-size:12px}
+.feed-filter[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.feed-filter:hover{border-color:var(--hover)}
+.feed-results{font-size:11px;color:var(--dim);font-weight:700;margin-bottom:14px}
+.poster-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;align-items:stretch}
+.poster-card{position:relative;display:flex;flex-direction:column;min-width:0;background:#19191a;border:1px solid #333438;border-radius:12px;overflow:hidden;isolation:isolate;transition:transform .18s,border-color .18s}
+.poster-card:hover{border-color:#888;transform:translateY(-2px)}
+.poster-card.wide{grid-column:span 2}
+.poster-open{display:block;position:relative;aspect-ratio:.77;width:100%;padding:0;border:0;background:linear-gradient(145deg,#27211d,#0d1014);color:#fff;text-align:inherit;overflow:hidden}
+.poster-card.wide .poster-open{aspect-ratio:1.6}
+.poster-open img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.8) contrast(1.08) brightness(.89);transform:scale(1);transition:transform .35s ease}
+.poster-card:hover img{transform:scale(1.04)}
+.poster-open img[hidden]{display:none}
+.poster-shade{position:absolute;inset:0;background:linear-gradient(180deg,#0004 0,#0000 27%,#0005 55%,#000e 100%)}
+.poster-topline{position:absolute;top:14px;left:13px;right:13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.poster-topline .poster-label{font-size:9px;letter-spacing:.12em;font-weight:900;color:#f6ead8;background:#0009;padding:5px 8px;border-radius:4px}
+.poster-topline .poster-index{font:900 12px var(--impact);opacity:.85}
+.poster-words{position:absolute;bottom:20px;left:15px;right:15px;display:block;color:#fff;font:900 clamp(16px,1.7vw,25px)/1.07 var(--impact);text-transform:uppercase;letter-spacing:-.045em;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 3px 14px #000a;white-space:normal;overflow-wrap:break-word;-webkit-text-stroke:.3px #000}
+.poster-card.wide .poster-words{font-size:clamp(24px,3vw,42px);max-width:540px}
+.poster-card:nth-child(3n) .poster-words{color:#f9e0a5}
+.poster-card:nth-child(5n) .poster-open{background:#38241d}
+.poster-control-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;background:#141516}
+.poster-control-row .post-topic{font:800 9px Arial,sans-serif;letter-spacing:.08em;color:#c3c2bc}
+.poster-actions{display:flex;gap:4px}
+.poster-actions button{border:0;background:transparent;color:#f0ede8;width:37px;height:36px;border-radius:7px;font-size:18px;display:grid;place-items:center}
+.poster-actions button[aria-pressed="true"]{color:#efb15b}
+.poster-actions button:hover{background:#27292b}
+.poster-actions button .icon{width:17px;height:17px}
+.poster-empty{grid-column:1/-1;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:50px 20px;text-align:center;color:var(--subink)}
+/* Evangelho e ação cotidiana, com destaque sem discurso de prosperidade */
+.feed-action-panel{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin:35px 0;border-top:1px solid var(--line);padding-top:29px}
+.feed-action-panel>section{border:1px solid var(--line);border-radius:13px;padding:25px;background:var(--surface)}
+.feed-action-panel .feed-action-label{font-size:11px;letter-spacing:.09em;font-weight:900;color:var(--warm)}
+.feed-action-panel h2{font:900 clamp(22px,2.5vw,32px)/1.15 Arial,sans-serif;letter-spacing:-.045em;margin:13px 0}
+.feed-action-panel p{color:var(--subink);font-size:13px;line-height:1.75;max-width:600px}
+.feed-progress-info{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim)}
+.feed-progress-info .progress{flex:1;min-width:65px;margin:0;height:8px}
+.feed-progress-info strong{color:var(--ink)}
+/* Detail: full-screen image + reflection, similar to opening a Reel, no fake engagement data */
+.feed-overlay{position:fixed;inset:0;z-index:100;background:#040404ed;display:flex;align-items:center;justify-content:center;padding:25px}
+.feed-modal{position:relative;display:grid;grid-template-columns:minmax(270px,.9fr) minmax(310px,.75fr);width:min(100%,1020px);max-height:min(92vh,870px);overflow:hidden;border:1px solid #55565b;border-radius:15px;background:#151618;color:#f4f4f4;box-shadow:0 36px 95px #0009}
+.feed-modal-image{position:relative;overflow:hidden;background:#090909;min-height:500px}
+.feed-modal-image img{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.feed-modal-image .poster-shade{background:linear-gradient(0deg,#000b,transparent 70%)}
+.feed-modal-image .poster-words{font-size:clamp(25px,3.1vw,42px);bottom:36px;left:27px;right:27px}
+.feed-modal-content{overflow-y:auto;padding:37px 29px;display:flex;flex-direction:column}
+.feed-modal-kicker{color:#d9b681;font:800 10px Arial,sans-serif;letter-spacing:.12em}
+.feed-modal-content h2{font:900 29px/1.1 Arial,sans-serif;letter-spacing:-.045em;margin:14px 0}
+.feed-modal-content p{color:#dedede;font-size:14px;line-height:1.82}
+.feed-modal-content .modal-ref{font-size:11px;color:#d9b681;margin:3px 0 18px;font-weight:800}
+.feed-modal-content .modal-task{border-left:3px solid #deb57c;background:#252422;padding:15px 16px;border-radius:0 8px 8px 0;margin:17px 0}
+.feed-modal-content .modal-task strong{font-size:11px;letter-spacing:.1em;color:#e8cc98}
+.feed-modal-content .modal-task p{margin:8px 0 0}
+.feed-modal-content .modal-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0 19px}
+.feed-modal-content .modal-toolbar .btn{font-size:11px;padding:11px 13px;min-height:42px}
+.feed-modal-content .modal-toolbar .btn-primary{background:#f6e4c6;border-color:#f6e4c6;color:#171717}
+.feed-modal-content .modal-toolbar .btn-secondary{background:transparent;color:#f8f8f8;border-color:#5d6062}
+.feed-credit{font-size:10px;color:#a9aaad;line-height:1.7;margin-top:auto;padding-top:20px}
+.feed-credit a{color:#ead1b2}
+.feed-close{position:absolute;right:14px;top:14px;z-index:2;background:#0009;color:#fff;border:1px solid #ffffff50;border-radius:50%;width:43px;height:43px;display:grid;place-items:center;font-size:23px}
+.feed-close:hover{background:#222}
+.feed-toast{position:fixed;bottom:100px;right:24px;z-index:110;background:#f7e6c5;color:#101010;border:1px solid #c99c60;border-radius:9px;padding:13px 18px;box-shadow:0 12px 40px #0006;font-size:12px;font-weight:900}
+/* Page-specific hero: São Miguel prominent */
+.sao-miguel-cover{position:relative;min-height:300px;border-radius:15px;background:#111;overflow:hidden;margin:0 0 26px;display:flex;align-items:flex-end;isolation:isolate}
+.sao-miguel-cover img{position:absolute;inset:0;z-index:-2;height:100%;width:100%;object-fit:cover;object-position:center 23%;filter:contrast(1.03) saturate(.85)}
+.sao-miguel-cover:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#080809e8 2%,#090909aa 44%,#0003 100%)}
+.sao-miguel-cover>div{padding:30px;max-width:650px}
+.sao-miguel-cover h1{font:900 clamp(31px,4.8vw,59px)/.97 var(--impact);letter-spacing:-.06em;color:#fff;margin:13px 0}
+.sao-miguel-cover p{font-size:13px;color:#ececec;line-height:1.7}
+.sao-miguel-cover span{font-size:11px;color:#e5b56f;font-weight:900}
+.sao-miguel-cover .btn{background:#f2e6d1;border-color:#f2e6d1;color:#111}
+/* Page Palavra: texts scroll easily by scripture ref */
+.bible-intro{border-bottom:1px solid var(--line);padding-bottom:25px;margin-bottom:19px}
+.bible-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.bible-card{display:flex;flex-direction:column;gap:12px}
+.bible-card blockquote{font-size:clamp(17px,1.6vw,21px);font-weight:600;line-height:1.5;margin:0;color:var(--ink)}
+.bible-card .card-meta{color:var(--warm)}
+.bible-card small{font-size:11px;color:var(--dim)}
+.bible-switch{display:flex;gap:6px;margin-top:12px}
+.bible-switch .group-button{border-radius:8px}
+.bible-note{font-size:11px;color:var(--dim);margin:22px 0}
+@media(max-width:1120px){.poster-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.poster-card.wide{grid-column:span 2}}
+@media(max-width:800px){.cuiudo-hero h1{font-size:clamp(43px,7vw,67px)}.cuiudo-hero-photo{width:85%}.feed-action-panel{grid-template-columns:1fr}.feed-modal{grid-template-columns:1fr 1fr}.feed-modal-image{min-height:450px}.poster-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster-card.wide{grid-column:span 2}}
+@media(max-width:760px){
+ .site-header,.header-inner{height:62px}
+ .main{padding:17px 13px 101px}
+ .logo-type{font-size:23px}
+ .compact-menu{display:inline-flex!important}
+ .compact-menu span{display:none}
+ .mode-switch{min-width:35px}
+ .cuiudo-hero{min-height:490px;border-radius:10px}
+ .cuiudo-hero-photo{width:100%;opacity:.83;object-position:56% center}
+ .cuiudo-hero:after{background:linear-gradient(0deg,#07080af5 0%,#07080abe 48%,#08090a30 100%)}
+ .cuiudo-hero-content{align-items:flex-start;justify-content:flex-end;padding:27px 20px}
+ .cuiudo-hero h1{font-size:clamp(43px,12vw,69px);max-width:490px}
+ .cuiudo-hero-content>p{font-size:13px}
+ .cuiudo-hero-footer{font-size:9px}
+ .cuiudo-hero-credit{top:12px;bottom:auto;font-size:8px}
+ .cuiudo-punch-strip{gap:12px;padding:13px 15px;flex-wrap:wrap;border-radius:9px}
+ .cuiudo-punch-strip .punch-symbol{min-width:66px;height:62px;font-size:33px}
+ .cuiudo-punch-strip strong{font-size:clamp(15px,4.5vw,20px)}
+ .cuiudo-punch-strip small{font-size:10px}
+ .cuiudo-punch-strip .punch-link{margin-left:auto}
+ .cuiudo-feed-toolbar{display:block;margin:27px 0 15px}
+ .cuiudo-feed-toolbar h2{font-size:28px}
+ .feed-searchbar{width:100%;margin-top:15px;min-width:0;padding:11px 13px}
+ .feed-searchbar input{font-size:14px}
+ .feed-filters{gap:7px;margin-left:-13px;margin-right:-13px;padding:0 13px 12px}
+ .feed-filter{font-size:11px;padding:10px 12px;min-height:40px}
+ .poster-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .poster-card{border-radius:8px}
+ .poster-open{aspect-ratio:.74}
+ .poster-card.wide .poster-open{aspect-ratio:1.52}
+ .poster-topline{top:8px;left:8px;right:8px}
+ .poster-topline .poster-label{font-size:8px;padding:4px 6px}
+ .poster-words{font-size:clamp(15px,4.2vw,22px);left:9px;right:9px;bottom:12px}
+ .poster-card.wide .poster-words{font-size:clamp(22px,6vw,33px)}
+ .poster-control-row{padding:5px 6px}
+ .poster-control-row .post-topic{font-size:8px}
+ .poster-actions button{min-width:33px;height:36px}
+ .feed-action-panel{margin:25px 0;padding-top:23px}
+ .feed-action-panel>section{padding:20px}
+ .feed-overlay{padding:0}
+ .feed-modal{border:0;border-radius:0;display:flex;flex-direction:column;width:100%;height:100dvh;max-height:none}
+ .feed-modal-image{height:min(51dvh,500px);min-height:230px;flex:0 0 auto}
+ .feed-modal-image .poster-words{font-size:clamp(22px,7vw,34px);bottom:21px;left:18px;right:18px}
+ .feed-modal-content{flex:1;padding:22px 20px 32px}
+ .feed-modal-content h2{font-size:24px}
+ .feed-modal-content p{font-size:13px}
+ .feed-toast{left:16px;right:16px;text-align:center;bottom:90px}
+ .bible-grid{grid-template-columns:1fr}
+ .sao-miguel-cover{min-height:340px}
+ .sao-miguel-cover>div{padding:23px}
+ .sao-miguel-cover h1{font-size:39px}
+ .mobile-nav{background:var(--bg);height:calc(68px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+ .mobile-nav-button{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .cuiudo-punch-strip .punch-fist,.cuiudo-punch-strip .punch-spark{animation:none}
+ .cuiudo-punch-strip .punch-fist{transform:translate(0,0)}
+ .poster-card,.poster-open img{transition:none!important}
+}
+@media (min-width:991px){.compact-menu{display:none!important}}
+
+</style>
   <title>CUIÚDO — Fé, Coragem e Ação</title>
 </head>
 <body>
@@ -459,6 +678,7 @@ const prayers = [
   {name:'Glória ao Pai',text:'Glória ao Pai, ao Filho e ao Espírito Santo. Como era no princípio, agora e sempre. Amém.'},
   {name:'Salve-Rainha',text:'Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei; e, depois deste desterro, mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Amém.'}
 ];
+
 
 
 // CUIÚDO | Modo SEM DESCULPAS
@@ -608,6 +828,7 @@ const confrontosBrutais = [
   {title:'PARE DE ESCONDER A VERDADE.',topic:'Honestidade',ref:'Efésios 4,25',quote:'VOCÊ QUER PAZ, MAS VIVE EMPILHANDO MEIAS VERDADES. Mentira pequena também corrói confiança. A coragem começa quando você prefere uma conversa difícil a mais uma desculpa conveniente.',truth:'A verdade pede responsabilidade, reparação e respeito ao próximo.',action:'Corrija uma informação enganosa ou esclareça um compromisso.'},
   {title:'VOCÊ PRECISA DE ATITUDE, NÃO DE PALCO.',topic:'Serviço',ref:'Colossenses 3,23',quote:'QUER SER EXEMPLO? ENTÃO SEJA FIEL QUANDO NÃO TEM NINGUÉM OLHANDO. O trabalho honesto, a oração secreta e a palavra cumprida não viralizam. Mas é neles que seu caráter se revela.',truth:'O valor da boa ação não depende da quantidade de testemunhas.',action:'Conclua uma obrigação silenciosa com atenção e sem procurar elogios.'}
 ];
+
 
 
 
@@ -947,6 +1168,260 @@ const ladainhaBreve = [
 ];
 const fonteLadainhaOficial = "https://www.vatican.va/special/rosary/documents/litanie-lauretane_po.html";
 
+
+// CUIÚDO / Feed editorial. Frases autorais; não são citações literais das Escrituras.
+// Obras clássicas em domínio público e fotografias sob licença Unsplash.
+const feedArtwork = Object.freeze({
+  "miguel-reni": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/GuidoReni_MichaelDefeatsSatan.jpg/640px-GuidoReni_MichaelDefeatsSatan.jpg",
+    "credit": "Guido Reni, São Miguel derrotando Satanás",
+    "source": "https://commons.wikimedia.org/wiki/File:GuidoReni_MichaelDefeatsSatan.jpg",
+    "license": "Domínio público"
+  },
+  "cowboy-remington": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/The_Cowboy%2C_1902%2C_by_Frederic_S._Remington.jpg/640px-The_Cowboy%2C_1902%2C_by_Frederic_S._Remington.jpg",
+    "credit": "Frederic Remington, The Cowboy (1902)",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Cowboy,_1902,_by_Frederic_S._Remington.jpg",
+    "license": "Domínio público"
+  },
+  "cristo-deserto": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Christ_in_the_Wilderness_-_Ivan_Kramskoy_-_Google_Cultural_Institute.jpg/640px-Christ_in_the_Wilderness_-_Ivan_Kramskoy_-_Google_Cultural_Institute.jpg",
+    "credit": "Ivan Kramskoy, Cristo no deserto (1872)",
+    "source": "https://commons.wikimedia.org/wiki/File:Christ_in_the_Wilderness_-_Ivan_Kramskoy_-_Google_Cultural_Institute.jpg",
+    "license": "Domínio público"
+  },
+  "miguel-rafael": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Raphael_Saint_Michael_and_the_Dragon.jpg/640px-Raphael_Saint_Michael_and_the_Dragon.jpg",
+    "credit": "Rafael, São Miguel e o dragão",
+    "source": "https://commons.wikimedia.org/wiki/File:Raphael_Saint_Michael_and_the_Dragon.jpg",
+    "license": "Domínio público"
+  },
+  "queda-cowboy": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/The_Fall_of_the_Cowboy%2C_1895%2C_by_Frederic_S._Remington.jpg/640px-The_Fall_of_the_Cowboy%2C_1895%2C_by_Frederic_S._Remington.jpg",
+    "credit": "Frederic Remington, The Fall of the Cowboy (1895)",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Fall_of_the_Cowboy,_1895,_by_Frederic_S._Remington.jpg",
+    "license": "Domínio público"
+  },
+  "investida": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/A_Dash_for_the_Timber%3B_1889%2C_Frederic_S._Remington.jpg/640px-A_Dash_for_the_Timber%3B_1889%2C_Frederic_S._Remington.jpg",
+    "credit": "Frederic Remington, A Dash for the Timber (1889)",
+    "source": "https://commons.wikimedia.org/wiki/File:A_Dash_for_the_Timber;_1889,_Frederic_S._Remington.jpg",
+    "license": "Domínio público"
+  },
+  "cristo-cruz": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Christ_Carrying_the_Cross_1580.jpg/640px-Christ_Carrying_the_Cross_1580.jpg",
+    "credit": "El Greco, Cristo carregando a cruz",
+    "source": "https://commons.wikimedia.org/wiki/File:Christ_Carrying_the_Cross_1580.jpg",
+    "license": "Domínio público"
+  },
+  "tempestade": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Rembrandt_-_Christ_in_the_Storm_on_the_Sea_of_Galilee.jpeg/640px-Rembrandt_-_Christ_in_the_Storm_on_the_Sea_of_Galilee.jpeg",
+    "credit": "Rembrandt, Cristo na tempestade (1633)",
+    "source": "https://commons.wikimedia.org/wiki/File:Rembrandt_-_Christ_in_the_Storm_on_the_Sea_of_Galilee.jpeg",
+    "license": "Domínio público"
+  },
+  "waterhole": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Frederic_Remington_-_Fight_for_the_Waterhole_-_Google_Art_Project.jpg/640px-Frederic_Remington_-_Fight_for_the_Waterhole_-_Google_Art_Project.jpg",
+    "credit": "Frederic Remington, Fight for the Waterhole",
+    "source": "https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_Fight_for_the_Waterhole_-_Google_Art_Project.jpg",
+    "license": "Domínio público"
+  },
+  "broncho": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/The_Broncho_Buster_by_Frederic_Remington.jpg/640px-The_Broncho_Buster_by_Frederic_Remington.jpg",
+    "credit": "Frederic Remington, The Broncho Buster",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Broncho_Buster_by_Frederic_Remington.jpg",
+    "license": "Domínio público"
+  },
+  "rider": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Frederic_Remington_-_The_Cowboy_-_Google_Art_Project.jpg/640px-Frederic_Remington_-_The_Cowboy_-_Google_Art_Project.jpg",
+    "credit": "Frederic Remington, The Cowboy",
+    "source": "https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_The_Cowboy_-_Google_Art_Project.jpg",
+    "license": "Domínio público"
+  },
+  "rosario": {
+    "url": "https://images.unsplash.com/photo-1654157632898-858fdbee3087?auto=format&fit=crop&w=900&q=82",
+    "credit": "Dolina Modlitwy / Unsplash",
+    "source": "https://unsplash.com/photos/a-person-holding-a-rosary-with-a-cross-on-it-CCC0CdEsI7E",
+    "license": "Unsplash License"
+  },
+  "luz": {
+    "url": "https://images.unsplash.com/photo-1491566102020-21838225c3c8?auto=format&fit=crop&w=900&q=82",
+    "credit": "Chad Greiter / Unsplash",
+    "source": "https://unsplash.com/photos/sunlight-beams-inside-ornate-cathedral--0gBnnMdQPw",
+    "license": "Unsplash License"
+  },
+  "igreja": {
+    "url": "https://images.unsplash.com/photo-1762967020428-66cdb1a6d789?auto=format&fit=crop&w=900&q=82",
+    "credit": "Julia Taubitz / Unsplash",
+    "source": "https://unsplash.com/photos/modern-concrete-church-interior-with-sunlight-streaming-in-ioHO90sxxJA",
+    "license": "Unsplash License"
+  }
+});
+const feedFilters = Object.freeze([["todos","Para você"],["miguel","São Miguel"],["rural","Rural / trabalho"],["jesus","Jesus"],["coragem","Vai pra cima"],["santidade","Santidade"],["salvos","Salvos"]]);
+const feedPosts = Object.freeze([
+  {
+    "id": "m01",
+    "category": "miguel",
+    "art": "miguel-reni",
+    "title": "NÃO INVOQUE SÃO MIGUEL PRA FUGIR DA SUA PRÓPRIA LUTA.",
+    "kicker": "COMBATE ESPIRITUAL",
+    "ref": "Ap 12,7",
+    "reflection": "São Miguel enfrenta a batalha que lhe foi confiada. A sua batalha diária começa quando você encara a verdade e abandona o pecado, a mentira e a covardia.",
+    "action": "Reze a oração de São Miguel e resolva uma pendência justa que você está adiando."
+  },
+  {
+    "id": "r01",
+    "category": "rural",
+    "art": "cowboy-remington",
+    "title": "FÉ EM DEUS. PÉ NA TÁBUA. TRABALHO NA MÃO.",
+    "kicker": "FÉ & TRABALHO",
+    "ref": "Cl 3,23",
+    "reflection": "A fé não se prova no grito. Aparece no compromisso, na honestidade do trabalho e na coragem de fazer o que precisa ser feito.",
+    "action": "Trabalhe 25 minutos sem distrair a cabeça com o celular."
+  },
+  {
+    "id": "j01",
+    "category": "jesus",
+    "art": "cristo-deserto",
+    "title": "CRISTO ENFRENTOU O DESERTO. E VOCÊ VAI FUGIR DO SEU DIA?",
+    "kicker": "JESUS & CORAGEM",
+    "ref": "Mt 4,1–11",
+    "reflection": "Nem toda dor é castigo, e nem todo cansaço é fraqueza. Mas existe uma decisão que cabe a você: não se entregar à tentação de desistir do bem.",
+    "action": "Reze por cinco minutos e faça o primeiro passo possível."
+  },
+  {
+    "id": "r02",
+    "category": "coragem",
+    "art": "queda-cowboy",
+    "title": "CAIU? LEVANTA. NÃO CHAMA UMA QUEDA DE DESTINO.",
+    "kicker": "LEVANTAR DE NOVO",
+    "ref": "Pr 24,16",
+    "reflection": "Cair machuca. Não há vergonha em pedir ajuda. A vergonha seria abandonar o bem quando ainda existe caminho para recomeçar.",
+    "action": "Identifique o erro, repare o que puder e volte ao trabalho."
+  },
+  {
+    "id": "m02",
+    "category": "miguel",
+    "art": "miguel-rafael",
+    "title": "SÃO MIGUEL, DEFENDEI-NOS NO COMBATE.",
+    "kicker": "MILÍCIA CELESTE",
+    "ref": "Ap 12,7–9",
+    "reflection": "São Miguel aponta para a vitória de Deus, não para um culto ao próprio ego. Coragem cristã é enfrentar o mal sem se tornar aquilo que combate.",
+    "action": "Reze a São Miguel e recuse uma atitude que alimenta o mal."
+  },
+  {
+    "id": "r03",
+    "category": "coragem",
+    "art": "investida",
+    "title": "SE TEM MEDO, VAI COM PRUDÊNCIA. MAS VAI.",
+    "kicker": "CORAGEM EM MOVIMENTO",
+    "ref": "Js 1,9",
+    "reflection": "Esperar uma coragem sem medo é esperar para sempre. Prudência não é fuga; é avançar com preparo e responsabilidade.",
+    "action": "Faça hoje uma ligação ou tarefa importante que você adia."
+  },
+  {
+    "id": "j02",
+    "category": "jesus",
+    "art": "cristo-cruz",
+    "title": "PEGA A TUA CRUZ. PARA DE TERCEIRIZAR A TUA VIDA.",
+    "kicker": "CRUZ & RESPONSABILIDADE",
+    "ref": "Lc 9,23",
+    "reflection": "Jesus não prometeu uma vida sem cruz. Ele ensinou a carregar o peso com amor, receber ajuda e permanecer fiel ao bem.",
+    "action": "Cumpra um dever que é seu sem colocar a culpa em outra pessoa."
+  },
+  {
+    "id": "j03",
+    "category": "jesus",
+    "art": "tempestade",
+    "title": "A TEMPESTADE NÃO É A ÚLTIMA PALAVRA.",
+    "kicker": "FÉ EM MEIO AO CAOS",
+    "ref": "Mt 8,23–27",
+    "reflection": "A vida pode desorganizar tudo. A confiança em Cristo não apaga a dificuldade, mas nos impede de transformar o medo em senhor da nossa existência.",
+    "action": "Coloque no papel três prioridades e execute a primeira."
+  },
+  {
+    "id": "r04",
+    "category": "rural",
+    "art": "waterhole",
+    "title": "QUEM QUER RESULTADO PRECISA ENCARAR A ESTRADA.",
+    "kicker": "DISCIPLINA",
+    "ref": "Gl 6,9",
+    "reflection": "Desejar a vitória é fácil; ser fiel aos pequenos trabalhos cotidianos é a parte que quase ninguém fotografa.",
+    "action": "Conclua uma tarefa concreta antes de abrir as redes sociais."
+  },
+  {
+    "id": "r05",
+    "category": "rural",
+    "art": "broncho",
+    "title": "CUIÚDO NÃO É QUEM GRITA. É QUEM AGUENTA E FAZ.",
+    "kicker": "FORÇA COM JUÍZO",
+    "ref": "2Tm 1,7",
+    "reflection": "A força cristã exige domínio de si, não violência. Se não consegue governar a própria língua e o próprio horário, comece por aí.",
+    "action": "Responda com respeito mesmo quando estiver irritado."
+  },
+  {
+    "id": "r06",
+    "category": "rural",
+    "art": "rider",
+    "title": "O SOL NASCEU. E A TUA DESCULPA JÁ ACORDOU ANTES?",
+    "kicker": "ACORDA, CUIÚDO",
+    "ref": "Ef 5,14",
+    "reflection": "Um dia novo não resolve tudo, mas oferece outra chance de agir com dignidade. Ninguém constrói uma vida consistente só na intenção.",
+    "action": "Escolha uma ação de 15 minutos e cumpra."
+  },
+  {
+    "id": "f01",
+    "category": "santidade",
+    "art": "rosario",
+    "title": "REZA DE VERDADE. DEPOIS HONRA O QUE REZOU.",
+    "kicker": "ORAÇÃO & COERÊNCIA",
+    "ref": "Tg 1,22",
+    "reflection": "A oração transforma quando atravessa a porta da igreja e entra no comportamento em casa, no trabalho e nas relações.",
+    "action": "Reze uma dezena do terço e pratique uma atitude de caridade."
+  },
+  {
+    "id": "f02",
+    "category": "santidade",
+    "art": "luz",
+    "title": "SILÊNCIO TAMBÉM É CORAGEM.",
+    "kicker": "DISCERNIMENTO",
+    "ref": "Sl 46,11",
+    "reflection": "Quem só conhece o barulho perde a capacidade de ouvir a consciência. A firmeza nasce também de reconhecer os próprios limites.",
+    "action": "Desligue as distrações e faça dez minutos de silêncio."
+  },
+  {
+    "id": "f03",
+    "category": "santidade",
+    "art": "igreja",
+    "title": "NÃO VENDA A ALMA PRA GANHAR UMA DISCUSSÃO.",
+    "kicker": "DOMÍNIO PRÓPRIO",
+    "ref": "Tg 1,19",
+    "reflection": "Ter razão não autoriza humilhar ninguém. A verdade é forte o suficiente para dispensar crueldade.",
+    "action": "Encerre hoje uma discussão inútil e preserve a paz."
+  },
+  {
+    "id": "m03",
+    "category": "miguel",
+    "art": "miguel-reni",
+    "title": "O MAL NÃO SE VENCE COM POSE. SE VENCE COM CONVERSÃO.",
+    "kicker": "GUERRA INTERIOR",
+    "ref": "Ef 6,11",
+    "reflection": "São Miguel não é um amuleto. A oração precisa acompanhar escolhas concretas de conversão e fidelidade a Cristo.",
+    "action": "Abandone um hábito que contraria sua consciência e procure a Reconciliação se necessário."
+  },
+  {
+    "id": "r07",
+    "category": "coragem",
+    "art": "investida",
+    "title": "TEM QUE FAZER DAR CERTO. COMEÇA COM O QUE VOCÊ CONTROLA.",
+    "kicker": "VAI PRA CIMA",
+    "ref": "Cl 3,23",
+    "reflection": "Você não controla o resultado do mundo. Controla parte do esforço, das escolhas e do modo como trata as pessoas. Faça o melhor com o que está nas suas mãos.",
+    "action": "Dê uma entrega concreta a algo importante ainda hoje."
+  }
+]);
+
+
 const STORE_KEY = 'cuiudo-v1';
 const groupNames = ['gozosos', 'dolorosos', 'gloriosos', 'luminosos'];
 const navItems = [
@@ -965,13 +1440,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'light',verseLang:'pt',mobileMore:false,designVersion:'white-arial-v1',...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'dark',verseLang:'pt',mobileMore:false,designVersion:'combat-v9',...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-if(state.designVersion!=='white-arial-v1'){state.theme='light';state.designVersion='white-arial-v1';save();}
-state.theme=['light','dark','system'].includes(state.theme)?state.theme:'light';
+if(state.designVersion!=='combat-v9'){state.theme='dark';state.designVersion='combat-v9';save();}
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'dark';
 state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
@@ -1150,6 +1625,7 @@ function render(){
 app.addEventListener('click',evt=>{
  const target=evt.target.closest('[data-action]');if(!target)return;
  const a=target.dataset.action;
+ if(a.startsWith('combat-'))return; // ações pertencem ao módulo visual v9
  if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;state.mobileMore=false;window.scrollTo({top:0,behavior:'instant'});}
  if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
  if(a==='dev-filter'){state.devFilter=target.dataset.filter;save();}
@@ -1188,6 +1664,175 @@ render();
 if(window.matchMedia){const query=window.matchMedia('(prefers-color-scheme: dark)');if(query.addEventListener)query.addEventListener('change',()=>{if(state.theme==='system')render();});}
 if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
+
+
+/* CUIÚDO V9 — UI de feed, combate espiritual e arte clássica.
+   Carregado depois do app base; preserva dados, terço, diário e orações. */
+const combatTabs=[
+ {id:'inicio',label:'Feed',mobile:'Feed',icon:'home'},
+ {id:'terco',label:'Rezar',mobile:'Rezar',icon:'rosary'},
+ {id:'devocionario',label:'São Miguel',mobile:'Miguel',icon:'angel'},
+ {id:'palavra',label:'Versículos',mobile:'Bíblia',icon:'book'},
+ {id:'diario',label:'Diário',mobile:'Diário',icon:'book'},
+ {id:'verdade',label:'Sem desculpas',mobile:'Verdade',icon:'flame'},
+ {id:'desafios',label:'Ir pra cima',mobile:'Ação',icon:'target'},
+ {id:'exame',label:'Exame',mobile:'Exame',icon:'heart'}
+];
+function combatNavBtn(tab,cls='nav-button'){
+ return `<button type="button" class="${cls}" data-action="navigate" data-tab="${tab.id}" aria-current="${state.tab===tab.id?'page':'false'}">${icon(tab.icon)}<span>${cls==='nav-button'?tab.label:tab.mobile}</span></button>`;
+}
+function combatNormalize(s){return String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');}
+function combatSaved(id){return Boolean(state.feedSaved?.[id]);}
+function combatDone(id){return Boolean(state.feedDone?.[currentDay()]?.[id]);}
+function combatMatches(p){
+ if(state.feedFilter==='salvos'&&!combatSaved(p.id))return false;
+ if(state.feedFilter!=='salvos'&&state.feedFilter!=='todos'&&p.category!==state.feedFilter)return false;
+ const q=combatNormalize(state.feedTerm).trim();
+ return !q||combatNormalize([p.title,p.kicker,p.ref,p.reflection,p.action].join(' ')).includes(q);
+}
+function combatPoster(p,i){
+ const art=feedArtwork[p.art];
+ return `<article class="poster-card ${i===0?'wide':''}" data-feed-id="${escapeHtml(p.id)}">
+   <button type="button" class="poster-open" data-action="combat-open" data-id="${p.id}" aria-label="Abrir reflexão ${escapeHtml(p.title)}">
+    <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="this.hidden=true" />
+    <span class="poster-shade" aria-hidden="true"></span>
+    <span class="poster-topline"><span class="poster-label">${escapeHtml(p.kicker)}</span><span class="poster-index">${String(i+1).padStart(2,'0')}</span></span>
+    <strong class="poster-words">${escapeHtml(p.title)}</strong>
+   </button>
+   <div class="poster-control-row"><span class="post-topic">${escapeHtml(p.ref)}</span><span class="poster-actions">
+    <button type="button" data-action="combat-save" data-id="${p.id}" aria-pressed="${combatSaved(p.id)}" aria-label="${combatSaved(p.id)?'Remover dos salvos':'Salvar reflexão'}">${combatSaved(p.id)?'♥':'♡'}</button>
+    <button type="button" data-action="combat-share" data-id="${p.id}" aria-label="Compartilhar reflexão">${icon('arrow')}</button>
+   </span></div>
+  </article>`;
+}
+function combatPostDetail(p){
+ const a=feedArtwork[p.art];
+ return `<div class="feed-overlay" data-action="combat-close" role="presentation">
+   <div class="feed-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(p.title)}">
+    <button type="button" data-action="combat-close" class="feed-close" aria-label="Fechar reflexão">×</button>
+    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="this.hidden=true" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
+    <div class="feed-modal-content">
+      <span class="feed-modal-kicker">${escapeHtml(p.kicker)} • CUIÚDO</span>
+      <h2>SEM DESCULPA. COM FÉ E ATITUDE.</h2>
+      <div class="modal-ref">Medite: ${escapeHtml(p.ref)} · frase autoral, não versículo literal</div>
+      <p>${escapeHtml(p.reflection)}</p>
+      <div class="modal-task"><strong>AÇÃO CUIÚDA</strong><p>${escapeHtml(p.action)}</p></div>
+      <div class="modal-toolbar">
+       <button type="button" class="btn btn-primary" data-action="combat-done" data-id="${p.id}">${combatDone(p.id)?'✓ Ação cumprida':'Marcar ação cumprida'}</button>
+       <button type="button" class="btn btn-secondary" data-action="combat-save" data-id="${p.id}">${combatSaved(p.id)?'♥ Salvo':'♡ Salvar'}</button>
+       <button type="button" class="btn btn-secondary" data-action="combat-share" data-id="${p.id}">Compartilhar</button>
+      </div>
+      <div class="feed-credit">Imagem: ${escapeHtml(a.credit)}. ${escapeHtml(a.license)}. <a target="_blank" rel="noopener noreferrer" href="${escapeHtml(a.source)}">Ver origem e licença ↗</a></div>
+    </div>
+   </div>
+  </div>`;
+}
+function combatHome(){
+ const g=groups[dayGroup()],prog=readProgress(dayGroup()),done=prog.reduce((n,v)=>n+v,0);
+ const picks=feedPosts.filter(combatMatches),selected=feedPosts.find(p=>p.id===state.feedOpen);
+ const lead=feedArtwork['miguel-reni'],daily=feedPosts[(new Date().getDate()+new Date().getDay())%feedPosts.length];
+ return `<section class="cuiudo-hero">
+  <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="this.hidden=true">
+  <div class="cuiudo-hero-content">
+    <div class="cuiudo-hero-kicker"><span class="cuiudo-star">✠</span> FÉ EM DEUS E PÉ NA TÁBUA</div>
+    <h1>TEM QUE SER<em>CUIÚDO.</em></h1>
+    <p>A vida exige coragem. <strong>Reza. Levanta. Vai pra cima.</strong> Quem ama a Deus não foge da verdade, não vende a consciência e não deixa a preguiça decidir o futuro.</p>
+    <div class="cuiudo-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">REZAR O TERÇO ${icon('arrow')}</button><button type="button" class="btn btn-secondary" data-action="navigate" data-tab="desafios">FAZER ACONTECER</button></div>
+    <div class="cuiudo-hero-footer">SEM DESCULPA. SEM FUGA. COM FÉ, JUÍZO E AÇÃO.</div>
+  </div>
+  <div class="cuiudo-hero-credit"><a href="${escapeHtml(lead.source)}" target="_blank" rel="noopener noreferrer">Guido Reni · domínio público ↗</a></div>
+ </section>
+ <section class="cuiudo-punch-strip" aria-label="Coragem e ação"><div class="punch-symbol" aria-hidden="true"><span class="punch-palm">✋</span><span class="punch-fist">👊</span><span class="punch-spark">✦</span></div><div><strong>TEM QUE FAZER AS COISAS DAR CERTO.<br>VAI PRA CIMA.</strong><small>Você não controla tudo. Mas controla o que decide fazer.</small></div><button type="button" class="punch-link" data-action="navigate" data-tab="desafios">PARTIR PRA AÇÃO ↗</button></section>
+ <section class="cuiudo-feed-toolbar"><div><h2>CONFRONTO DO DIA.</h2><p>Arte, fé, trabalho e coragem. Sem passar a mão na cabeça.</p></div><label class="feed-searchbar"><span aria-hidden="true">⌕</span><input type="search" id="feed-search" placeholder="Buscar fé, São Miguel, trabalho..." autocomplete="off" value="${escapeHtml(state.feedTerm)}" aria-label="Pesquisar reflexões"></label></section>
+ <div class="feed-filters" role="group" aria-label="Escolher tema do feed">${feedFilters.map(([id,label])=>`<button type="button" class="feed-filter" data-action="combat-filter" data-filter="${id}" aria-pressed="${state.feedFilter===id}">${escapeHtml(label)}</button>`).join('')}</div>
+ <div class="feed-results" aria-live="polite"><span id="feed-result-count">${picks.length}</span> reflexões • conteúdo autoral • imagens licenciadas</div>
+ <section class="poster-grid" id="feed-posts" aria-label="Feed de reflexões">${picks.length?picks.map((p,i)=>combatPoster(p,i)).join(''):'<div class="poster-empty">Nenhuma reflexão encontrada. Experimente outra busca.</div>'}</section>
+ <section class="feed-action-panel" aria-label="Fé em ação">
+   <section><span class="feed-action-label">TERÇO DE HOJE</span><h2>${escapeHtml(g.title)}. Reza e começa.</h2><p>Cinco mistérios. Uma dezena por vez. Que a oração te leve a viver melhor o dia.</p><div class="feed-progress-info"><div class="progress"><div class="progress-fill" style="width:${done*2}%"></div></div><strong>${done}/50</strong></div><button class="text-link" data-action="navigate" data-tab="terco">Rezar agora ${icon('arrow')}</button></section>
+   <section><span class="feed-action-label">ATITUDE DE HOJE</span><h2>Menos promessa. Mais execução.</h2><p>${escapeHtml(daily.action)}</p><button class="text-link" data-action="combat-open" data-id="${daily.id}">Encarar esta reflexão ${icon('arrow')}</button></section>
+ </section>
+ ${selected?combatPostDetail(selected):''}
+ ${state.feedToast?`<div class="feed-toast" role="status">${escapeHtml(state.feedToast)}</div>`:''}
+ `;
+}
+function combatBible(){
+ const verses=Object.entries(versiculosPorMisterio);
+ return `<section class="bible-intro"><span class="eyebrow">A VERDADE NÃO É DE ACORDO COM O SEU HUMOR.</span><h1 class="page-title">PALAVRA DE DEUS.</h1><p class="page-desc">20 passagens para meditar o terço, com traduções católicas históricas em português e inglês. Reflita, reze e pratique.</p>
+ <div class="bible-switch" role="group" aria-label="Escolher idioma dos versículos"><button type="button" class="group-button ${state.verseLang==='pt'?'active':''}" data-action="verse-lang" data-lang="pt">Português · Figueiredo</button><button type="button" class="group-button ${state.verseLang==='en'?'active':''}" data-action="verse-lang" data-lang="en">English · Douay-Rheims</button></div></section>
+ <section class="bible-grid">${verses.map(([id,v],i)=>`<article class="card bible-card"><span class="card-meta">${String(i+1).padStart(2,'0')} / ${escapeHtml(v.ref)}</span><blockquote lang="${state.verseLang==='pt'?'pt-BR':'en'}">“${escapeHtml(scriptureText(v))}”</blockquote><small>${state.verseLang==='pt'?'Pe. Antônio Pereira de Figueiredo':'Douay-Rheims 1899'} · ${v.excerptPt&&state.verseLang==='pt'?'excerto · ':''}domínio público</small><a href="${escapeHtml(state.verseLang==='pt'?v.ptSource:v.enSource)}" class="text-link" target="_blank" rel="noopener noreferrer">Ler capítulo completo ↗</a></article>`).join('')}</section>
+ <p class="bible-note">Estas não são citações da Bíblia Ave-Maria. Ap 12 é referência tipológica dos mistérios marianos, não uma descrição literal da Assunção.</p>`;
+}
+const combatOldDevotion=devocionario;
+devocionario=function(){
+ const a=feedArtwork['miguel-reni'];
+ return `<section class="sao-miguel-cover"><img src="${escapeHtml(a.url)}" alt="São Miguel Arcanjo, pintura de Guido Reni" onerror="this.hidden=true"><div><span>COMBATE ESPIRITUAL</span><h1>SÃO MIGUEL.<br>DEFENDEI-NOS NO COMBATE.</h1><p>Firmeza, oração e conversão. Quem vence o mal é Cristo. São Miguel intercede por nós.</p><a class="btn btn-primary" href="#oracao-miguel">REZAR A ORAÇÃO</a></div></section>`+combatOldDevotion();
+};
+renderShell=function(content){
+ const themeItems=[['dark','Escuro','moon'],['light','Claro','sun'],['system','Auto','rotate']];
+ const settings=`<div class="appearance-control" role="group" aria-label="Mudar tema">${themeItems.map(([id,label,ico])=>`<button type="button" class="theme-option ${state.theme===id?'selected':''}" data-action="set-theme" data-theme="${id}" aria-label="Tema ${label}" title="${label}" aria-pressed="${state.theme===id}">${icon(ico)}<span>${label}</span></button>`).join('')}</div>`;
+ const more=state.mobileMore?`<button class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais seções"><div class="more-panel-head"><strong>EXPLORAR</strong><button class="more-close" data-action="close-more" aria-label="Fechar">✕</button></div>${combatTabs.slice(5).map(t=>combatNavBtn(t,'more-nav-button')).join('')}</div>`:'';
+ return `<div class="app-shell"><a class="skip-link" href="#main-content">Pular para conteúdo</a><header class="site-header"><div class="header-inner">
+ <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — feed"><span class="logo-mark">✠</span><span class="logo-type">CUIÚDO<span class="logo-dot">.</span></span></a>
+ <nav class="desktop-nav" aria-label="Principal">${combatTabs.slice(0,5).map(t=>combatNavBtn(t)).join('')}<button type="button" class="nav-more" data-action="toggle-more">Mais ${icon('arrow')}</button></nav>
+ <div class="header-tools"><button type="button" class="compact-menu" data-action="toggle-more" aria-label="Abrir mais seções">☰ <span>Menu</span></button>${settings}<button class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" title="Intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'SEM DESCULPAS':'FIRME'}</span></button></div></div></header>
+ <main class="main" id="main-content">${content}<footer class="site-footer"><span>CUIÚDO — FÉ EM DEUS E PÉ NA TÁBUA ✠</span><p>Conteúdo autoral de combate espiritual e disciplina. Imagens de domínio público e Unsplash, creditadas em cada post. Sem violência física, garantias de sucesso ou substituição da Confissão sacramental.</p></footer></main>
+ <nav class="mobile-nav" aria-label="Principal no celular">${combatTabs.slice(0,5).map(t=>combatNavBtn(t,'mobile-nav-button')).join('')}</nav>${more}</div>`;
+};
+home=combatHome;
+render=function(){
+ setTheme();
+ const pages={inicio:combatHome,terco:rosary,devocionario:devocionario,palavra:combatBible,diario:diary,verdade:truth,desafios:challenges,exame:examine};
+ app.innerHTML=renderShell((pages[state.tab]||combatHome)());
+ document.title=(combatTabs.find(t=>t.id===state.tab)?.label||'Feed')+' | CUIÚDO';
+ if(document.body?.classList)document.body.classList.toggle('combat-modal-open',Boolean(state.feedOpen));
+};
+state.feedSaved=state.feedSaved&&typeof state.feedSaved==='object'?state.feedSaved:{};
+state.feedDone=state.feedDone&&typeof state.feedDone==='object'?state.feedDone:{};
+state.feedFilter=feedFilters.some(([id])=>id===state.feedFilter)?state.feedFilter:'todos';
+state.feedTerm='';
+state.feedOpen=null;
+state.feedToast='';
+if(state.designVersion!=='combat-v9'){state.theme='dark';state.designVersion='combat-v9';save();}
+if(!['dark','light','system'].includes(state.theme))state.theme='dark';
+app.addEventListener('click',event=>{
+ const target=event.target.closest?.('[data-action]');if(!target)return;
+ const action=target.dataset.action;
+ if(action==='combat-close'&&target!==event.target&&event.target.closest('.feed-modal'))return;
+ if(action==='combat-filter'){state.feedFilter=target.dataset.filter;save();}
+ else if(action==='combat-open'){state.feedOpen=target.dataset.id;state.feedToast='';}
+ else if(action==='combat-close'){state.feedOpen=null;state.feedToast='';}
+ else if(action==='combat-save'){const id=target.dataset.id;state.feedSaved[id]=!combatSaved(id);save();}
+ else if(action==='combat-done'){const id=target.dataset.id;state.feedDone[currentDay()]??={};state.feedDone[currentDay()][id]=!combatDone(id);save();}
+ else if(action==='combat-share'){
+   const p=feedPosts.find(p=>p.id===target.dataset.id);
+   if(p){
+    const url=(location.origin||'https://devbrunoo.github.io')+(location.pathname||'/Terc0-homens/')+'#post='+encodeURIComponent(p.id);
+    const content={title:p.title,text:'CUIÚDO — '+p.title,url};
+    if(navigator.share)navigator.share(content).catch(()=>{});
+    else if(navigator.clipboard?.writeText)navigator.clipboard.writeText(p.title+'\n'+url).then(()=>{state.feedToast='Link copiado para compartilhar';render();},()=>{state.feedToast='Não foi possível copiar. Link: '+url;render();});
+    else state.feedToast='Compartilhe: '+url;
+   }
+ }else return;
+ render();
+});
+app.addEventListener('input',event=>{
+ if(event.target.id!=='feed-search')return;
+ state.feedTerm=event.target.value;
+ let count=0;
+ for(const element of app.querySelectorAll('[data-feed-id]')){
+  const p=feedPosts.find(x=>x.id===element.dataset.feedId);
+  const visible=Boolean(p&&combatMatches(p));element.hidden=!visible;if(visible)count++;
+ }
+ const counter=app.querySelector('#feed-result-count');if(counter)counter.textContent=String(count);
+});
+if(document.addEventListener)document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&state.feedOpen){state.feedOpen=null;render();}
+});
+render();
+if(window.location?.hash?.startsWith('#post=')){
+ const id=decodeURIComponent(window.location.hash.slice(6));
+ if(feedPosts.some(p=>p.id===id)){state.tab='inicio';state.feedOpen=id;render();}
+}
 
 </script>
 </body>
