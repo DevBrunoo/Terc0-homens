@@ -1,0 +1,215 @@
+/* CUIÚDO 2026 / design system: feed de atitude, arte clássica e vida real */
+/* Dark é o padrão de marca. Claro e automático continuam disponíveis. */
+:root[data-theme="dark"]{
+ --bg:#08090a;--surface:#121416;--muted-surface:#121416;--surface-2:#202225;
+ --ink:#f7f7f4;--subink:#b6b7b8;--dim:#888d93;--line:#282c30;--hover:#50565e;
+ --accent:#f2f1ec;--on-accent:#0c1013;--warm:#e5b56f;
+ --radius:14px;color-scheme:dark
+}
+:root[data-theme="light"]{
+ --bg:#f7f7f5;--surface:#ffffff;--muted-surface:#f1f1ef;--surface-2:#e6e6e4;
+ --ink:#141414;--subink:#535456;--dim:#74767a;--line:#d9dade;--hover:#a8acb0;
+ --accent:#161717;--on-accent:#ffffff;--warm:#925d27;
+ --radius:14px;color-scheme:light
+}
+:root { --impact:'Arial Black',Impact,Arial,Helvetica,sans-serif; --body:Arial,Helvetica,sans-serif }
+body{font-family:var(--body);letter-spacing:-.005em}
+.site-header{background:var(--bg);height:70px;border-color:var(--line)}
+.header-inner{height:70px;max-width:1480px}
+.logo-mark{width:29px;height:29px;border-radius:5px;background:var(--ink);color:var(--bg);font-weight:800;border:0}
+.logo-type{font-weight:900;letter-spacing:-.09em}
+.logo-dot{color:var(--warm)}
+.desktop-nav .nav-button{font-weight:800;letter-spacing:.025em}
+.desktop-nav .nav-button[aria-current="page"]{background:var(--surface-2);color:var(--ink)}
+.theme-option{font-weight:700}
+.mode-switch{font-weight:800}
+.main{max-width:1360px;padding:30px clamp(18px,3vw,44px) 65px}
+.site-footer{border-top-color:var(--line)}
+.site-footer p{max-width:610px}
+.compact-menu{display:inline-flex!important}
+.compact-menu span{font-weight:800}
+.btn-primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn-secondary{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.btn{min-height:44px;border-radius:9px;font-weight:800}
+.btn:hover{opacity:.95}
+.card{border:1px solid var(--line);background:var(--surface);border-radius:14px}
+.card:hover{border-color:var(--hover)}
+.page-title{font-weight:900}
+.group-button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* Home: capa de batalha. Foto é plano de fundo narrativo, nunca ruído. */
+.cuiudo-hero{min-height:430px;position:relative;display:flex;align-items:stretch;border:1px solid #33383e;background:#0c0d0e;overflow:hidden;border-radius:17px;isolation:isolate}
+.cuiudo-hero-photo{position:absolute;right:0;top:0;height:100%;width:72%;object-fit:cover;object-position:center 25%;filter:saturate(.75) contrast(1.08);z-index:-2}
+.cuiudo-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b0c0d 0%,#0b0c0dee 24%,#08090a8a 52%,#08090a18 100%),linear-gradient(0deg,#090909ba,transparent 50%);z-index:-1}
+.cuiudo-hero-content{display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4.2vw,60px);max-width:770px;color:#fff}
+.cuiudo-hero-kicker{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:900;letter-spacing:.14em;color:#ecc68b}
+.cuiudo-hero-kicker .cuiudo-star{font-size:18px}
+.cuiudo-hero h1{font:900 clamp(48px,6.6vw,96px)/.92 var(--impact);letter-spacing:-.078em;margin:21px 0 18px;text-transform:uppercase;text-wrap:balance}
+.cuiudo-hero h1 em{font-style:normal;color:#f6cc87;display:block}
+.cuiudo-hero-content>p{font-size:clamp(13px,1.25vw,16px);line-height:1.74;color:#ece9e2;max-width:500px;margin:0}
+.cuiudo-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.cuiudo-hero-actions .btn-primary{background:#f3e7d3;color:#151413;border-color:#f3e7d3}
+.cuiudo-hero-actions .btn-secondary{border:1px solid #ffffff70;background:#ffffff16;color:#fff}
+.cuiudo-hero-footer{font-size:10px;color:#e0d7c9;letter-spacing:.12em;font-weight:800;margin-top:31px}
+.cuiudo-hero-credit{position:absolute;bottom:12px;right:15px;font-size:9px;color:#e9e9e9ba;text-shadow:0 1px 3px #000;z-index:3}
+.cuiudo-hero-credit a{color:inherit}
+.cuiudo-punch-strip{margin:19px 0 25px;background:#1b1b1c;border:1px solid #363435;display:flex;align-items:center;gap:20px;padding:16px 23px;border-radius:12px;color:#fff}
+.cuiudo-punch-strip .punch-symbol{position:relative;display:grid;place-items:center;font-size:42px;line-height:1;min-width:78px;height:70px}
+.cuiudo-punch-strip .punch-fist{position:absolute;transform:translate(-17px,-9px);animation:cuiudoPunch 1.65s cubic-bezier(.4,0,.25,1) infinite}
+.cuiudo-punch-strip .punch-palm{position:absolute;transform:translate(18px,9px) rotate(-10deg)}
+.cuiudo-punch-strip .punch-spark{position:absolute;transform:translate(2px,0);font-size:20px;color:#e6bd70;opacity:0;animation:cuiudoSpark 1.65s ease-out infinite}
+@keyframes cuiudoPunch{0%,24%,100%{transform:translate(-22px,-13px) rotate(-8deg)}45%,51%{transform:translate(4px,8px) rotate(5deg)}64%{transform:translate(-13px,-5px) rotate(-3deg)}}
+@keyframes cuiudoSpark{0%,41%,65%,100%{opacity:0;scale:.7}48%{opacity:1;scale:1.3}}
+.cuiudo-punch-strip strong{display:block;font:900 clamp(15px,2vw,23px)/1.16 var(--impact);letter-spacing:-.025em}
+.cuiudo-punch-strip small{display:block;font-size:11px;color:#c4c4c7;margin-top:5px}
+.cuiudo-punch-strip .punch-link{margin-left:auto;background:#f8ead4;color:#1c1b17;border:0;border-radius:8px;padding:12px 15px;white-space:nowrap;font-weight:900;font-size:11px}
+.cuiudo-feed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:31px 0 18px}
+.cuiudo-feed-toolbar h2{font:900 clamp(27px,3vw,38px)/1 var(--impact);letter-spacing:-.055em;margin:0;text-transform:uppercase}
+.cuiudo-feed-toolbar p{font-size:12px;color:var(--dim);margin:7px 0 0}
+.feed-searchbar{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:8px 14px;min-width:min(300px,36vw)}
+.feed-searchbar .icon{width:16px;height:16px;color:var(--subink)}
+.feed-searchbar input{background:transparent;border:0;outline:0;width:100%;min-width:0;color:var(--ink);font-size:12px}
+.feed-searchbar input::placeholder{color:var(--dim)}
+.feed-filters{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding:1px 0 14px;-webkit-overflow-scrolling:touch}
+.feed-filters::-webkit-scrollbar{display:none}
+.feed-filter{flex:0 0 auto;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:10px 14px;color:var(--subink);min-height:40px;font-weight:800;font-size:12px}
+.feed-filter[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.feed-filter:hover{border-color:var(--hover)}
+.feed-results{font-size:11px;color:var(--dim);font-weight:700;margin-bottom:14px}
+.poster-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;align-items:stretch}
+.poster-card{position:relative;display:flex;flex-direction:column;min-width:0;background:#19191a;border:1px solid #333438;border-radius:12px;overflow:hidden;isolation:isolate;transition:transform .18s,border-color .18s}
+.poster-card:hover{border-color:#888;transform:translateY(-2px)}
+.poster-card.wide{grid-column:span 2}
+.poster-open{display:block;position:relative;aspect-ratio:.77;width:100%;padding:0;border:0;background:linear-gradient(145deg,#27211d,#0d1014);color:#fff;text-align:inherit;overflow:hidden}
+.poster-card.wide .poster-open{aspect-ratio:1.6}
+.poster-open img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.8) contrast(1.08) brightness(.89);transform:scale(1);transition:transform .35s ease}
+.poster-card:hover img{transform:scale(1.04)}
+.poster-open img[hidden]{display:none}
+.poster-shade{position:absolute;inset:0;background:linear-gradient(180deg,#0004 0,#0000 27%,#0005 55%,#000e 100%)}
+.poster-topline{position:absolute;top:14px;left:13px;right:13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.poster-topline .poster-label{font-size:9px;letter-spacing:.12em;font-weight:900;color:#f6ead8;background:#0009;padding:5px 8px;border-radius:4px}
+.poster-topline .poster-index{font:900 12px var(--impact);opacity:.85}
+.poster-words{position:absolute;bottom:20px;left:15px;right:15px;display:block;color:#fff;font:900 clamp(16px,1.7vw,25px)/1.07 var(--impact);text-transform:uppercase;letter-spacing:-.045em;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 3px 14px #000a;white-space:normal;overflow-wrap:break-word;-webkit-text-stroke:.3px #000}
+.poster-card.wide .poster-words{font-size:clamp(24px,3vw,42px);max-width:540px}
+.poster-card:nth-child(3n) .poster-words{color:#f9e0a5}
+.poster-card:nth-child(5n) .poster-open{background:#38241d}
+.poster-control-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;background:#141516}
+.poster-control-row .post-topic{font:800 9px Arial,sans-serif;letter-spacing:.08em;color:#c3c2bc}
+.poster-actions{display:flex;gap:4px}
+.poster-actions button{border:0;background:transparent;color:#f0ede8;width:37px;height:36px;border-radius:7px;font-size:18px;display:grid;place-items:center}
+.poster-actions button[aria-pressed="true"]{color:#efb15b}
+.poster-actions button:hover{background:#27292b}
+.poster-actions button .icon{width:17px;height:17px}
+.poster-empty{grid-column:1/-1;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:50px 20px;text-align:center;color:var(--subink)}
+/* Evangelho e ação cotidiana, com destaque sem discurso de prosperidade */
+.feed-action-panel{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin:35px 0;border-top:1px solid var(--line);padding-top:29px}
+.feed-action-panel>section{border:1px solid var(--line);border-radius:13px;padding:25px;background:var(--surface)}
+.feed-action-panel .feed-action-label{font-size:11px;letter-spacing:.09em;font-weight:900;color:var(--warm)}
+.feed-action-panel h2{font:900 clamp(22px,2.5vw,32px)/1.15 Arial,sans-serif;letter-spacing:-.045em;margin:13px 0}
+.feed-action-panel p{color:var(--subink);font-size:13px;line-height:1.75;max-width:600px}
+.feed-progress-info{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim)}
+.feed-progress-info .progress{flex:1;min-width:65px;margin:0;height:8px}
+.feed-progress-info strong{color:var(--ink)}
+/* Detail: full-screen image + reflection, similar to opening a Reel, no fake engagement data */
+.feed-overlay{position:fixed;inset:0;z-index:100;background:#040404ed;display:flex;align-items:center;justify-content:center;padding:25px}
+.feed-modal{position:relative;display:grid;grid-template-columns:minmax(270px,.9fr) minmax(310px,.75fr);width:min(100%,1020px);max-height:min(92vh,870px);overflow:hidden;border:1px solid #55565b;border-radius:15px;background:#151618;color:#f4f4f4;box-shadow:0 36px 95px #0009}
+.feed-modal-image{position:relative;overflow:hidden;background:#090909;min-height:500px}
+.feed-modal-image img{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.feed-modal-image .poster-shade{background:linear-gradient(0deg,#000b,transparent 70%)}
+.feed-modal-image .poster-words{font-size:clamp(25px,3.1vw,42px);bottom:36px;left:27px;right:27px}
+.feed-modal-content{overflow-y:auto;padding:37px 29px;display:flex;flex-direction:column}
+.feed-modal-kicker{color:#d9b681;font:800 10px Arial,sans-serif;letter-spacing:.12em}
+.feed-modal-content h2{font:900 29px/1.1 Arial,sans-serif;letter-spacing:-.045em;margin:14px 0}
+.feed-modal-content p{color:#dedede;font-size:14px;line-height:1.82}
+.feed-modal-content .modal-ref{font-size:11px;color:#d9b681;margin:3px 0 18px;font-weight:800}
+.feed-modal-content .modal-task{border-left:3px solid #deb57c;background:#252422;padding:15px 16px;border-radius:0 8px 8px 0;margin:17px 0}
+.feed-modal-content .modal-task strong{font-size:11px;letter-spacing:.1em;color:#e8cc98}
+.feed-modal-content .modal-task p{margin:8px 0 0}
+.feed-modal-content .modal-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0 19px}
+.feed-modal-content .modal-toolbar .btn{font-size:11px;padding:11px 13px;min-height:42px}
+.feed-modal-content .modal-toolbar .btn-primary{background:#f6e4c6;border-color:#f6e4c6;color:#171717}
+.feed-modal-content .modal-toolbar .btn-secondary{background:transparent;color:#f8f8f8;border-color:#5d6062}
+.feed-credit{font-size:10px;color:#a9aaad;line-height:1.7;margin-top:auto;padding-top:20px}
+.feed-credit a{color:#ead1b2}
+.feed-close{position:absolute;right:14px;top:14px;z-index:2;background:#0009;color:#fff;border:1px solid #ffffff50;border-radius:50%;width:43px;height:43px;display:grid;place-items:center;font-size:23px}
+.feed-close:hover{background:#222}
+.feed-toast{position:fixed;bottom:100px;right:24px;z-index:110;background:#f7e6c5;color:#101010;border:1px solid #c99c60;border-radius:9px;padding:13px 18px;box-shadow:0 12px 40px #0006;font-size:12px;font-weight:900}
+/* Page-specific hero: São Miguel prominent */
+.sao-miguel-cover{position:relative;min-height:300px;border-radius:15px;background:#111;overflow:hidden;margin:0 0 26px;display:flex;align-items:flex-end;isolation:isolate}
+.sao-miguel-cover img{position:absolute;inset:0;z-index:-2;height:100%;width:100%;object-fit:cover;object-position:center 23%;filter:contrast(1.03) saturate(.85)}
+.sao-miguel-cover:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#080809e8 2%,#090909aa 44%,#0003 100%)}
+.sao-miguel-cover>div{padding:30px;max-width:650px}
+.sao-miguel-cover h1{font:900 clamp(31px,4.8vw,59px)/.97 var(--impact);letter-spacing:-.06em;color:#fff;margin:13px 0}
+.sao-miguel-cover p{font-size:13px;color:#ececec;line-height:1.7}
+.sao-miguel-cover span{font-size:11px;color:#e5b56f;font-weight:900}
+.sao-miguel-cover .btn{background:#f2e6d1;border-color:#f2e6d1;color:#111}
+/* Page Palavra: texts scroll easily by scripture ref */
+.bible-intro{border-bottom:1px solid var(--line);padding-bottom:25px;margin-bottom:19px}
+.bible-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.bible-card{display:flex;flex-direction:column;gap:12px}
+.bible-card blockquote{font-size:clamp(17px,1.6vw,21px);font-weight:600;line-height:1.5;margin:0;color:var(--ink)}
+.bible-card .card-meta{color:var(--warm)}
+.bible-card small{font-size:11px;color:var(--dim)}
+.bible-switch{display:flex;gap:6px;margin-top:12px}
+.bible-switch .group-button{border-radius:8px}
+.bible-note{font-size:11px;color:var(--dim);margin:22px 0}
+@media(max-width:1120px){.poster-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.poster-card.wide{grid-column:span 2}}
+@media(max-width:800px){.cuiudo-hero h1{font-size:clamp(43px,7vw,67px)}.cuiudo-hero-photo{width:85%}.feed-action-panel{grid-template-columns:1fr}.feed-modal{grid-template-columns:1fr 1fr}.feed-modal-image{min-height:450px}.poster-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster-card.wide{grid-column:span 2}}
+@media(max-width:760px){
+ .site-header,.header-inner{height:62px}
+ .main{padding:17px 13px 101px}
+ .logo-type{font-size:23px}
+ .compact-menu{display:inline-flex!important}
+ .compact-menu span{display:none}
+ .mode-switch{min-width:35px}
+ .cuiudo-hero{min-height:490px;border-radius:10px}
+ .cuiudo-hero-photo{width:100%;opacity:.83;object-position:56% center}
+ .cuiudo-hero:after{background:linear-gradient(0deg,#07080af5 0%,#07080abe 48%,#08090a30 100%)}
+ .cuiudo-hero-content{align-items:flex-start;justify-content:flex-end;padding:27px 20px}
+ .cuiudo-hero h1{font-size:clamp(43px,12vw,69px);max-width:490px}
+ .cuiudo-hero-content>p{font-size:13px}
+ .cuiudo-hero-footer{font-size:9px}
+ .cuiudo-hero-credit{top:12px;bottom:auto;font-size:8px}
+ .cuiudo-punch-strip{gap:12px;padding:13px 15px;flex-wrap:wrap;border-radius:9px}
+ .cuiudo-punch-strip .punch-symbol{min-width:66px;height:62px;font-size:33px}
+ .cuiudo-punch-strip strong{font-size:clamp(15px,4.5vw,20px)}
+ .cuiudo-punch-strip small{font-size:10px}
+ .cuiudo-punch-strip .punch-link{margin-left:auto}
+ .cuiudo-feed-toolbar{display:block;margin:27px 0 15px}
+ .cuiudo-feed-toolbar h2{font-size:28px}
+ .feed-searchbar{width:100%;margin-top:15px;min-width:0;padding:11px 13px}
+ .feed-searchbar input{font-size:14px}
+ .feed-filters{gap:7px;margin-left:-13px;margin-right:-13px;padding:0 13px 12px}
+ .feed-filter{font-size:11px;padding:10px 12px;min-height:40px}
+ .poster-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .poster-card{border-radius:8px}
+ .poster-open{aspect-ratio:.74}
+ .poster-card.wide .poster-open{aspect-ratio:1.52}
+ .poster-topline{top:8px;left:8px;right:8px}
+ .poster-topline .poster-label{font-size:8px;padding:4px 6px}
+ .poster-words{font-size:clamp(15px,4.2vw,22px);left:9px;right:9px;bottom:12px}
+ .poster-card.wide .poster-words{font-size:clamp(22px,6vw,33px)}
+ .poster-control-row{padding:5px 6px}
+ .poster-control-row .post-topic{font-size:8px}
+ .poster-actions button{min-width:33px;height:36px}
+ .feed-action-panel{margin:25px 0;padding-top:23px}
+ .feed-action-panel>section{padding:20px}
+ .feed-overlay{padding:0}
+ .feed-modal{border:0;border-radius:0;display:flex;flex-direction:column;width:100%;height:100dvh;max-height:none}
+ .feed-modal-image{height:min(51dvh,500px);min-height:230px;flex:0 0 auto}
+ .feed-modal-image .poster-words{font-size:clamp(22px,7vw,34px);bottom:21px;left:18px;right:18px}
+ .feed-modal-content{flex:1;padding:22px 20px 32px}
+ .feed-modal-content h2{font-size:24px}
+ .feed-modal-content p{font-size:13px}
+ .feed-toast{left:16px;right:16px;text-align:center;bottom:90px}
+ .bible-grid{grid-template-columns:1fr}
+ .sao-miguel-cover{min-height:340px}
+ .sao-miguel-cover>div{padding:23px}
+ .sao-miguel-cover h1{font-size:39px}
+ .mobile-nav{background:var(--bg);height:calc(68px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+ .mobile-nav-button{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .cuiudo-punch-strip .punch-fist,.cuiudo-punch-strip .punch-spark{animation:none}
+ .cuiudo-punch-strip .punch-fist{transform:translate(0,0)}
+ .poster-card,.poster-open img{transition:none!important}
+}
