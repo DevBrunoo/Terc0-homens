@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { runInNewContext } from 'node:vm';
+import { runInNewContext, runInContext, createContext } from 'node:vm';
 import { spawnSync } from 'node:child_process';
 const read=n=>readFileSync(new URL('./'+n,import.meta.url),'utf8');
 const data=read('data.js'), brutal=read('brutal.js'), app=read('app.js'), html=read('index.html');
@@ -53,4 +53,38 @@ assert.match(app,/devocionario:devocionario/);
 assert.match(app,/angel:/);
 assert.doesNotMatch(app,/MISSÃO DE HOJE:/);
 assert.match(html,/devocionario\.js/);
+
+// Smoke test real de renderização sem navegador: todas as telas e alternância de aparência.
+const mount={innerHTML:'',addEventListener(){}};
+const meta={content:'',setAttribute(name,value){this[name]=value}};
+const doc={documentElement:{dataset:{},style:{}},getElementById(){return mount},querySelector(){return meta}};
+const storage=new Map();
+const sandbox={
+ document:doc,
+ window:{scrollTo(){},matchMedia(){return {matches:false,addEventListener(){}}}},
+ navigator:{},location:{protocol:'file:'},
+ localStorage:{getItem(k){return storage.get(k)||null},setItem(k,v){storage.set(k,v)}},
+ confirm(){return true},console
+};
+const viewCtx=createContext(sandbox);
+runInContext(data+'\n'+brutal+'\n'+devotion+'\n'+app,viewCtx,{timeout:3000});
+assert.match(mount.innerHTML,/home-hero/);
+assert.match(mount.innerHTML,/Reza\. Levanta/);
+for(const [tab,needle] of [
+ ['inicio','home-hero'],['terco','O Santo Terço'],['devocionario','Santos'],
+ ['verdade','Confronto'],['desafios','compromissos'],['exame','consciência'],['diario','Diário']
+]){
+ runInContext("state.tab='"+tab+"';render();",viewCtx,{timeout:3000});
+ assert.ok(mount.innerHTML.includes(needle),'Falha ao renderizar a tela '+tab);
+}
+runInContext("state.theme='dark';render()",viewCtx);
+assert.equal(doc.documentElement.dataset.theme,'dark');
+runInContext("state.theme='light';render()",viewCtx);
+assert.equal(doc.documentElement.dataset.theme,'light');
+runInContext("state.tab='terco';state.verseLang='en';render()",viewCtx);
+assert.match(mount.innerHTML,/Douay-Rheims/);
+runInContext("state.tab='inicio';state.mobileMore=true;render()",viewCtx);
+assert.match(mount.innerHTML,/more-panel/);
+console.log('✓ Smoke test: 7 telas, tema claro/escuro, PT/EN e menu adicional');
+
 console.log('✓ 20 mistérios, 20 meditações SEM DESCULPAS, 18 confrontos, artes e sintaxe JS');
