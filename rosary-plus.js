@@ -71,7 +71,8 @@ function cuiudoBenedictBanner(){
   '<div class="benedict-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">'+escapeHtml(lines[3])+' ↗</button>'+
   '</div><div class="benedict-motto">PAX · CRUX SACRA SIT MIHI LUX · NON DRACO SIT MIHI DUX</div></div>'+
   '<div class="benedict-hero-art"><div class="medal-halo"></div>'+
-  '<img src="./assets/medalha-sao-bento.svg" fetchpriority="high" alt="'+escapeHtml(lines[2])+'" width="540" height="540"></div></section>';
+  '<img class="benedict-medal-photo" src="./assets/medalha-sao-bento-real.webp" fetchpriority="high" alt="'+escapeHtml(lines[2])+' frente e verso" width="900" height="540" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
+  '<span class="benedict-medal-credit">Gec00 · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Saint_Benedict_Medal.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons ↗</a></span></div></section>';
 }
 const cuiudoBaseHome=combatHome;
 combatHome=function(){
@@ -110,7 +111,8 @@ function cuiudoRosary(){
  const t=cuiudoStrings(),l=cuiudoLocale(),g=groups[state.group],m=g.mysteries[state.mystery];
  const mm=mysteryText(m),loc=cuiudoMystery(m),verse=cuiudoVerse(m);
  const progress=readProgress(),count=progress[state.mystery],extra=rosaryExtras[l];
- const musicOn=cuiudoAmbient.isPlaying(),volume=Math.round(Number(state.musicVolume)*100);
+ const musicOn=cuiudoMusic.isPlaying(),volume=Math.round(Number(state.musicVolume)*100);
+ const musicTrack=cuiudoMusic.getTrack(),musicLabels=cuiudoMusic.labels(l),musicInfo=cuiudoMusic.tracks[musicTrack];
  const length=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
  const art=cuiudoArtwork(m.id),lang={pt:'pt-BR',en:'en',es:'es',la:'la'}[l];
  const personalized=rosaryLanguageExtras.mysteries[m.id]?.[l];
@@ -120,7 +122,7 @@ function cuiudoRosary(){
  const prayer=l==='pt'?(mm.prayer||'Senhor, dai-me a coragem de viver o que acabo de contemplar. Amém.'):extra.offering;
  const fullPrayerList=cuiudoPrayersList();
  const credits=art.source?'<a href="'+escapeHtml(art.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(art.credit)+' ↗</a>':escapeHtml(art.credit);
- const musicLabel=cuiudoAmbient.isSupported()?t.musicLabel:t.musicUnsupported;
+ const musicLabel=cuiudoMusic.isSupported()?musicLabels.title:t.musicUnsupported;
  const artworkAlt={pt:'Pintura ilustrativa: ',en:'Illustrative painting: ',es:'Pintura ilustrativa: ',la:'Imago sacra: '}[l];
  const meditationBlock='<div class="rosary-meditation-block"><span class="card-meta">'+escapeHtml(t.meditation)+'</span>'+
   '<p class="readable">'+escapeHtml(loc.meditation)+'</p>'+
@@ -132,15 +134,24 @@ function cuiudoRosary(){
    '<div class="prayer-response"><span>'+escapeHtml(t.offering)+'</span><p>'+escapeHtml(prayer)+'</p></div></div>'):'')+'</div>';
  return '<section class="rosary-plus-header"><div><span class="eyebrow">'+escapeHtml(t.today)+': '+escapeHtml(cuiudoGroupName(dayGroup()))+'</span>'+
   '<h1 class="page-title">'+escapeHtml(t.rosary)+'</h1><p class="page-desc">'+escapeHtml(t.intro)+'</p></div>'+
-  '<aside class="rosary-music-control" aria-label="'+escapeHtml(musicLabel)+'"><div class="music-heading">'+
+  '<aside class="rosary-music-control rosary-music-v13" aria-label="'+escapeHtml(musicLabel)+'"><div class="music-heading">'+
    '<span class="music-disc" aria-hidden="true">♫</span><div><strong>'+escapeHtml(musicLabel)+'</strong>'+
-   '<small>66 BPM · '+escapeHtml(t.volume)+'</small></div></div>'+
+   '<small>'+escapeHtml(musicInfo.title)+'</small></div></div>'+
+   '<div class="rosary-track-options" role="group" aria-label="'+escapeHtml(musicLabels.title)+'">'+
+     Object.keys(cuiudoMusic.tracks).map(id=>'<button type="button" class="rosary-track-option '+(musicTrack===id?'selected':'')+
+      '" data-action="combat-rosary-track" data-track="'+id+'" aria-pressed="'+(musicTrack===id)+'">'+
+       escapeHtml(musicLabels[id])+'</button>').join('')+'</div>'+
    '<div class="music-buttons"><button class="btn '+(musicOn?'music-active':'btn-secondary')+
-   '" type="button" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" '+(cuiudoAmbient.isSupported()?'':'disabled')+'>'+
-   '<span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span> '+escapeHtml(musicOn?t.musicOff:t.musicOn)+'</button>'+
+   '" type="button" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'>'+
+   '<span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span> '+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'</button>'+
    '<input type="range" id="rosary-volume" min="0" max="50" step="1" value="'+volume+
-   '" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'"></div></aside></section>'+
-  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento.svg" alt="Medalha de São Bento" loading="lazy">'+
+   '" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'"></div>'+
+   (cuiudoMusic.hasError()?'<p class="audio-error" role="alert">'+escapeHtml(musicLabels.noAudio)+'</p>':'')+
+   '<p class="rosary-music-credit">'+escapeHtml(musicInfo.author)+' · '+escapeHtml(musicInfo.license)+
+    (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
+   (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
+   '</aside></section>'+
+  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-real.webp" alt="Medalha de São Bento" loading="lazy" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
     groupNames.map(id=>'<button class="group-button '+(state.group===id?'active':'')+
@@ -205,7 +216,7 @@ function cuiudoRosary(){
 const cuiudoPreviousRender=render;
 render=function(){
  document.documentElement.lang=({pt:'pt-BR',en:'en',es:'es',la:'la'}[cuiudoLocale()]||'pt-BR');
- if(state.tab!=='terco'&&cuiudoAmbient.isPlaying())cuiudoAmbient.stop();
+ if(state.tab!=='terco'&&cuiudoMusic.isPlaying())cuiudoMusic.stop();
  setTheme();
  const pages={
   inicio:combatHome,terco:cuiudoRosary,devocionario:devocionario,
@@ -219,13 +230,20 @@ state.appLang=['pt','en','es','la'].includes(state.appLang)?state.appLang:'pt';
 state.rosaryLength=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
 state.musicVolume=Number.isFinite(Number(state.musicVolume))?Math.max(0,Math.min(.5,Number(state.musicVolume))):.22;
 state.rosaryIntention=String(state.rosaryIntention||'').slice(0,800);
-cuiudoAmbient.setVolume(state.musicVolume);
+state.musicTrack=['catolico','templario','relaxar'].includes(state.musicTrack)?state.musicTrack:'catolico';
+cuiudoMusic.select(state.musicTrack);
+cuiudoMusic.setVolume(state.musicVolume);
 app.addEventListener('click',evt=>{
  const el=evt.target.closest?.('[data-action]');if(!el)return;
  const action=el.dataset.action;
  if(action==='combat-rosary-music'){
-  if(cuiudoAmbient.isPlaying()){cuiudoAmbient.stop();render();}
-  else cuiudoAmbient.start().then(ok=>{if(!ok){state.musicVolume=.22;/* no autoplay retry */}render();}).catch(()=>render());
+  if(cuiudoMusic.isPlaying()){cuiudoMusic.stop();render();}
+  else cuiudoMusic.play().then(()=>render()).catch(()=>render());
+ }
+ if(action==='combat-rosary-track'){
+  state.musicTrack=['catolico','templario','relaxar'].includes(el.dataset.track)?el.dataset.track:'catolico';
+  save();
+  cuiudoMusic.select(state.musicTrack).then(()=>render()).catch(()=>render());
  }
  if(action==='combat-meditation-length'){
   state.rosaryLength=['small','medium','large'].includes(el.dataset.length)?el.dataset.length:'medium';
@@ -242,7 +260,7 @@ app.addEventListener('change',evt=>{
 app.addEventListener('input',evt=>{
  if(evt.target.id==='rosary-volume'){
   state.musicVolume=Math.max(0,Math.min(.5,Number(evt.target.value)/100));
-  cuiudoAmbient.setVolume(state.musicVolume);save();
+  cuiudoMusic.setVolume(state.musicVolume);save();
  }
 });
 app.addEventListener('submit',evt=>{
@@ -252,6 +270,6 @@ app.addEventListener('submit',evt=>{
  save();render();
 });
 if(document.addEventListener)document.addEventListener('visibilitychange',()=>{
- if(document.hidden&&cuiudoAmbient.isPlaying()){cuiudoAmbient.stop();render();}
+ if(document.hidden&&cuiudoMusic.isPlaying()){cuiudoMusic.stop();render();}
 });
 render();
