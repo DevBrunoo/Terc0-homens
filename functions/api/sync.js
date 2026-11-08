@@ -1,4 +1,4 @@
-import {response,dbReady,checkOrigin,readJSON,currentUser} from '../_lib/security.js';
+import {response,dbReady,checkOrigin,readJSON,currentUser} from '../../server/cloud-security.js';
 
 // Apenas dados do usuário: telas/controles temporários não vão para o banco.
 export const SYNC_KEYS=['progress','decadePrayers','challengeDays','examineDays','missionDays',

@@ -5,7 +5,7 @@ import {webcrypto} from 'node:crypto';
 if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', {value:webcrypto});
 
 const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
-for(const path of ['cloud-sync.js','functions/_lib/security.js','functions/api/auth.js','functions/api/sync.js']){
+for(const path of ['cloud-sync.js','server/cloud-security.js','functions/api/auth.js','functions/api/sync.js']){
  const result=spawnSync(process.execPath,['--check',new URL('./'+path,import.meta.url).pathname]);
  assert.equal(result.status,0,path+': '+result.stderr);
 }
@@ -18,7 +18,7 @@ assert.match(read('cloud-sync.js'),/cuiudo-sync-dirty/);
 assert.match(read('cloud-sync.js'),/Conflito de versões|status===409/);
 assert.match(read('migrations/0001_cuiudo_d1.sql'),/CREATE TABLE IF NOT EXISTS synced_state/);
 
-const security=await import('./functions/_lib/security.js');
+const security=await import('./server/cloud-security.js');
 const auth=await import('./functions/api/auth.js');
 const sync=await import('./functions/api/sync.js');
 const salt=security.randomHex(16),pass='Senha de teste suficientemente longa';

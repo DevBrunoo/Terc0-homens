@@ -1,5 +1,5 @@
 import {response,dbReady,checkOrigin,readJSON,randomHex,sha256,passwordHash,sameHash,
-  currentUser,issueSession,cookieValue,cookieHeader,rateLimit} from '../_lib/security.js';
+  currentUser,issueSession,cookieValue,cookieHeader,rateLimit} from '../../server/cloud-security.js';
 
 export async function onRequestGet(context) {
   if (!dbReady(context))return response({error:'D1 não configurado: binding DB'},503);
