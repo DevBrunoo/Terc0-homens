@@ -71,8 +71,8 @@ function cuiudoBenedictBanner(){
   '<div class="benedict-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">'+escapeHtml(lines[3])+' ↗</button>'+
   '</div><div class="benedict-motto">PAX · CRUX SACRA SIT MIHI LUX · NON DRACO SIT MIHI DUX</div></div>'+
   '<div class="benedict-hero-art"><div class="medal-halo"></div>'+
-  '<img class="benedict-medal-premium" src="./assets/medalha-sao-bento-ouro.svg" fetchpriority="high" alt="'+escapeHtml(lines[2])+' em arte dourada tradicional" width="900" height="900" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
-  '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://osb.org/the-medal-of-saint-benedict/" target="_blank" rel="noopener noreferrer">Simbologia beneditina ↗</a></span></div></section>';
+  '<img class="benedict-medal-premium" src="./assets/medalha-sao-bento-colorida.webp" fetchpriority="high" alt="'+escapeHtml(lines[2])+' colorida, em azul, vermelho e dourado" width="560" height="560" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-ouro.svg\';}">'+
+  '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://jovensconectados.org.br/7-coisas-que-devemos-saber-sobre-a-medalha-e-cruz-de-sao-bento.html" target="_blank" rel="noopener noreferrer">Significado da medalha ↗</a></span></div></section>';
 }
 const cuiudoBaseHome=combatHome;
 combatHome=function(){
@@ -159,7 +159,7 @@ function cuiudoRosary(){
     (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
    (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
    '</aside></section>'+
-  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-ouro.svg" alt="Medalha de São Bento" loading="lazy" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
+  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-colorida.webp" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-ouro.svg\';}">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
     groupNames.map(id=>'<button class="group-button '+(state.group===id?'active':'')+
