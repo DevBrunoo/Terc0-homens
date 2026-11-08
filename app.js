@@ -217,7 +217,7 @@ app.addEventListener('click',evt=>{
  if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';state.designVersion='apple-v11';save();}
  if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
  if(a==='close-more'){state.mobileMore=false;}
- if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';save();}
+ if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';state.appLang=state.verseLang;save();}
  if(a==='mission-done'){state.missionDays??={};state.missionDays[missionId()]=!missionDone();save();}
  if(a==='delete-note'){
    const i=Number(target.dataset.index);
