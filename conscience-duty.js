@@ -62,7 +62,7 @@ function cuiudoDutyHero(){
 function cuiudoDutyContent(){
  return '<section class="duty-section"><div class="duty-section-intro">'+
   '<span class="eyebrow">CATECISMO · PECADO POR OMISSÃO</span>'+
-  '<h2>Sete maneiras de abandonar o bem que deve ser feito.</h2>'+
+  '<h2>Preguiça, omissão e deveres abandonados podem ser pecado. Sete maneiras de examinar a própria consciência.</h2>'+
   '<p>Não confunda disciplina com brutalidade. O exame pergunta pela liberdade, pelo dever verdadeiro e pelo amor ao próximo.</p></div>'+
   '<div class="duty-cards">'+cuiudoDutyItems.map(item=>'<article class="duty-card">'+
    '<div class="duty-card-top"><span class="duty-number">'+item.number+'</span>'+
@@ -73,10 +73,11 @@ function cuiudoDutyContent(){
    '<div class="duty-action"><strong>Hoje:</strong> '+escapeHtml(item.action)+'</div>'+
    '<a href="'+escapeHtml(item.url)+'" target="_blank" rel="noopener noreferrer">'+
    'Consultar a doutrina ↗</a></article>').join('')+'</div>'+
-  '<div class="duty-balance"><strong>Discernimento, não condenação automática.</strong>'+
+  '<div class="duty-balance"><strong>Responsabilidade, arrependimento e Confissão.</strong>'+
    '<p>Ficar cansado, adoecer, descansar ou não alcançar uma meta pessoal não é, por si só, pecado mortal. '+
    'A doutrina exige avaliar o dever real e a liberdade da pessoa; o pecado mortal requer matéria grave, pleno conhecimento e consentimento deliberado (CIC 1857). '+
-   'Faça o que deve, peça ajuda quando precisar e recomece com responsabilidade.</p>'+
+   'Se você deixou de praticar deliberadamente um bem sério que devia fazer, reconheça, repare e procure a Confissão sacramental. '+
+   'Se tiver consciência de pecado mortal, confesse-se antes de comungar. Faça o que deve, peça ajuda e recomece com responsabilidade.</p>'+
    '<a href="'+cuiudoDutyReferences.sins+'" target="_blank" rel="noopener noreferrer">Catecismo da Igreja Católica, 1853–1860 ↗</a></div></section>';
 }
 const cuiudoDutyOldExamine=examine;
