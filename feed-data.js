@@ -84,6 +84,24 @@ const feedArtwork = Object.freeze({
     "credit": "Julia Taubitz / Unsplash",
     "source": "https://unsplash.com/photos/modern-concrete-church-interior-with-sunlight-streaming-in-ioHO90sxxJA",
     "license": "Unsplash License"
+  },
+  "ajudar-companheiro": {
+    "url": "./assets/feed/ajudar-companheiro.webp",
+    "credit": "Frederic Remington, Aiding a Comrade (1890)",
+    "source": "https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_Aiding_a_Comrade_-_Google_Art_Project.jpg",
+    "license": "Domínio público"
+  },
+  "vai-pra-cima": {
+    "url": "./assets/feed/vai-pra-cima.webp",
+    "credit": "Frederic Remington, A New Year on the Cimarron",
+    "source": "https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_A_New_Year_on_the_Cimarron_-_Google_Art_Project.jpg",
+    "license": "Domínio público"
+  },
+  "foco-estrada": {
+    "url": "./assets/feed/foco-estrada.webp",
+    "credit": "Frederic Remington, The Smoke Signal (1905)",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Smoke_Signal,_1905,_by_Frederic_S._Remington.jpg",
+    "license": "Domínio público"
   }
 });
 const feedFilters = Object.freeze([["todos","Para você"],["miguel","São Miguel"],["rural","Rural / trabalho"],["jesus","Jesus"],["coragem","Vai pra cima"],["santidade","Santidade"],["salvos","Salvos"]]);
@@ -247,5 +265,35 @@ const feedPosts = Object.freeze([
     "ref": "Cl 3,23",
     "reflection": "Você não controla o resultado do mundo. Controla parte do esforço, das escolhas e do modo como trata as pessoas. Faça o melhor com o que está nas suas mãos.",
     "action": "Dê uma entrega concreta a algo importante ainda hoje."
+  },
+  {
+    "id": "r08",
+    "category": "coragem",
+    "art": "ajudar-companheiro",
+    "title": "CUIÚDO DE VERDADE NÃO ABANDONA QUEM PRECISA.",
+    "kicker": "FORÇA & COMPANHEIRISMO",
+    "ref": "Gl 6,2",
+    "reflection": "A força não é para humilhar ninguém. É para carregar responsabilidades e levantar quem caiu. Coragem também é oferecer ajuda.",
+    "action": "Ajude uma pessoa hoje de maneira concreta, sem esperar aplausos."
+  },
+  {
+    "id": "r09",
+    "category": "rural",
+    "art": "vai-pra-cima",
+    "title": "TEM QUE FAZER DAR CERTO. IR PRA CIMA TODO DIA.",
+    "kicker": "TRABALHO & PERSEVERANÇA",
+    "ref": "Cl 3,23",
+    "reflection": "O resultado final não está totalmente sob seu controle. Mas sua dedicação, seu caráter e sua perseverança precisam aparecer no serviço de hoje.",
+    "action": "Escreva uma meta de hoje e conclua uma parte real dela."
+  },
+  {
+    "id": "r10",
+    "category": "coragem",
+    "art": "foco-estrada",
+    "title": "PARE DE ESPERAR SINAL. ESCOLHA O BEM E COMECE.",
+    "kicker": "DECISÃO & DISCIPLINA",
+    "ref": "Pr 16,3",
+    "reflection": "Confiar o trabalho ao Senhor não é cruzar os braços. É fazer planos honestos, agir com prudência e permanecer fiel.",
+    "action": "Escolha uma decisão que você vem adiando e faça o primeiro passo possível."
   }
 ]);
