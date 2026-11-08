@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 960 960" role="img" aria-label="Medalha de São Bento, face da cruz, PAX, CSPB, CSSML e NDSMD">
+  <defs>
+    <radialGradient id="gold" cx="38%" cy="27%" r="79%">
+      <stop stop-color="#fff8df"/>
+      <stop offset=".20" stop-color="#f4dfae"/>
+      <stop offset=".43" stop-color="#c59b5f"/>
+      <stop offset=".68" stop-color="#977143"/>
+      <stop offset=".90" stop-color="#d3ad73"/>
+      <stop offset="1" stop-color="#6b4b30"/>
+    </radialGradient>
+    <radialGradient id="field" cx="42%" cy="35%" r="78%">
+      <stop stop-color="#f9e8be"/>
+      <stop offset=".55" stop-color="#e2c28b"/>
+      <stop offset="1" stop-color="#977042"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#fffbe9"/><stop offset=".28" stop-color="#bc9157"/><stop offset=".65" stop-color="#583921"/><stop offset="1" stop-color="#eacb93"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="relief" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="1.5" dy="2.6" stdDeviation="2.5" flood-color="#4f321c" flood-opacity=".65"/>
+    </filter>
+    <path id="outerText" d="M 480 112 A 368 368 0 1 1 479.9 112" fill="none"/>
+    <path id="lowerText" d="M 194 603 A 340 340 0 0 0 766 603" fill="none"/>
+  </defs>
+  <ellipse cx="479" cy="508" rx="362" ry="373" fill="#151310" opacity=".30" filter="url(#shadow)"/>
+  <circle cx="480" cy="480" r="423" fill="url(#edge)"/>
+  <circle cx="480" cy="480" r="409" fill="url(#gold)" stroke="#634a2a" stroke-width="7"/>
+  <circle cx="480" cy="480" r="394" fill="none" stroke="#fff4d3" stroke-width="7" opacity=".85"/>
+  <circle cx="480" cy="480" r="385" fill="none" stroke="#694523" stroke-width="4"/>
+  <circle cx="480" cy="480" r="358" fill="url(#field)" stroke="#70502a" stroke-width="13"/>
+  <circle cx="480" cy="480" r="333" fill="none" stroke="#fff4d0" stroke-width="5" opacity=".75"/>
+  <circle cx="480" cy="480" r="308" fill="none" stroke="#997043" stroke-width="4"/>
+  <text font-family="Georgia,'Times New Roman',serif" font-size="32" font-weight="700" fill="#573a23" letter-spacing="8" filter="url(#relief)">
+    <textPath xlink:href="#outerText" startOffset="50%" text-anchor="middle">V • R • S • N • S • M • V • S • M • Q • L • I • V • B •</textPath>
+  </text>
+  <text x="480" y="208" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="73" font-weight="bold" letter-spacing="6" fill="#65401e" filter="url(#relief)">PAX</text>
+  <circle cx="480" cy="480" r="261" fill="url(#field)" stroke="#fff1c7" stroke-width="6"/>
+  <circle cx="480" cy="480" r="254" fill="none" stroke="#82572d" stroke-width="4"/>
+  <g filter="url(#relief)">
+    <path d="M434 280 H526 V437 H682 V524 H526 V680 H434 V524 H278 V437 H434 Z" fill="#6a4728" stroke="#fff0c4" stroke-width="6"/>
+    <path d="M447 294 H513 V451 H668 V510 H513 V666 H447 V510 H292 V451 H447 Z" fill="#dfb878" stroke="#9c713e" stroke-width="3"/>
+    <path d="M459 303 V647 M304 479 H656" stroke="#fff5d6" stroke-width="3" opacity=".75"/>
+  </g>
+  <g fill="#58371e" font-family="Georgia,'Times New Roman',serif" font-weight="bold" font-size="31" text-anchor="middle">
+    <text x="480" y="337">C</text><text x="480" y="376">S</text><text x="480" y="414">S</text>
+    <text x="480" y="555">M</text><text x="480" y="595">L</text>
+    <text x="340" y="490">N</text><text x="377" y="490">D</text>
+    <text x="582" y="490">S</text><text x="620" y="490">M</text><text x="654" y="490">D</text>
+  </g>
+  <g font-family="Georgia,'Times New Roman',serif" font-size="70" font-weight="bold" fill="#6a4527" text-anchor="middle" filter="url(#relief)">
+    <text x="347" y="376">C</text><text x="610" y="376">S</text>
+    <text x="347" y="622">P</text><text x="610" y="622">B</text>
+  </g>
+  <g stroke="#80552f" stroke-width="3" fill="none" opacity=".68">
+    <path d="M287 288Q345 248 406 255"/><path d="M554 255Q626 248 674 288"/>
+    <path d="M287 671Q351 716 409 709"/><path d="M551 709Q621 717 674 670"/>
+  </g>
+  <text x="480" y="814" text-anchor="middle" fill="#5e3a1e" font-family="Georgia,'Times New Roman',serif" font-size="27" letter-spacing="3">CRUX SANCTI PATRIS BENEDICTI</text>
+</svg>
