@@ -81,4 +81,67 @@ assert.ok(existsSync(new URL('./assets/medalha-sao-bento.svg',import.meta.url)))
 const html=read('index.html');
 for(const file of ['ambient-audio.js','rosary-i18n.js','rosary-plus.js','rosary-plus.css'])
  assert.ok(html.includes(file),'HTML não inclui '+file);
+
+const personalized=runInContext('rosaryLanguageExtras',vm);
+assert.equal(Object.keys(personalized.mysteries).length,20);
+for(const lang of ['en','es','la']){
+ const actions=new Set();
+ for(const [id,items] of Object.entries(personalized.mysteries)){
+  assert.ok(items[lang]?.question?.length>10,'Pergunta incompleta '+lang+'/'+id);
+  assert.ok(items[lang]?.action?.length>10,'Ação incompleta '+lang+'/'+id);
+  actions.add(items[lang].action);
+ }
+ assert.equal(actions.size,20,'Cada mistério exige uma meditação individualizada em '+lang);
+ runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.mystery=0;state.group="gozosos";state.rosaryLength="large";render()',vm);
+ assert.match(mount.innerHTML,/rosary-long/);
+ assert.ok(mount.innerHTML.includes(personalized.mysteries.anunciacao[lang].question));
+ assert.ok(mount.innerHTML.includes(personalized.mysteries.anunciacao[lang].action));
+ assert.ok(mount.innerHTML.includes(personalized.saintMichael[lang].name));
+ assert.ok(mount.innerHTML.includes(personalized.litany[lang].name));
+ assert.ok(mount.innerHTML.includes(personalized.saintMichael[lang].text.slice(0,35)));
+}
+console.log('✓ 20 meditações individualizadas e São Miguel + ladainha em EN/ES/LA');
+
+const audioEvents=[];
+class FakeGain {
+ gain={setValueAtTime(){},exponentialRampToValueAtTime(){},setTargetAtTime(){}};
+ connect(){}
+ disconnect(){}
+}
+class FakeOscillator {
+ type='sine';
+ frequency={setValueAtTime(){}};
+ connect(){}
+ start(t){audioEvents.push(['start',t]);}
+ stop(t){audioEvents.push(['stop',t]);}
+ disconnect(){}
+}
+class FakeAudioContext {
+ currentTime=0;
+ destination={};
+ createGain(){return new FakeGain();}
+ createOscillator(){return new FakeOscillator();}
+ async resume(){}
+ async close(){audioEvents.push(['close']);}
+}
+const fakeWindow={
+ AudioContext:FakeAudioContext,
+ setInterval(cb){audioEvents.push(['interval']);return 21;},
+ clearInterval(id){audioEvents.push(['clear',id]);},
+ setTimeout(cb){cb();return 42;}
+};
+const audioContext=createContext({window:fakeWindow,console});
+runInContext(read('ambient-audio.js'),audioContext,{timeout:1000});
+assert.equal(runInContext('cuiudoAmbient.isPlaying()',audioContext),false,'Não iniciar sozinho');
+const started=await runInContext('cuiudoAmbient.start()',audioContext);
+assert.equal(started,true,'Botão precisa iniciar áudio');
+assert.equal(runInContext('cuiudoAmbient.isPlaying()',audioContext),true);
+assert.ok(audioEvents.filter(x=>x[0]==='start').length>10,'Deve criar notas musicais');
+runInContext('cuiudoAmbient.setVolume(0)',audioContext);
+assert.equal(runInContext('cuiudoAmbient.getVolume()',audioContext),0);
+runInContext('cuiudoAmbient.stop()',audioContext);
+assert.equal(runInContext('cuiudoAmbient.isPlaying()',audioContext),false);
+assert.ok(audioEvents.some(x=>x[0]==='clear'),'Parada precisa cancelar o loop');
+console.log('✓ AudioContext: início somente após toque, notas, volume zero, pausa e limpeza');
+
 console.log('✓ CUIÚDO 12: medalha, áudio opcional, 4 idiomas, 20 mistérios e 3 tamanhos');
