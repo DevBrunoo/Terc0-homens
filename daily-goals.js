@@ -92,9 +92,9 @@ const cuiudoPreviousHomeGoals=combatHome;
 combatHome=function(){
  const html=cuiudoPreviousHomeGoals();
  const start=html.indexOf('<section class="benedict-hero">');
- const close=html.indexOf('</section>',start);
- if(start<0||close<0)return cuiudoGoalChecklist()+html;
- return html.slice(0,close+10)+cuiudoGoalChecklist()+html.slice(close+10);
+ if(start<0)return cuiudoGoalChecklist()+html;
+ // Metas vêm logo após a faixa de ação, antes da imagem principal.
+ return html.slice(0,start)+cuiudoGoalChecklist()+html.slice(start);
 };
 const cuiudoPreviousChallengesGoals=challenges;
 challenges=function(){return cuiudoGoalChecklist()+cuiudoPreviousChallengesGoals();};
