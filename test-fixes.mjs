@@ -70,6 +70,7 @@ function element(tag){
 const mockedDoc={body:{append(node){byId.set('cuiudo-youtube-dock',node);}},getElementById(k){return byId.get(k)||null},
  createElement:element};
 const playCtx=createContext({document:mockedDoc,window:{AudioContext:null,webkitAudioContext:null},console});
+runInContext('const cuiudoAmbient={isPlaying:()=>false,stop(){},setVolume(){}};',playCtx);
 runInContext(read('cuiudo-music.js'),playCtx);
 assert.equal(runInContext("cuiudoMusic.tracks.templario.kind",playCtx),'youtube');
 assert.equal(runInContext("cuiudoMusic.tracks.templario.source",playCtx),'https://www.youtube.com/watch?v=zodHltkgK1w');
