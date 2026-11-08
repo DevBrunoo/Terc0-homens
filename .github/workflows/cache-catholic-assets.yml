@@ -1,0 +1,53 @@
+name: Incorporar cânticos e imagens do CUIÚDO
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/cache_catholic_assets.py'
+      - '.github/workflows/cache-catholic-assets.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  licenciar-e-incorporar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar processamento de imagens e áudio
+        run: |
+          python -m pip install -q requests Pillow
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+      - name: Baixar e verificar licenças, MP3 e imagens
+        run: python scripts/cache_catholic_assets.py
+      - name: Verificar os seis arquivos locais
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          pictures=['assets/medalha-sao-bento-real.webp','assets/feed/ajudar-companheiro.webp','assets/feed/vai-pra-cima.webp','assets/feed/foco-estrada.webp']
+          sounds=['assets/audio/cantico-catolico.mp3','assets/audio/cantico-medieval.mp3']
+          for name in pictures:
+            data=Path(name).read_bytes()
+            assert data[:4]==b'RIFF' and data[8:12]==b'WEBP',name
+          for name in sounds:
+            data=Path(name).read_bytes()
+            assert len(data)>30000 and (data.startswith(b'ID3') or data[0]==255),name
+          print('4 imagens WebP e 2 MP3 OK')
+          PY
+      - name: Salvar áudios e imagens no GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio assets/feed assets/medalha-sao-bento-real.webp
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: cânticos católicos licenciados, medalha CC0 e novas pinturas"
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
