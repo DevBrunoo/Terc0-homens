@@ -1,0 +1,301 @@
+/* CUIÚDO v16 · Medalha vetorial, 7 cantos, Santos e rosário com contas reais.
+   Tipografia Arial, branco minimalista + arte sacra. */
+.benedict-hero-art img.benedict-medal-premium{
+ image-rendering:auto!important;width:min(100%,465px)!important;max-width:465px!important;
+ aspect-ratio:1/1!important;filter:drop-shadow(0 18px 18px #182c4835)!important;
+ background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+ transform:none!important;object-fit:contain!important
+}
+.benedict-hero:hover img.benedict-medal-premium{
+ transform:scale(1.035)!important;box-shadow:none!important
+}
+:root[data-theme=dark] .benedict-hero-art img.benedict-medal-premium{
+ border:0!important;background:transparent!important;box-shadow:none!important
+}
+/* Canto: 7 opções locais, rolagem horizontal suave, sem iframe/YouTube. */
+.rosary-music-v13 .rosary-track-options{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;
+ padding:5px;background:var(--surface-2);border-radius:15px
+}
+.rosary-music-v13 .rosary-track-option{
+ padding:11px 5px;min-height:47px;font:620 11px/1.3 var(--font);
+ word-break:normal;white-space:normal
+}
+.rosary-music-v13 .rosary-track-option.selected{
+ color:var(--ink);border:1px solid var(--line);background:var(--surface);
+ box-shadow:0 1px 6px #00000012
+}
+.rosary-music-v13 .rosary-music-note{
+ font-size:11px;line-height:1.6;color:var(--subink)
+}
+/* Santos & Anjos — duas obras históricas em alta resolução. */
+.saints-hd-hero{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,1.03fr);
+ overflow:hidden;min-height:390px;border:1px solid var(--line);
+ border-radius:25px;background:var(--surface);margin:0 0 24px
+}
+.saints-hd-copy{padding:clamp(28px,4.4vw,56px);align-self:center}
+.saints-hd-copy .eyebrow{letter-spacing:.07em;font-size:11px}
+.saints-hd-copy h1{
+ margin:13px 0 15px;font:760 clamp(40px,5vw,67px)/1.04 var(--font);
+ letter-spacing:-.073em;color:var(--ink);text-wrap:balance
+}
+.saints-hd-copy>p{
+ margin:0;max-width:580px;color:var(--subink);
+ font:420 15px/1.8 var(--font)
+}
+.saints-hd-hero-detail{
+ display:flex;align-items:center;gap:10px;
+ margin-top:29px;color:var(--accent);font:680 12px var(--font);
+ letter-spacing:.04em
+}
+.saints-hd-hero-detail span:first-child{font-size:22px}
+.saints-hd-photo{
+ position:relative;overflow:hidden;height:100%;margin:0;
+ background:#dfd8c4;min-height:380px
+}
+.saints-hd-photo img{
+ width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;
+ filter:saturate(.95) contrast(1.025)
+}
+.saints-hd-photo figcaption{
+ position:absolute;bottom:0;left:0;right:0;z-index:2;
+ background:linear-gradient(transparent,#0009);
+ color:#fff;font:540 10px/1.55 var(--font);padding:26px 18px 12px
+}
+.saints-hd-grid{margin-top:17px}
+.saints-hd-grid .devotion-card{
+ border-radius:15px;overflow:hidden;transition:transform .2s,box-shadow .2s
+}
+.saints-hd-grid .devotion-card:focus-within{
+ outline:2px solid var(--accent);outline-offset:2px
+}
+.saints-hd-grid .devotion-text{
+ font-size:15px;line-height:1.85;white-space:pre-line
+}
+.saints-count{font-size:11px;letter-spacing:.035em}
+.saints-second-photo{
+ display:grid;grid-template-columns:minmax(240px,.95fr) minmax(0,1.05fr);
+ align-items:center;gap:clamp(20px,4vw,54px);
+ border:1px solid var(--line);border-radius:23px;
+ background:var(--surface);overflow:hidden;margin:25px 0 36px;
+}
+.saints-second-photo figure{position:relative;margin:0;height:360px;overflow:hidden;background:#e4d9c2}
+.saints-second-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.saints-second-photo figcaption{
+ position:absolute;bottom:0;left:0;right:0;padding:22px 12px 11px;
+ color:#fff;font:550 10px var(--font);
+ background:linear-gradient(transparent,#0009)
+}
+.saints-second-photo>div{padding:22px 30px 22px 0}
+.saints-second-photo h2{
+ font:740 clamp(25px,3.1vw,39px)/1.14 var(--font);
+ letter-spacing:-.06em;margin:10px 0 12px;color:var(--ink)
+}
+.saints-second-photo p{font:440 14px/1.8 var(--font);color:var(--subink);margin:0 0 19px}
+/* São Bento: preservar a arte enviada como pequeno detalhe, usar gravura HD de fundo. */
+.duty-image-wrap{background:#110f10;position:relative}
+.duty-image-wrap img.saint-benedict-hd{
+ width:100%;height:100%;max-width:100%;max-height:none;
+ object-fit:cover;object-position:top center;
+ filter:grayscale(1) contrast(1.11);opacity:.85
+}
+.duty-image-wrap img.saint-benedict-user-art{
+ position:absolute;z-index:3;right:12px;bottom:11px;
+ width:86px;height:153px;max-width:86px;max-height:153px;
+ display:block;object-fit:cover;border-radius:12px;
+ border:2px solid #c9aa7c;box-shadow:0 5px 22px #000b;
+ background:#000
+}
+/* Falha em dever: chamado à consciência e à Confissão, sem culpa automática. */
+.today-goal-content .goal-confession{
+ margin:10px 0 8px;font:500 12px/1.73 var(--font);color:var(--subink)
+}
+.goal-confession-link{
+ display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);
+ background:var(--surface);color:var(--ink);border-radius:999px;
+ padding:8px 12px;cursor:pointer;font:660 11px/1.3 var(--font)
+}
+.goal-confession-link:hover{background:var(--surface-2)}
+/* Contador do terço: as 12 orações de cada dezena têm conta própria. */
+.rosary-bead-counter{
+ display:block;margin:28px 0;background:var(--surface);border:1px solid var(--line);
+ border-radius:25px;padding:clamp(18px,3vw,34px);
+ box-shadow:0 6px 25px #00000008
+}
+.rosary-beads-heading{
+ display:flex;justify-content:space-between;align-items:flex-start;gap:15px
+}
+.rosary-beads-heading .eyebrow{
+ display:block;color:var(--accent);font-weight:700;font-size:11px;letter-spacing:.035em
+}
+.rosary-beads-heading h2{
+ margin:9px 0 7px;color:var(--ink);
+ font:750 clamp(22px,2.6vw,32px)/1.16 var(--font);letter-spacing:-.048em
+}
+.rosary-beads-heading p{font:450 12px/1.7 var(--font);color:var(--dim);margin:0}
+.rosary-beads-tally{
+ flex:0 0 auto;font:760 clamp(22px,3vw,31px)/1.1 var(--font);
+ letter-spacing:-.065em;color:var(--ink);font-variant-numeric:tabular-nums
+}
+.rosary-bead-layout{display:grid;grid-template-columns:minmax(250px,400px) minmax(0,1fr);
+ gap:clamp(18px,3.6vw,44px);align-items:center;margin-top:23px}
+.rosary-bead-visual{
+ width:100%;aspect-ratio:360/395;position:relative;
+ overflow:hidden;border-radius:22px;
+ background:radial-gradient(circle at 50% 43%,#fff9ea 0%,#fbfaf7 52%,#f2eee7 100%);
+ border:1px solid #e9e4dd;max-width:400px
+}
+:root[data-theme=dark] .rosary-bead-visual{
+ background:radial-gradient(circle at 50% 44%,#283142 0%,#1b2231 57%,#171b25 100%);
+ border-color:#41434c
+}
+.rosary-bead-thread{
+ position:absolute;inset:0;width:100%;height:100%;
+ color:#b7a384;opacity:.95
+}
+.rosary-bead-node{
+ position:absolute;z-index:2;display:grid;place-items:center;cursor:pointer;
+ transform:translate(-50%,-50%);
+ border-radius:50%;
+ height:37px;width:37px;
+ border:2px solid #b2a07e;
+ background:linear-gradient(150deg,#ffffff,#e9dfcb);
+ box-shadow:0 3px 8px #00000024, inset 0 1px 3px #fff;
+ color:#4f4637;font:750 11px/1 var(--font);padding:0;
+ transition:background .18s,border-color .18s,transform .18s
+}
+.rosary-bead-node.hail{width:28px;height:28px;font-size:10px}
+.rosary-bead-node.father,.rosary-bead-node.glory{
+ width:46px;height:46px;font-size:23px;
+ border-color:#9a7445;color:#795d35;
+ background:linear-gradient(140deg,#fff8e5,#ddbe7d)
+}
+.rosary-bead-node.glory{font-size:21px}
+.rosary-bead-node.completed{
+ color:#fff!important;background:linear-gradient(145deg,#2c517c,#183350)!important;
+ border-color:#1c466c!important;box-shadow:0 3px 9px #234b6b48!important
+}
+.rosary-bead-node:disabled{cursor:not-allowed;opacity:.66}
+.rosary-bead-node.available:not(:disabled):hover{
+ transform:translate(-50%,-50%) scale(1.15)
+}
+.rosary-bead-node:focus-visible{
+ outline:3px solid var(--accent);outline-offset:4px
+}
+.rosary-bead-center{
+ position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);
+ width:56%;display:flex;flex-direction:column;align-items:center;gap:8px;
+ text-align:center;pointer-events:none;color:#665a43
+}
+.rosary-bead-center span{font-size:27px;color:#ad8253}
+.rosary-bead-center strong{
+ font:730 clamp(12px,1.5vw,16px)/1.4 var(--font);
+ max-width:140px;letter-spacing:-.015em;color:var(--ink)
+}
+.rosary-bead-center small{
+ font:570 11px/1.3 var(--font);color:var(--subink)
+}
+.rosary-bead-guide{min-width:0}
+.rosary-prayer-status{display:flex;flex-direction:column;gap:10px}
+.rosary-prayer-row{
+ display:flex;align-items:center;gap:12px;border:1px solid var(--line);
+ border-radius:15px;background:var(--surface);padding:13px 14px
+}
+.rosary-prayer-row.is-done{background:var(--surface-2)}
+.rosary-prayer-number{
+ display:grid;place-items:center;flex:0 0 32px;height:32px;border-radius:10px;
+ color:var(--dim);background:var(--surface-2);font:720 10px var(--font)
+}
+.rosary-prayer-row.is-done .rosary-prayer-number{background:#24517e;color:#fff}
+.rosary-prayer-row>div{flex:1;min-width:0}
+.rosary-prayer-row>div strong{display:block;font:700 13px/1.5 var(--font);color:var(--ink)}
+.rosary-prayer-row>div small{display:block;font:500 11px/1.45 var(--font);color:var(--dim)}
+.rosary-status-btn{
+ border:1px solid var(--line);border-radius:999px;background:var(--surface);
+ color:var(--ink);font:650 11px var(--font);
+ padding:10px 11px;min-height:38px;max-width:142px;cursor:pointer
+}
+.rosary-status-btn:disabled{opacity:.45;cursor:not-allowed}
+.rosary-prayer-row.is-done .rosary-status-btn{
+ border-color:#92ae9b;color:#216f46
+}
+.rosary-prayer-toggle{
+ display:flex;flex-direction:column;gap:8px;margin-top:15px
+}
+.rosary-prayer-toggle details{
+ background:var(--surface);border:1px solid var(--line);
+ border-radius:12px;padding:12px 15px
+}
+.rosary-prayer-toggle summary{
+ color:var(--ink);font:650 12px var(--font);cursor:pointer
+}
+.rosary-prayer-toggle p{
+ white-space:pre-line;font:440 13px/1.85 var(--font);
+ color:var(--subink);margin:12px 0 2px
+}
+.rosary-bead-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.rosary-bead-actions .btn{min-height:41px;font-size:12px}
+.rosary-mystery-steps{
+ display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+ margin:24px auto 17px;padding:17px 0;border-top:1px solid var(--line)
+}
+.rosary-mystery-step{
+ width:44px;height:44px;display:grid;place-items:center;border-radius:50%;
+ border:1px solid var(--line);color:var(--subink);background:var(--surface);
+ font:730 13px var(--font);cursor:pointer
+}
+.rosary-mystery-step.current{
+ background:var(--accent);color:var(--on-accent);border-color:var(--accent)
+}
+.rosary-mystery-step.complete{
+ background:#245d46;color:#fff;border-color:#245d46
+}
+.rosary-bead-counter .two-buttons{
+ display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap
+}
+@media(max-width:1020px){
+ .rosary-bead-layout{grid-template-columns:minmax(245px,360px) minmax(0,1fr);gap:18px}
+ .rosary-prayer-row{padding:11px}
+ .rosary-status-btn{font-size:10px}
+}
+@media(max-width:760px){
+ .benedict-hero-art img.benedict-medal-premium{
+  width:min(100%,292px)!important;max-width:292px!important;
+  border:0!important
+ }
+ .rosary-music-v13 .rosary-track-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .rosary-music-v13 .rosary-track-option{font-size:10px;min-height:43px}
+ .saints-hd-hero{display:flex;flex-direction:column-reverse;border-radius:20px}
+ .saints-hd-photo{width:100%;height:215px;min-height:215px}
+ .saints-hd-photo img{object-position:center 34%}
+ .saints-hd-copy{padding:23px 21px 27px}
+ .saints-hd-copy h1{font-size:42px}
+ .saints-hd-copy p{font-size:13px}
+ .saints-hd-hero-detail{margin-top:16px}
+ .saints-second-photo{grid-template-columns:1fr;gap:0}
+ .saints-second-photo figure{height:245px}
+ .saints-second-photo>div{padding:24px 22px 26px}
+ .duty-image-wrap img.saint-benedict-user-art{
+  right:9px;bottom:9px;width:71px;height:125px
+ }
+ .rosary-bead-counter{padding:17px 15px;border-radius:20px;margin:20px 0}
+ .rosary-beads-heading h2{font-size:22px}
+ .rosary-beads-heading p{font-size:11px}
+ .rosary-beads-tally{font-size:20px}
+ .rosary-bead-layout{grid-template-columns:1fr;gap:17px}
+ .rosary-bead-visual{margin:auto;max-width:350px}
+ .rosary-prayer-row{padding:12px}
+ .rosary-status-btn{font-size:11px}
+ .rosary-mystery-steps{gap:10px}
+ .rosary-bead-counter .two-buttons>*{flex:1}
+}
+@media(max-width:360px){
+ .rosary-beads-heading{flex-wrap:wrap}
+ .rosary-status-btn{max-width:115px}
+ .rosary-prayer-row{gap:7px}
+ .rosary-bead-node.hail{width:25px;height:25px}
+}
+@media(prefers-reduced-motion:reduce){
+ .rosary-bead-node{transition:none!important}
+}
