@@ -65,7 +65,7 @@ function combatHome(){
  const g=groups[dayGroup()],prog=readProgress(dayGroup()),done=prog.reduce((n,v)=>n+v,0);
  const picks=feedPosts.filter(combatMatches),selected=feedPosts.find(p=>p.id===state.feedOpen);
  const lead=feedArtwork['miguel-reni'],daily=feedPosts[(new Date().getDate()+new Date().getDay())%feedPosts.length];
- return `<section class="cuiudo-punch-strip" aria-label="Coragem e ação"><div class="punch-symbol" aria-hidden="true"><span class="punch-palm">✋</span><span class="punch-fist">👊</span><span class="punch-spark">✦</span></div><div><strong>Tem que fazer dar certo, SFD!<br>Vai para cima.</strong><small>Você não controla tudo. Mas controla o que decide fazer.</small></div><button type="button" class="punch-link" data-action="navigate" data-tab="desafios">PARTIR PRA AÇÃO ↗</button></section>
+ return `<section class="cuiudo-punch-strip" aria-label="Coragem e ação"><div class="punch-symbol" aria-hidden="true"><span class="punch-palm">✋</span><span class="punch-fist">👊</span><span class="punch-spark">✦</span></div><div><strong>Tem que fazer dar certo, SFD!<br>Vai para cima.</strong></div><button type="button" class="punch-link" data-action="navigate" data-tab="desafios">PARTIR PRA AÇÃO ↗</button></section>
  <section class="cuiudo-hero">
   <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}">
   <div class="cuiudo-hero-content">
