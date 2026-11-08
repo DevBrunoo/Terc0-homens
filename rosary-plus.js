@@ -110,7 +110,7 @@ function cuiudoRosary(){
  const t=cuiudoStrings(),l=cuiudoLocale(),g=groups[state.group],m=g.mysteries[state.mystery];
  const mm=mysteryText(m),loc=cuiudoMystery(m),verse=cuiudoVerse(m);
  const progress=readProgress(),count=progress[state.mystery],extra=rosaryExtras[l];
- const musicOn=cuiudoAmbient.isPlaying(),volume=Math.round((Number(state.musicVolume)||.22)*100);
+ const musicOn=cuiudoAmbient.isPlaying(),volume=Math.round(Number(state.musicVolume)*100);
  const length=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
  const sizeIndex=['small','medium','large'].indexOf(length);
  const art=cuiudoArtwork(m.id),lang={pt:'pt-BR',en:'en',es:'es',la:'la'}[l];
@@ -205,6 +205,7 @@ function cuiudoRosary(){
 }
 const cuiudoPreviousRender=render;
 render=function(){
+ document.documentElement.lang=({pt:'pt-BR',en:'en',es:'es',la:'la'}[cuiudoLocale()]||'pt-BR');
  if(state.tab!=='terco'&&cuiudoAmbient.isPlaying())cuiudoAmbient.stop();
  setTheme();
  const pages={

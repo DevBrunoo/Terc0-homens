@@ -159,3 +159,15 @@ Reformulada a apresentação sem remover funções: visual claro com fundo `#f5f
 Todas as 14 imagens de `assets/feed/*.webp` continuam **dentro do repositório** (não há dependência de Unsplash/Wikimedia na exibição). `index.html` carrega `apple.css` depois das folhas antigas. `sw.js` invalidou o cache, cacheia os recursos do app e prefere a rede para WebP quando disponível. A pré-carga da pintura de São Miguel melhora a imagem do primeiro card.
 
 Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o conteúdo na branch principal. **Para o primeiro deploy, o administrador precisa habilitar GitHub Pages em Settings → Pages → Source: GitHub Actions**. Sem essa configuração, a URL `https://devbrunoo.github.io/Terc0-homens/` retorna HTTP 404 mesmo com todos os arquivos presentes. Depois disso, o fluxo publica automaticamente.
+
+
+## V12 — Medalha de São Bento, música suave e terço em 4 idiomas
+
+- **Banner**: arte vetorial local da Medalha de São Bento, com inscrições tradicionais e chamada à oração. A medalha é sacramental, não amuleto.
+- **Terço**: 20 mistérios com pinturas históricas licenciadas, baixadas do Wikimedia Commons e salvas no repositório em `assets/misterios/fotos/*.webp`. Cada imagem tem referência e licença própria em `rosary-artwork.js`. Se o arquivo não carregar, a ilustração SVG original permanece disponível.
+- **Meditação**: escolha **Pequena / Média / Grande**, sem alterar as cinco dezenas tradicionais. Versão grande inclui exame de consciência, reflexão firme, virtude e oração pessoal.
+- **Música**: composição instrumental ambiente **original**, sintetizada no navegador via Web Audio API (`ambient-audio.js`), com botão de iniciar/pausar e controle de volume. Não inicia sozinha, faz entrada e saída suave, não usa CDNs nem gravações de terceiros. É interrompida quando o usuário deixa o terço ou oculta a página.
+- **Idiomas**: PT, EN, ES e LA para a tela do terço, orações tradicionais, títulos dos mistérios, instruções, meditações e navegação. Português e inglês mantêm citações bíblicas históricas literais já verificadas; espanhol e latim apresentam paráfrases **identificadas**, com acesso às fontes e sem fingir citação literal.
+- **Mais conteúdo**: guia para rezar, oferecimento do terço, oração de Fátima, oração da Cruz de São Bento, intenção de oração salva localmente e crédito por pintura.
+
+**Nota:** outras áreas editoriais do aplicativo continuam com textos em português; a internacionalização completa do feed e diário não está concluída.
