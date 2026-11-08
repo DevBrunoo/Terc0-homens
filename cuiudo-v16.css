@@ -300,13 +300,11 @@
  .rosary-bead-node{transition:none!important}
 }
 
-/* v17: ambas as faces da medalha em vetor, qualidade independente da tela. */
-.benedict-hero-art .benedict-medal-pair{position:relative;z-index:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(9px,1.7vw,21px);align-items:center;justify-items:center;width:min(100%,550px);margin:15px auto 5px}
-.benedict-medal-face{width:100%;min-width:0;margin:0;text-align:center}
-.benedict-hero-art .benedict-medal-face img.benedict-medal-premium{display:block;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;filter:drop-shadow(0 17px 22px #20283e30)!important;transform:none!important}
-.benedict-hero-art .benedict-medal-face figcaption{color:var(--subink);font:680 12px/1.4 var(--font);margin:4px 0 0}
-.benedict-hero:hover .benedict-medal-face img.benedict-medal-premium{transform:scale(1.035)!important}
+/* v18: exibir somente o anverso colorido da medalha de São Bento. */
+.benedict-hero-art .benedict-medal-single{position:relative;z-index:2;display:grid;place-items:center;width:min(100%,465px);margin:10px auto 4px}
+.benedict-hero-art .benedict-medal-single img.benedict-medal-premium{display:block;width:100%!important;max-width:465px!important;height:auto!important;aspect-ratio:1!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;filter:drop-shadow(0 17px 22px #20283e30)!important;transform:none!important}
+.benedict-hero:hover .benedict-medal-single img.benedict-medal-premium{transform:scale(1.035)!important}
 .goals-kick{font:750 clamp(13px,1.6vw,17px)/1.48 var(--font);letter-spacing:-.02em;color:var(--ink);margin:8px 0 10px;max-width:620px}
 .rosary-bead-center{pointer-events:none}
 .rosary-bead-counter .rosary-bead-node{touch-action:manipulation}
-@media(max-width:760px){.benedict-hero-art .benedict-medal-pair{width:min(100%,400px);gap:10px;margin:0 auto 8px}.benedict-hero-art .benedict-medal-face img.benedict-medal-premium{width:100%!important;height:auto!important;transform:none!important}.benedict-hero-art .benedict-medal-face figcaption{font-size:11px}.goals-kick{font-size:14px}}
+@media(max-width:760px){.benedict-hero-art .benedict-medal-single{width:min(100%,292px);margin:0 auto 8px}.benedict-hero-art .benedict-medal-single img.benedict-medal-premium{width:100%!important;height:auto!important;transform:none!important}.goals-kick{font-size:14px}}

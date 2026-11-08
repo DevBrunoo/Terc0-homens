@@ -65,18 +65,14 @@ function cuiudoBenedictBanner(){
   es:['Que la Santa Cruz sea mi luz.','Fe para resistir. Valor para actuar.','Medalla de San Benito','Rezar ahora'],
   la:['Crux sacra sit mihi lux.','Fides ad perseverandum. Fortitudo ad agendum.','Medalia Sancti Benedicti','Ora nunc']
  }[l];
- const medalFaces={pt:['Anverso','Reverso'],en:['Front','Reverse'],es:['Anverso','Reverso'],la:['Pars anterior','Pars posterior']}[l];
  return '<section class="benedict-hero">'+
   '<div class="benedict-hero-copy"><span class="benedict-eyebrow">✝ '+escapeHtml(lines[2])+'</span>'+
   '<h1>'+escapeHtml(lines[0])+'</h1><p>'+escapeHtml(lines[1])+'</p>'+
   '<div class="benedict-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">'+escapeHtml(lines[3])+' ↗</button>'+
   '</div><div class="benedict-motto">PAX · CRUX SACRA SIT MIHI LUX · NON DRACO SIT MIHI DUX</div></div>'+
   '<div class="benedict-hero-art"><div class="medal-halo"></div>'+
-  '<div class="benedict-medal-pair" aria-label="'+escapeHtml(lines[2])+'">'+
-  '<figure class="benedict-medal-face"><img class="benedict-medal-premium" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saint_Benedict_Medal_icon.svg" alt="'+escapeHtml(medalFaces[0]+' — '+lines[2])+'" width="512" height="512" loading="eager" fetchpriority="high" onerror="this.onerror=null;this.src=\'./assets/medalha-sao-bento-hd.svg\'">'+
-  '<figcaption>'+escapeHtml(medalFaces[0])+'</figcaption></figure>'+
-  '<figure class="benedict-medal-face"><img class="benedict-medal-premium" src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Benedict_Medal_icon.svg" alt="'+escapeHtml(medalFaces[1]+' — '+lines[2])+'" width="512" height="512" loading="eager" decoding="async" onerror="this.onerror=null;this.src=\'./assets/medalha-sao-bento-ouro.svg\'">'+
-  '<figcaption>'+escapeHtml(medalFaces[1])+'</figcaption></figure></div>'+
+  '<div class="benedict-medal-single" aria-label="'+escapeHtml(lines[2])+'">'+
+  '<img class="benedict-medal-premium" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saint_Benedict_Medal_icon.svg" alt="'+escapeHtml(lines[2])+'" width="512" height="512" loading="eager" fetchpriority="high" onerror="this.onerror=null;this.src=\'./assets/medalha-sao-bento-hd.svg\'"></div>'+
   '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://jovensconectados.org.br/7-coisas-que-devemos-saber-sobre-a-medalha-e-cruz-de-sao-bento.html" target="_blank" rel="noopener noreferrer">Significado da medalha ↗</a></span></div></section>';
 }
 const cuiudoBaseHome=combatHome;

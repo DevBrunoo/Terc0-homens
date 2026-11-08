@@ -22,9 +22,9 @@ const vm=createContext({document:doc,console,navigator:{},location:{protocol:'fi
 runInContext(files.map(read).join('\n'),vm,{timeout:9500});
 
 assert.match(mount.innerHTML,/medalha-sao-bento-hd\.svg/);
-assert.match(mount.innerHTML,/benedict-medal-pair/);
+assert.match(mount.innerHTML,/benedict-medal-single/);
 assert.match(mount.innerHTML,/Saint_Benedict_Medal_icon\.svg/);
-assert.match(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
+assert.doesNotMatch(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
 assert.match(mount.innerHTML,/Você é muito macio!/);
 assert.match(mount.innerHTML,/sao-bento-gravura-hd\.webp/);
 assert.match(mount.innerHTML,/sao-bento-arte-enviada\.webp/);
