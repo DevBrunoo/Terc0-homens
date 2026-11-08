@@ -94,8 +94,8 @@ for(const lang of ['en','es','la']){
  assert.equal(actions.size,20,'Cada mistério exige uma meditação individualizada em '+lang);
  runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.mystery=0;state.group="gozosos";state.rosaryLength="large";render()',vm);
  assert.match(mount.innerHTML,/rosary-long/);
- assert.ok(mount.innerHTML.includes(personalized.mysteries.anunciacao[lang].question));
- assert.ok(mount.innerHTML.includes(personalized.mysteries.anunciacao[lang].action));
+ assert.ok(mount.innerHTML.includes(runInContext('escapeHtml(rosaryLanguageExtras.mysteries.anunciacao['+JSON.stringify(lang)+'].question)',vm)));
+ assert.ok(mount.innerHTML.includes(runInContext('escapeHtml(rosaryLanguageExtras.mysteries.anunciacao['+JSON.stringify(lang)+'].action)',vm)));
  assert.ok(mount.innerHTML.includes(personalized.saintMichael[lang].name));
  assert.ok(mount.innerHTML.includes(personalized.litany[lang].name));
  assert.ok(mount.innerHTML.includes(personalized.saintMichael[lang].text.slice(0,35)));
