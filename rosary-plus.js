@@ -71,8 +71,8 @@ function cuiudoBenedictBanner(){
   '<div class="benedict-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">'+escapeHtml(lines[3])+' ↗</button>'+
   '</div><div class="benedict-motto">PAX · CRUX SACRA SIT MIHI LUX · NON DRACO SIT MIHI DUX</div></div>'+
   '<div class="benedict-hero-art"><div class="medal-halo"></div>'+
-  '<img class="benedict-medal-photo" src="./assets/medalha-sao-bento-real.webp" fetchpriority="high" alt="'+escapeHtml(lines[2])+' frente e verso" width="900" height="540" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
-  '<span class="benedict-medal-credit">Gec00 · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Saint_Benedict_Medal.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons ↗</a></span></div></section>';
+  '<img class="benedict-medal-premium" src="./assets/medalha-sao-bento-ouro.svg" fetchpriority="high" alt="'+escapeHtml(lines[2])+' em arte dourada tradicional" width="900" height="900" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
+  '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://osb.org/the-medal-of-saint-benedict/" target="_blank" rel="noopener noreferrer">Simbologia beneditina ↗</a></span></div></section>';
 }
 const cuiudoBaseHome=combatHome;
 combatHome=function(){
@@ -92,7 +92,7 @@ combatBible=function(){
  const l=cuiudoLocale();
  if(l==='pt'||l==='en'){
    // The existing Bible screen uses state.verseLang, not the new UI locale.
-   state.verseLang=l;
+   // O botão PT / English governa state.verseLang sem sobrescrever o clique.
    return cuiudoBaseBible();
  }
  const t=cuiudoStrings();
@@ -115,6 +115,7 @@ function cuiudoRosary(){
  const musicTrack=cuiudoMusic.getTrack(),musicLabels=cuiudoMusic.labels(l),musicInfo=cuiudoMusic.tracks[musicTrack];
  const length=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
  const art=cuiudoArtwork(m.id),lang={pt:'pt-BR',en:'en',es:'es',la:'la'}[l];
+ const context=cuiudoMysteryContext[m.id]?.[l],contextLabels=cuiudoContextTitles[l];
  const personalized=rosaryLanguageExtras.mysteries[m.id]?.[l];
  const strong=l==='pt'?mm.hard:loc.meditation;
  const question=l==='pt'?mm.question:(personalized?.question||t.question);
@@ -126,6 +127,13 @@ function cuiudoRosary(){
  const artworkAlt={pt:'Pintura ilustrativa: ',en:'Illustrative painting: ',es:'Pintura ilustrativa: ',la:'Imago sacra: '}[l];
  const meditationBlock='<div class="rosary-meditation-block"><span class="card-meta">'+escapeHtml(t.meditation)+'</span>'+
   '<p class="readable">'+escapeHtml(loc.meditation)+'</p>'+
+  (context?'<div class="rosary-story-grid">'+
+    [['history',0,'01'],['think',1,'02'],['apply',2,'03']].map(([key,i,number])=>
+      '<article class="rosary-story-card rosary-story-'+key+'">'+
+      '<div class="rosary-story-heading"><span>'+number+'</span><h3>'+escapeHtml(contextLabels[key])+'</h3></div>'+
+      '<p>'+escapeHtml(context[i])+'</p></article>').join('')+
+    '<a class="rosary-story-source" href="'+escapeHtml(cuiudoMysteryContextSource)+'" target="_blank" rel="noopener noreferrer">'+
+    'Rosarium Virginis Mariae · Vatican ↗</a></div>':'')+
   (length==='small'?'':('<div class="virtue-strip"><span>'+escapeHtml(t.virtue)+'</span><strong>'+escapeHtml(loc.virtue)+'</strong></div>'+
     '<div class="question"><strong>'+escapeHtml(t.examine)+':</strong> '+escapeHtml(question)+'</div>'))+
   (length==='large'?('<div class="rosary-long"><h3>'+escapeHtml(t.reflection)+'</h3>'+
@@ -151,7 +159,7 @@ function cuiudoRosary(){
     (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
    (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
    '</aside></section>'+
-  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-real.webp" alt="Medalha de São Bento" loading="lazy" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
+  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-ouro.svg" alt="Medalha de São Bento" loading="lazy" onerror="this.src=\'./assets/medalha-sao-bento.svg\'">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
     groupNames.map(id=>'<button class="group-button '+(state.group===id?'active':'')+
