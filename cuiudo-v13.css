@@ -1,0 +1,158 @@
+/* CUIÚDO v13 · medalha autêntica, 3 cânticos e metas de hoje.
+ * Refinamento sobre o visual minimalista atual, sem mexer nos demais módulos.
+ */
+.benedict-hero-art{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:9px;min-width:0}
+.benedict-hero-art img.benedict-medal-photo{
+ width:min(100%,560px)!important;height:auto!important;aspect-ratio:2989/1772;
+ max-width:100%;object-fit:contain!important;transform:none!important;
+ background:#faf8f4;border-radius:22px;padding:10px;
+ border:1px solid #d8c8ae;box-shadow:0 18px 42px #58422729;
+ filter:none!important
+}
+.benedict-hero-art .benedict-medal-credit{
+ position:relative;z-index:3;font:500 10px/1.4 var(--font);
+ color:#856b48;text-align:center;max-width:100%;padding:0 12px
+}
+.benedict-medal-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+:root[data-theme="dark"] .benedict-hero-art img.benedict-medal-photo{background:#f8f4ed}
+:root[data-theme="dark"] .benedict-medal-credit{color:#d9c199}
+.benedict-rosary-tip img{width:85px!important;height:56px!important;background:#faf8f4;border-radius:8px;object-fit:contain}
+/* Três modos de música católica: seleção clara, um único botão de áudio. */
+.rosary-plus-header{grid-template-columns:minmax(0,1fr) minmax(320px,430px);gap:22px}
+.rosary-music-v13{width:100%;padding:19px 20px;min-width:0}
+.rosary-track-options{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:17px 0 13px;
+ padding:5px;border-radius:15px;background:var(--surface-2)
+}
+.rosary-track-option{
+ font:650 11px/1.4 var(--font);letter-spacing:-.01em;
+ color:var(--subink);padding:11px 7px;min-height:49px;border:0;
+ border-radius:12px;background:transparent;text-align:center;cursor:pointer
+}
+.rosary-track-option.selected{
+ color:var(--ink);background:var(--surface);
+ box-shadow:0 1px 7px #0000001b
+}
+.rosary-track-option:hover:not(.selected){color:var(--ink)}
+.rosary-music-v13 .music-buttons{margin-top:11px;gap:13px}
+.rosary-music-v13 .music-buttons .btn{
+ background:var(--accent);color:var(--on-accent);border-color:var(--accent)
+}
+.rosary-music-v13 .music-buttons .btn.music-active{
+ background:var(--surface-2);color:var(--ink);border:1px solid var(--line)
+}
+.rosary-music-v13 .music-heading strong{font-size:14px}
+.rosary-music-v13 .music-heading small{font-size:11px;line-height:1.45;margin-top:2px}
+.rosary-music-note,.rosary-music-credit{
+ color:var(--dim);font:450 10px/1.6 var(--font);margin:11px 0 0
+}
+.rosary-music-note{color:var(--subink);margin-top:6px}
+.rosary-music-credit a{color:var(--accent);text-underline-offset:2px}
+.rosary-music-v13 .audio-error{
+ font-size:12px;color:#b64534;margin:13px 0 0
+}
+/* Checklist do dia: preenchimento, escolhas concretas e recompensa. */
+.today-goals{
+ border:1px solid var(--line);border-radius:26px;
+ background:var(--surface);padding:clamp(20px,3vw,33px);
+ margin:20px 0 21px;box-shadow:0 8px 25px #00000008
+}
+.today-goals-top{display:flex;justify-content:space-between;gap:18px;align-items:center}
+.today-goals .eyebrow{color:var(--accent);font-size:11px;letter-spacing:.02em}
+.today-goals h2{font:760 clamp(25px,3.1vw,37px)/1.12 var(--font);letter-spacing:-.055em;margin:7px 0 6px}
+.today-goals-top p{color:var(--subink);font:420 13px/1.65 var(--font);margin:0}
+.today-goals-status{
+ display:flex;flex-direction:column;align-items:flex-end;gap:1px;
+ text-align:right;white-space:nowrap;flex:0 0 auto
+}
+.today-goals-status strong{font:760 25px var(--font);letter-spacing:-.05em}
+.today-goals-status span{font-size:11px;color:var(--dim)}
+.today-goals-form{display:flex;gap:10px;margin:22px 0 16px}
+.today-goals-form input{
+ flex:1;min-width:0;min-height:49px;padding:12px 17px;
+ border:1px solid var(--line);border-radius:12px;
+ background:var(--bg);color:var(--ink);
+ font:450 14px var(--font);outline-offset:2px
+}
+.today-goals-form input:focus{border-color:var(--accent);outline:2px solid color-mix(in srgb,var(--accent) 17%,transparent)}
+.today-goals-form .btn{min-width:115px;min-height:49px;white-space:nowrap}
+.today-goals-progress{height:7px;overflow:hidden;border-radius:99px;background:var(--surface-2)}
+.today-goals-progress>span{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .27s}
+.today-goals-list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.today-goals-empty{color:var(--dim);font-size:13px;line-height:1.65;margin:8px 0}
+.today-goal{
+ border-radius:16px;border:1px solid var(--line);padding:15px 17px;
+ background:var(--bg);display:flex;align-items:flex-start;justify-content:space-between;gap:17px;
+ transition:background .18s
+}
+.today-goal-main{display:flex;gap:12px;align-items:flex-start;min-width:0;flex:1}
+.today-goal-icon{width:30px;height:30px;flex-shrink:0;
+ display:grid;place-items:center;font:720 12px var(--font);color:var(--subink);
+ background:var(--surface-2);border-radius:11px
+}
+.goal-completed .today-goal-icon{color:#fff;background:#24804e}
+.goal-missed .today-goal-icon{color:#fff;background:#b36645}
+.today-goal-content{min-width:0;flex:1}
+.today-goal-content>strong{
+ display:block;font:590 14px/1.55 var(--font);color:var(--ink);overflow-wrap:anywhere
+}
+.today-goal-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.goal-action,.goal-delete{
+ min-height:38px;border:1px solid var(--line);color:var(--subink);background:var(--surface);
+ border-radius:999px;padding:9px 13px;font:620 11px/1.3 var(--font);
+ white-space:nowrap;cursor:pointer
+}
+.goal-action.positive{border-color:#23885440;color:#20804d;background:#24804e12}
+.goal-action:hover,.goal-delete:hover{border-color:var(--hover);color:var(--ink)}
+.goal-delete{padding:7px 10px;min-width:34px;font-size:20px;line-height:1}
+.goal-gift{
+ display:flex;align-items:center;gap:10px;margin-top:13px;padding:12px 15px;
+ border:1px solid #d7b874;border-radius:13px;
+ background:linear-gradient(120deg,#fff7da,#f8eac8);color:#63451b;
+ box-shadow:0 4px 14px #a78b4625;animation:cuiudoGift .45s ease-out both
+}
+.goal-gift-icon{font-size:25px;animation:cuiudoGiftFloat 2.7s ease-in-out infinite}
+.goal-gift b{display:block;font:750 12px/1.35 var(--font)}
+.goal-gift small{display:block;font:450 11px/1.5 var(--font);margin-top:3px;color:#735c37}
+.goal-gift>span:last-child{color:#ba8b37;font-size:17px;margin-left:auto}
+.goal-reality{font:700 12px/1.6 var(--font);margin:10px 0 0;color:#b25335}
+:root[data-theme="dark"] .goal-gift{
+ background:linear-gradient(120deg,#43351e,#4c3b1e);color:#fee5a4;border-color:#a8894e
+}
+:root[data-theme="dark"] .goal-gift small{color:#dec895}
+:root[data-theme="dark"] .goal-reality{color:#ecaa90}
+@keyframes cuiudoGift{0%{opacity:0;transform:translateY(9px) scale(.98)}100%{opacity:1;transform:none}}
+@keyframes cuiudoGiftFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:900px){
+ .rosary-plus-header{grid-template-columns:1fr}
+ .rosary-music-v13{width:100%;max-width:630px}
+ .today-goal{flex-direction:column;gap:12px}
+ .today-goal-actions{justify-content:flex-start;padding-left:42px;width:100%}
+}
+@media(max-width:760px){
+ .benedict-hero-art{height:auto!important;min-height:230px!important;max-height:none!important;padding:18px 14px 0}
+ .benedict-hero-art img.benedict-medal-photo{
+  height:auto!important;width:100%!important;max-width:410px;aspect-ratio:2989/1772;
+  padding:6px;transform:none!important;border-radius:17px
+ }
+ .benedict-hero-art .benedict-medal-credit{font-size:9px}
+ .rosary-music-v13{max-width:100%;padding:16px}
+ .rosary-track-options{gap:3px}
+ .rosary-track-option{min-height:50px;padding:8px 5px;font-size:10px}
+ .today-goals{margin:15px 0 16px;padding:18px 15px;border-radius:20px}
+ .today-goals h2{font-size:27px}
+ .today-goals-top{gap:10px}
+ .today-goals-status strong{font-size:23px}
+ .today-goals-top p{font-size:12px}
+ .today-goals-form{flex-wrap:wrap;gap:8px;margin-top:17px}
+ .today-goals-form input{width:100%;flex:1 0 100%;font-size:14px}
+ .today-goals-form .btn{width:100%}
+ .today-goal{padding:13px;gap:11px}
+ .today-goal-actions{padding:0 0 0 40px}
+ .goal-action{padding:9px 11px;font-size:11px}
+ .goal-gift{padding:10px 11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .goal-gift,.goal-gift-icon{animation:none}
+ .today-goals-progress>span{transition:none}
+}
