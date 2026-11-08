@@ -24,19 +24,19 @@ if(existsSync(new URL('./rosary-artwork.js',import.meta.url)))codes.splice(-1,0,
 const vm=createContext(context);
 runInContext(codes.join('\n'),vm,{timeout:6000});
 assert.match(mount.innerHTML,/benedict-hero/,'a medalha deve substituir o banner');
-assert.match(mount.innerHTML,/medalha-sao-bento-colorida\.webp/);
+assert.match(mount.innerHTML,/medalha-sao-bento-hd\.svg/);
 assert.match(mount.innerHTML,/cuiudo-language/);
 for(const lang of ['pt','en','es','la']){
  runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.rosaryLength="small";render()',vm,{timeout:2500});
  assert.match(mount.innerHTML,/rosary-music-control/,'controle de música visível em '+lang);
  assert.match(mount.innerHTML,/meditation-size-buttons/,'três tamanhos em '+lang);
  assert.match(mount.innerHTML,/rosary-painting/,'foto por mistério em '+lang);
- assert.match(mount.innerHTML,/assets\/medalha-sao-bento-colorida\.webp/);
+ assert.match(mount.innerHTML,/assets\/medalha-sao-bento-hd\.svg/);
  assert.match(mount.innerHTML,/data-action="add-bead"/);
  assert.match(mount.innerHTML,/rosary-intention-form/);
  assert.equal((mount.innerHTML.match(/data-action="combat-meditation-length"/g)||[]).length,3);
  assert.match(mount.innerHTML,/data-action="combat-rosary-music"/);
- assert.equal((mount.innerHTML.match(/data-action="combat-rosary-track"/g)||[]).length,3);
+ assert.equal((mount.innerHTML.match(/data-action="combat-rosary-track"/g)||[]).length,7);
  for(const length of ['small','medium','large']){
   runInContext('state.rosaryLength='+JSON.stringify(length)+';render()',vm);
   if(length==='small')assert.doesNotMatch(mount.innerHTML,/rosary-long/);
@@ -85,7 +85,7 @@ assert.ok(existsSync(new URL('./assets/medalha-sao-bento-real.webp',import.meta.
 assert.ok(existsSync(new URL('./assets/audio/cantico-catolico.mp3',import.meta.url)));
 assert.ok(existsSync(new URL('./assets/audio/cantico-medieval.mp3',import.meta.url)));
 const html=read('index.html');
-for(const file of ['ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-context.js','rosary-plus.js','daily-goals.js','rosary-plus.css','cuiudo-v13.css','cuiudo-v14.css','cuiudo-v15.css'])
+for(const file of ['ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-context.js','rosary-plus.js','daily-goals.js','rosary-plus.css','cuiudo-v13.css','cuiudo-v14.css','cuiudo-v15.css','cuiudo-v16.css','rosary-beads.js','saints-i18n.js'])
  assert.ok(html.includes(file),'HTML não inclui '+file);
 
 const personalized=runInContext('rosaryLanguageExtras',vm);

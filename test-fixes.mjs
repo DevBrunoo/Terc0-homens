@@ -60,31 +60,33 @@ for(const mark of ['PAX','V · R · S · N · S · M · V','CRUX SANCTI PATRIS B
  assert.ok(svg.includes(mark),'Inscrição da medalha: '+mark);
 console.log('✓ História, contemplação e aplicação em todos os 20 mistérios / 4 idiomas');
 
-const elements=[],byId=new Map();
-function element(tag){
- const el={tag,attrs:{},children:[],isConnected:true,addEventListener(){},
-  setAttribute(k,v){this.attrs[k]=v;},append(...nodes){this.children.push(...nodes);},
-  remove(){this.isConnected=false;},removeAttribute(k){delete this.attrs[k]},load(){},pause(){}};
- elements.push(el);return el;
-}
-const mockedDoc={body:{append(node){byId.set('cuiudo-youtube-dock',node);}},getElementById(k){return byId.get(k)||null},
- createElement:element};
-const playCtx=createContext({document:mockedDoc,window:{AudioContext:null,webkitAudioContext:null},console});
+
+const sounds=[],events=[];
+const fakeAudio={
+ attrs:{},volume:0,loop:false,preload:'',
+ addEventListener(type,fn){events.push('listen-'+type);},
+ getAttribute(name){return this.attrs[name]||null;},
+ set src(value){this.attrs.src=value;},
+ load(){events.push('load');},
+ pause(){events.push('pause');},
+ async play(){events.push('play');}
+};
+const mockedDoc={createElement(type){sounds.push(type);if(type!=='audio')throw Error('Não criar iframe YouTube');return fakeAudio}};
+const playCtx=createContext({document:mockedDoc,window:{},console});
 runInContext('const cuiudoAmbient={isPlaying:()=>false,stop(){},setVolume(){}};',playCtx);
 runInContext(read('cuiudo-music.js'),playCtx);
-assert.equal(runInContext("cuiudoMusic.tracks.templario.kind",playCtx),'youtube');
-assert.equal(runInContext("cuiudoMusic.tracks.templario.source",playCtx),'https://www.youtube.com/watch?v=zodHltkgK1w');
-assert.equal(elements.length,0,'Não criar player automaticamente');
+assert.equal(runInContext("cuiudoMusic.tracks.templario.kind",playCtx),'file');
+assert.equal(runInContext("cuiudoMusic.tracks.templario.src",playCtx),'./assets/audio/cantico-medieval.mp3');
+assert.equal(runInContext("Object.keys(cuiudoMusic.tracks).length",playCtx),7);
+assert.equal(sounds.length,0,'Música não deve iniciar automaticamente');
 await runInContext("cuiudoMusic.select('templario')",playCtx);
-assert.equal(elements.length,0,'Selecionar faixa não deve tocar sozinho');
+assert.equal(sounds.length,0,'Selecionar não toca');
 const started=await runInContext("cuiudoMusic.play()",playCtx);
-assert.equal(started,true,'Iniciar o vídeo só após clique');
-const iframe=elements.find(x=>x.tag==='iframe');
-assert.ok(iframe);
-assert.match(iframe.src,/youtube-nocookie\.com\/embed\/zodHltkgK1w\?autoplay=1/);
-assert.equal(iframe.width,'360');assert.equal(iframe.height,'224');
+assert.equal(started,true,'Tocar arquivo MP3 local');
+assert.equal(fakeAudio.attrs.src,'./assets/audio/cantico-medieval.mp3');
+assert.deepEqual(sounds,['audio'],'A música templária não deve abrir YouTube/iframe');
 assert.equal(runInContext('cuiudoMusic.isPlaying()',playCtx),true);
 runInContext('cuiudoMusic.stop()',playCtx);
 assert.equal(runInContext('cuiudoMusic.isPlaying()',playCtx),false);
-console.log('✓ Cântico exato de YouTube por player oficial visível, sem autoplay inicial');
-console.log('✓ CUIÚDO v14 validado');
+console.log('✓ Música templária reproduz MP3 no aplicativo, sem YouTube, sem autoplay');
+console.log('✓ CUIÚDO v16 validado');

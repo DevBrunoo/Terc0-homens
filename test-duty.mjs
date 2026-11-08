@@ -13,7 +13,7 @@ const vm=createContext({document:doc,window:{location:{hash:''},scrollTo(){},mat
  navigator:{},location:{protocol:'file:'},localStorage:{getItem(k){return saved.get(k)||null},setItem(k,v){saved.set(k,v)}},
  console,confirm(){return true}});
 runInContext(files.map(read).join('\n'),vm,{timeout:7000});
-assert.match(app.innerHTML,/medalha-sao-bento-colorida\.webp/,'Medalha enviada visível na home');
+assert.match(app.innerHTML,/medalha-sao-bento-hd\.svg/,'Medalha em vetor HD visível na home');
 assert.match(app.innerHTML,/sao-bento-arte-enviada\.webp/,'Arte de São Bento enviada visível na home');
 assert.match(app.innerHTML,/duty-hero/,'Banner do exame de deveres visível');
 assert.match(app.innerHTML,/today-goals/,'Checklist de metas existente preservado');
@@ -34,7 +34,7 @@ for(const item of items){
  assert.match(item.url,/^https:\/\/www\.vatican\.va\//);
 }
 runInContext("state.tab='terco';render()",vm);
-assert.match(app.innerHTML,/medalha-sao-bento-colorida\.webp/,'Medalha também durante o terço');
+assert.match(app.innerHTML,/medalha-sao-bento-hd\.svg/,'Medalha HD também durante o terço');
 for(const asset of ['assets/medalha-sao-bento-colorida.webp','assets/sao-bento-arte-enviada.webp']){
  const url=new URL('./'+asset,import.meta.url);
  assert.ok(existsSync(url),'Imagem ausente: '+asset);

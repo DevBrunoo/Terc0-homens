@@ -37,7 +37,7 @@ jobs:
       - name: Preparar pacote do site
         run: |
           mkdir -p _site
-          cp index.html styles.css feed.css apple.css rosary-plus.css cuiudo-v13.css cuiudo-v14.css cuiudo-v15.css data.js brutal.js devocionario.js feed-data.js app.js feed-ui.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-context.js rosary-plus.js daily-goals.js conscience-duty.js sw.js manifest.webmanifest .nojekyll _site/
+          cp index.html styles.css feed.css apple.css rosary-plus.css cuiudo-v13.css cuiudo-v14.css cuiudo-v15.css cuiudo-v16.css data.js brutal.js devocionario.js feed-data.js app.js feed-ui.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-context.js rosary-plus.js rosary-beads.js saints-i18n.js daily-goals.js conscience-duty.js sw.js manifest.webmanifest .nojekyll _site/
           cp -R assets _site/
           find _site/assets/feed -type f | wc -l
       - name: Configurar GitHub Pages
