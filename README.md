@@ -171,3 +171,5 @@ Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o
 - **Mais conteúdo**: guia para rezar, oferecimento do terço, oração de Fátima, oração da Cruz de São Bento, intenção de oração salva localmente e crédito por pintura.
 
 **Nota:** outras áreas editoriais do aplicativo continuam com textos em português; a internacionalização completa do feed e diário não está concluída.
+
+**Acervo verificado:** os vinte arquivos WebP estão presentes na branch principal, todos com `license`, `credit` e `source` em `rosary-artwork.js`. O cache offline da v12 inclui os 20 arquivos. O teste automatizado valida a assinatura WebP de cada um.

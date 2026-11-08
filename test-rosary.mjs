@@ -61,6 +61,20 @@ const langs=runInContext('Object.keys(rosaryLocales)',vm);
 assert.deepEqual(Array.from(langs),['pt','en','es','la']);
 const mysteries=runInContext('Object.keys(rosaryMysteries)',vm);
 assert.equal(mysteries.length,20);
+
+const art=runInContext('rosaryArtwork',vm);
+assert.equal(Object.keys(art).length,20);
+for(const [id,obj] of Object.entries(art)){
+ assert.match(obj.url,/^\.\/assets\/misterios\/fotos\/[a-z-]+\.webp$/,'arte local: '+id);
+ const p=new URL(obj.url.slice(2),import.meta.url);
+ assert.ok(existsSync(p),'Imagem física ausente: '+obj.url);
+ const b=readFileSync(p);
+ assert.ok(b.length>8000,'Imagem muito pequena: '+obj.url);
+ assert.equal(b.subarray(0,4).toString('ascii'),'RIFF','WebP: '+id);
+ assert.equal(b.subarray(8,12).toString('ascii'),'WEBP','WebP: '+id);
+ assert.ok(obj.credit&&obj.source&&obj.license,'crédito incompleto: '+id);
+}
+console.log('✓ 20/20 artes religiosas no repositório com créditos e arquivos válidos');
 const audio=runInContext('({playing:cuiudoAmbient.isPlaying(),supported:cuiudoAmbient.isSupported()})',vm);
 assert.equal(audio.playing,false,'áudio não deve iniciar automaticamente');
 assert.ok(existsSync(new URL('./assets/medalha-sao-bento.svg',import.meta.url)));
