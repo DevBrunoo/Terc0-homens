@@ -61,7 +61,7 @@ function cuiudoGoalChecklist(){
  const pending=Math.max(0,metrics.total-metrics.done-metrics.failed);
  return '<section class="today-goals" aria-label="'+escapeHtml(t.heading)+'">'+
   '<div class="today-goals-top"><div><span class="eyebrow">✓ '+escapeHtml(t.heading)+'</span>'+
-  '<h2>'+escapeHtml(t.heading)+'</h2><p>'+escapeHtml(t.sub)+'</p></div>'+
+  '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+

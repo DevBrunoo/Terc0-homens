@@ -22,6 +22,10 @@ const vm=createContext({document:doc,console,navigator:{},location:{protocol:'fi
 runInContext(files.map(read).join('\n'),vm,{timeout:9500});
 
 assert.match(mount.innerHTML,/medalha-sao-bento-hd\.svg/);
+assert.match(mount.innerHTML,/benedict-medal-pair/);
+assert.match(mount.innerHTML,/Saint_Benedict_Medal_icon\.svg/);
+assert.match(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
+assert.match(mount.innerHTML,/Você é muito macio!/);
 assert.match(mount.innerHTML,/sao-bento-gravura-hd\.webp/);
 assert.match(mount.innerHTML,/sao-bento-arte-enviada\.webp/);
 
@@ -56,8 +60,10 @@ console.log('✓ Rosário de contas: 1 Pai-Nosso, 10 Ave-Marias e 1 Glória com 
 
 const ids=runInContext('oracoesDevocionario.map(p=>p.id)',vm);
 assert.equal(ids.length,18);
-assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),7);
+assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),9);
 assert.equal(runInContext('cuiudoMusic.tracks.templario.kind',vm),'file');
+assert.match(runInContext('cuiudoMusic.tracks.veni.src',vm),/Veni.creator.spiritus\.ogg/);
+assert.match(runInContext('cuiudoMusic.tracks.alma.src',vm),/Alma_Redemptoris_Mater\.ogg/);
 assert.equal(runInContext('cuiudoMusic.tracks.templario.src',vm),'./assets/audio/cantico-medieval.mp3');
 assert.equal(runInContext('cuiudoMusic.isPlaying()',vm),false);
 assert.doesNotMatch(read('cuiudo-music.js'),/youtube-nocookie\.com\/embed/);
