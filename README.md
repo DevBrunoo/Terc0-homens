@@ -173,3 +173,14 @@ Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o
 **Nota:** outras áreas editoriais do aplicativo continuam com textos em português; a internacionalização completa do feed e diário não está concluída.
 
 **Acervo verificado:** os vinte arquivos WebP estão presentes na branch principal, todos com `license`, `credit` e `source` em `rosary-artwork.js`. O cache offline da v12 inclui os 20 arquivos. O teste automatizado valida a assinatura WebP de cada um.
+
+
+## CUIÚDO v13 — três músicas, foto real da medalha e metas do dia
+
+**Música:** selecionável ao rezar o terço, com botão tocar/pausar e volume: (1) **Cântico católico** — *Ave Maria* da Schola Gregoriana de Ołtarzew (direção Pe. Dariusz Smolarek), [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Ave_Maria.ogg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/); (2) **Cântico templário (estilo medieval)** — *Cum Angelis*, antífona gregoriana medieval cantada por Paterm, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gregorian_chant_-_Procedamus_in_pace_-_Cum_angelis_-_Psalm_24_(23)_(German-Polish_accent).ogg), CC BY-SA 3.0. Não é uma gravação histórica de templários; (3) **Relaxar** — música ambiente instrumental original gerada via Web Audio. Os dois arquivos são transcodificações MP3 locais dos OGG originais. Crédito e licença acessíveis na tela do terço. Nenhuma música inicia automaticamente; para quando o usuário sai da oração.
+
+**Medalha:** fotografia real e detalhada dos dois lados, de Gec00, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Saint_Benedict_Medal.jpg), licença CC0 1.0. A simbologia foi conferida no [Mosteiro de São Bento do Rio de Janeiro](https://www.mosteirodesaobentorio.org.br/espiritualidade/medalha-de-sao-bento/). A medalha é sacramental, não amuleto.
+
+**Mais três obras e reflexões cuiúdas:** *Aiding a Comrade*, *A New Year on the Cimarron* e *The Smoke Signal*, pinturas de Frederic Remington em domínio público, todas disponíveis localmente em assets/feed e creditadas em feed-data.js. Agora são 19 posts, 17 obras/fotografias no feed.
+
+**Checklist de hoje:** usuário escreve a meta, clica **Concluí** ou **Não concluí**, pode reabrir ou excluir. Quando conclui, ganha uma recompensa virtual colecionável (medalha/selo/estrela/troféu) e animação discreta. Quando marca não concluída, aparece exatamente a mensagem solicitada: **“Você é muito macio! Reorganize-se, levante e faça acontecer.”** As metas são salvas por data apenas no navegador (`localStorage`).

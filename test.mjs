@@ -109,8 +109,8 @@ assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);
 const feedInfo=runInNewContext(feedData+'\n;({feedPosts,feedArtwork,feedFilters})');
-assert.equal(feedInfo.feedPosts.length,16);
-assert.ok(Object.keys(feedInfo.feedArtwork).length>=14);
+assert.equal(feedInfo.feedPosts.length,19);
+assert.ok(Object.keys(feedInfo.feedArtwork).length>=17);
 assert.ok(existsSync(new URL('./assets/feed/fallback.svg',import.meta.url)));
 for(const [id,asset] of Object.entries(feedInfo.feedArtwork)){
   assert.match(asset.url,/^\.\/assets\/feed\/[a-z0-9-]+\.webp$/,'Imagem deve estar no repositório: '+id);
@@ -121,7 +121,7 @@ for(const [id,asset] of Object.entries(feedInfo.feedArtwork)){
   assert.equal(content.subarray(0,4).toString('ascii'),'RIFF','Cabeçalho WebP: '+id);
   assert.equal(content.subarray(8,12).toString('ascii'),'WEBP','Assinatura WebP: '+id);
 }
-console.log('✓ 14/14 imagens WebP armazenadas no repositório e verificadas');
+console.log('✓ 17/17 imagens WebP armazenadas no repositório e verificadas');
 assert.ok(feedInfo.feedFilters.some(([id])=>id==='miguel'));
 for(const file of ['feed-ui.js','feed-data.js']){
  const out=spawnSync(process.execPath,['--check',new URL('./'+file,import.meta.url).pathname]);
@@ -143,7 +143,7 @@ runInContext(data+'\n'+brutal+'\n'+devotion+'\n'+feedData+'\n'+app+'\n'+feedUi,f
 assert.match(feedMount.innerHTML,/cuiudo-hero/);
 assert.match(feedMount.innerHTML,/TEM QUE SER/);
 assert.match(feedMount.innerHTML,/poster-grid/);
-assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,16);
+assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,19);
 assert.equal(feedDoc.documentElement.dataset.theme,'light');
 for(const [tab,expected] of [['terco','O Santo Terço'],['devocionario','SÃO MIGUEL'],['palavra','PALAVRA DE DEUS'],['diario','Diário'],['desafios','compromissos'],['exame','consciência']]){
  runInContext("state.tab='"+tab+"';render()",feedCtx);
@@ -157,4 +157,4 @@ runInContext("state.feedFilter='todos';state.theme='light';render()",feedCtx);
 assert.equal(feedDoc.documentElement.dataset.theme,'light');
 runInContext("state.tab='palavra';state.verseLang='en';render()",feedCtx);
 assert.match(feedMount.innerHTML,/Douay-Rheims/);
-console.log('✓ CUIÚDO V9: 16 posts, 14 fontes de imagem, feed, salvos, modal, temas e 8 telas');
+console.log('✓ CUIÚDO V13: 19 posts, 17 fontes de imagem, feed, salvos, modal, temas e 8 telas');

@@ -19,7 +19,7 @@ jobs:
           import re
           data=Path('feed-data.js').read_text(encoding='utf-8')
           refs=re.findall(r'"url": "(\./assets/feed/[a-z0-9-]+\.webp)"',data)
-          assert len(refs)==14, f'Imagens cadastradas: {len(refs)} (esperado 14)'
+          assert len(refs)==17, f'Imagens cadastradas: {len(refs)} (esperado 17)'
           assert len(set(refs))==len(refs), 'Referências duplicadas'
           for ref in refs:
               image=Path(ref)
@@ -37,7 +37,7 @@ jobs:
       - name: Preparar aplicativo completo com imagens
         run: |
           mkdir -p package
-          cp index.html apple.css rosary-plus.css styles.css feed.css app.js feed-ui.js feed-data.js ambient-audio.js rosary-i18n.js rosary-artwork.js rosary-plus.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
+          cp index.html apple.css rosary-plus.css cuiudo-v13.css styles.css feed.css app.js feed-ui.js feed-data.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-plus.js daily-goals.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
           cp -R assets package/
           cat > package/COMO_ABRIR.txt <<'TXT'
           CUIÚDO — Versão completa com imagens locais
