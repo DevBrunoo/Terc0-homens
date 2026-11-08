@@ -65,7 +65,8 @@ function combatHome(){
  const g=groups[dayGroup()],prog=readProgress(dayGroup()),done=prog.reduce((n,v)=>n+v,0);
  const picks=feedPosts.filter(combatMatches),selected=feedPosts.find(p=>p.id===state.feedOpen);
  const lead=feedArtwork['miguel-reni'],daily=feedPosts[(new Date().getDate()+new Date().getDay())%feedPosts.length];
- return `<section class="cuiudo-hero">
+ return `<section class="cuiudo-punch-strip" aria-label="Coragem e ação"><div class="punch-symbol" aria-hidden="true"><span class="punch-palm">✋</span><span class="punch-fist">👊</span><span class="punch-spark">✦</span></div><div><strong>TEM QUE FAZER AS COISAS DAR CERTO.<br>VAI PRA CIMA.</strong><small>Você não controla tudo. Mas controla o que decide fazer.</small></div><button type="button" class="punch-link" data-action="navigate" data-tab="desafios">PARTIR PRA AÇÃO ↗</button></section>
+ <section class="cuiudo-hero">
   <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}">
   <div class="cuiudo-hero-content">
     <div class="cuiudo-hero-kicker"><span class="cuiudo-star">✠</span> FÉ EM DEUS E PÉ NA TÁBUA</div>
@@ -76,7 +77,6 @@ function combatHome(){
   </div>
   <div class="cuiudo-hero-credit"><a href="${escapeHtml(lead.source)}" target="_blank" rel="noopener noreferrer">Guido Reni · domínio público ↗</a></div>
  </section>
- <section class="cuiudo-punch-strip" aria-label="Coragem e ação"><div class="punch-symbol" aria-hidden="true"><span class="punch-palm">✋</span><span class="punch-fist">👊</span><span class="punch-spark">✦</span></div><div><strong>TEM QUE FAZER AS COISAS DAR CERTO.<br>VAI PRA CIMA.</strong><small>Você não controla tudo. Mas controla o que decide fazer.</small></div><button type="button" class="punch-link" data-action="navigate" data-tab="desafios">PARTIR PRA AÇÃO ↗</button></section>
  <section class="cuiudo-feed-toolbar"><div><h2>CONFRONTO DO DIA.</h2><p>Arte, fé, trabalho e coragem. Sem passar a mão na cabeça.</p></div><label class="feed-searchbar"><span aria-hidden="true">⌕</span><input type="search" id="feed-search" placeholder="Buscar fé, São Miguel, trabalho..." autocomplete="off" value="${escapeHtml(state.feedTerm)}" aria-label="Pesquisar reflexões"></label></section>
  <div class="feed-filters" role="group" aria-label="Escolher tema do feed">${feedFilters.map(([id,label])=>`<button type="button" class="feed-filter" data-action="combat-filter" data-filter="${id}" aria-pressed="${state.feedFilter===id}">${escapeHtml(label)}</button>`).join('')}</div>
  <div class="feed-results" aria-live="polite"><span id="feed-result-count">${picks.length}</span> reflexões • conteúdo autoral • imagens licenciadas</div>
