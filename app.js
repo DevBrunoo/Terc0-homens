@@ -215,7 +215,17 @@ app.addEventListener('click',evt=>{
  if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
  if(a==='toggle-theme'){state.theme=state.theme==='light'?'dark':'light';save();}
  if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';state.designVersion='apple-v11';save();}
- if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
+ if(a==='toggle-more'){
+   state.mobileMore=!state.mobileMore;
+   // Na navbar, abrir as opções imediatamente abaixo do botão clicado.
+   if(state.mobileMore && typeof target.getBoundingClientRect==='function'){
+    const rect=target.getBoundingClientRect();
+    const viewport=Number(window.innerWidth)||1024;
+    const width=Math.min(265,viewport-24);
+    state.moreMenuLeft=Math.max(12,Math.min(rect.left,viewport-width-12));
+    state.moreMenuTop=Math.max(54,rect.bottom+7);
+   }
+  }
  if(a==='close-more'){state.mobileMore=false;}
  if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';state.appLang=state.verseLang;save();}
  if(a==='mission-done'){state.missionDays??={};state.missionDays[missionId()]=!missionDone();save();}

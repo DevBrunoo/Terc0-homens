@@ -28,6 +28,8 @@ assert.doesNotMatch(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
 assert.match(mount.innerHTML,/Você é muito macio!/);
 assert.match(mount.innerHTML,/cuiudo-photo-gallery/);
 assert.equal((mount.innerHTML.match(/class="cuiudo-gallery-card"/g)||[]).length,10);
+assert.match(mount.innerHTML,/class="nav-more" data-action="toggle-more"/);
+assert.match(mount.innerHTML,/aria-haspopup="true"/);
 assert.ok(read('cuiudo-v16.css').includes('scroll-snap-type:x mandatory'));
 assert.ok(read('cuiudo-v16.css').includes('@media(max-width:350px)'));
 assert.match(mount.innerHTML,/sao-bento-gravura-hd\.webp/);
@@ -37,6 +39,12 @@ function click(action,more={}){
  const target={dataset:{action,...more},closest(){return this}};
  for(const fn of callbacks.click)fn({target,preventDefault(){}});
 }
+click('toggle-more');
+assert.match(mount.innerHTML,/id="cuiudo-more-menu"/);
+assert.match(mount.innerHTML,/style="--cuiudo-more-x:/);
+assert.match(mount.innerHTML,/aria-expanded="true"/);
+click('close-more');
+assert.doesNotMatch(mount.innerHTML,/id="cuiudo-more-menu"/);
 runInContext("state.tab='terco';state.appLang='pt';state.group='gozosos';state.mystery=0;render()",vm);
 assert.match(mount.innerHTML,/rosary-bead-visual/);
 assert.match(mount.innerHTML,/cuiudo-tiny-player/);
