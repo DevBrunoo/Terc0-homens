@@ -45,7 +45,7 @@ def license_ok(meta,target):
  x=meta.get('extmetadata',{})
  data=' '.join(str(x.get(y,{}).get('value','')) for y in ['LicenseShortName','LicenseUrl','UsageTerms','Copyrighted']).lower()
  if target=='public_domain':return ('public domain' in data or 'publicdomain' in data or 'pd-old' in data)
- if target=='cc0':return 'cc0' in data or 'publicdomain/zero' in data
+ if target=='cc0':return 'cc0' in data or 'cc-zero' in data or 'publicdomain/zero' in data or ('public domain' in data and 'attribution' not in data)
  if target=='by_sa_3':return 'by-sa/3.0' in data or 'by-sa-3.0' in data or 'attribution-sharealike 3.0' in data
  if target=='by_sa_4':return 'by-sa/4.0' in data or 'by-sa-4.0' in data or 'attribution-sharealike 4.0' in data
  return False
