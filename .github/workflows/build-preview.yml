@@ -1,0 +1,55 @@
+name: Gerar aplicativo CUIÚDO para prévia
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  montar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar integridade das imagens e arquivos
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+          data=Path('feed-data.js').read_text(encoding='utf-8')
+          refs=re.findall(r'"url": "(\./assets/feed/[a-z0-9-]+\.webp)"',data)
+          assert len(refs)==14, f'Imagens cadastradas: {len(refs)} (esperado 14)'
+          assert len(set(refs))==len(refs), 'Referências duplicadas'
+          for ref in refs:
+              image=Path(ref)
+              assert image.is_file(), f'Arquivo ausente: {image}'
+              blob=image.read_bytes()
+              assert blob[:4]==b'RIFF' and blob[8:12]==b'WEBP', f'WebP inválido: {image}'
+              assert len(blob)>8000, f'Imagem incompleta: {image}'
+          for name in ['index.html','apple.css','styles.css','feed.css','app.js','feed-ui.js','sw.js','data.js','brutal.js','devocionario.js','feed-data.js','manifest.webmanifest','assets/icon.svg']:
+              assert Path(name).is_file(), f'Arquivo ausente: {name}'
+          html=Path('index.html').read_text(encoding='utf-8')
+          assert './apple.css' in html and './feed-data.js' in html
+          assert Path('.nojekyll').is_file(), '.nojekyll ausente'
+          print(f'VALIDADO: {len(refs)} imagens WebP locais e todos os scripts/CSS')
+          PY
+      - name: Preparar aplicativo completo com imagens
+        run: |
+          mkdir -p package
+          cp index.html apple.css styles.css feed.css app.js feed-ui.js feed-data.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
+          cp -R assets package/
+          cat > package/COMO_ABRIR.txt <<'TXT'
+          CUIÚDO — Versão completa com imagens locais
+          Os arquivos devem ficar juntos: abra index.html no navegador.
+          Para usar como site, hospede a pasta package/ em um servidor estático.
+          Não é preciso baixar imagens externas.
+          Para ativar o site oficial no GitHub, Settings -> Pages -> Source: GitHub Actions.
+          TXT
+      - name: Disponibilizar ZIP de prévia no GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: CUIUDO-APP-COM-IMAGENS
+          path: package/
+          if-no-files-found: error
+          retention-days: 30

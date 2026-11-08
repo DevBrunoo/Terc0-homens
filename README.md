@@ -1,3 +1,10 @@
+## Abrir o aplicativo com todas as imagens
+
+- Repositório: https://github.com/DevBrunoo/Terc0-homens
+- **Pacote completo**: abra a aba **Actions**, escolha **Gerar aplicativo CUIÚDO para prévia** e baixe o artefato `CUIUDO-APP-COM-IMAGENS` (HTML, CSS, JavaScript e 14 WebP, tudo junto).
+- **GitHub Pages**: para ativar o link público `https://devbrunoo.github.io/Terc0-homens/`, vá em **Settings → Pages → Build and deployment → Source → GitHub Actions**. A ativação é necessária apenas uma vez e não pode ser feita com o `GITHUB_TOKEN` padrão do repositório.
+- Os arquivos do aplicativo estão na branch `main`. Tema claro minimalista como padrão, modo escuro/auto e todas as seções preservadas.
+
 # CUIÚDO — Fé, Coragem e Ação ✝️
 
 **Reza. Levanta. Faz acontecer. Sem desculpas.**
