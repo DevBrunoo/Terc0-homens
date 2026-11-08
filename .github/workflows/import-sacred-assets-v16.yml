@@ -1,0 +1,34 @@
+name: Adicionar cantos e imagens sacras HD
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/import-sacred-assets-v16.py','.github/workflows/import-sacred-assets-v16.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Ferramentas para arquivos licenciados
+        run: |
+          python -m pip install -q requests Pillow
+          which ffmpeg
+      - name: Download com validação de licenças e transcodificação
+        run: python scripts/import-sacred-assets-v16.py
+      - name: Salvar no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/medalha-sao-bento-hd.svg assets/santos-todos-fra-angelico.webp assets/santos-coroacao-fra-angelico.webp assets/sao-bento-gravura-hd.webp assets/audio/cantico-pange-lingua.mp3 assets/audio/cantico-tantum-ergo.mp3 assets/audio/cantico-pater-noster.mp3 assets/audio/cantico-rorate-caeli.mp3
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: medalha colorida vetorial, pinturas e 4 cânticos de domínio livre"
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
