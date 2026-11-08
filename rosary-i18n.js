@@ -680,3 +680,365 @@ const rosaryExtras=Object.freeze({
     "challenge": "Quid hoc mysterium hodie a me postulat? Gratiam peto et primum gradum facio."
   }
 });
+
+/* Meditações personalizadas e orações em cada um dos quatro idiomas. */
+const rosaryLanguageExtras=Object.freeze({
+  "mysteries": {
+    "anunciacao": {
+      "en": {
+        "question": "Where am I resisting God's call?",
+        "action": "Answer one honest invitation to do good today."
+      },
+      "es": {
+        "question": "¿Dónde me resisto a la llamada de Dios?",
+        "action": "Responde hoy a una invitación concreta al bien."
+      },
+      "la": {
+        "question": "Ubi vocationi Dei resisto?",
+        "action": "Hodie vocationi ad bonum responde."
+      }
+    },
+    "visitacao": {
+      "en": {
+        "question": "Who needs my presence instead of my excuses?",
+        "action": "Visit or help someone who needs you."
+      },
+      "es": {
+        "question": "¿Quién necesita mi presencia y no mis excusas?",
+        "action": "Visita o ayuda a alguien que te necesite."
+      },
+      "la": {
+        "question": "Quis praesentia mea, non excusationibus, indiget?",
+        "action": "Hodie aliquem in necessitate adiuva."
+      }
+    },
+    "nascimento": {
+      "en": {
+        "question": "Am I trying to impress instead of serving humbly?",
+        "action": "Do an unnoticed act of kindness."
+      },
+      "es": {
+        "question": "¿Busco impresionar en lugar de servir humildemente?",
+        "action": "Haz un bien sin buscar aplausos."
+      },
+      "la": {
+        "question": "Num gloriam meam quaero potius quam humiliter serviam?",
+        "action": "Bonum opus occulte fac."
+      }
+    },
+    "apresentacao": {
+      "en": {
+        "question": "Which ordinary duty am I neglecting?",
+        "action": "Complete an obligation without complaining."
+      },
+      "es": {
+        "question": "¿Qué deber cotidiano estoy descuidando?",
+        "action": "Cumple un deber sin quejarte."
+      },
+      "la": {
+        "question": "Quod cotidianum officium neglego?",
+        "action": "Officium fideliter sine querelis exple."
+      }
+    },
+    "encontro": {
+      "en": {
+        "question": "Where have I stopped seeking Jesus?",
+        "action": "Make time for prayer and the Gospel."
+      },
+      "es": {
+        "question": "¿Dónde he dejado de buscar a Jesús?",
+        "action": "Reserva tiempo para orar y leer el Evangelio."
+      },
+      "la": {
+        "question": "Ubi Iesum quaerere desii?",
+        "action": "Tempus orationi et Evangelio tribue."
+      }
+    },
+    "agonia": {
+      "en": {
+        "question": "Do I pray only when things go my way?",
+        "action": "Place one fear before the Father in prayer."
+      },
+      "es": {
+        "question": "¿Solo rezo cuando todo sale como quiero?",
+        "action": "Entrega un miedo al Padre en la oración."
+      },
+      "la": {
+        "question": "Num tantum cum omnia pro voto fiunt oro?",
+        "action": "Unum timorem Patri in oratione committe."
+      }
+    },
+    "flagelacao": {
+      "en": {
+        "question": "Do I answer suffering with bitterness?",
+        "action": "Respond to one difficulty with patience."
+      },
+      "es": {
+        "question": "¿Respondo al sufrimiento con amargura?",
+        "action": "Afronta una dificultad con paciencia."
+      },
+      "la": {
+        "question": "Num dolori amaritudine respondeo?",
+        "action": "Unam difficultatem patientia sustine."
+      }
+    },
+    "espinhos": {
+      "en": {
+        "question": "Does wounded pride control my response?",
+        "action": "Let go of one unnecessary argument."
+      },
+      "es": {
+        "question": "¿Gobierna mi respuesta el orgullo herido?",
+        "action": "Renuncia a una discusión innecesaria."
+      },
+      "la": {
+        "question": "Num superbia vulnerata me regit?",
+        "action": "Controversiam inutilem hodie omitte."
+      }
+    },
+    "cruz": {
+      "en": {
+        "question": "Am I fleeing responsibilities that are mine?",
+        "action": "Carry out one difficult duty and accept help."
+      },
+      "es": {
+        "question": "¿Huyo de una responsabilidad que me corresponde?",
+        "action": "Cumple un deber difícil y acepta ayuda."
+      },
+      "la": {
+        "question": "Num a propriis officiis fugio?",
+        "action": "Difficile officium exple et auxilium accipe."
+      }
+    },
+    "crucificacao": {
+      "en": {
+        "question": "Can I forgive without denying the harm done?",
+        "action": "Pray for someone who has hurt you."
+      },
+      "es": {
+        "question": "¿Puedo perdonar sin negar el daño recibido?",
+        "action": "Reza por alguien que te haya herido."
+      },
+      "la": {
+        "question": "Possumne ignoscere sine malo negando?",
+        "action": "Pro eo qui te laesit ora."
+      }
+    },
+    "ressurreicao": {
+      "en": {
+        "question": "What hopeless thought needs Christ's light?",
+        "action": "Take one hopeful step after a setback."
+      },
+      "es": {
+        "question": "¿Qué pensamiento desesperado necesita luz?",
+        "action": "Da un paso de esperanza después de una caída."
+      },
+      "la": {
+        "question": "Quae desperatio lumine Christi eget?",
+        "action": "Post casum unum spei gradum fac."
+      }
+    },
+    "ascensao": {
+      "en": {
+        "question": "Am I waiting for others to carry out my mission?",
+        "action": "Do one concrete act of witness today."
+      },
+      "es": {
+        "question": "¿Espero que otros cumplan mi misión?",
+        "action": "Haz hoy un acto concreto de testimonio."
+      },
+      "la": {
+        "question": "Num aliis missionem meam relinquo?",
+        "action": "Hodie fidem uno opere testare."
+      }
+    },
+    "pentecostes": {
+      "en": {
+        "question": "Do I ask for courage yet remain silent out of fear?",
+        "action": "Speak the truth with kindness."
+      },
+      "es": {
+        "question": "¿Pido valentía y luego callo por miedo?",
+        "action": "Di la verdad con caridad."
+      },
+      "la": {
+        "question": "Num fortitudinem peto sed timore taceo?",
+        "action": "Veritatem cum caritate dic."
+      }
+    },
+    "assuncao": {
+      "en": {
+        "question": "Am I living as if this world were everything?",
+        "action": "Choose a lasting good over a passing pleasure."
+      },
+      "es": {
+        "question": "¿Vivo como si este mundo lo fuera todo?",
+        "action": "Elige un bien duradero en vez de un placer pasajero."
+      },
+      "la": {
+        "question": "Num quasi mundus omnia esset vivo?",
+        "action": "Bonum permanens voluptati caducae antepone."
+      }
+    },
+    "coroacao": {
+      "en": {
+        "question": "Do I seek status more than faithful service?",
+        "action": "Serve someone without seeking recognition."
+      },
+      "es": {
+        "question": "¿Busco prestigio más que servicio fiel?",
+        "action": "Sirve a alguien sin buscar reconocimiento."
+      },
+      "la": {
+        "question": "Num honorem potius quam fidele ministerium quaero?",
+        "action": "Sine laude quaerenda alicui servi."
+      }
+    },
+    "batismo": {
+      "en": {
+        "question": "Do I let other people define my worth?",
+        "action": "Remember your baptism and act with dignity."
+      },
+      "es": {
+        "question": "¿Dejo que otros definan mi dignidad?",
+        "action": "Recuerda tu bautismo y obra con dignidad."
+      },
+      "la": {
+        "question": "Num alii dignitatem meam definiunt?",
+        "action": "Baptismi memor cum dignitate age."
+      }
+    },
+    "cana": {
+      "en": {
+        "question": "Do I trust Christ enough to obey the good I know?",
+        "action": "Do what is right before you feel ready."
+      },
+      "es": {
+        "question": "¿Confío en Cristo hasta obedecer el bien que conozco?",
+        "action": "Haz lo correcto antes de sentirte preparado."
+      },
+      "la": {
+        "question": "Num Christo fidens bonum cognitum facio?",
+        "action": "Bonum fac antequam te paratum sentias."
+      }
+    },
+    "reino": {
+      "en": {
+        "question": "Which habit keeps pulling me away from conversion?",
+        "action": "Leave one harmful habit and seek grace."
+      },
+      "es": {
+        "question": "¿Qué costumbre me aleja de la conversión?",
+        "action": "Deja una costumbre dañina y busca la gracia."
+      },
+      "la": {
+        "question": "Qui mos me a conversione retrahit?",
+        "action": "Pravum morem relinque et gratiam pete."
+      }
+    },
+    "transfiguracao": {
+      "en": {
+        "question": "Do I listen to Christ or only to my impulses?",
+        "action": "Read the Gospel and keep a moment of silence."
+      },
+      "es": {
+        "question": "¿Escucho a Cristo o solo a mis impulsos?",
+        "action": "Lee el Evangelio y guarda silencio."
+      },
+      "la": {
+        "question": "Christumne audio an tantum cupiditates meas?",
+        "action": "Evangelium lege et paulisper tace."
+      }
+    },
+    "eucaristia": {
+      "en": {
+        "question": "Does receiving Christ make me more generous?",
+        "action": "Thank God and share something with another."
+      },
+      "es": {
+        "question": "¿Recibir a Cristo me vuelve más generoso?",
+        "action": "Da gracias a Dios y comparte algo con otro."
+      },
+      "la": {
+        "question": "Num Eucharistia me largiorem reddit?",
+        "action": "Deo gratias age et cum alio aliquid communica."
+      }
+    }
+  },
+  "saintMichael": {
+    "pt": {
+      "name": "São Miguel Arcanjo",
+      "text": "São Miguel Arcanjo, defendei-nos no combate. Sede nosso refúgio contra as maldades e ciladas do demônio. Ordene-lhe Deus, instantemente o pedimos; e vós, Príncipe da milícia celeste, pelo divino poder, precipitai no inferno a Satanás e a todos os espíritos malignos que andam pelo mundo para perder as almas. Amém."
+    },
+    "en": {
+      "name": "Saint Michael the Archangel",
+      "text": "Saint Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, O Prince of the heavenly host, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen."
+    },
+    "es": {
+      "name": "San Miguel Arcángel",
+      "text": "San Miguel Arcángel, defiéndenos en la batalla. Sé nuestro amparo contra las maldades y asechanzas del demonio. Reprímale Dios, pedimos suplicantes; y tú, Príncipe de la milicia celestial, arroja al infierno con el divino poder a Satanás y a los demás espíritus malignos que andan dispersos por el mundo para la perdición de las almas. Amén."
+    },
+    "la": {
+      "name": "Sancte Michael Archangele",
+      "text": "Sancte Michael Archangele, defende nos in proelio, contra nequitiam et insidias diaboli esto praesidium. Imperet illi Deus, supplices deprecamur; tuque, Princeps militiae caelestis, Satanam aliosque spiritus malignos, qui ad perditionem animarum pervagantur in mundo, divina virtute, in infernum detrude. Amen."
+    }
+  },
+  "litany": {
+    "pt": {
+      "name": "Ladainha breve",
+      "text": [
+        "Senhor Jesus, fonte da nossa esperança — tende piedade de nós.",
+        "Cristo, que acolheis os arrependidos — tende piedade de nós.",
+        "Santa Maria — rogai por nós.",
+        "São Miguel Arcanjo — rogai por nós.",
+        "São Gabriel Arcanjo — rogai por nós.",
+        "São Rafael Arcanjo — rogai por nós.",
+        "Todos os santos anjos — rogai por nós.",
+        "São Bento — rogai por nós.",
+        "Todos os santos e santas de Deus — rogai por nós."
+      ]
+    },
+    "en": {
+      "name": "Short litany",
+      "text": [
+        "Lord Jesus, source of our hope — have mercy on us.",
+        "Christ, who welcomes those who repent — have mercy on us.",
+        "Holy Mary — pray for us.",
+        "Saint Michael the Archangel — pray for us.",
+        "Saint Gabriel the Archangel — pray for us.",
+        "Saint Raphael the Archangel — pray for us.",
+        "All holy angels — pray for us.",
+        "Saint Benedict — pray for us.",
+        "All holy men and women of God — pray for us."
+      ]
+    },
+    "es": {
+      "name": "Letanía breve",
+      "text": [
+        "Señor Jesús, fuente de nuestra esperanza — ten piedad de nosotros.",
+        "Cristo, que acoges a los arrepentidos — ten piedad de nosotros.",
+        "Santa María — ruega por nosotros.",
+        "San Miguel Arcángel — ruega por nosotros.",
+        "San Gabriel Arcángel — ruega por nosotros.",
+        "San Rafael Arcángel — ruega por nosotros.",
+        "Santos ángeles — rogad por nosotros.",
+        "San Benito — ruega por nosotros.",
+        "Todos los santos de Dios — rogad por nosotros."
+      ]
+    },
+    "la": {
+      "name": "Litania brevis",
+      "text": [
+        "Domine Iesu, spes nostra — miserere nobis.",
+        "Christe, qui paenitentes suscipis — miserere nobis.",
+        "Sancta Maria — ora pro nobis.",
+        "Sancte Michael Archangele — ora pro nobis.",
+        "Sancte Gabriel Archangele — ora pro nobis.",
+        "Sancte Raphael Archangele — ora pro nobis.",
+        "Omnes sancti Angeli — orate pro nobis.",
+        "Sancte Benedicte — ora pro nobis.",
+        "Omnes Sancti et Sanctae Dei — orate pro nobis."
+      ]
+    }
+  }
+});
