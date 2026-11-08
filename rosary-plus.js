@@ -143,24 +143,26 @@ function cuiudoRosary(){
    '<div class="prayer-response"><span>'+escapeHtml(t.offering)+'</span><p>'+escapeHtml(prayer)+'</p></div></div>'):'')+'</div>';
  return '<section class="rosary-plus-header"><div><span class="eyebrow">'+escapeHtml(t.today)+': '+escapeHtml(cuiudoGroupName(dayGroup()))+'</span>'+
   '<h1 class="page-title">'+escapeHtml(t.rosary)+'</h1><p class="page-desc">'+escapeHtml(t.intro)+'</p></div>'+
-  '<aside class="rosary-music-control rosary-music-v13" aria-label="'+escapeHtml(musicLabel)+'"><div class="music-heading">'+
+   '<aside class="rosary-music-control rosary-music-v13 spotify-mini-player" aria-label="'+escapeHtml(musicLabel)+'">'+
+   '<div class="rosary-player-top"><div class="music-heading">'+
    '<span class="music-disc" aria-hidden="true">♫</span><div><strong>'+escapeHtml(musicLabel)+'</strong>'+
-   '<small>'+escapeHtml(musicInfo.title)+'</small></div></div>'+
-   '<div class="rosary-track-options" role="group" aria-label="'+escapeHtml(musicLabels.title)+'">'+
-     Object.keys(cuiudoMusic.tracks).map(id=>'<button type="button" class="rosary-track-option '+(musicTrack===id?'selected':'')+
-      '" data-action="combat-rosary-track" data-track="'+id+'" aria-pressed="'+(musicTrack===id)+'">'+
-       escapeHtml(musicLabels[id])+'</button>').join('')+'</div>'+
+   '<small title="'+escapeHtml(musicInfo.title)+'">'+escapeHtml(musicInfo.title)+'</small></div></div>'+
    '<div class="music-buttons"><button class="btn '+(musicOn?'music-active':'btn-secondary')+
-   '" type="button" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'>'+
-   '<span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span> '+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'</button>'+
+   '" type="button" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" aria-label="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" title="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'>'+
+   '<span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span></button>'+
    '<input type="range" id="rosary-volume" min="0" max="50" step="1" value="'+volume+
-   '" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'"></div>'+
+   '" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'"></div></div>'+
+   '<div class="rosary-track-options" role="group" aria-label="'+escapeHtml(musicLabels.title)+'">'+
+   Object.keys(cuiudoMusic.tracks).map(id=>'<button type="button" class="rosary-track-option '+(musicTrack===id?'selected':'')+
+   '" data-action="combat-rosary-track" data-track="'+id+'" aria-pressed="'+(musicTrack===id)+'">'+
+   escapeHtml(musicLabels[id])+'</button>').join('')+'</div>'+
    (cuiudoMusic.hasError()?'<p class="audio-error" role="alert">'+escapeHtml(musicLabels.noAudio)+'</p>':'')+
+   '<details class="rosary-music-credits"><summary>'+escapeHtml(musicLabels.credit)+'</summary>'+
    '<p class="rosary-music-credit">'+escapeHtml(musicInfo.author)+' · '+escapeHtml(musicInfo.license)+
-    (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
+   (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
    (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
-    (musicInfo.src?.startsWith('https://')?'<p class="rosary-music-note">'+escapeHtml(musicLabels.online)+'</p>':'')+
-   '</aside></section>'+
+   (musicInfo.src?.startsWith('https://')?'<p class="rosary-music-note">'+escapeHtml(musicLabels.online)+'</p>':'')+
+   '</details></aside></section>'+
   '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-hd.svg" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
