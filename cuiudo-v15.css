@@ -1,0 +1,166 @@
+/* CUIÚDO v15 — imagens selecionadas pelo usuário + deveres e omissões.
+   A medalha colorida substitui a antiga arte dourada, preservando o visual minimalista.
+*/
+.benedict-hero{
+ min-height:460px;
+ border:1px solid #dde2ee;
+ background:linear-gradient(117deg,#ffffff 0%,#f9fafc 47%,#e8eef9 100%);
+ box-shadow:0 16px 46px #1c2c4a10;
+}
+.benedict-hero:before{
+ background:radial-gradient(circle,#cad6ee5c,transparent 74%);
+}
+.benedict-hero h1{color:#18243c;letter-spacing:-.073em}
+.benedict-eyebrow{color:#a26538}
+.benedict-motto{color:#687591}
+.benedict-hero-copy p{color:#526077}
+.benedict-hero-actions .btn{
+ background:#18294d;color:#fff;border-color:#18294d;
+ box-shadow:0 6px 17px #18294d25
+}
+.benedict-hero-art{min-height:415px}
+.benedict-hero-art:before{
+ background:radial-gradient(ellipse,#d9e4fa8f 0%,#d7dcf159 47%,transparent 72%);
+}
+.benedict-hero-art img.benedict-medal-premium{
+ display:block;width:min(100%,445px)!important;max-width:445px!important;
+ aspect-ratio:1!important;object-fit:contain!important;
+ background:#fff!important;
+ border:7px solid #ffffff!important;border-radius:50%!important;
+ box-shadow:0 15px 37px #0b24512b,0 0 0 1px #dce4f3!important;
+ transform:none!important;
+ filter:none!important;transition:transform .25s ease,box-shadow .25s ease!important;
+}
+.benedict-hero:hover .benedict-medal-premium{
+ transform:translateY(-3px)!important;box-shadow:0 20px 46px #132b5130!important;
+}
+.benedict-hero-art .benedict-medal-credit{color:#71809b}
+:root[data-theme=dark] .benedict-hero{
+ background:linear-gradient(117deg,#151b2b 0%,#202a3d 57%,#2e3f5c 100%);
+ border-color:#3b4960
+}
+:root[data-theme=dark] .benedict-hero h1{color:#f7f9ff}
+:root[data-theme=dark] .benedict-hero-copy p{color:#c0cbe1}
+:root[data-theme=dark] .benedict-eyebrow{color:#ffd48b}
+:root[data-theme=dark] .benedict-hero-actions .btn{background:#f7f9ff;color:#172440;border-color:#f7f9ff}
+:root[data-theme=dark] .benedict-hero-art:before{
+ background:radial-gradient(ellipse,#24395c 0%,#24304c75 49%,transparent 72%)
+}
+:root[data-theme=dark] .benedict-hero-art img.benedict-medal-premium{
+ border-color:#fff!important;background:#fff!important;box-shadow:0 18px 45px #0008!important
+}
+/* Imagem do usuário com São Bento + disciplina sem crueldade. */
+.duty-hero{
+ display:grid;grid-template-columns:minmax(0,1.3fr) minmax(200px,.7fr);
+ min-height:285px;overflow:hidden;isolation:isolate;border-radius:24px;
+ background:#090909;border:1px solid #242424;color:#fff;
+ margin:24px 0 30px;
+ box-shadow:0 16px 38px #00000018;
+}
+.duty-hero-copy{padding:clamp(25px,4vw,46px);align-self:center;position:relative;z-index:1}
+.duty-eyebrow{display:block;color:#e7c69b;font:700 10px/1.4 var(--font);letter-spacing:.11em}
+.duty-hero h2{
+ margin:14px 0 12px;color:#fcfcfa;max-width:700px;
+ font:770 clamp(29px,3.8vw,48px)/1.09 var(--font);
+ letter-spacing:-.065em;text-wrap:balance
+}
+.duty-hero p{font:430 14px/1.76 var(--font);color:#d0ccc7;margin:0;max-width:540px}
+.duty-hero-actions{margin-top:23px}
+.duty-hero-actions .btn{
+ background:#f7f4ef;color:#171717;border:1px solid #f7f4ef;
+ min-height:44px;box-shadow:none;
+}
+.duty-image-wrap{
+ position:relative;display:grid;place-items:center;background:#050505;
+ min-height:285px;overflow:hidden
+}
+.duty-image-wrap:before{
+ content:"";position:absolute;z-index:1;inset:0;
+ background:linear-gradient(90deg,#090909 0%,transparent 20%,transparent 90%,#09090980);
+ pointer-events:none
+}
+.duty-image-wrap img{
+ width:100%;height:100%;max-height:365px;max-width:350px;
+ display:block;object-fit:contain;object-position:center;
+ filter:contrast(1.03);background:#000
+}
+.duty-section{margin:29px 0 46px}
+.duty-section-intro{max-width:790px;margin-bottom:22px}
+.duty-section-intro .eyebrow{color:var(--accent)}
+.duty-section-intro h2{
+ font:760 clamp(30px,3.5vw,45px)/1.13 var(--font);
+ letter-spacing:-.065em;margin:12px 0;color:var(--ink)
+}
+.duty-section-intro p{
+ font:440 14px/1.7 var(--font);color:var(--subink);margin:0
+}
+.duty-cards{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:13px
+}
+.duty-card{
+ background:var(--surface);border:1px solid var(--line);
+ border-radius:19px;padding:clamp(18px,2.5vw,25px);
+ display:flex;flex-direction:column;min-height:250px
+}
+.duty-card-top{display:flex;justify-content:space-between;align-items:center;gap:13px}
+.duty-number{
+ display:grid;place-items:center;height:35px;width:35px;border-radius:12px;
+ background:var(--surface-2);color:var(--ink);
+ font:750 12px var(--font)
+}
+.duty-reference{font:650 11px var(--font);color:var(--dim);text-align:right}
+.duty-card h3{
+ font:720 clamp(19px,2.1vw,24px)/1.16 var(--font);
+ color:var(--ink);letter-spacing:-.04em;
+ margin:17px 0 7px
+}
+.duty-subtitle{color:var(--accent)!important;font-weight:650!important;margin:0 0 11px!important}
+.duty-card p{
+ font:440 13px/1.73 var(--font);color:var(--subink);margin:0 0 11px
+}
+.duty-question,.duty-action{
+ padding:13px 15px;background:var(--surface-2);border-radius:11px;
+ font:475 12px/1.67 var(--font);color:var(--ink);margin:9px 0 0
+}
+.duty-action{background:transparent;border:1px solid var(--line)}
+.duty-question strong,.duty-action strong{color:var(--ink);font-weight:720}
+.duty-card>a{
+ align-self:flex-start;margin-top:auto;padding-top:14px;
+ color:var(--accent);font:650 11px/1.5 var(--font);
+ text-decoration:underline;text-underline-offset:3px
+}
+.duty-balance{
+ margin-top:18px;border-radius:17px;padding:21px 24px;
+ background:var(--surface-2);border:1px solid var(--line)
+}
+.duty-balance strong{color:var(--ink);font:720 15px var(--font)}
+.duty-balance p{color:var(--subink);font:445 13px/1.8 var(--font);margin:9px 0}
+.duty-balance a{color:var(--accent);font:650 11px var(--font)}
+@media(max-width:760px){
+ .benedict-hero{min-height:0}
+ .benedict-hero-art{min-height:300px!important;height:310px!important;padding:15px 18px}
+ .benedict-hero-art img.benedict-medal-premium{
+  width:min(100%,270px)!important;max-width:270px!important;
+  transform:none!important;border-width:5px!important
+ }
+ .benedict-hero h1{font-size:clamp(35px,8.7vw,50px)}
+ .duty-hero{grid-template-columns:1fr;margin:15px 0 24px;border-radius:20px}
+ .duty-image-wrap{grid-row:1;min-height:230px;max-height:230px}
+ .duty-image-wrap img{height:255px;max-height:none;max-width:100%;width:auto;object-fit:contain}
+ .duty-image-wrap:before{background:linear-gradient(0deg,#090909 0%,transparent 25%)}
+ .duty-hero-copy{padding:24px 21px 26px}
+ .duty-hero h2{font-size:clamp(29px,7vw,40px)}
+ .duty-hero p{font-size:13px}
+ .duty-hero-actions .btn{width:100%}
+ .duty-cards{grid-template-columns:1fr;gap:11px}
+ .duty-card{min-height:0;padding:19px}
+ .duty-section-intro h2{font-size:31px}
+ .duty-balance{padding:19px}
+}
+@media(prefers-reduced-motion:reduce){
+ .benedict-hero-art img.benedict-medal-premium,
+ .benedict-hero:hover img.benedict-medal-premium{
+  transition:none!important;transform:none!important
+ }
+}
