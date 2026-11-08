@@ -112,16 +112,16 @@ function cuiudoRosary(){
  const progress=readProgress(),count=progress[state.mystery],extra=rosaryExtras[l];
  const musicOn=cuiudoAmbient.isPlaying(),volume=Math.round(Number(state.musicVolume)*100);
  const length=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
- const sizeIndex=['small','medium','large'].indexOf(length);
  const art=cuiudoArtwork(m.id),lang={pt:'pt-BR',en:'en',es:'es',la:'la'}[l];
- const strong=l==='pt'?mm.hard:extra.challenge;
- const question=l==='pt'?mm.question:t.question;
- const concrete=l==='pt'?m.action:extra.challenge;
+ const personalized=rosaryLanguageExtras.mysteries[m.id]?.[l];
+ const strong=l==='pt'?mm.hard:loc.meditation;
+ const question=l==='pt'?mm.question:(personalized?.question||t.question);
+ const concrete=l==='pt'?m.action:(personalized?.action||extra.challenge);
  const prayer=l==='pt'?(mm.prayer||'Senhor, dai-me a coragem de viver o que acabo de contemplar. Amém.'):extra.offering;
  const fullPrayerList=cuiudoPrayersList();
  const credits=art.source?'<a href="'+escapeHtml(art.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(art.credit)+' ↗</a>':escapeHtml(art.credit);
  const musicLabel=cuiudoAmbient.isSupported()?t.musicLabel:t.musicUnsupported;
- const artworkAlt=l==='pt'?'Pintura ilustrativa: ':'Illustration: ';
+ const artworkAlt={pt:'Pintura ilustrativa: ',en:'Illustrative painting: ',es:'Pintura ilustrativa: ',la:'Imago sacra: '}[l];
  const meditationBlock='<div class="rosary-meditation-block"><span class="card-meta">'+escapeHtml(t.meditation)+'</span>'+
   '<p class="readable">'+escapeHtml(loc.meditation)+'</p>'+
   (length==='small'?'':('<div class="virtue-strip"><span>'+escapeHtml(t.virtue)+'</span><strong>'+escapeHtml(loc.virtue)+'</strong></div>'+
@@ -147,7 +147,7 @@ function cuiudoRosary(){
     '" type="button" data-action="group" data-id="'+id+'" aria-pressed="'+(state.group===id)+'">'+
     escapeHtml(cuiudoGroupName(id))+'</button>').join('')+'</div>'+
   '<section class="rosary-length"><div><span class="card-meta">'+escapeHtml(cuiudoLengthHeading[l])+'</span>'+
-   '<p>'+(['pt','es'].includes(l)?'A quantidade de Ave-Marias não muda: são sempre cinco dezenas.':'The Rosary always has five decades; only the reflection length changes.')+'</p></div>'+
+   '<p>'+escapeHtml({pt:'As cinco dezenas permanecem iguais; só muda a profundidade da meditação.',en:'The five decades stay the same; only the depth of each meditation changes.',es:'Las cinco decenas permanecen iguales; solo cambia la profundidad de la meditación.',la:'Quinque decades manent; tantum meditationis profunditas mutatur.'}[l])+'</p></div>'+
    '<div class="meditation-size-buttons" role="group" aria-label="'+escapeHtml(cuiudoLengthHeading[l])+'">'+
    ['small','medium','large'].map((size,i)=>'<button type="button" class="meditation-size '+(length===size?'active':'')+
    '" data-action="combat-meditation-length" data-length="'+size+'" aria-pressed="'+(length===size)+'">'+
@@ -197,11 +197,10 @@ function cuiudoRosary(){
    '<h2>'+escapeHtml(t.prayersMore)+'</h2><div class="prayer-list">'+
     [[t.offering,extra.offering],[t.fatima,extra.fatima],[t.benedict,extra.benedict]].map(([name,words])=>
      '<details class="card prayer-card"><summary>'+escapeHtml(name)+'</summary><p>'+escapeHtml(words)+'</p></details>').join('')+
-   '<details class="card prayer-card"><summary>São Miguel Arcanjo / Saint Michael</summary>'+
-    '<p>'+escapeHtml(oracoesDevocionario.find(x=>x.id==='miguel').text)+'</p></details>'+
-   '<details class="card prayer-card"><summary>Ladainha / Litany</summary><p>'+
-    escapeHtml(ladainhaBreve.join('\n'))+'</p><a href="'+escapeHtml(fonteLadainhaOficial)+
-    '" target="_blank" rel="noopener noreferrer">Vatican — Litany ↗</a></details></div></section>';
+   '<details class="card prayer-card"><summary>'+escapeHtml(rosaryLanguageExtras.saintMichael[l].name)+'</summary>'+
+    '<p>'+escapeHtml(rosaryLanguageExtras.saintMichael[l].text)+'</p></details>'+
+   '<details class="card prayer-card"><summary>'+escapeHtml(rosaryLanguageExtras.litany[l].name)+'</summary><p>'+
+    escapeHtml(rosaryLanguageExtras.litany[l].text.join('\n'))+'</p></details></div></section>';
 }
 const cuiudoPreviousRender=render;
 render=function(){
