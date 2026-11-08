@@ -37,10 +37,11 @@ assert.ok(root.innerHTML.includes('&lt;script&gt;'));
 runInContext("state.tab='desafios';render()",vm);
 assert.match(root.innerHTML,/today-goals/);
 runInContext("state.tab='terco';state.appLang='pt';render()",vm);
-assert.equal((root.innerHTML.match(/data-action="combat-rosary-track"/g)||[]).length,9);
+assert.match(root.innerHTML,/data-action="combat-rosary-prev-track"/);
+ assert.match(root.innerHTML,/data-action="combat-rosary-next-track"/);
 for(const id of ['catolico','templario','relaxar']){
  runInContext("state.musicTrack='"+id+"';cuiudoMusic.select('"+id+"');render()",vm);
- assert.match(root.innerHTML,/rosary-track-options/);
+ assert.match(root.innerHTML,/cuiudo-tiny-player/);
 }
 assert.equal(runInContext('cuiudoMusic.isPlaying()',vm),false);
 for(const f of ['daily-goals.js','cuiudo-music.js','cuiudo-v13.css']){assert.ok(read('index.html').includes(f));assert.ok(read('sw.js').includes(f));}

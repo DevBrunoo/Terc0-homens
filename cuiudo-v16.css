@@ -310,109 +310,6 @@
 @media(max-width:760px){.benedict-hero-art .benedict-medal-single{width:min(100%,292px);margin:0 auto 8px}.benedict-hero-art .benedict-medal-single img.benedict-medal-premium{width:100%!important;height:auto!important;transform:none!important}.goals-kick{font-size:14px}}
 
 
-/* v19 — mini player responsivo inspirado no Spotify. */
-@media(min-width:901px){
- .rosary-plus-header{grid-template-columns:minmax(0,1fr) minmax(300px,360px)}
-}
-.rosary-plus-header .spotify-mini-player{
- width:100%;max-width:440px;min-width:0;box-sizing:border-box;
- background:#191d1b;color:#f7faf7;border:1px solid #303733;
- border-radius:17px;padding:12px 13px!important;box-shadow:0 8px 24px #00000016
-}
-.spotify-mini-player .rosary-player-top{
- display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center
-}
-.spotify-mini-player .music-heading{display:flex;align-items:center;gap:9px;min-width:0}
-.spotify-mini-player .music-heading>div{min-width:0}
-.spotify-mini-player .music-disc{
- flex:0 0 34px;width:34px;height:34px;font-size:18px;
- border-radius:50%;background:#2a302d;color:#1ed760
-}
-.spotify-mini-player .music-heading strong{color:#f6f8f6;font:700 12px/1.3 var(--font)}
-.spotify-mini-player .music-heading small{
- display:block;margin-top:2px;font:480 10px/1.35 var(--font);color:#afb8b1;
- overflow:hidden;text-overflow:ellipsis;white-space:nowrap
-}
-.spotify-mini-player .music-buttons{
- display:flex;flex-wrap:nowrap!important;align-items:center;
- gap:9px;min-width:0;margin:0!important
-}
-.spotify-mini-player .music-buttons .btn,
-.spotify-mini-player .music-buttons .btn.music-active{
- display:grid;place-items:center;flex:0 0 38px!important;
- box-sizing:border-box;width:38px;height:38px;min-height:38px;
- padding:0!important;margin:0;border:0!important;border-radius:50%!important;
- background:#1ed760!important;color:#102013!important;box-shadow:none;line-height:1
-}
-.spotify-mini-player .music-buttons .btn span{font-size:15px;line-height:1}
-.spotify-mini-player .music-buttons .btn:hover:not(:disabled){
- background:#51ee86!important;transform:scale(1.04)
-}
-.spotify-mini-player .music-buttons input[type="range"]{
- box-sizing:border-box;display:block;flex:0 0 58px!important;
- width:58px!important;min-width:0;height:24px;
- padding:0;margin:0;accent-color:#1ed760;cursor:pointer
-}
-.spotify-mini-player .rosary-track-options{
- display:flex!important;grid-template-columns:none!important;align-items:center;
- flex-wrap:nowrap;gap:6px;min-width:0;margin:9px 0 0!important;
- padding:1px 0 7px!important;overflow-x:auto;overflow-y:hidden;
- overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch;
- scrollbar-width:thin;scrollbar-color:#4a5b4e transparent;
- background:transparent!important;border-radius:0!important
-}
-.spotify-mini-player .rosary-track-option{
- flex:0 0 auto;min-height:32px!important;max-width:none;
- padding:7px 11px!important;border-radius:999px!important;
- border:1px solid #353d38!important;box-shadow:none!important;
- background:#292e2b!important;color:#cbd3ce!important;
- font:600 11px/1.3 var(--font)!important;
- white-space:nowrap!important;word-break:normal!important
-}
-.spotify-mini-player .rosary-track-option:hover:not(.selected){
- color:#fff!important;background:#38413a!important
-}
-.spotify-mini-player .rosary-track-option.selected{
- color:#102013!important;background:#1ed760!important;
- border-color:#1ed760!important;box-shadow:none!important
-}
-.spotify-mini-player .rosary-music-credits{margin:3px 0 0;min-width:0}
-.spotify-mini-player .rosary-music-credits summary{
- display:inline-flex;align-items:center;gap:5px;cursor:pointer;
- color:#aab5ac;font:530 10px/1.5 var(--font);list-style:none
-}
-.spotify-mini-player .rosary-music-credits summary::-webkit-details-marker{display:none}
-.spotify-mini-player .rosary-music-credits summary::after{content:"⌄";font-size:12px}
-.spotify-mini-player .rosary-music-credits[open] summary::after{content:"⌃"}
-.spotify-mini-player .rosary-music-credit,
-.spotify-mini-player .rosary-music-note{
- margin:5px 0 0;font:450 10px/1.55 var(--font);color:#aab5ac
-}
-.spotify-mini-player .rosary-music-credit a{color:#6ff39d}
-.spotify-mini-player .audio-error{font-size:11px;color:#ff9c95;margin:7px 0 0}
-.spotify-mini-player .music-buttons .btn:focus-visible,
-.spotify-mini-player .rosary-track-option:focus-visible,
-.spotify-mini-player summary:focus-visible,
-.spotify-mini-player input[type="range"]:focus-visible{
- outline:2px solid #a6f3bd;outline-offset:3px
-}
-@media(max-width:900px){
- .rosary-plus-header .spotify-mini-player{max-width:440px}
-}
-@media(max-width:420px){
- .rosary-plus-header .spotify-mini-player{padding:11px 12px!important;border-radius:15px}
- .spotify-mini-player .rosary-player-top{gap:6px}
- .spotify-mini-player .music-heading{gap:7px}
- .spotify-mini-player .music-disc{flex-basis:30px;width:30px;height:30px;font-size:17px}
- .spotify-mini-player .music-buttons{gap:7px}
- .spotify-mini-player .music-buttons input[type="range"]{width:46px!important;flex-basis:46px!important}
- .spotify-mini-player .rosary-track-option{padding:7px 10px!important}
-}
-@media(prefers-reduced-motion:reduce){
- .spotify-mini-player .music-buttons .btn{transition:none;transform:none!important}
-}
-
-
 /* v20: mobile-first. Galeria editorial CUIÚDO em fotos + telas pequenas. */
 .cuiudo-photo-gallery{margin:32px 0 34px;min-width:0}
 .cuiudo-gallery-heading{
@@ -574,4 +471,117 @@
 }
 @media(prefers-reduced-motion:reduce){
  .cuiudo-gallery-open img{transition:none!important}
+}
+
+
+/* v21 — Faixa única, controles de anterior / reproduzir / próxima. */
+.rosary-plus-header .cuiudo-tiny-player{
+ width:100%;max-width:370px;min-width:0;box-sizing:border-box;
+ display:grid;grid-template-columns:30px minmax(0,1fr) auto 44px 20px;
+ gap:0 7px;align-items:center;
+ padding:8px 9px!important;border:1px solid #333b34;border-radius:14px;
+ background:#191d1b;color:#f7faf7;box-shadow:0 5px 17px #00000016
+}
+.cuiudo-tiny-player .music-disc{
+ grid-column:1;grid-row:1;width:30px;height:30px;
+ display:grid;place-items:center;background:#2b322d;color:#1ed760;
+ border-radius:9px;font-size:16px
+}
+.cuiudo-tiny-player .cuiudo-track-info{
+ grid-column:2;grid-row:1;min-width:0;
+ display:flex;flex-direction:column;gap:3px
+}
+.cuiudo-tiny-player .cuiudo-track-info strong{
+ display:block;color:#f4f7f4;font:750 11px/1.18 var(--font);
+ overflow:hidden;white-space:nowrap;text-overflow:ellipsis
+}
+.cuiudo-tiny-player .cuiudo-track-info small{
+ display:block;color:#aab5ae;font:490 9px/1.18 var(--font);
+ overflow:hidden;white-space:nowrap;text-overflow:ellipsis
+}
+.cuiudo-tiny-player .cuiudo-skip-controls{
+ grid-column:3;grid-row:1;display:flex;align-items:center;gap:2px;
+ flex-wrap:nowrap;justify-content:flex-end
+}
+.cuiudo-tiny-player .cuiudo-skip-controls button{
+ display:grid;place-items:center;flex:0 0 auto;padding:0;
+ border:0;cursor:pointer;outline-offset:3px
+}
+.cuiudo-tiny-player .cuiudo-skip{
+ width:24px;height:31px;border-radius:8px;
+ background:transparent;color:#e0e8e0;font:550 29px/1 var(--font)
+}
+.cuiudo-tiny-player .cuiudo-skip:hover{background:#ffffff13;color:#1ed760}
+.cuiudo-tiny-player .cuiudo-play-toggle{
+ width:33px;height:33px;border-radius:50%;
+ background:#1ed760;color:#102013;font:700 15px/1 var(--font)
+}
+.cuiudo-tiny-player .cuiudo-play-toggle:hover{background:#51ee86}
+.cuiudo-tiny-player .cuiudo-play-toggle:disabled{opacity:.5;cursor:not-allowed}
+.cuiudo-tiny-player input.cuiudo-mini-volume{
+ grid-column:4;grid-row:1;box-sizing:border-box;
+ width:44px;height:26px;min-width:0;margin:0;padding:0;
+ accent-color:#1ed760;cursor:pointer
+}
+.cuiudo-tiny-player .rosary-music-credits{
+ grid-column:5;grid-row:1;position:relative;margin:0;min-width:0
+}
+.cuiudo-tiny-player .rosary-music-credits summary{
+ display:grid;place-items:center;width:20px;height:28px;
+ cursor:pointer;list-style:none;color:#aab5ad
+}
+.cuiudo-tiny-player .rosary-music-credits summary::-webkit-details-marker{display:none}
+.cuiudo-tiny-player .rosary-music-credits summary>span{font-size:16px}
+.cuiudo-tiny-player .rosary-music-credits[open]{
+ grid-column:1/-1;grid-row:2;position:static;
+ min-width:0;margin-top:7px;padding-top:6px;
+ border-top:1px solid #39423c
+}
+.cuiudo-tiny-player .rosary-music-credits[open] summary{
+ display:inline-flex;width:auto;height:20px
+}
+.cuiudo-tiny-player .rosary-music-credit,
+.cuiudo-tiny-player .rosary-music-note{
+ color:#abb5ad;font:450 10px/1.5 var(--font);
+ margin:4px 0 0;overflow-wrap:anywhere
+}
+.cuiudo-tiny-player .rosary-music-credit a{color:#70f39d}
+.cuiudo-tiny-player .audio-error{
+ grid-column:1/-1;grid-row:3;
+ color:#ffb7b4;font:510 10px/1.4 var(--font);margin-top:7px
+}
+.cuiudo-tiny-player :is(button,input,summary):focus-visible{
+ outline:2px solid #93f2b2;outline-offset:2px
+}
+@media(max-width:900px){.rosary-plus-header .cuiudo-tiny-player{max-width:370px}}
+@media(max-width:760px){
+ .rosary-plus-header .cuiudo-tiny-player{
+  max-width:100%;grid-template-columns:30px minmax(0,1fr) auto 42px 20px;
+  gap:0 6px;padding:8px 9px!important
+ }
+ .cuiudo-tiny-player input.cuiudo-mini-volume{width:42px}
+}
+@media(max-width:420px){
+ .rosary-plus-header .cuiudo-tiny-player{
+  grid-template-columns:27px minmax(0,1fr) auto 36px 18px;
+  gap:0 5px;padding:7px 8px!important
+ }
+ .cuiudo-tiny-player .music-disc{width:27px;height:27px}
+ .cuiudo-tiny-player .cuiudo-skip-controls{gap:1px}
+ .cuiudo-tiny-player .cuiudo-skip{width:21px;height:29px}
+ .cuiudo-tiny-player .cuiudo-play-toggle{width:30px;height:30px}
+ .cuiudo-tiny-player input.cuiudo-mini-volume{width:36px}
+}
+@media(max-width:350px){
+ .rosary-plus-header .cuiudo-tiny-player{
+  grid-template-columns:24px minmax(0,1fr) auto 28px 16px;
+  gap:0 3px;padding:7px 6px!important
+ }
+ .cuiudo-tiny-player .music-disc{width:24px;height:24px}
+ .cuiudo-tiny-player .cuiudo-skip{width:20px}
+ .cuiudo-tiny-player .cuiudo-play-toggle{width:28px;height:28px}
+ .cuiudo-tiny-player input.cuiudo-mini-volume{width:28px}
+}
+@media(prefers-reduced-motion:reduce){
+ .cuiudo-tiny-player .cuiudo-play-toggle{transition:none;transform:none!important}
 }

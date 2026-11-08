@@ -182,26 +182,24 @@ function cuiudoRosary(){
    '<div class="prayer-response"><span>'+escapeHtml(t.offering)+'</span><p>'+escapeHtml(prayer)+'</p></div></div>'):'')+'</div>';
  return '<section class="rosary-plus-header"><div><span class="eyebrow">'+escapeHtml(t.today)+': '+escapeHtml(cuiudoGroupName(dayGroup()))+'</span>'+
   '<h1 class="page-title">'+escapeHtml(t.rosary)+'</h1><p class="page-desc">'+escapeHtml(t.intro)+'</p></div>'+
-   '<aside class="rosary-music-control rosary-music-v13 spotify-mini-player" aria-label="'+escapeHtml(musicLabel)+'">'+
-   '<div class="rosary-player-top"><div class="music-heading">'+
-   '<span class="music-disc" aria-hidden="true">♫</span><div><strong>'+escapeHtml(musicLabel)+'</strong>'+
-   '<small title="'+escapeHtml(musicInfo.title)+'">'+escapeHtml(musicInfo.title)+'</small></div></div>'+
-   '<div class="music-buttons"><button class="btn '+(musicOn?'music-active':'btn-secondary')+
-   '" type="button" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" aria-label="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" title="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'>'+
-   '<span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span></button>'+
-   '<input type="range" id="rosary-volume" min="0" max="50" step="1" value="'+volume+
-   '" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'"></div></div>'+
-   '<div class="rosary-track-options" role="group" aria-label="'+escapeHtml(musicLabels.title)+'">'+
-   Object.keys(cuiudoMusic.tracks).map(id=>'<button type="button" class="rosary-track-option '+(musicTrack===id?'selected':'')+
-   '" data-action="combat-rosary-track" data-track="'+id+'" aria-pressed="'+(musicTrack===id)+'">'+
-   escapeHtml(musicLabels[id])+'</button>').join('')+'</div>'+
-   (cuiudoMusic.hasError()?'<p class="audio-error" role="alert">'+escapeHtml(musicLabels.noAudio)+'</p>':'')+
-   '<details class="rosary-music-credits"><summary>'+escapeHtml(musicLabels.credit)+'</summary>'+
+   '<aside class="rosary-music-control rosary-music-v13 cuiudo-tiny-player" aria-label="'+escapeHtml(musicLabel)+'">'+
+   '<span class="music-disc" aria-hidden="true">♫</span>'+
+   '<div class="cuiudo-track-info" aria-live="polite" aria-atomic="true">'+
+   '<strong title="'+escapeHtml(musicInfo.title)+'">'+escapeHtml(musicLabels[musicTrack]||musicInfo.title)+'</strong>'+
+   '<small title="'+escapeHtml(musicInfo.title)+'">'+escapeHtml(musicInfo.title)+'</small></div>'+
+   '<div class="cuiudo-skip-controls" role="group" aria-label="'+escapeHtml(musicLabel)+'">'+
+   '<button type="button" class="cuiudo-skip" data-action="combat-rosary-prev-track" aria-label="'+escapeHtml({pt:'Música anterior',en:'Previous track',es:'Canción anterior',la:'Cantus prior'}[l])+'"><span aria-hidden="true">‹</span></button>'+
+   '<button type="button" class="cuiudo-play-toggle" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" aria-label="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" title="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'><span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span></button>'+
+   '<button type="button" class="cuiudo-skip" data-action="combat-rosary-next-track" aria-label="'+escapeHtml({pt:'Próxima música',en:'Next track',es:'Siguiente canción',la:'Cantus sequens'}[l])+'"><span aria-hidden="true">›</span></button></div>'+
+   '<input class="cuiudo-mini-volume" type="range" id="rosary-volume" min="0" max="50" step="1" value="'+volume+'" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'">'+
+   '<details class="rosary-music-credits"><summary aria-label="'+escapeHtml(musicLabels.credit)+'" title="'+escapeHtml(musicLabels.credit)+'"><span aria-hidden="true">ⓘ</span></summary>'+
    '<p class="rosary-music-credit">'+escapeHtml(musicInfo.author)+' · '+escapeHtml(musicInfo.license)+
    (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
    (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
    (musicInfo.src?.startsWith('https://')?'<p class="rosary-music-note">'+escapeHtml(musicLabels.online)+'</p>':'')+
-   '</details></aside></section>'+
+   '</details>'+
+   (cuiudoMusic.hasError()?'<p class="audio-error" role="alert">'+escapeHtml(musicLabels.noAudio)+'</p>':'')+
+   '</aside></section>'+
   '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-hd.svg" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
@@ -291,10 +289,16 @@ app.addEventListener('click',evt=>{
   if(cuiudoMusic.isPlaying()){cuiudoMusic.stop();render();}
   else cuiudoMusic.play().then(()=>render()).catch(()=>render());
  }
- if(action==='combat-rosary-track'){
-  state.musicTrack=Object.keys(cuiudoMusic.tracks).includes(el.dataset.track)?el.dataset.track:'catolico';
+ if(action==='combat-rosary-prev-track'||action==='combat-rosary-next-track'){
+  const tracks=Object.keys(cuiudoMusic.tracks);
+  const index=tracks.indexOf(cuiudoMusic.getTrack());
+  const delta=action==='combat-rosary-next-track'?1:-1;
+  const next=tracks[(Math.max(0,index)+delta+tracks.length)%tracks.length];
+  const wasPlaying=cuiudoMusic.isPlaying();
+  state.musicTrack=next;
   save();
-  cuiudoMusic.select(state.musicTrack).then(()=>render()).catch(()=>render());
+  cuiudoMusic.select(next).then(()=>wasPlaying?cuiudoMusic.play():false)
+   .then(()=>render()).catch(()=>render());
  }
  if(action==='combat-meditation-length'){
   state.rosaryLength=['small','medium','large'].includes(el.dataset.length)?el.dataset.length:'medium';

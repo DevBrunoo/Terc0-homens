@@ -39,6 +39,15 @@ function click(action,more={}){
 }
 runInContext("state.tab='terco';state.appLang='pt';state.group='gozosos';state.mystery=0;render()",vm);
 assert.match(mount.innerHTML,/rosary-bead-visual/);
+assert.match(mount.innerHTML,/cuiudo-tiny-player/);
+assert.match(mount.innerHTML,/data-action="combat-rosary-next-track"/);
+assert.match(mount.innerHTML,/data-action="combat-rosary-prev-track"/);
+assert.doesNotMatch(mount.innerHTML,/data-action="combat-rosary-track"/);
+assert.equal(runInContext('cuiudoMusic.getTrack()',vm),'catolico');
+click('combat-rosary-next-track');
+assert.equal(runInContext('cuiudoMusic.getTrack()',vm),'templario');
+click('combat-rosary-prev-track');
+assert.equal(runInContext('cuiudoMusic.getTrack()',vm),'catolico');
 assert.equal((mount.innerHTML.match(/class="rosary-bead-node hail/g)||[]).length,10);
 assert.equal((mount.innerHTML.match(/class="rosary-bead-node father/g)||[]).length,1);
 assert.equal((mount.innerHTML.match(/class="rosary-bead-node glory/g)||[]).length,1);
