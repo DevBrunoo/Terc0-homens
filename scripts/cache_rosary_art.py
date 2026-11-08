@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cria acervo local com 20 pinturas sacras ilustrando os mistérios do terço.
 
-Busca Wikimedia Commons, baixa APENAS obras com licença Public Domain / CC0,
+Busca Wikimedia Commons, baixa obras em domínio público ou com licença Creative Commons,
 converte em WebP e grava créditos verificáveis em rosary-artwork.js. Não publica
 links de imagens externas nem inventa autoria. Mantém os SVGs anteriores como
 fallback de acessibilidade, se uma fonte estiver temporariamente indisponível.
@@ -36,8 +36,8 @@ SEARCHES={
  'flagelacao':['Flagellation of Christ Caravaggio','Flagellation of Christ painting'],
  'espinhos':['Crowning with Thorns Titian painting','Christ crowned with thorns painting'],
  'cruz':['Christ Carrying the Cross El Greco','Carrying the Cross Titian painting'],
- 'crucificacao':['Crucifixion Diego Velazquez','Crucifixion painting Jesus Christ'],
- 'ressurreicao':['Resurrection of Christ Piero della Francesca','Resurrection Jesus painting Raphael'],
+ 'crucificacao':['Christ on the Cross Velazquez','Crucifixion Jesus Christ painting','Crucifixion Christ 1600 painting','Jesus crucified painting'],
+ 'ressurreicao':['Resurrection of Christ Perugino','Resurrection Jesus Christ painting','Resurrection of Christ fresco','Christ risen painting'],
  'ascensao':['Ascension of Christ Giotto','Ascension of Christ painting'],
  'pentecostes':['Pentecost El Greco painting','Pentecost painting descent Holy Spirit'],
  'assuncao':['Assumption of the Virgin Titian','Assumption of Mary Rubens painting'],
@@ -63,7 +63,7 @@ def license_ok(info):
  metadata=info.get('extmetadata') or {}
  label=str((metadata.get('LicenseShortName') or {}).get('value',''))
  link=str((metadata.get('LicenseUrl') or {}).get('value',''))
- return bool(re.search(r'public domain|^PD|^CC0\b',label,re.I) or re.search(r'publicdomain|creativecommons.org/publicdomain',link,re.I))
+ return bool(re.search(r'public domain|^PD|^CC0\b|CC BY(?:-SA)?',label,re.I) or re.search(r'publicdomain|creativecommons.org/(?:publicdomain|licenses/by)',link,re.I))
 def search(query):
  args={'action':'query','generator':'search','gsrsearch':query,'gsrnamespace':6,'gsrlimit':26,'prop':'imageinfo',
        'iiprop':'url|size|extmetadata','iiurlwidth':1080,'format':'json','formatversion':'2'}
