@@ -26,6 +26,10 @@ assert.match(mount.innerHTML,/benedict-medal-single/);
 assert.match(mount.innerHTML,/Saint_Benedict_Medal_icon\.svg/);
 assert.doesNotMatch(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
 assert.match(mount.innerHTML,/Você é muito macio!/);
+assert.match(mount.innerHTML,/cuiudo-photo-gallery/);
+assert.equal((mount.innerHTML.match(/class="cuiudo-gallery-card"/g)||[]).length,10);
+assert.ok(read('cuiudo-v16.css').includes('scroll-snap-type:x mandatory'));
+assert.ok(read('cuiudo-v16.css').includes('@media(max-width:350px)'));
 assert.match(mount.innerHTML,/sao-bento-gravura-hd\.webp/);
 assert.match(mount.innerHTML,/sao-bento-arte-enviada\.webp/);
 

@@ -75,9 +75,48 @@ function cuiudoBenedictBanner(){
   '<img class="benedict-medal-premium" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saint_Benedict_Medal_icon.svg" alt="'+escapeHtml(lines[2])+'" width="512" height="512" loading="eager" fetchpriority="high" onerror="this.onerror=null;this.src=\'./assets/medalha-sao-bento-hd.svg\'"></div>'+
   '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://jovensconectados.org.br/7-coisas-que-devemos-saber-sobre-a-medalha-e-cruz-de-sao-bento.html" target="_blank" rel="noopener noreferrer">Significado da medalha ↗</a></span></div></section>';
 }
+
+/* CUIÚDO — mais imagens, arte sacra e coragem, com fontes identificadas. */
+const cuiudoGalleryItems=Object.freeze([
+ {tag:'ORAÇÃO',title:'REZE. LEVANTE.',description:'A fé começa no coração e chega às atitudes.',url:'./assets/feed/rosario.webp',fallback:'./assets/feed/rosario.webp',source:'https://unsplash.com/photos/a-person-holding-a-rosary-with-a-cross-on-it-CCC0CdEsI7E',credit:'Dolina Modlitwy · Unsplash',post:'f01'},
+ {tag:'DISCIPLINA',title:'VENÇA A SI MESMO.',description:'Coragem também é fazer o que precisa ser feito.',url:'./assets/feed/cristo-deserto.webp',fallback:'./assets/feed/cristo-deserto.webp',source:'https://commons.wikimedia.org/wiki/File:Christ_in_the_Wilderness_-_Ivan_Kramskoy_-_Google_Cultural_Institute.jpg',credit:'Ivan Kramskoy · domínio público',post:'j01'},
+ {tag:'CORAGEM',title:'VÁ PRA CIMA.',description:'Levante-se e faça a sua parte.',url:'./assets/feed/vai-pra-cima.webp',fallback:'./assets/feed/vai-pra-cima.webp',source:'https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_A_New_Year_on_the_Cimarron_-_Google_Art_Project.jpg',credit:'Frederic Remington · domínio público',post:'r09'},
+ {tag:'VIGILÂNCIA',title:'VIGIAI E ORAI.',description:'Não durma diante dos seus deveres.',url:'https://commons.wikimedia.org/wiki/Special:FilePath/Christ_in_Gethsemane.jpg?width=900',fallback:'./assets/misterios/fotos/agonia.webp',source:'https://commons.wikimedia.org/wiki/File:Christ_in_Gethsemane.jpg',credit:'Heinrich Hofmann · domínio público',tab:'terco'},
+ {tag:'COMBATE ESPIRITUAL',title:'PERMANEÇA FIRME.',description:'A vitória não é feita de desculpas.',url:'./assets/feed/miguel-rafael.webp',fallback:'./assets/feed/miguel-rafael.webp',source:'https://commons.wikimedia.org/wiki/File:Raphael_Saint_Michael_and_the_Dragon.jpg',credit:'Rafael · domínio público',post:'m02'},
+ {tag:'PERSEVERANÇA',title:'LEVANTE OUTRA VEZ.',description:'Recomeçar também exige humildade.',url:'https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt_Christ_Resurrected.jpg?width=900',fallback:'./assets/misterios/fotos/ressurreicao.webp',source:'https://commons.wikimedia.org/wiki/File:Rembrandt_Christ_Resurrected.jpg',credit:'Rembrandt · domínio público',tab:'terco'},
+ {tag:'CARIDADE',title:'NÃO ABANDONE O OUTRO.',description:'Fé verdadeira aprende a servir.',url:'./assets/feed/ajudar-companheiro.webp',fallback:'./assets/feed/ajudar-companheiro.webp',source:'https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_Aiding_a_Comrade_-_Google_Art_Project.jpg',credit:'Frederic Remington · domínio público',post:'r08'},
+ {tag:'CAMINHO',title:'FOCO NO QUE IMPORTA.',description:'Menos ruído. Mais direção.',url:'./assets/feed/foco-estrada.webp',fallback:'./assets/feed/foco-estrada.webp',source:'https://commons.wikimedia.org/wiki/File:The_Smoke_Signal,_1905,_by_Frederic_S._Remington.jpg',credit:'Frederic Remington · domínio público',post:'r10'},
+ {tag:'ESPERANÇA',title:'A LUZ VAI ENTRAR.',description:'Volte à oração, sem abandonar a ação.',url:'./assets/feed/luz.webp',fallback:'./assets/feed/luz.webp',source:'https://unsplash.com/photos/sunlight-beams-inside-ornate-cathedral--0gBnnMdQPw',credit:'Chad Greiter · Unsplash',post:'f02'},
+ {tag:'CRUZ',title:'NÃO FUJA DA CRUZ.',description:'Cristo ensina fidelidade no sofrimento.',url:'./assets/misterios/fotos/cruz.webp',fallback:'./assets/misterios/fotos/cruz.webp',source:'https://commons.wikimedia.org/wiki/File:El_Greco_-_Christ_Carrying_the_Cross_-_WGA10559.jpg',credit:'El Greco · domínio público',tab:'terco'}
+]);
+function cuiudoPhotoGallery(){
+ const labels={
+  pt:['CUIÚDO EM IMAGENS','FÉ QUE SE VÊ. CORAGEM QUE SE VIVE.','Deslize para explorar'],
+  en:['CUIÚDO IN PICTURES','FAITH TO SEE. COURAGE TO LIVE.','Swipe to explore'],
+  es:['CUIÚDO EN IMÁGENES','FE QUE SE VE. VALENTÍA PARA VIVIR.','Desliza para explorar'],
+  la:['CUIÚDO IN IMAGINIBUS','FIDES ET FORTITUDO.','Immagines percurre']
+ }[cuiudoLocale()]||['CUIÚDO EM IMAGENS','FÉ QUE SE VÊ. CORAGEM QUE SE VIVE.','Deslize para explorar'];
+ return '<section class="cuiudo-photo-gallery" aria-label="'+escapeHtml(labels[0])+'">'+
+  '<div class="cuiudo-gallery-heading"><div><span class="eyebrow">'+escapeHtml(labels[0])+'</span>'+
+  '<h2>'+escapeHtml(labels[1])+'</h2></div><p>'+escapeHtml(labels[2])+' <span aria-hidden="true">→</span></p></div>'+
+  '<div class="cuiudo-photo-rail" role="region" tabindex="0" aria-label="'+escapeHtml(labels[0])+'">'+
+  cuiudoGalleryItems.map((item,i)=>{
+   const act=item.post?'combat-open':'navigate';
+   const data=item.post?' data-id="'+escapeHtml(item.post)+'"':' data-tab="'+escapeHtml(item.tab)+'"';
+   return '<figure class="cuiudo-gallery-card"><button type="button" class="cuiudo-gallery-open" data-action="'+act+'"'+data+
+    ' aria-label="'+escapeHtml(item.title+' — '+item.description)+'">'+
+    '<img src="'+escapeHtml(item.url)+'" loading="lazy" decoding="async" alt="'+escapeHtml(item.credit)+'"'+
+    ' onerror="this.onerror=null;this.src=\''+escapeHtml(item.fallback)+'\'">'+
+    '<span class="cuiudo-gallery-gradient" aria-hidden="true"></span>'+
+    '<span class="cuiudo-gallery-copy"><small>'+escapeHtml(item.tag)+' <span aria-hidden="true">· '+String(i+1).padStart(2,'0')+'</span></small>'+
+    '<strong>'+escapeHtml(item.title)+'</strong><span>'+escapeHtml(item.description)+'</span></span></button>'+
+    '<figcaption><a href="'+escapeHtml(item.source)+'" rel="noopener noreferrer" target="_blank">'+escapeHtml(item.credit)+' ↗</a></figcaption></figure>';
+  }).join('')+'</div></section>';
+}
+
 const cuiudoBaseHome=combatHome;
 combatHome=function(){
- return cuiudoBaseHome().replace(/<section class="cuiudo-hero">[\s\S]*?<\/section>/,cuiudoBenedictBanner());
+ return cuiudoBaseHome().replace(/<section class="cuiudo-hero">[\s\S]*?<\/section>/,cuiudoBenedictBanner()).replace('<section class="cuiudo-feed-toolbar">',cuiudoPhotoGallery()+'<section class="cuiudo-feed-toolbar">');
 };
 const cuiudoBaseNavButton=combatNavBtn;
 combatNavBtn=function(tab,cls='nav-button'){

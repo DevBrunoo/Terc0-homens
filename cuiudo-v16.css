@@ -411,3 +411,167 @@
 @media(prefers-reduced-motion:reduce){
  .spotify-mini-player .music-buttons .btn{transition:none;transform:none!important}
 }
+
+
+/* v20: mobile-first. Galeria editorial CUIÚDO em fotos + telas pequenas. */
+.cuiudo-photo-gallery{margin:32px 0 34px;min-width:0}
+.cuiudo-gallery-heading{
+ display:flex;justify-content:space-between;align-items:end;gap:16px;
+ margin-bottom:15px;min-width:0
+}
+.cuiudo-gallery-heading>div{min-width:0}
+.cuiudo-gallery-heading .eyebrow{
+ display:block;color:var(--warm);font:750 10px/1.35 var(--font);
+ letter-spacing:.12em;margin:0 0 9px
+}
+.cuiudo-gallery-heading h2{
+ font:800 clamp(24px,3vw,36px)/1.12 var(--font);letter-spacing:-.065em;
+ color:var(--ink);margin:0;text-wrap:balance
+}
+.cuiudo-gallery-heading>p{
+ font:550 11px/1.4 var(--font);color:var(--subink);
+ margin:0 0 3px;white-space:nowrap
+}
+.cuiudo-photo-rail{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:13px;min-width:0;outline-offset:5px
+}
+.cuiudo-gallery-card{
+ margin:0;min-width:0;overflow:hidden;
+ border:1px solid var(--line);border-radius:18px;background:var(--surface)
+}
+.cuiudo-gallery-open{
+ position:relative;isolation:isolate;width:100%;aspect-ratio:.88;
+ display:block;overflow:hidden;background:#111315;
+ border:0;border-radius:0;padding:0;color:#fff;text-align:left;cursor:pointer
+}
+.cuiudo-gallery-open img{
+ position:absolute;inset:0;z-index:-2;width:100%;height:100%;
+ display:block;object-fit:cover;object-position:center;
+ filter:saturate(.86) contrast(1.09);
+ transition:transform .3s ease
+}
+.cuiudo-gallery-open:hover img{transform:scale(1.045)}
+.cuiudo-gallery-gradient{
+ position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,#0006,transparent 40%,#08080822 54%,#050505eb 100%)
+}
+.cuiudo-gallery-copy{
+ position:absolute;inset:auto 13px 18px;display:grid;gap:6px;
+ text-shadow:0 1px 7px #000c
+}
+.cuiudo-gallery-copy small{
+ color:#ecd0a0;font:770 10px/1.3 var(--font);letter-spacing:.09em
+}
+.cuiudo-gallery-copy strong{
+ color:#fff;font:820 clamp(19px,2vw,27px)/1.06 var(--font);letter-spacing:-.05em
+}
+.cuiudo-gallery-copy>span{
+ color:#f5f3ed;font:510 12px/1.4 var(--font)
+}
+.cuiudo-gallery-card figcaption{
+ min-height:34px;display:flex;align-items:center;padding:7px 12px;
+ font:500 10px/1.4 var(--font)
+}
+.cuiudo-gallery-card figcaption a{color:var(--subink);text-decoration:none}
+.cuiudo-gallery-card figcaption a:hover{text-decoration:underline}
+.cuiudo-gallery-open:focus-visible,
+.cuiudo-photo-rail:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(min-width:761px) and (max-width:1040px){
+ .cuiudo-photo-rail{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .main,.app-shell,#app{min-width:0}
+ .main{box-sizing:border-box;width:100%;max-width:100%;padding-inline:clamp(10px,3.2vw,17px)}
+ .main>*{min-width:0;max-width:100%}
+ .site-header .header-inner{box-sizing:border-box;width:100%;min-width:0;gap:5px;padding-inline:clamp(8px,2.4vw,15px)}
+ .site-header .logo{gap:5px;flex:0 1 auto;min-width:0}
+ .site-header .logo-type{font-size:clamp(17px,5.3vw,22px)}
+ .site-header .logo-mark{flex-shrink:0}
+ .site-header .header-tools{gap:4px;min-width:0;flex-shrink:1}
+ .header-tools .cuiudo-locale{padding:4px 6px;gap:2px;min-height:34px;max-width:102px}
+ .header-tools .cuiudo-locale>.locale-label{display:none}
+ .header-tools .cuiudo-locale select{font-size:11px;max-width:76px;min-width:0}
+ .header-tools .appearance-control{gap:0;padding:2px}
+ .header-tools .theme-option{min-width:29px;width:29px;max-width:29px;padding:4px}
+ .header-tools .mode-switch{min-width:31px;max-width:34px;padding:6px}
+ .header-tools .mode-switch span{display:none}
+ .mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr));max-width:100vw;padding-inline:6px}
+ .mobile-nav-button{min-width:0;padding-inline:1px;font-size:clamp(9px,2.4vw,11px)}
+ .more-panel{max-height:min(70dvh,560px);overflow-y:auto}
+ .benedict-hero{max-width:100%;overflow:hidden}
+ .benedict-hero-copy{min-width:0}
+ .benedict-hero-copy h1{overflow-wrap:break-word}
+ .rosary-plus-header{display:grid;grid-template-columns:minmax(0,1fr);gap:13px}
+ .rosary-plus-header>div,.rosary-plus-header>aside{min-width:0}
+ .rosary-plus-header .spotify-mini-player{width:100%;max-width:100%!important;min-width:0}
+ .spotify-mini-player .rosary-player-top{gap:8px}
+ .spotify-mini-player .music-heading{flex:1;min-width:0}
+ .spotify-mini-player .music-heading small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .spotify-mini-player .rosary-track-options{max-width:100%;scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+ .spotify-mini-player .rosary-track-option{scroll-snap-align:start}
+ .rosary-bead-counter{width:100%;box-sizing:border-box}
+ .rosary-beads-heading{min-width:0;flex-wrap:wrap}
+ .rosary-bead-visual{width:min(100%,350px);max-width:100%}
+ .rosary-mystery-steps{gap:6px}
+ .rosary-mystery-step{flex:0 0 auto}
+ .saints-hd-hero,.saints-second-photo,.duty-hero{max-width:100%}
+ .saints-hd-grid{grid-template-columns:minmax(0,1fr)}
+ .cuiudo-photo-gallery{margin:24px 0 27px;max-width:100%;min-width:0}
+ .cuiudo-gallery-heading{align-items:start;gap:9px;margin-bottom:11px}
+ .cuiudo-gallery-heading h2{font-size:clamp(23px,6.4vw,31px)}
+ .cuiudo-gallery-heading>p{font-size:10px;margin-top:4px}
+ .cuiudo-photo-rail{
+  display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-padding-inline:2px;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-x;
+  padding:2px 2px 9px;scrollbar-width:thin
+ }
+ .cuiudo-gallery-card{
+  flex:0 0 clamp(215px,74vw,295px);width:clamp(215px,74vw,295px);
+  scroll-snap-align:start;border-radius:16px
+ }
+ .cuiudo-gallery-open{aspect-ratio:1.04}
+ .cuiudo-gallery-copy{inset:auto 14px 17px;gap:5px}
+ .cuiudo-gallery-copy strong{font-size:clamp(21px,5.4vw,28px)}
+ .cuiudo-gallery-copy>span{font-size:12px}
+ .cuiudo-gallery-card figcaption{padding:7px 12px;font-size:9px}
+ .poster-grid{min-width:0}
+ .poster-open{width:100%}
+ .poster-card.wide{min-width:0}
+ .feed-modal{height:100dvh;max-width:100vw}
+ .feed-modal-content{min-height:0;overflow:auto;padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+ .feed-filters{overflow-x:auto;overscroll-behavior-x:contain}
+ .today-goals-form{min-width:0}
+ .today-goals-form input{min-width:0}
+}
+@media(max-width:390px){
+ .site-header .header-inner{gap:3px;padding-inline:7px}
+ .site-header .logo-type{font-size:17px}
+ .site-header .logo-mark{width:24px;height:24px}
+ .header-tools .cuiudo-locale{padding:3px 4px;max-width:85px}
+ .header-tools .cuiudo-locale select{max-width:62px;font-size:10px;padding-right:11px;background-size:10px}
+ .header-tools .appearance-control{padding:1px}
+ .header-tools .theme-option{min-width:26px;width:26px;max-width:26px}
+ .header-tools .mode-switch{min-width:27px;width:27px;max-width:27px}
+ .spotify-mini-player .music-disc{width:28px;height:28px;flex-basis:28px}
+ .spotify-mini-player .music-buttons input[type=range]{width:38px!important;flex-basis:38px!important}
+ .spotify-mini-player .music-buttons .btn{width:34px!important;height:34px!important;min-height:34px!important;flex-basis:34px!important}
+ .cuiudo-gallery-heading>p{display:none}
+ .cuiudo-gallery-card{flex-basis:78vw;width:78vw}
+ .rosary-bead-counter{padding:13px 10px}
+ .rosary-prayer-row{gap:6px;flex-wrap:wrap}
+ .rosary-status-btn{margin-left:auto}
+}
+@media(max-width:350px){
+ .site-header .logo-mark{display:none}
+ .header-tools .cuiudo-locale>span:first-child{display:none}
+ .header-tools .theme-option{min-width:24px;width:24px;max-width:24px}
+ .poster-grid{gap:7px}
+ .poster-words{font-size:14px}
+ .mobile-nav-button{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .cuiudo-gallery-open img{transition:none!important}
+}
