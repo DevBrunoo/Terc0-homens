@@ -3,6 +3,18 @@
 O projeto funciona offline/local mesmo sem banco. Para sincronizar notebook e celular
 é necessário acessar a **mesma URL do Cloudflare Pages**, criar uma conta e entrar em ambos.
 
+## Configuração de build do Cloudflare Pages
+- **Framework preset:** `None`
+- **Build command:** `npm run build:cloudflare`
+- **Build output directory:** `dist`
+- **Root directory:** vazio (raiz do repositório)
+- **Production branch:** `main`
+
+O script copia somente HTML, CSS, JavaScript e imagens para `dist`.
+As funções de backend continuam na pasta `/functions` da raiz do repositório
+e não são publicadas como arquivos estáticos. Use integração GitHub → Cloudflare
+Pages, não upload manual do ZIP: Functions exigem Git ou Wrangler.
+
 ## Instalação (uma vez)
 1. Cloudflare Dashboard → **Storage & databases → D1 SQL Database → Create**.
    Nome recomendado: `cuiudo-dados`.
