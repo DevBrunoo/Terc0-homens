@@ -11,7 +11,8 @@ const combatTabs=[
  {id:'exame',label:'Exame',mobile:'Exame',icon:'heart'}
 ];
 function combatNavBtn(tab,cls='nav-button'){
- const title=(typeof cuiudoNav!=='undefined'&&typeof cuiudoLocale==='function' ? cuiudoNav[cuiudoLocale()]?.[tab.id] : null) || (cls==='nav-button'?tab.label:tab.mobile);
+ const saints={pt:'Santos',en:'Saints',es:'Santos',la:'Sancti'};
+ const title=tab.id==='devocionario'?(saints[state.appLang]||saints.pt):(cls==='nav-button'?tab.label:tab.mobile);
  return `<button type="button" class="${cls}" data-action="navigate" data-tab="${tab.id}" aria-current="${state.tab===tab.id?'page':'false'}">${icon(tab.icon)}<span>${escapeHtml(title)}</span></button>`;
 }
 function combatNormalize(s){return String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');}
