@@ -24,7 +24,7 @@ if(existsSync(new URL('./rosary-artwork.js',import.meta.url)))codes.splice(-1,0,
 const vm=createContext(context);
 runInContext(codes.join('\n'),vm,{timeout:6000});
 assert.match(mount.innerHTML,/benedict-hero/,'a medalha deve substituir o banner');
-assert.match(mount.innerHTML,/medalha-sao-bento-ouro\.svg/);
+assert.match(mount.innerHTML,/medalha-sao-bento-colorida\.webp/);
 assert.match(mount.innerHTML,/cuiudo-language/);
 for(const lang of ['pt','en','es','la']){
  runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.rosaryLength="small";render()',vm,{timeout:2500});
@@ -80,11 +80,12 @@ const audio=runInContext('({playing:cuiudoAmbient.isPlaying(),supported:cuiudoAm
 assert.equal(audio.playing,false,'áudio não deve iniciar automaticamente');
 assert.ok(existsSync(new URL('./assets/medalha-sao-bento.svg',import.meta.url)));
 assert.ok(existsSync(new URL('./assets/medalha-sao-bento-ouro.svg',import.meta.url)));
+assert.ok(existsSync(new URL('./assets/medalha-sao-bento-colorida.webp',import.meta.url)));
 assert.ok(existsSync(new URL('./assets/medalha-sao-bento-real.webp',import.meta.url)));
 assert.ok(existsSync(new URL('./assets/audio/cantico-catolico.mp3',import.meta.url)));
 assert.ok(existsSync(new URL('./assets/audio/cantico-medieval.mp3',import.meta.url)));
 const html=read('index.html');
-for(const file of ['ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-context.js','rosary-plus.js','daily-goals.js','rosary-plus.css','cuiudo-v13.css','cuiudo-v14.css'])
+for(const file of ['ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-context.js','rosary-plus.js','daily-goals.js','rosary-plus.css','cuiudo-v13.css','cuiudo-v14.css','cuiudo-v15.css'])
  assert.ok(html.includes(file),'HTML não inclui '+file);
 
 const personalized=runInContext('rosaryLanguageExtras',vm);

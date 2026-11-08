@@ -195,3 +195,11 @@ Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o
 **English · Douay-Rheims:** removida a redefinição de idioma que anulava o clique; a opção agora troca de fato os versículos e salva a preferência.
 
 **20 mistérios:** história, o que contemplar durante a oração e aplicação concreta na vida, em PT, EN, ES e LA. Textos autorais fundamentados nas passagens bíblicas e na carta [Rosarium Virginis Mariae](https://www.vatican.va/content/john-paul-ii/pt/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html). A Assunção e a Coroação não são descritas literalmente nos Evangelhos.
+
+
+## CUIÚDO v15 — as duas imagens escolhidas e exame da omissão
+
+- **Imagem da medalha colorida:** `assets/medalha-sao-bento-colorida.webp` — a imagem em azul, vermelho e dourado enviada na conversa; substitui o desenho dourado anterior no banner e no terço.
+- **Imagem artística de São Bento:** `assets/sao-bento-arte-enviada.webp` — a ilustração escura com São Bento e a Cruz, apresentada no conteúdo de exame de consciência. As duas cópias WebP estão embutidas no repositório e cacheadas no PWA, sem depender de URLs externas. Para importação, as imagens foram redimensionadas a partir de cópias de pré-visualização do upload; a resolução não é a original.
+- **Exame dos deveres e pecados por omissão**: sete reflexões com pergunta e atitude concreta: acédia (CIC 2094/2733), pecado por omissão (Tg 4,17/CIC 1853), deveres negligenciados, procrastinação voluntária, talentos desperdiçados (Mt 25), caridade omitida (Mt 25/CIC 2447) e desânimo. O conteúdo permanece fiel à doutrina: falhar uma meta pessoal não é automaticamente pecado mortal, que requer matéria grave, pleno conhecimento e consentimento deliberado (CIC 1857).
+- **Fontes:** [Catecismo — pecado e omissão](https://www.vatican.va/archive/cathechism_po/index_new/p3s1cap1_1699-1876_po.html), [acédia e amor a Deus](https://www.vatican.va/archive/cathechism_po/index_new/p3s2cap1_2083-2195_po.html), [acédia na oração](https://www.vatican.va/archive/cathechism_po/index_new/p4s1cap3_2697-2758_po.html), [medalha de São Bento — CNBB](https://jovensconectados.org.br/7-coisas-que-devemos-saber-sobre-a-medalha-e-cruz-de-sao-bento.html).

@@ -1,11 +1,11 @@
 {
   "name": "cuiudo-fe-coragem-acao",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "description": "Terço católico e desafios de fé e ação",
   "scripts": {
     "dev": "node server.mjs",
-    "test": "node test.mjs && node test-rosary.mjs && node test-goals.mjs && node test-fixes.mjs"
+    "test": "node test.mjs && node test-rosary.mjs && node test-goals.mjs && node test-fixes.mjs && node test-duty.mjs"
   }
 }
