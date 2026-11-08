@@ -1,5 +1,5 @@
-/* CUIÚDO v16 — sete trilhas DE VERDADE, seis gravações católicas licenciadas
- * armazenadas no aplicativo e uma faixa ambiente original. SEM YOUTUBE.
+/* CUIÚDO — 14 opções de áudio: cantos gregorianos licenciados, domínio público e faixa ambiente original.
+ * Gravações originais locais e novas faixas públicas do Wikimedia Commons. SEM YOUTUBE.
  * Nenhum áudio é iniciado automaticamente. Cada faixa usa o controle do app.
  */
 const cuiudoMusic=(()=>{
@@ -29,19 +29,29 @@ const cuiudoMusic=(()=>{
    author:'Membeth · canto gregoriano',source:'https://commons.wikimedia.org/wiki/File:Veni.creator.spiritus.ogg',license:'Domínio público',licenseUrl:null},
   alma:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Alma_Redemptoris_Mater.ogg',title:'Alma Redemptoris Mater — antífona mariana',
    author:'Rick Dechance · canto tradicional',source:'https://commons.wikimedia.org/wiki/File:Alma_Redemptoris_Mater.ogg',license:'CC BY-SA 3.0',licenseUrl:by3},
+  kyrie:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Schola_Gregoriana-Kyrie_eleison.ogg',title:'Kyrie Eleison — súplica gregoriana',
+   author:'Schola Gregoriana de Ołtarzew · Pe. Dariusz Smolarek',source:'https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Kyrie_eleison.ogg',license:'CC BY-SA 3.0',licenseUrl:by3},
+  sancte:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Veni.sancte.spiritus.ogg',title:'Veni Sancte Spiritus — sequência de Pentecostes',
+   author:'Membeth · canto tradicional',source:'https://commons.wikimedia.org/wiki/File:Veni.sancte.spiritus.ogg',license:'Domínio público',licenseUrl:null},
+  puer:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Puer.natus.est.ogg',title:'Puer Natus Est — canto natalino',
+   author:'Membeth · canto gregoriano',source:'https://commons.wikimedia.org/wiki/File:Puer.natus.est.ogg',license:'Domínio público',licenseUrl:null},
+  magnificat:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Schola_Gregoriana-Antiphona_et_Magnificat.ogg',title:'Magnificat — antífona e cântico',
+   author:'Schola Gregoriana de Ołtarzew · Pe. Dariusz Smolarek',source:'https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Antiphona_et_Magnificat.ogg',license:'CC BY-SA 3.0',licenseUrl:by3},
+  adjutorium:{kind:'file',src:'https://commons.wikimedia.org/wiki/Special:FilePath/Schola_Gregoriana-Deus_in_adjutorium_meum_intende.ogg',title:'Deus in Adjutorium — canto gregoriano',
+   author:'Schola Gregoriana de Ołtarzew · Pe. Dariusz Smolarek',source:'https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Deus_in_adjutorium_meum_intende.ogg',license:'CC BY-SA 3.0',licenseUrl:by3},
   relaxar:{kind:'ambient',src:null,title:'Música instrumental suave',
    author:'Composição original do CUIÚDO, sintetizada no navegador',
    source:null,license:'Original',licenseUrl:null}
  });
  const labels={
-  pt:{title:'Música para rezar',catolico:'Ave Maria',templario:'Templário',pater:'Pai-Nosso',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',relaxar:'Relaxar',
+  pt:{title:'Música para rezar',catolico:'Ave Maria',templario:'Templário',pater:'Pai-Nosso',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',kyrie:'Kyrie Eleison',sancte:'Veni Sancte',puer:'Puer Natus',magnificat:'Magnificat',adjutorium:'Deus in Adjutorium',relaxar:'Relaxar',
    play:'Tocar música',pause:'Pausar música',noAudio:'Não foi possível reproduzir. Verifique os arquivos ou sua conexão.',
    note:'Canto medieval em estilo templário; áudio no próprio app, não é a gravação do vídeo do YouTube.',credit:'Créditos / licença',online:'Este canto toca aqui no aplicativo, usando o acervo do Wikimedia Commons. Requer internet.'},
-  en:{title:'Music for prayer',catolico:'Ave Maria',templario:'Medieval chant',pater:'Our Father',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',relaxar:'Relax',
+  en:{title:'Music for prayer',catolico:'Ave Maria',templario:'Medieval chant',pater:'Our Father',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',kyrie:'Kyrie Eleison',sancte:'Veni Sancte',puer:'Puer Natus',magnificat:'Magnificat',adjutorium:'Deus in Adjutorium',relaxar:'Relax',
    play:'Play music',pause:'Pause music',noAudio:'Unable to play this track. Check your connection or file.',note:'Medieval chant in a Templar-inspired style, played inside the app, not the YouTube recording.',credit:'Credits / license',online:'This chant plays inside the app via Wikimedia Commons. Internet required.'},
-  es:{title:'Música para rezar',catolico:'Ave María',templario:'Canto medieval',pater:'Padrenuestro',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',relaxar:'Relajarse',
+  es:{title:'Música para rezar',catolico:'Ave María',templario:'Canto medieval',pater:'Padrenuestro',pange:'Pange Lingua',tantum:'Tantum Ergo',rorate:'Rorate Caeli',veni:'Veni Creator',alma:'Alma Redemptoris',kyrie:'Kyrie Eleison',sancte:'Veni Sancte',puer:'Puer Natus',magnificat:'Magníficat',adjutorium:'Deus in Adjutorium',relaxar:'Relajarse',
    play:'Reproducir',pause:'Pausar',noAudio:'No se pudo reproducir este canto. Comprueba la conexión.',note:'Canto medieval de estilo templario dentro de la aplicación; no es el audio de YouTube.',credit:'Créditos / licencia',online:'Este canto se reproduce aquí en la aplicación desde Wikimedia Commons. Requiere internet.'},
-  la:{title:'Musica ad orandum',catolico:'Ave Maria',templario:'Cantus medii aevi',pater:'Pater noster',pange:'Pange lingua',tantum:'Tantum ergo',rorate:'Rorate caeli',veni:'Veni creator',alma:'Alma Redemptoris',relaxar:'Quies',
+  la:{title:'Musica ad orandum',catolico:'Ave Maria',templario:'Cantus medii aevi',pater:'Pater noster',pange:'Pange lingua',tantum:'Tantum ergo',rorate:'Rorate caeli',veni:'Veni creator',alma:'Alma Redemptoris',kyrie:'Kyrie Eleison',sancte:'Veni Sancte',puer:'Puer Natus',magnificat:'Magnificat',adjutorium:'Deus in Adjutorium',relaxar:'Quies',
    play:'Incipe',pause:'Siste',noAudio:'Cantus reddi non potest.',note:'Cantus medii aevi in hoc ipso instrumento auditur, non e YouTube.',credit:'Auctor / licentia',online:'Hic cantus in applicatione ex Wikimedia Commons auditur. Rete requiritur.'}
  };
  let selected='catolico',playing=false,volume=.22,audio=null,error='';
