@@ -26,7 +26,7 @@ function combatPoster(p,i){
  const art=feedArtwork[p.art];
  return `<article class="poster-card ${i===0?'wide':''}" data-feed-id="${escapeHtml(p.id)}">
    <button type="button" class="poster-open" data-action="combat-open" data-id="${p.id}" aria-label="Abrir reflexão ${escapeHtml(p.title)}">
-    <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}" />
+    <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}" />
     <span class="poster-shade" aria-hidden="true"></span>
     <span class="poster-topline"><span class="poster-label">${escapeHtml(p.kicker)}</span><span class="poster-index">${String(i+1).padStart(2,'0')}</span></span>
     <strong class="poster-words">${escapeHtml(p.title)}</strong>
@@ -42,7 +42,7 @@ function combatPostDetail(p){
  return `<div class="feed-overlay" data-action="combat-close" role="presentation">
    <div class="feed-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(p.title)}">
     <button type="button" data-action="combat-close" class="feed-close" aria-label="Fechar reflexão">×</button>
-    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
+    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
     <div class="feed-modal-content">
       <span class="feed-modal-kicker">${escapeHtml(p.kicker)} • CUIÚDO</span>
       <h2>SEM DESCULPA. COM FÉ E ATITUDE.</h2>
@@ -64,7 +64,7 @@ function combatHome(){
  const picks=feedPosts.filter(combatMatches),selected=feedPosts.find(p=>p.id===state.feedOpen);
  const lead=feedArtwork['miguel-reni'],daily=feedPosts[(new Date().getDate()+new Date().getDay())%feedPosts.length];
  return `<section class="cuiudo-hero">
-  <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}">
+  <img class="cuiudo-hero-photo" src="${escapeHtml(lead.url)}" alt="São Miguel derrotando Satanás, pintura clássica de Guido Reni" fetchpriority="high" decoding="async" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}">
   <div class="cuiudo-hero-content">
     <div class="cuiudo-hero-kicker"><span class="cuiudo-star">✠</span> FÉ EM DEUS E PÉ NA TÁBUA</div>
     <h1>TEM QUE SER<em>CUIÚDO.</em></h1>
@@ -97,10 +97,10 @@ function combatBible(){
 const combatOldDevotion=devocionario;
 devocionario=function(){
  const a=feedArtwork['miguel-reni'];
- return `<section class="sao-miguel-cover"><img src="${escapeHtml(a.url)}" alt="São Miguel Arcanjo, pintura de Guido Reni" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';}"><div><span>COMBATE ESPIRITUAL</span><h1>SÃO MIGUEL.<br>DEFENDEI-NOS NO COMBATE.</h1><p>Firmeza, oração e conversão. Quem vence o mal é Cristo. São Miguel intercede por nós.</p><a class="btn btn-primary" href="#oracao-miguel">REZAR A ORAÇÃO</a></div></section>`+combatOldDevotion();
+ return `<section class="sao-miguel-cover"><img src="${escapeHtml(a.url)}" alt="São Miguel Arcanjo, pintura de Guido Reni" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}"><div><span>COMBATE ESPIRITUAL</span><h1>SÃO MIGUEL.<br>DEFENDEI-NOS NO COMBATE.</h1><p>Firmeza, oração e conversão. Quem vence o mal é Cristo. São Miguel intercede por nós.</p><a class="btn btn-primary" href="#oracao-miguel">REZAR A ORAÇÃO</a></div></section>`+combatOldDevotion();
 };
 renderShell=function(content){
- const themeItems=[['dark','Escuro','moon'],['light','Claro','sun'],['system','Auto','rotate']];
+ const themeItems=[['light','Claro','sun'],['dark','Escuro','moon'],['system','Auto','rotate']];
  const settings=`<div class="appearance-control" role="group" aria-label="Mudar tema">${themeItems.map(([id,label,ico])=>`<button type="button" class="theme-option ${state.theme===id?'selected':''}" data-action="set-theme" data-theme="${id}" aria-label="Tema ${label}" title="${label}" aria-pressed="${state.theme===id}">${icon(ico)}<span>${label}</span></button>`).join('')}</div>`;
  const more=state.mobileMore?`<button class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais seções"><div class="more-panel-head"><strong>EXPLORAR</strong><button class="more-close" data-action="close-more" aria-label="Fechar">✕</button></div>${combatTabs.slice(5).map(t=>combatNavBtn(t,'more-nav-button')).join('')}</div>`:'';
  return `<div class="app-shell"><a class="skip-link" href="#main-content">Pular para conteúdo</a><header class="site-header"><div class="header-inner">
@@ -124,8 +124,8 @@ state.feedFilter=feedFilters.some(([id])=>id===state.feedFilter)?state.feedFilte
 state.feedTerm='';
 state.feedOpen=null;
 state.feedToast='';
-if(state.designVersion!=='combat-v9'){state.theme='dark';state.designVersion='combat-v9';save();}
-if(!['dark','light','system'].includes(state.theme))state.theme='dark';
+if(state.designVersion!=='apple-v11'){state.theme='light';state.designVersion='apple-v11';save();}
+if(!['dark','light','system'].includes(state.theme))state.theme='light';
 app.addEventListener('click',event=>{
  const target=event.target.closest?.('[data-action]');if(!target)return;
  const action=target.dataset.action;

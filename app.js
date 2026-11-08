@@ -16,13 +16,13 @@ function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','lumin
 function truthDeck(){return state.mode==='brutal'?confrontosBrutais:confrontos;}
 function dailyIndex(){let n=0; for(const c of currentDay().replaceAll('-','')) n=(n*31+c.charCodeAt(0))>>>0;return n%truthDeck().length;}
 function storedState(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{};}catch{return {};}}
-const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'dark',verseLang:'pt',mobileMore:false,designVersion:'combat-v9',...storedState()};
+const state={ tab:'inicio',group:dayGroup(),mystery:0,truthOffset:0,mode:'brutal',prayerOpen:false,devFilter:'todos',theme:'light',verseLang:'pt',mobileMore:false,designVersion:'apple-v11',...storedState()};
 state.tab='inicio'; // Sempre abrir na home.
 state.group=dayGroup(); // O dia determina o primeiro conjunto exibido.
 state.mystery=0;
 state.truthOffset=0;
-if(state.designVersion!=='combat-v9'){state.theme='dark';state.designVersion='combat-v9';save();}
-state.theme=['light','dark','system'].includes(state.theme)?state.theme:'dark';
+if(state.designVersion!=='apple-v11'){state.theme='light';state.designVersion='apple-v11';save();}
+state.theme=['light','dark','system'].includes(state.theme)?state.theme:'light';
 state.mobileMore=false;
 state.verseLang=state.verseLang==='en'?'en':'pt';
 function save(){try{const {tab,prayerOpen,...keep}=state;localStorage.setItem(STORE_KEY,JSON.stringify(keep));}catch{ /* O app continua utilizável sem armazenamento */ }}
@@ -65,7 +65,7 @@ function icon(name,extra=''){
 }
 function scriptureText(v){return v[state.verseLang]||v.pt;}
 function resolvedTheme(){return state.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):state.theme;}
-function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#111111':'#ffffff';}
+function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#0f1012':'#f5f5f7';}
 function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
 function stats(){
   const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
@@ -214,7 +214,7 @@ app.addEventListener('click',evt=>{
  if(a==='next-truth')state.truthOffset=(state.truthOffset+1)%truthDeck().length;
  if(a==='toggle-mode'){state.mode=state.mode==='brutal'?'firme':'brutal';state.truthOffset=0;save();}
  if(a==='toggle-theme'){state.theme=state.theme==='light'?'dark':'light';save();}
- if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';save();}
+ if(a==='set-theme'){state.theme=['light','dark','system'].includes(target.dataset.theme)?target.dataset.theme:'light';state.designVersion='apple-v11';save();}
  if(a==='toggle-more'){state.mobileMore=!state.mobileMore;}
  if(a==='close-more'){state.mobileMore=false;}
  if(a==='verse-lang'){state.verseLang=target.dataset.lang==='en'?'en':'pt';save();}

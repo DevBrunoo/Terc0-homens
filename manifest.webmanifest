@@ -1,12 +1,12 @@
 {
   "name": "CUIÚDO — Fé, Coragem e Ação",
   "short_name": "CUIÚDO",
-  "description": "Combate espiritual, fé e coragem. São Miguel, terço, Bíblia e feed.",
+  "description": "CUIÚDO — oração, coragem e disciplina. Interface clara, terço diário, São Miguel, Bíblia e imagens reais.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#08090a",
-  "theme_color": "#08090a",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
   "lang": "pt-BR",
   "icons": [
     {

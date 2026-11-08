@@ -143,3 +143,12 @@ Em 7/11/2026, as **14 imagens de fonte** do feed foram baixadas, redimensionadas
 O Service Worker `cuiudo-local-art-v10` armazena essas imagens após instalar, invalidando o cache anterior e permitindo visualização offline. Cada card possui uma arte SVG local de segurança se algum arquivo falhar. O comando `npm test` confirma a existência e a assinatura WebP de todos os 14 arquivos.
 
 Para importar novos trabalhos legais do Wikimedia / Unsplash no futuro, altere o script `scripts/cache_feed_art.py` e execute o fluxo `Incorporar imagens locais ao CUIÚDO` no GitHub Actions.
+
+
+## CUIÚDO v11 — visual minimalista e publicação GitHub Pages
+
+Reformulada a apresentação sem remover funções: visual claro com fundo `#f5f5f7`, navegação translúcida, tipografia de sistema (SF/Helvetica/Arial), cards de foto grandes, gradientes suaves, animação respeitando redução de movimento, e tema escuro opcional. Referências de design: Apple Human Interface Guidelines (hierarquia, legibilidade, conteúdo primeiro e alvos de toque).
+
+Todas as 14 imagens de `assets/feed/*.webp` continuam **dentro do repositório** (não há dependência de Unsplash/Wikimedia na exibição). `index.html` carrega `apple.css` depois das folhas antigas. `sw.js` invalidou o cache, cacheia os recursos do app e prefere a rede para WebP quando disponível. A pré-carga da pintura de São Miguel melhora a imagem do primeiro card.
+
+Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o conteúdo na branch principal. **Para o primeiro deploy, o administrador precisa habilitar GitHub Pages em Settings → Pages → Source: GitHub Actions**. Sem essa configuração, a URL `https://devbrunoo.github.io/Terc0-homens/` retorna HTTP 404 mesmo com todos os arquivos presentes. Depois disso, o fluxo publica automaticamente.
