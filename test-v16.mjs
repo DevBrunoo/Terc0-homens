@@ -40,6 +40,11 @@ function click(action,more={}){
 runInContext("state.tab='terco';state.appLang='pt';state.group='gozosos';state.mystery=0;render()",vm);
 assert.match(mount.innerHTML,/rosary-bead-visual/);
 assert.match(mount.innerHTML,/cuiudo-tiny-player/);
+assert.match(read('index.html'),/cloud-sync\.js/);
+for(const id of ['kyrie','sancte','puer','magnificat','adjutorium']){
+ const url=runInContext('cuiudoMusic.tracks['+JSON.stringify(id)+'].source',vm);
+ assert.ok(url.startsWith('https://commons.wikimedia.org/wiki/File:'),'Fonte musical '+id);
+}
 assert.match(mount.innerHTML,/data-action="combat-rosary-next-track"/);
 assert.match(mount.innerHTML,/data-action="combat-rosary-prev-track"/);
 assert.doesNotMatch(mount.innerHTML,/data-action="combat-rosary-track"/);
@@ -73,7 +78,7 @@ console.log('✓ Rosário de contas: 1 Pai-Nosso, 10 Ave-Marias e 1 Glória com 
 
 const ids=runInContext('oracoesDevocionario.map(p=>p.id)',vm);
 assert.equal(ids.length,18);
-assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),9);
+assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),14);
 assert.equal(runInContext('cuiudoMusic.tracks.templario.kind',vm),'file');
 assert.match(runInContext('cuiudoMusic.tracks.veni.src',vm),/Veni.creator.spiritus\.ogg/);
 assert.match(runInContext('cuiudoMusic.tracks.alma.src',vm),/Alma_Redemptoris_Mater\.ogg/);
