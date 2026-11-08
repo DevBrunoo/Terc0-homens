@@ -7,6 +7,8 @@ const cuiudoGoalsText={
   add:'Adicionar',done:'Concluí',missed:'Não concluí',reopen:'Reabrir',remove:'Excluir',
   complete:'Concluídas',remaining:'Pendente',gift:'Seu presente',empty:'Sua primeira meta começa aqui.',
   comeback:'Você é muito macio! Reorganize-se, levante e faça acontecer.',
+  confession:'Preguiça, omissão e abandono deliberado de deveres reais podem ser pecado. Examine sua consciência e leve à Confissão o que for culpável; não confunda uma meta frustrada com pecado mortal automático.',
+  confessionButton:'Examinar e corrigir',
   undone:'Não concluída',earned:['Medalha da Coragem','Selo da Disciplina','Estrela da Perseverança','Troféu da Palavra Cumprida'],
   rewardText:'Você fez o que prometeu. O presente é uma conquista virtual: continue firme.'},
  en:{heading:"Today's goals",sub:'Write down what needs doing. Then own the result.',
@@ -14,6 +16,8 @@ const cuiudoGoalsText={
   done:'Completed',missed:'Not completed',reopen:'Reopen',remove:'Delete',
   complete:'Completed',remaining:'Pending',gift:'Your gift',empty:'Your first goal starts here.',
   comeback:'You have gone soft! Stand up, regroup and get it done.',
+  confession:'Deliberate neglect of real duties may be sinful. Examine your conscience and bring culpable failures to Confession; not every missed personal goal is a mortal sin.',
+  confessionButton:'Examine and act',
   undone:'Not completed',earned:['Medal of Courage','Discipline Badge','Star of Perseverance','Promise Kept Trophy'],
   rewardText:'You followed through. Your gift is a virtual achievement: keep going.'},
  es:{heading:'Metas de hoy',sub:'Escribe lo que debes hacer y asume el resultado.',
@@ -21,6 +25,8 @@ const cuiudoGoalsText={
   done:'Cumplí',missed:'No cumplí',reopen:'Reabrir',remove:'Eliminar',
   complete:'Cumplidas',remaining:'Pendientes',gift:'Tu regalo',empty:'Tu primera meta empieza aquí.',
   comeback:'¡Estás demasiado blando! Levántate, reorganízate y hazlo.',
+  confession:'La pereza y la omisión deliberada de deberes reales pueden ser pecado. Examina tu conciencia y lleva a la Confesión las faltas culpables; no toda meta incumplida es pecado mortal.',
+  confessionButton:'Examinar y actuar',
   undone:'No cumplida',earned:['Medalla del Valor','Sello de la Disciplina','Estrella de Perseverancia','Trofeo de la Palabra Cumplida'],
   rewardText:'Cumpliste lo prometido. Tu regalo es una recompensa virtual.'},
  la:{heading:'Metas hodiernae',sub:'Scribe quod hodie agere debes et opus exple.',
@@ -28,6 +34,8 @@ const cuiudoGoalsText={
   done:'Complevi',missed:'Non complevi',reopen:'Reclude',remove:'Dele',
   complete:'Completae',remaining:'Pendentes',gift:'Donum tuum',empty:'Prima meta hic incipit.',
   comeback:'Nimis mollis es! Surge, te para et opus fac.',
+  confession:'Neglegentia et omissio officiorum deliberata peccata esse possunt. Conscientiam examina et culpabiles culpas in Confessione affer; non omnis meta irrita peccatum mortale est.',
+  confessionButton:'Conscientiam examina',
   undone:'Non completa',earned:['Medalia Fortitudinis','Signum Disciplinae','Stella Constantiae','Praemium Promissi Servati'],
   rewardText:'Promissum servasti. Donum tuum honor virtualis est.'}
 };
@@ -70,7 +78,8 @@ function cuiudoGoalChecklist(){
    (completed?'<div class="goal-gift" role="status"><span class="goal-gift-icon" aria-hidden="true">🎁</span>'+
     '<div><b>'+escapeHtml(t.gift)+': '+escapeHtml(cuiudoGoalGift(goal.id))+'</b><small>'+
     escapeHtml(t.rewardText)+'</small></div><span aria-hidden="true">✦ ✧</span></div>':
-   failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p>':'')+
+   failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p><p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
+    '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
    '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>':
