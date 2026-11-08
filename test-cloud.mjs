@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {webcrypto} from 'node:crypto';
-globalThis.crypto=globalThis.crypto||webcrypto;
+if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', {value:webcrypto});
 
 const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 for(const path of ['cloud-sync.js','functions/_lib/security.js','functions/api/auth.js','functions/api/sync.js']){
