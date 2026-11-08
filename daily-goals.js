@@ -7,7 +7,7 @@ const cuiudoGoalsText={
   add:'Adicionar',done:'Concluí',missed:'Não concluí',reopen:'Reabrir',remove:'Excluir',
   complete:'Concluídas',remaining:'Pendente',gift:'Seu presente',empty:'Sua primeira meta começa aqui.',
   comeback:'Você é muito macio! Reorganize-se, levante e faça acontecer.',
-  confession:'Preguica e pecado, omissao e pecado, nao fazer o que cumpre e coisa de macio frango, voce vai ter que se confessar.',
+  confession:'Preguiça é pecado, omissão é pecado, não fazer o que cumpre é coisa de macio frango, você vai ter que se confessar.',
   confessionButton:'Examinar e corrigir',
   undone:'Não concluída',earned:['Medalha da Coragem','Selo da Disciplina','Estrela da Perseverança','Troféu da Palavra Cumprida'],
   rewardText:'Você fez o que prometeu. O presente é uma conquista virtual: continue firme.'},
