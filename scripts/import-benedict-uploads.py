@@ -15,8 +15,8 @@ for record in IMAGES:
  url=record['source']
  o=urlsplit(url)
  path=o.path
- wanted_width=record['width']
- wanted_height=record['height']
+ wanted_width=record['width'] or (736 if 'medalha' in record['path'] else 675)
+ wanted_height=record['height'] or (736 if 'medalha' in record['path'] else 1200)
  variants=[
   urlunsplit((o.scheme,o.netloc,re.sub(r'/height:\\d+',f'/height:{wanted_height}',re.sub(r'/width:\\d+',f'/width:{wanted_width}',path)),o.query,'')),
   urlunsplit((o.scheme,o.netloc,path,o.query.replace('x-canva-quality=thumbnail','x-canva-quality=preview'),'')),
