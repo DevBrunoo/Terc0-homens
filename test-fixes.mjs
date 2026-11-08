@@ -77,7 +77,7 @@ runInContext('const cuiudoAmbient={isPlaying:()=>false,stop(){},setVolume(){}};'
 runInContext(read('cuiudo-music.js'),playCtx);
 assert.equal(runInContext("cuiudoMusic.tracks.templario.kind",playCtx),'file');
 assert.equal(runInContext("cuiudoMusic.tracks.templario.src",playCtx),'./assets/audio/cantico-medieval.mp3');
-assert.equal(runInContext("Object.keys(cuiudoMusic.tracks).length",playCtx),14);
+assert.equal(runInContext("Object.keys(cuiudoMusic.tracks).length",playCtx),15);
 assert.equal(sounds.length,0,'Música não deve iniciar automaticamente');
 await runInContext("cuiudoMusic.select('templario')",playCtx);
 assert.equal(sounds.length,0,'Selecionar não toca');

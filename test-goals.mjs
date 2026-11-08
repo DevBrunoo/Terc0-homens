@@ -39,7 +39,7 @@ assert.match(root.innerHTML,/today-goals/);
 runInContext("state.tab='terco';state.appLang='pt';render()",vm);
 assert.match(root.innerHTML,/data-action="combat-rosary-prev-track"/);
  assert.match(root.innerHTML,/data-action="combat-rosary-next-track"/);
-for(const id of ['catolico','templario','relaxar']){
+for(const id of ['catolico','templario','relaxar','relaxar2']){
  runInContext("state.musicTrack='"+id+"';cuiudoMusic.select('"+id+"');render()",vm);
  assert.match(root.innerHTML,/cuiudo-tiny-player/);
 }

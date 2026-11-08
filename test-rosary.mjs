@@ -150,6 +150,12 @@ assert.equal(runInContext('cuiudoAmbient.getVolume()',audioContext),0);
 runInContext('cuiudoAmbient.stop()',audioContext);
 assert.equal(runInContext('cuiudoAmbient.isPlaying()',audioContext),false);
 assert.ok(audioEvents.some(x=>x[0]==='clear'),'Parada precisa cancelar o loop');
+const firstNoteCount=audioEvents.filter(x=>x[0]==='start').length;
+const startedQuiet=await runInContext("cuiudoAmbient.start('relaxar2')",audioContext);
+assert.equal(startedQuiet,true,'A nova faixa relaxante deve tocar');
+assert.equal(runInContext('cuiudoAmbient.getMode()',audioContext),'relaxar2');
+assert.ok(audioEvents.filter(x=>x[0]==='start').length>firstNoteCount,'Relaxar II deve produzir notas próprias');
+runInContext('cuiudoAmbient.stop()',audioContext);
 console.log('✓ AudioContext: início somente após toque, notas, volume zero, pausa e limpeza');
 
 console.log('✓ CUIÚDO 12: medalha, áudio opcional, 4 idiomas, 20 mistérios e 3 tamanhos');

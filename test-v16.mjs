@@ -78,7 +78,7 @@ console.log('✓ Rosário de contas: 1 Pai-Nosso, 10 Ave-Marias e 1 Glória com 
 
 const ids=runInContext('oracoesDevocionario.map(p=>p.id)',vm);
 assert.equal(ids.length,18);
-assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),14);
+assert.equal(runInContext('Object.keys(cuiudoMusic.tracks).length',vm),15);
 assert.equal(runInContext('cuiudoMusic.tracks.templario.kind',vm),'file');
 assert.match(runInContext('cuiudoMusic.tracks.veni.src',vm),/Veni.creator.spiritus\.ogg/);
 assert.match(runInContext('cuiudoMusic.tracks.alma.src',vm),/Alma_Redemptoris_Mater\.ogg/);
