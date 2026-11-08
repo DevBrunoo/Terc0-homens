@@ -184,3 +184,14 @@ Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o
 **Mais três obras e reflexões cuiúdas:** *Aiding a Comrade*, *A New Year on the Cimarron* e *The Smoke Signal*, pinturas de Frederic Remington em domínio público, todas disponíveis localmente em assets/feed e creditadas em feed-data.js. Agora são 19 posts, 17 obras/fotografias no feed.
 
 **Checklist de hoje:** usuário escreve a meta, clica **Concluí** ou **Não concluí**, pode reabrir ou excluir. Quando conclui, ganha uma recompensa virtual colecionável (medalha/selo/estrela/troféu) e animação discreta. Quando marca não concluída, aparece exatamente a mensagem solicitada: **“Você é muito macio! Reorganize-se, levante e faça acontecer.”** As metas são salvas por data apenas no navegador (`localStorage`).
+
+
+## CUIÚDO v14 — Medalha, cântico indicado e novas meditações
+
+**Medalha:** arte em ouro `assets/medalha-sao-bento-ouro.svg`, baseada nas inscrições tradicionais de São Bento, conferidas no [OSB](https://osb.org/the-medal-of-saint-benedict/). É interpretação vetorial, não cunhagem oficial.
+
+**Música templária:** reproduz o vídeo exato informado: [YouTube zodHltkgK1w](https://www.youtube.com/watch?v=zodHltkgK1w), com player oficial do YouTube que fica visível e só abre após clicar em reproduzir. Nenhum áudio é copiado ou redistribuído; se o canal não permitir incorporação, o link original continua disponível.
+
+**English · Douay-Rheims:** removida a redefinição de idioma que anulava o clique; a opção agora troca de fato os versículos e salva a preferência.
+
+**20 mistérios:** história, o que contemplar durante a oração e aplicação concreta na vida, em PT, EN, ES e LA. Textos autorais fundamentados nas passagens bíblicas e na carta [Rosarium Virginis Mariae](https://www.vatican.va/content/john-paul-ii/pt/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html). A Assunção e a Coroação não são descritas literalmente nos Evangelhos.

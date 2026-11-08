@@ -37,7 +37,7 @@ jobs:
       - name: Preparar aplicativo completo com imagens
         run: |
           mkdir -p package
-          cp index.html apple.css rosary-plus.css cuiudo-v13.css styles.css feed.css app.js feed-ui.js feed-data.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-plus.js daily-goals.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
+          cp index.html apple.css rosary-plus.css cuiudo-v13.css cuiudo-v14.css styles.css feed.css app.js feed-ui.js feed-data.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-context.js rosary-plus.js daily-goals.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
           cp -R assets package/
           cat > package/COMO_ABRIR.txt <<'TXT'
           CUIÚDO — Versão completa com imagens locais

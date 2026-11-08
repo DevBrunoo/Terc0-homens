@@ -3,7 +3,7 @@ import {readFileSync,existsSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {createContext,runInContext} from 'node:vm';
 const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
-const files=['data.js','brutal.js','devocionario.js','feed-data.js','app.js','feed-ui.js','ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-artwork.js','rosary-plus.js','daily-goals.js'];
+const files=['data.js','brutal.js','devocionario.js','feed-data.js','app.js','feed-ui.js','ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-artwork.js','rosary-context.js','rosary-plus.js','daily-goals.js'];
 for(const f of files){const p=spawnSync(process.execPath,['--check',new URL('./'+f,import.meta.url).pathname]);assert.equal(p.status,0,f+': '+p.stderr);}
 for(const p of ['assets/audio/cantico-catolico.mp3','assets/audio/cantico-medieval.mp3']){
  const b=readFileSync(new URL('./'+p,import.meta.url));
@@ -18,7 +18,7 @@ const doc={documentElement:{dataset:{},style:{}},getElementById(){return root},q
 const memory=new Map();
 const vm=createContext({document:doc,window:{scrollTo(){},location:{hash:''},matchMedia(){return {matches:false,addEventListener(){}}}},navigator:{},location:{protocol:'file:'},localStorage:{getItem(k){return memory.get(k)||null},setItem(k,v){memory.set(k,v)}},confirm(){return true},console});
 runInContext(files.map(read).join('\n'),vm,{timeout:6000});
-assert.match(root.innerHTML,/benedict-medal-photo/);
+assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
