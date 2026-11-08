@@ -36,7 +36,7 @@ for(const lang of ['pt','en','es','la']){
  assert.match(mount.innerHTML,/rosary-intention-form/);
  assert.equal((mount.innerHTML.match(/data-action="combat-meditation-length"/g)||[]).length,3);
  assert.match(mount.innerHTML,/data-action="combat-rosary-music"/);
- assert.equal((mount.innerHTML.match(/data-action="combat-rosary-track"/g)||[]).length,7);
+ assert.equal((mount.innerHTML.match(/data-action="combat-rosary-track"/g)||[]).length,9);
  for(const length of ['small','medium','large']){
   runInContext('state.rosaryLength='+JSON.stringify(length)+';render()',vm);
   if(length==='small')assert.doesNotMatch(mount.innerHTML,/rosary-long/);
