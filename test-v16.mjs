@@ -64,7 +64,7 @@ assert.doesNotMatch(read('cuiudo-music.js'),/youtube-nocookie\.com\/embed/);
 for(const lang of ['pt','en','es','la']){
  runInContext('state.appLang='+JSON.stringify(lang)+";state.tab='devocionario';state.devFilter='todos';render()",vm);
  const translated=runInContext('cuiudoSaintUI['+JSON.stringify(lang)+'].heading',vm);
- assert.ok(mount.innerHTML.includes(translated));
+ assert.ok(mount.innerHTML.includes(String(translated).replaceAll('&','&amp;')), 'Título em '+lang);
  assert.match(mount.innerHTML,/santos-todos-fra-angelico\.webp/);
  assert.match(mount.innerHTML,/santos-coroacao-fra-angelico\.webp/);
  assert.equal((mount.innerHTML.match(/class="card devotion-card"/g)||[]).length,18,'18 orações em '+lang);
