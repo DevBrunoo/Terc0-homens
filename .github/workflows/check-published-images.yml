@@ -1,34 +1,46 @@
 name: Verificar imagens do site publicado
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Publicar CUIÚDO no GitHub Pages"]
+    types: [completed]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   site:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 5
     steps:
-      - name: Confirmar página publicada e imagens
+      - name: Conferir HTML, JS, CSS e fotos pela rede
         run: |
           python - <<'PY'
           import time
           import urllib.request
+          import urllib.error
           base='https://devbrunoo.github.io/Terc0-homens/'
-          paths=['','index.html','feed-data.js','feed-ui.js','feed.css',
+          paths=['','index.html','feed-data.js','feed-ui.js','apple.css',
             'assets/feed/miguel-reni.webp','assets/feed/cristo-deserto.webp',
             'assets/feed/cowboy-remington.webp']
           for path in paths:
               url=base+path
-              try:
-                  req=urllib.request.Request(url,headers={'User-Agent':'Cuiudo-Pages-Health/1.0','Cache-Control':'no-cache'})
-                  with urllib.request.urlopen(req,timeout=17) as response:
-                      body=response.read()
-                      print(f'{response.status} {len(body):7} {response.headers.get("content-type")} {url}',flush=True)
-                      if path.endswith('.webp'):
-                          assert body[:4]==b'RIFF' and body[8:12]==b'WEBP', 'Asset não é WebP'
-                      if path=='index.html' or path=='':
-                          assert b'feed-data.js' in body, 'O HTML publicado não é a versão nova'
-              except Exception as exc:
-                  print(f'ERRO {url} {type(exc).__name__} {exc}',flush=True)
-                  raise
+              for attempt in range(8):
+                  try:
+                      req=urllib.request.Request(url,headers={'User-Agent':'Cuiudo-Pages-Health/2.0','Cache-Control':'no-cache'})
+                      with urllib.request.urlopen(req,timeout=18) as res:
+                          data=res.read()
+                          kind=res.headers.get('content-type','')
+                          if path.endswith('.webp'):
+                              assert data[:4]==b'RIFF' and data[8:12]==b'WEBP','Imagem WebP inválida'
+                          if path in ('','index.html'):
+                              assert b'apple.css' in data,'HTML antigo'
+                          if path=='apple.css':
+                              assert b'--bg:#f5f5f7' in data or b'--bg:#f5f5f7;' in data,'CSS Apple antigo'
+                          print(f'OK {res.status} {len(data)} bytes {kind} {url}',flush=True)
+                          break
+                  except Exception as e:
+                      if attempt==7: raise
+                      print(f'Tentativa {attempt+1}/8: {url} {e}',flush=True)
+                      time.sleep(9)
+          print('PUBLICADO: página e imagens reais carregam corretamente via HTTPS')
           PY
