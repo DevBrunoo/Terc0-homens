@@ -17,7 +17,7 @@ ASSET_CREDITS={
  'assets/medalha-sao-bento-hd.svg':('St Benedict Medal icon.svg','public_domain','Medalha de São Bento em vetor colorido; Sy.Paul, domínio público'),
  'assets/santos-todos-fra-angelico.webp':('All-Saints.jpg','public_domain','Fra Angelico, The Forerunners of Christ with Saints and Martyrs; domínio público'),
  'assets/santos-coroacao-fra-angelico.webp':('Fra Angelico — Coronation of the Virgin.jpg','cc0','Fra Angelico, Coroação da Virgem, fotografia de Gleb Simonov, CC0 1.0'),
- 'assets/sao-bento-gravura-hd.webp':('Saint Benedict. Engraving by F.L. Schmitner. Wellcome V0048893.jpg','public_domain','São Bento, gravura histórica de F. L. Schmitner, Wellcome Collection, domínio público'),
+ 'assets/sao-bento-gravura-hd.webp':('Saint Benedict. Engraving by F.L. Schmitner. Wellcome V0048893.jpg','by_4','São Bento, gravura histórica de F. L. Schmitner, Wellcome Collection, CC BY 4.0'),
  'assets/audio/cantico-pange-lingua.mp3':('Pange Lingua Latin in Latin.ogg','by_sa_3','Gareth Hughes, Pange Lingua, CC BY-SA 3.0'),
  'assets/audio/cantico-tantum-ergo.mp3':('Tantum Ergo I Gregorian.ogg','by_sa_3','Gareth Hughes / Richardprins, Tantum Ergo, CC BY-SA 3.0'),
  'assets/audio/cantico-pater-noster.mp3':('Schola Gregoriana-Pater Noster.ogg','by_sa_3','Schola Gregoriana de Ołtarzew, Pater Noster, CC BY-SA 3.0'),
@@ -46,6 +46,7 @@ def license_ok(meta,target):
  data=' '.join(str(x.get(y,{}).get('value','')) for y in ['LicenseShortName','LicenseUrl','UsageTerms','Copyrighted']).lower()
  if target=='public_domain':return ('public domain' in data or 'publicdomain' in data or 'pd-old' in data)
  if target=='cc0':return 'cc0' in data or 'cc-zero' in data or 'publicdomain/zero' in data or ('public domain' in data and 'attribution' not in data)
+ if target=='by_4':return 'licenses/by/4.0' in data or 'cc by 4.0' in data or 'attribution 4.0' in data
  if target=='by_sa_3':return 'by-sa/3.0' in data or 'by-sa-3.0' in data or 'attribution-sharealike 3.0' in data
  if target=='by_sa_4':return 'by-sa/4.0' in data or 'by-sa-4.0' in data or 'attribution-sharealike 4.0' in data
  return False
