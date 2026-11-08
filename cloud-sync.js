@@ -11,7 +11,7 @@
  const COLLECTIONS=new Set(['progress','decadePrayers','challengeDays','examineDays',
   'missionDays','dailyGoalDays','feedSaved','feedDone']);
  const ui={user:null,revision:0,open:false,mode:'login',status:'',available:null,busy:false,applying:false};
- let syncTimer=null,working=false,retry=null,changeSequence=0;
+ let syncTimer=null,working=false,retryAt=0,changeSequence=0;
  const oldSave=save,oldShell=renderShell;
  const supported=typeof window.fetch==='function' && location.protocol!=='file:';
  const esc=escapeHtml;
@@ -23,7 +23,7 @@
  function applyData(next){
   ui.applying=true;
   try{
-   for(const k of KEYS)if(Object.hasOwn(next,k))state[k]=next[k];
+   for(const k of KEYS){if(Object.hasOwn(next,k))state[k]=next[k];else delete state[k];}
    saveOffline();
    if(typeof cuiudoMusic!=='undefined'&&next.musicTrack)cuiudoMusic.select(next.musicTrack);
   }finally{ui.applying=false;}
@@ -111,7 +111,7 @@
   }
  };
  function schedule(){
-  if(!ui.user||!supported||ui.busy)return;
+  if(!ui.user||!supported||ui.busy||Date.now()<retryAt)return;
   if(syncTimer)clearTimeout(syncTimer);
   syncTimer=setTimeout(()=>{syncTimer=null;flush();},1000);
  }
@@ -152,7 +152,7 @@
     setDirty(false);ui.status='Dados atualizados nos dois aparelhos.';
    }
    ui.available=true;
-  }catch(e){ui.status=String(e.message||e);setDirty(true);}
+  }catch(e){ui.status=String(e.message||e);}
   finally{working=false;render();if(isDirty()&&ui.user)schedule();}
  }
  async function flush(){
@@ -161,7 +161,7 @@
   const sentSequence=changeSequence,data=snapshot();
   try{
    const result=await api('sync',{method:'PUT',body:JSON.stringify({revision:ui.revision,state:data})});
-   if(result.status===409){
+   if(result.status===409){retryAt=0;
     ui.revision=result.revision||0;
     const combined=merge(result.state||{},snapshot(),true);
     applyData(combined);
@@ -170,13 +170,13 @@
    }
    if(result.status===401){ui.user=null;ui.status='Faça login novamente.';return;}
    if(result.status>=400)throw new Error(result.error||'Não foi possível salvar.');
-   ui.revision=result.revision;
+   retryAt=0;ui.revision=result.revision;
    if(sentSequence===changeSequence){
     setDirty(false);ui.status='Salvo na nuvem.';
    }else{
     setDirty(true);ui.status='Sincronizando novas alterações…';
    }
-  }catch(e){ui.status='Salvo neste aparelho. A nuvem está indisponível: '+String(e.message||e);}
+  }catch(e){retryAt=Date.now()+30000;ui.status='Salvo neste aparelho. A nuvem está indisponível: '+String(e.message||e);}
   finally{working=false;if(ui.open)render();if(isDirty()&&ui.user&&navigator.onLine)schedule();}
  }
  async function checkSession(){
@@ -199,12 +199,13 @@
    await pull({initial:true});
    ui.open=false;
   }catch(e){ui.status=String(e.message||e);}
-  finally{ui.busy=false;render();}
+  finally{ui.busy=false;render();if(ui.user&&isDirty())schedule();}
  }
  async function logout(){
   if(ui.busy)return;
   ui.busy=true;
   if(isDirty())await flush();
+  if(isDirty()){ui.status='Sincronize antes de sair para não perder as alterações deste aparelho.';ui.busy=false;render();return;}
   try{await api('auth',{method:'POST',body:JSON.stringify({action:'logout'})});}catch{}
   ui.user=null;ui.revision=0;ui.open=false;ui.busy=false;
   setDirty(false);
