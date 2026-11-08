@@ -31,7 +31,7 @@ for(const lang of ['pt','en','es','la']){
  assert.match(mount.innerHTML,/rosary-music-control/,'controle de música visível em '+lang);
  assert.match(mount.innerHTML,/meditation-size-buttons/,'três tamanhos em '+lang);
  assert.match(mount.innerHTML,/rosary-painting/,'foto por mistério em '+lang);
- assert.match(mount.innerHTML,/assets\/medalha-sao-bento\.svg/);
+ assert.match(mount.innerHTML,/assets\/medalha-sao-bento-colorida\.webp/);
  assert.match(mount.innerHTML,/data-action="add-bead"/);
  assert.match(mount.innerHTML,/rosary-intention-form/);
  assert.equal((mount.innerHTML.match(/data-action="combat-meditation-length"/g)||[]).length,3);
