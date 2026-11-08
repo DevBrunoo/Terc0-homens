@@ -1,0 +1,51 @@
+name: Publicar CUIÚDO no GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Buscar o repositório
+        uses: actions/checkout@v4
+      - name: Validar site e as 14 imagens locais
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('.')
+          code=(root/'feed-data.js').read_text(encoding='utf-8')
+          paths=re.findall(r'"url": "(\./assets/feed/[^"]+\.webp)"',code)
+          assert len(paths)==14, f'Esperadas 14 imagens, existem {len(paths)}'
+          for p in paths:
+              data=Path(p).read_bytes()
+              assert data[:4]==b'RIFF' and data[8:12]==b'WEBP', f'{p} inválido'
+          assert (root/'apple.css').is_file(), 'Tema Apple ausente'
+          print('14/14 imagens WEBP OK; index, CSS e JS prontos')
+          PY
+      - name: Preparar pacote do site
+        run: |
+          mkdir -p _site
+          cp index.html styles.css feed.css apple.css data.js brutal.js devocionario.js feed-data.js app.js feed-ui.js sw.js manifest.webmanifest .nojekyll _site/
+          cp -R assets _site/
+          find _site/assets/feed -type f | wc -l
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Enviar site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
