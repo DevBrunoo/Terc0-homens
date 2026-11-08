@@ -18,7 +18,10 @@ jobs:
       - name: Ferramentas para arquivos licenciados
         run: |
           python -m pip install -q requests Pillow
-          which ffmpeg
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
       - name: Download com validação de licenças e transcodificação
         run: python scripts/import-sacred-assets-v16.py
       - name: Salvar no repositório
