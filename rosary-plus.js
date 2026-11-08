@@ -3,10 +3,10 @@
    A configuração do contador permanece inalterada: 5 mistérios por terço. */
 const cuiudoLangLabels={pt:'Português',en:'English',es:'Español',la:'Latina'};
 const cuiudoNav={
- pt:{inicio:'Início',terco:'Terço',devocionario:'São Miguel',palavra:'Bíblia',diario:'Diário',verdade:'Reflexões',desafios:'Ação',exame:'Exame'},
- en:{inicio:'Home',terco:'Rosary',devocionario:'St Michael',palavra:'Bible',diario:'Journal',verdade:'Reflections',desafios:'Action',exame:'Examination'},
- es:{inicio:'Inicio',terco:'Rosario',devocionario:'San Miguel',palavra:'Biblia',diario:'Diario',verdade:'Reflexiones',desafios:'Acción',exame:'Examen'},
- la:{inicio:'Domus',terco:'Rosarium',devocionario:'S. Michael',palavra:'Biblia',diario:'Diarium',verdade:'Meditationes',desafios:'Opera',exame:'Examen'}
+ pt:{inicio:'Início',terco:'Terço',devocionario:'Santos',palavra:'Bíblia',diario:'Diário',verdade:'Reflexões',desafios:'Ação',exame:'Exame'},
+ en:{inicio:'Home',terco:'Rosary',devocionario:'Saints',palavra:'Bible',diario:'Journal',verdade:'Reflections',desafios:'Action',exame:'Examination'},
+ es:{inicio:'Inicio',terco:'Rosario',devocionario:'Santos',palavra:'Biblia',diario:'Diario',verdade:'Reflexiones',desafios:'Acción',exame:'Examen'},
+ la:{inicio:'Domus',terco:'Rosarium',devocionario:'Sancti',palavra:'Biblia',diario:'Diarium',verdade:'Meditationes',desafios:'Opera',exame:'Examen'}
 };
 const cuiudoLengthLabels={
  pt:['Pequena','Média','Grande'],
@@ -71,7 +71,7 @@ function cuiudoBenedictBanner(){
   '<div class="benedict-hero-actions"><button type="button" class="btn btn-primary" data-action="navigate" data-tab="terco">'+escapeHtml(lines[3])+' ↗</button>'+
   '</div><div class="benedict-motto">PAX · CRUX SACRA SIT MIHI LUX · NON DRACO SIT MIHI DUX</div></div>'+
   '<div class="benedict-hero-art"><div class="medal-halo"></div>'+
-  '<img class="benedict-medal-premium" src="./assets/medalha-sao-bento-colorida.webp" fetchpriority="high" alt="'+escapeHtml(lines[2])+' colorida, em azul, vermelho e dourado" width="560" height="560" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-ouro.svg\';}">'+
+  '<img class="benedict-medal-premium" src="./assets/medalha-sao-bento-hd.svg" fetchpriority="high" alt="'+escapeHtml(lines[2])+' colorida, em azul, vermelho e dourado" width="560" height="560" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
   '<span class="benedict-medal-credit">PAX · C S P B · <a href="https://jovensconectados.org.br/7-coisas-que-devemos-saber-sobre-a-medalha-e-cruz-de-sao-bento.html" target="_blank" rel="noopener noreferrer">Significado da medalha ↗</a></span></div></section>';
 }
 const cuiudoBaseHome=combatHome;
@@ -159,7 +159,7 @@ function cuiudoRosary(){
     (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
    (musicTrack==='templario'?'<p class="rosary-music-note">'+escapeHtml(musicLabels.note)+'</p>':'')+
    '</aside></section>'+
-  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-colorida.webp" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-ouro.svg\';}">'+
+  '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-hd.svg" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
     groupNames.map(id=>'<button class="group-button '+(state.group===id?'active':'')+
@@ -238,7 +238,7 @@ state.appLang=['pt','en','es','la'].includes(state.appLang)?state.appLang:'pt';
 state.rosaryLength=['small','medium','large'].includes(state.rosaryLength)?state.rosaryLength:'medium';
 state.musicVolume=Number.isFinite(Number(state.musicVolume))?Math.max(0,Math.min(.5,Number(state.musicVolume))):.22;
 state.rosaryIntention=String(state.rosaryIntention||'').slice(0,800);
-state.musicTrack=['catolico','templario','relaxar'].includes(state.musicTrack)?state.musicTrack:'catolico';
+state.musicTrack=Object.keys(cuiudoMusic.tracks).includes(state.musicTrack)?state.musicTrack:'catolico';
 cuiudoMusic.select(state.musicTrack);
 cuiudoMusic.setVolume(state.musicVolume);
 app.addEventListener('click',evt=>{
@@ -249,7 +249,7 @@ app.addEventListener('click',evt=>{
   else cuiudoMusic.play().then(()=>render()).catch(()=>render());
  }
  if(action==='combat-rosary-track'){
-  state.musicTrack=['catolico','templario','relaxar'].includes(el.dataset.track)?el.dataset.track:'catolico';
+  state.musicTrack=Object.keys(cuiudoMusic.tracks).includes(el.dataset.track)?el.dataset.track:'catolico';
   save();
   cuiudoMusic.select(state.musicTrack).then(()=>render()).catch(()=>render());
  }

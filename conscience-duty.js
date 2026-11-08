@@ -54,10 +54,12 @@ function cuiudoDutyHero(){
   '<p>Preguiça. Omissão. Deveres abandonados. A fé pede oração, responsabilidade e coragem para agir.</p>'+
   '<div class="duty-hero-actions"><button class="btn btn-primary" type="button" data-action="navigate" data-tab="exame">'+
   'Examinar minha consciência ↗</button></div></div>'+
-  '<div class="duty-image-wrap"><img src="./assets/sao-bento-arte-enviada.webp" loading="lazy" decoding="async" width="390" height="700"'+
-   ' alt="São Bento com a Cruz, vencendo uma figura que simboliza o mal, em ilustração de fundo preto" '+
-   'onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
-  '</div></section>';
+  '<div class="duty-image-wrap"><img class="saint-benedict-hd" src="./assets/sao-bento-gravura-hd.webp" loading="lazy" decoding="async" width="620" height="900"'+
+   ' alt="Gravura histórica de São Bento, Wellcome Collection · CC BY 4.0" '+
+   'onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/sao-bento-arte-enviada.webp\';}">'+
+   '<img class="saint-benedict-user-art" src="./assets/sao-bento-arte-enviada.webp" loading="lazy" decoding="async" width="120" height="200"'+
+    ' alt="Arte de São Bento enviada pelo usuário — A cruz sagrada seja minha luz">'+
+   '</div></section>';
 }
 function cuiudoDutyContent(){
  return '<section class="duty-section"><div class="duty-section-intro">'+
