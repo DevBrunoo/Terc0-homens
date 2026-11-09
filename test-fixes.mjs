@@ -47,7 +47,9 @@ for(const locale of ['pt','en','es','la']){
  for(const group of ['gozosos','luminosos','dolorosos','gloriosos']){
   for(let i=0;i<5;i++){
    runInContext("state.tab='terco';state.appLang="+JSON.stringify(locale)+";state.group="+JSON.stringify(group)+";state.mystery="+i+";render()",vm);
-   assert.match(mount.innerHTML,/rosary-story-history/);
+   assert.match(mount.innerHTML,/rosary-history-card/);
+   const visual=mount.innerHTML.split('class="mystery-visual rosary-photo-wrap"')[1].split('<div class="mystery-detail">')[0];
+   assert.ok(visual.indexOf('class="rosary-painting"')<visual.indexOf('class="rosary-history-card"'),'História abaixo da imagem');
    assert.match(mount.innerHTML,/rosary-story-think/);
    assert.match(mount.innerHTML,/rosary-story-apply/);
    assert.match(mount.innerHTML,/rosary-story-source/);
