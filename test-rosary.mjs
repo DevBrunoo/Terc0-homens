@@ -29,6 +29,7 @@ assert.match(mount.innerHTML,/cuiudo-language/);
 for(const lang of ['pt','en','es','la']){
  runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.rosaryLength="small";render()',vm,{timeout:2500});
  assert.match(mount.innerHTML,/rosary-music-control/,'controle de música visível em '+lang);
+ assert.match(mount.innerHTML,/data-action="cuiudo-spotify-open"/,'opção Spotify visível em '+lang);
  assert.match(mount.innerHTML,/meditation-size-buttons/,'três tamanhos em '+lang);
  assert.match(mount.innerHTML,/rosary-painting/,'foto por mistério em '+lang);
  assert.match(mount.innerHTML,/assets\/medalha-sao-bento-hd\.svg/);

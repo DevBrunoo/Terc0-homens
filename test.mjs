@@ -104,7 +104,7 @@ assert.match(html,/feed\.css/);
 assert.match(html,/apple\.css/);
 assert.match(read('apple.css'),/\.cuiudo-hero/);
 assert.match(read('apple.css'),/\.poster-grid/);
-assert.match(read('sw.js'),/terco-metas-largura-v37/);
+assert.match(read('sw.js'),/terco-spotify-player-v38/);
 assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);

@@ -196,6 +196,7 @@ function cuiudoRosary(){
    '<button type="button" class="cuiudo-play-toggle" data-action="combat-rosary-music" aria-pressed="'+musicOn+'" aria-label="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" title="'+escapeHtml(musicOn?musicLabels.pause:musicLabels.play)+'" '+(cuiudoMusic.isSupported()?'':'disabled')+'><span aria-hidden="true">'+(musicOn?'Ⅱ':'▶')+'</span></button>'+
    '<button type="button" class="cuiudo-skip" data-action="combat-rosary-next-track" aria-label="'+escapeHtml({pt:'Próxima música',en:'Next track',es:'Siguiente canción',la:'Cantus sequens'}[l])+'"><span aria-hidden="true">›</span></button></div>'+
    '<input class="cuiudo-mini-volume" type="range" id="rosary-volume" min="0" max="50" step="1" value="'+volume+'" aria-label="'+escapeHtml(t.volume)+'" title="'+escapeHtml(t.volume)+'">'+
+   '<button type="button" class="cuiudo-spotify-launch" data-action="cuiudo-spotify-open" title="Spotify" aria-label="'+escapeHtml({pt:'Ouvir no Spotify',en:'Listen on Spotify',es:'Escuchar en Spotify',la:'Spotify audi'}[l])+'"><span aria-hidden="true">◉</span> Spotify</button>'+
    '<details class="rosary-music-credits"><summary aria-label="'+escapeHtml(musicLabels.credit)+'" title="'+escapeHtml(musicLabels.credit)+'"><span aria-hidden="true">ⓘ</span></summary>'+
    '<p class="rosary-music-credit">'+escapeHtml(musicInfo.author)+' · '+escapeHtml(musicInfo.license)+
    (musicInfo.source?' · <a href="'+escapeHtml(musicInfo.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(musicLabels.credit)+' ↗</a>':'')+'</p>'+
@@ -302,7 +303,10 @@ app.addEventListener('click',evt=>{
  const action=el.dataset.action;
  if(action==='combat-rosary-music'){
   if(cuiudoMusic.isPlaying()){cuiudoMusic.stop();render();}
-  else cuiudoMusic.play().then(()=>render()).catch(()=>render());
+  else{
+   if(typeof cuiudoSpotify!=='undefined')cuiudoSpotify.stopPlayback();
+   cuiudoMusic.play().then(()=>render()).catch(()=>render());
+  }
  }
  if(action==='combat-rosary-prev-track'||action==='combat-rosary-next-track'){
   const tracks=Object.keys(cuiudoMusic.tracks);
