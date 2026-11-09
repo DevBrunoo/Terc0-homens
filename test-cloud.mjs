@@ -18,6 +18,8 @@ assert.match(read('cloud-sync.js'),/Ativar sincronização/);
 assert.match(read('cloud-sync.js'),/Mesclar por ID/);
 assert.match(read('cloud-sync.js'),/Aparelho já sincronizado/);
 assert.match(read('cloud-sync.js'),/Metas salvas somente neste aparelho/);
+assert.match(read('cloud-sync.js'),/Conectar metas do PC e celular/);
+assert.match(read('cloud-sync.js'),/cuiudo-goals-sync-hint/);
 assert.match(read('daily-goals.js'),/sincronização opcional/);
 assert.doesNotMatch(read('cloud-sync.js'),/Criar conta|Email<input/);
 assert.match(read('migrations/0002_cuiudo_solo.sql'),/CREATE TABLE IF NOT EXISTS solo_keys/);

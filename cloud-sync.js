@@ -118,7 +118,17 @@
   const notice=ui.user?
    '<div class="cuiudo-cloud-alert cuiudo-cloud-active" role="status">☁ Sincronização ligada · <button type="button" data-sync-action="open">Conferir nuvem</button></div>':
    '<div class="cuiudo-cloud-alert" role="status">⇄ Metas salvas somente neste aparelho. <button type="button" data-sync-action="open">Ativar sincronização sem cadastro</button></div>';
-  return oldShell(html).replace('<div class="header-tools">','<div class="header-tools">'+button)
+  const goalHint=ui.user?
+    '<div class="cuiudo-goals-sync-hint cuiudo-goals-sync-connected" role="status">'+
+      '<strong>☁ Seus aparelhos podem compartilhar as metas.</strong><span>'+esc(ui.status||'Conectado ao D1')+'</span>'+
+      '<button type="button" data-sync-action="refresh">Sincronizar agora ↻</button></div>':
+    '<div class="cuiudo-goals-sync-hint" role="status">'+
+      '<strong>⚠ Estas metas ainda não estão na nuvem.</strong>'+
+      '<span>Para aparecerem no celular: neste navegador escolha <b>Primeiro aparelho</b>; no celular escolha <b>Outro aparelho</b> e cole o mesmo código.</span>'+
+      '<button type="button" data-sync-action="open">☁ Conectar metas do PC e celular ↗</button></div>';
+  return oldShell(html)
+   .replace('<div class="header-tools">','<div class="header-tools">'+button)
+   .replace('<form id="cuiudo-goal-form"',goalHint+'<form id="cuiudo-goal-form"')
    .replace('<main class="main" id="main-content">',''+accountPanel()+'<main class="main" id="main-content">'+notice);
  };
  save=function(){
@@ -224,7 +234,9 @@
    else if(code){try{localStorage.setItem(SOLO,code.trim().replace(/[\s-]/g,'').toLowerCase());}catch{}}
    ui.user=result.user;ui.revision=0;ui.available=true;
    ui.showCode=action==='create';
-   ui.status='Conectado. As metas e o terço serão sincronizados automaticamente.';
+   ui.status=action==='create'?
+    'Código criado. Copie e cole no celular em Outro aparelho. Suas metas estão sendo enviadas.':
+    'Código aceito. Este aparelho vai compartilhar as mesmas metas do primeiro.';
    ui.busy=false;
    await pull({initial:true});
   }catch(e){ui.status=String(e.message||e);}
