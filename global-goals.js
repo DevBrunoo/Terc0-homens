@@ -8,10 +8,8 @@
  const ENDPOINT='/api/goals';
  const QUEUE_KEY='cuiudo-public-goals-queue-v1';
  const IMPORT_KEY='cuiudo-public-goals-imported-v1';
- const esc=escapeHtml;
- let pending=[],inFlight=false,pulling=false,connected=false,initialLoad=true;
- let timer=null,lastCheck=0,status='Carregando metas da nuvem…';
- const previousShell=renderShell;
+ let pending=[],inFlight=false,pulling=false,connected=false;
+ let timer=null,status='Carregando metas da nuvem…';
  const supported=typeof window.fetch==='function' && location.protocol!=='file:';
 
  function readLocal(key,fallback){
@@ -47,10 +45,6 @@
  function updateStatus(message,online){
   status=message;
   if(online!==undefined)connected=online;
-  if(document.getElementById('cuiudo-global-status')){
-   const node=document.getElementById('cuiudo-global-status');
-   node.textContent=status;
-  }
  }
  function snapshotGoals(){
   const result={};
@@ -83,9 +77,23 @@
   for(const [day,entries] of Object.entries(old)){
    if(!withinWindow(day)&&Array.isArray(entries))grouped[day]=entries;
   }
+  // A atualização automática não deve apagar o que a pessoa está digitando
+  // no campo de metas. Só redesenhar quando houver mudança real dos dados.
+  if(JSON.stringify(grouped)===JSON.stringify(old))return;
+  const input=document.getElementById('cuiudo-goal-text');
+  const draft=input?.value||'';
+  const focused=Boolean(input&&document.activeElement===input);
+  const start=focused?input.selectionStart:null;
+  const end=focused?input.selectionEnd:null;
   state.dailyGoalDays=grouped;
   saveLocal();
   render();
+  const nextInput=document.getElementById('cuiudo-goal-text');
+  if(nextInput&&draft){
+   nextInput.value=draft;
+   if(focused){nextInput.focus({preventScroll:true});
+    if(start!==null&&end!==null)nextInput.setSelectionRange(start,end);}
+  }
  }
  function queueOperation(op){
   const normalized=normalize(op);
@@ -154,13 +162,12 @@
     writeLocal(IMPORT_KEY,true);
    }
    connected=true;
-   lastCheck=Date.now();
    updateStatus(pending.length?'Enviando metas locais…':'Sincronizado automaticamente com o D1.',true);
    replaceGoals(rows);
    if(pending.length)schedule();
   }catch(e){
    updateStatus('Não foi possível buscar metas da nuvem: '+String(e.message||e),false);
-  }finally{pulling=false;initialLoad=false;}
+  }finally{pulling=false;}
  }
  window.cuiudoGlobalGoals={
   change(action,day,goal){
@@ -168,20 +175,9 @@
    queueOperation({action,day,id:goal.id,text:goal.text,status:goal.status||'pending'});
   },
   refresh(){return pull();},
-  isConnected(){return connected;}
+  isConnected(){return connected;},
+  getStatus(){return status;}
  };
- renderShell=function(html){
-  const notice='<div class="cuiudo-global-notice" role="status">'+
-   '<strong>☁ Metas universais — sem conta ou código</strong>'+
-   '<span id="cuiudo-global-status">'+esc(status)+'</span>'+
-   '<small>Quadro público: qualquer visitante pode ver, concluir ou excluir as metas. Diário e intenções continuam privados neste aparelho.</small>'+
-   '<button type="button" data-global-goals-refresh>Atualizar ↻</button></div>';
-  return previousShell(html).replace('<form id="cuiudo-goal-form"',notice+'<form id="cuiudo-goal-form"');
- };
- app.addEventListener('click',event=>{
-  if(!event.target.closest?.('[data-global-goals-refresh]'))return;
-  event.preventDefault();pull();
- },true);
  if(supported){
   window.addEventListener('online',()=>{if(pending.length)flush();pull();});
   window.addEventListener('focus',()=>pull());

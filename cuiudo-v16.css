@@ -783,3 +783,119 @@
 @media(max-width:600px) {
   .cuiudo-grace-reflection { margin: 15px 0 19px; padding: 19px 17px; border-radius: 17px; }
 }
+
+
+/* v29 — Metas em telas pequenas. Sem card extra, botão de atualizar ou status visível.
+   Atualização remota continua silenciosa e automática pelo global-goals.js. */
+@media (max-width:760px) {
+  .today-goals {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    margin:14px 0 18px;
+    padding:clamp(14px,4vw,22px);
+    border-radius:19px;
+    overflow-wrap:anywhere;
+  }
+  .today-goals-top {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:10px;
+    align-items:start;
+  }
+  .today-goals-top>div:first-child { min-width:0; }
+  .today-goals h2 {
+    margin:6px 0 7px;
+    font-size:clamp(24px,6.1vw,30px);
+    line-height:1.12;
+    overflow-wrap:anywhere;
+  }
+  .today-goals-status {
+    align-items:flex-end;
+    justify-content:flex-start;
+    padding-top:6px;
+    min-width:44px;
+  }
+  .today-goals-status strong {font-size:clamp(19px,5.4vw,25px);}
+  .today-goals-top p {font-size:12px;line-height:1.55;}
+  .today-goals-form {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    width:100%;
+    min-width:0;
+    gap:9px;
+    margin:17px 0 15px;
+  }
+  .today-goals-form input {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    font-size:16px; /* Evita zoom involuntário no Safari do iPhone. */
+    flex:none;
+  }
+  .today-goals-form .btn {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    min-height:46px;
+    padding:11px 14px;
+    font-size:13px;
+  }
+  .today-goals-list {width:100%;min-width:0;gap:9px;}
+  .today-goal {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:11px;
+    padding:13px;
+    border-radius:15px;
+  }
+  .today-goal-main {width:100%;min-width:0;gap:10px;}
+  .today-goal-icon {width:29px;height:29px;flex:0 0 29px;}
+  .today-goal-content {flex:1;min-width:0;}
+  .today-goal-content>strong {font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
+  .today-goal-actions {
+    box-sizing:border-box;
+    display:flex;
+    flex-wrap:wrap;
+    width:100%;
+    min-width:0;
+    padding:0;
+    margin:0;
+    gap:8px;
+    justify-content:flex-start;
+  }
+  .today-goal-actions .goal-action {
+    flex:1 1 105px;
+    min-width:0;
+    min-height:44px;
+    padding:9px 11px;
+    white-space:normal;
+    font-size:11px;
+    line-height:1.35;
+    text-align:center;
+  }
+  .today-goal-actions .goal-delete {
+    flex:0 0 44px;
+    min-height:44px;
+    min-width:44px;
+    padding:8px;
+    border-radius:12px;
+  }
+  .goal-gift {max-width:100%;min-width:0;box-sizing:border-box;gap:8px;padding:10px;}
+  .goal-gift>div {min-width:0;flex:1;}
+  .goal-gift small {overflow-wrap:anywhere;}
+}
+@media (max-width:365px) {
+  .today-goals {padding:13px 11px;border-radius:15px;}
+  .today-goals h2 {font-size:24px;}
+  .today-goals-status strong {font-size:19px;}
+  .today-goal-actions .goal-action {flex-basis:85px;padding:9px 6px;}
+}
