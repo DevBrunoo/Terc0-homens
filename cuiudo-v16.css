@@ -1269,3 +1269,595 @@
  .rosary-long .prayer-response.rosary-offering{padding:17px 16px}
  .rosary-long .rosary-offering p{font-size:18px;line-height:1.66}
 }
+
+
+/* v33 — Metas: interface editorial com hierarquia limpa inspirada em apps
+ * de produtividade. Ações com alvos grandes; celebrações apenas após sucesso. */
+.today-goals{
+ --goal-celebrate:#27825b;
+ --goal-ink:#202b25;
+ position:relative;
+ max-width:1060px;
+ margin:20px auto 22px;
+ padding:clamp(17px,2.4vw,27px)!important;
+ border:1px solid var(--line);
+ border-radius:22px;
+ background:var(--surface);
+ box-shadow:0 15px 46px #1726300a,0 2px 9px #17263004;
+ overflow:visible;
+}
+.today-goals-top{
+ align-items:center;
+ gap:15px;
+ margin-bottom:13px;
+}
+.today-goals .eyebrow{
+ display:inline-flex;
+ align-items:center;
+ letter-spacing:.075em;
+ font-size:10px;
+ font-weight:770;
+}
+.today-goals h2{
+ margin:5px 0 5px;
+ color:var(--ink);
+ font-size:clamp(25px,2.8vw,33px);
+ line-height:1.12;
+ letter-spacing:-.055em;
+}
+.today-goals .goals-kick{
+ color:var(--subink);
+ font-size:12px!important;
+ font-weight:600;
+}
+.today-goals-top p:not(.goals-kick){
+ font-size:12px;
+ color:var(--dim);
+ line-height:1.55;
+}
+.today-goals-status{
+ padding:9px 13px;
+ border:1px solid var(--line);
+ border-radius:13px;
+ background:var(--surface-2);
+ text-align:center;
+ align-items:center;
+ min-width:66px;
+}
+.today-goals-status strong{
+ color:var(--ink);
+ font-size:25px;
+ font-weight:800;
+ line-height:1.12;
+ letter-spacing:-.045em;
+}
+.today-goals-status span{font-size:10px;font-weight:600;line-height:1.4}
+
+/* Lembrete fixo: renderizado de forma incondicional, sem botão de excluir,
+ * independente da lista diária ou do carregamento remoto. */
+.goals-permanent-note{
+ display:flex;
+ align-items:center;
+ gap:14px;
+ margin:14px 0 19px;
+ padding:17px 18px;
+ border-radius:15px;
+ border:1px solid color-mix(in srgb,var(--accent) 22%,var(--line));
+ background:
+  radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 60%),
+  var(--surface-2);
+ color:var(--ink);
+}
+.goals-note-icon{
+ width:43px;
+ height:43px;
+ flex:0 0 43px;
+ display:grid;
+ place-items:center;
+ border-radius:12px;
+ color:var(--accent);
+ background:var(--surface);
+ border:1px solid var(--line);
+ font-size:23px;
+}
+.goals-permanent-note>div{
+ display:flex;
+ flex-direction:column;
+ align-items:flex-start;
+ gap:4px;
+ flex:1;
+ min-width:0;
+}
+.goals-note-eyebrow{
+ color:var(--accent);
+ font:770 10px/1.4 var(--font);
+ letter-spacing:.08em;
+}
+.goals-permanent-note strong{
+ font:760 clamp(15px,1.65vw,19px)/1.35 var(--font);
+ letter-spacing:-.025em;
+ color:var(--ink);
+ overflow-wrap:anywhere;
+}
+.goals-permanent-note small{
+ font:470 11px/1.5 var(--font);
+ color:var(--subink);
+}
+.goals-note-pin{
+ flex:0 0 auto;
+ align-self:flex-start;
+ padding:5px 8px;
+ border-radius:99px;
+ border:1px solid var(--line);
+ background:var(--surface);
+ font:750 9px/1.1 var(--font);
+ letter-spacing:.07em;
+ color:var(--subink);
+}
+/* Campo horizontal espaçoso no desktop e duas linhas em mobile. */
+.today-goals-form{
+ gap:10px;
+ margin:17px 0 16px;
+}
+.today-goals-form>input[name=goal]{
+ height:46px;
+ min-height:46px;
+ background:var(--bg);
+ border-radius:11px;
+ font-size:14px;
+ padding:10px 14px;
+}
+.today-goals-form>.cuiudo-timer-duration{
+ height:46px;
+ min-height:46px;
+ border-radius:11px;
+ padding:5px 8px 5px 11px;
+ background:var(--surface-2);
+}
+.today-goals-form>.btn{
+ height:46px;
+ min-height:46px;
+ border-radius:11px;
+ font-size:12px;
+ font-weight:770;
+}
+.today-goals-progress{
+ height:5px;
+ margin-bottom:2px;
+ background:var(--surface-2);
+ border-radius:99px;
+}
+/* Duas colunas equilibradas, sem os blocos cinzas pesados da versão antiga. */
+.today-goals-list{
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ align-items:stretch;
+ gap:12px;
+ margin-top:15px;
+}
+.today-goal{
+ position:relative;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-areas:"main" "timer" "actions";
+ align-content:start;
+ min-width:0;
+ min-height:0;
+ gap:10px;
+ padding:16px;
+ border:1px solid var(--line);
+ border-radius:16px;
+ background:var(--surface);
+ box-shadow:0 2px 13px #00000006;
+ transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+@media(hover:hover){
+ .today-goal:hover{
+  border-color:color-mix(in srgb,var(--accent) 26%,var(--line));
+  box-shadow:0 7px 20px #0000000a;
+  transform:translateY(-1px);
+ }
+}
+.today-goal-main{
+ gap:10px;
+ align-items:flex-start;
+ min-width:0;
+}
+.today-goal-icon{
+ display:grid;
+ place-items:center;
+ flex:0 0 29px;
+ width:29px;
+ height:29px;
+ border-radius:9px;
+ background:var(--surface-2);
+ color:var(--subink);
+ font:760 11px/1 var(--font);
+}
+.today-goal-content{
+ min-width:0;
+ flex:1;
+}
+.goal-card-heading{
+ display:flex;
+ align-items:flex-start;
+ justify-content:space-between;
+ flex-wrap:wrap;
+ gap:8px 10px;
+ min-width:0;
+}
+.goal-card-heading .goal-card-title{
+ flex:1 1 175px;
+ min-width:0;
+ color:var(--ink);
+ font:720 clamp(13px,1.2vw,15px)/1.42 var(--font);
+ letter-spacing:-.012em;
+ overflow-wrap:anywhere;
+}
+.goal-card-status{
+ display:inline-flex;
+ flex:0 0 auto;
+ align-items:center;
+ min-height:23px;
+ padding:4px 7px;
+ border:1px solid var(--line);
+ border-radius:7px;
+ color:var(--dim);
+ background:var(--surface-2);
+ font:700 10px/1.1 var(--font);
+ white-space:nowrap;
+}
+.goal-card-status.is-success{
+ color:#1b7551;
+ background:#dcefe6;
+ border-color:#b9dccc;
+}
+.goal-card-status.is-missed{
+ color:#9c5d3b;
+ background:#f9ece4;
+ border-color:#f0d7ca;
+}
+.goal-completed{
+ border-color:color-mix(in srgb,#288b60 27%,var(--line));
+}
+.goal-completed .today-goal-icon{
+ background:#26875d;
+ color:#fff;
+}
+.goal-missed{border-color:color-mix(in srgb,#b97854 25%,var(--line))}
+/* Timer em uma faixa fina, sem empilhar blocos dentro de blocos. */
+.today-goal .goal-timer{
+ grid-area:timer;
+ width:100%;
+ min-width:0;
+ max-width:100%;
+ flex:none;
+ order:initial;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ flex-wrap:wrap;
+ gap:7px 10px;
+ padding:10px 0;
+ margin:0;
+ border:0;
+ border-top:1px solid var(--line);
+ border-bottom:1px solid var(--line);
+ border-radius:0;
+ background:transparent;
+ box-sizing:border-box;
+}
+.goal-timer-top{
+ display:flex;
+ align-items:center;
+ justify-content:flex-start;
+ gap:6px;
+ flex:0 0 auto;
+ min-width:0;
+}
+.goal-timer-label{
+ font-size:0!important;
+ letter-spacing:0;
+}
+.goal-timer-label::first-letter{
+ font-size:14px!important;
+}
+.goal-timer-clock{
+ font:790 clamp(18px,1.8vw,21px)/1.1 var(--font);
+ letter-spacing:-.03em;
+ font-variant-numeric:tabular-nums;
+ color:var(--ink);
+}
+.goal-timer-controls{
+ display:flex;
+ flex:1 1 auto;
+ justify-content:flex-end;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:6px;
+ min-width:0;
+}
+.goal-timer-set{
+ flex:0 0 auto;
+ gap:5px;
+ color:var(--dim);
+ font-size:11px;
+}
+.goal-timer-set input{
+ box-sizing:border-box;
+ width:42px;
+ min-width:42px;
+ height:34px;
+ min-height:34px;
+ padding:5px 4px;
+ border:1px solid var(--line);
+ border-radius:8px;
+ background:var(--surface-2);
+ color:var(--ink);
+ font:740 13px/1 var(--font);
+}
+.goal-timer-controls button{
+ min-height:34px;
+ min-width:0;
+ padding:6px 9px;
+ border-radius:8px;
+ border:1px solid var(--line);
+ background:var(--surface-2);
+ color:var(--ink);
+ font:700 11px/1.2 var(--font);
+ white-space:nowrap;
+}
+.goal-timer-controls button:focus-visible,
+.today-goal-actions button:focus-visible{
+ outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);
+ outline-offset:2px;
+}
+.goal-timer-state{display:none}
+/* Ações agrupadas, com uma prioridade bem definida. */
+.today-goal-actions{
+ grid-area:actions;
+ display:flex;
+ align-items:center;
+ justify-content:flex-end;
+ flex-wrap:wrap;
+ gap:7px;
+ width:100%;
+ padding:0;
+ margin:0;
+ order:initial;
+}
+.today-goal-actions .goal-action{
+ flex:0 1 auto;
+ min-width:0;
+ min-height:36px;
+ padding:8px 11px;
+ border-radius:9px;
+ font:720 11px/1.25 var(--font);
+ color:var(--subink);
+ background:var(--surface-2);
+ border:1px solid var(--line);
+}
+.today-goal-actions .goal-action.positive{
+ background:#27865c;
+ color:#fff;
+ border-color:#27865c;
+}
+.today-goal-actions .goal-delete{
+ flex:0 0 36px;
+ min-width:36px;
+ min-height:36px;
+ border-radius:9px;
+ background:var(--surface-2);
+ color:var(--subink);
+ border:1px solid var(--line);
+ font-size:20px;
+ line-height:1;
+ padding:6px;
+}
+/* Celebração distinta por meta, com emoji, incentivo e referência bíblica.
+ * Ela não existe no HTML das metas pendentes ou não concluídas. */
+.goal-victory.goal-gift{
+ position:relative;
+ display:flex;
+ align-items:flex-start;
+ gap:12px;
+ margin:13px 0 0;
+ padding:13px 14px;
+ border:1px solid color-mix(in srgb,#43936e 24%,var(--line));
+ border-radius:12px;
+ background:
+  radial-gradient(circle at 100% 0%,#b5e6c126,transparent 52%),
+  color-mix(in srgb,#e4f4e9 56%,var(--surface));
+ box-shadow:none;
+ overflow:hidden;
+ animation:goalSuccessReveal .36s cubic-bezier(.21,.72,.24,1) both;
+}
+.goal-victory-emoji.goal-gift-icon{
+ display:grid;
+ place-items:center;
+ width:42px;
+ height:42px;
+ flex:0 0 42px;
+ margin:0;
+ padding:0;
+ border-radius:12px;
+ background:color-mix(in srgb,#ffffff 72%,#9cddb9);
+ font-size:26px;
+ line-height:1;
+ transform-origin:center;
+ animation:goalEmojiCheer .72s ease-out both;
+}
+.goal-victory-copy{
+ display:flex;
+ flex:1;
+ flex-direction:column;
+ align-items:flex-start;
+ gap:5px;
+ min-width:0;
+}
+.goal-victory-kicker{
+ color:#297a51;
+ font:760 9px/1.45 var(--font);
+ letter-spacing:.05em;
+ text-transform:uppercase;
+}
+.goal-victory-copy>b{
+ color:var(--ink);
+ font:740 clamp(13px,1.3vw,15px)/1.45 var(--font);
+ letter-spacing:-.01em;
+ overflow-wrap:anywhere;
+}
+.goal-victory-copy>small{
+ color:var(--subink);
+ font:540 11px/1.4 var(--font);
+}
+.goal-victory-spark{
+ position:absolute;
+ right:10px;
+ top:8px;
+ font-size:16px;
+ color:#62a674;
+ opacity:.56;
+}
+@keyframes goalSuccessReveal{
+ from{opacity:.6;transform:translateY(6px)}
+ to{opacity:1;transform:translateY(0)}
+}
+@keyframes goalEmojiCheer{
+ 0%{transform:rotate(-12deg) scale(.86)}
+ 55%{transform:rotate(8deg) scale(1.12)}
+ 100%{transform:rotate(0deg) scale(1)}
+}
+:root[data-theme="dark"] .goal-card-status.is-success{
+ color:#aadcc1;background:#1e4334;border-color:#326049;
+}
+:root[data-theme="dark"] .goal-card-status.is-missed{
+ color:#e2bba8;background:#54372d;border-color:#6c4535;
+}
+:root[data-theme="dark"] .goal-victory.goal-gift{
+ background:linear-gradient(120deg,#203d3190,var(--surface));
+ border-color:#3e6650;
+}
+:root[data-theme="dark"] .goal-victory-emoji.goal-gift-icon{
+ background:#2c4c3b;
+}
+:root[data-theme="dark"] .goal-victory-kicker{color:#a7d8b8}
+:root[data-theme="dark"] .goals-permanent-note{background:var(--surface-2)}
+@media(max-width:950px){
+ .today-goals-list{grid-template-columns:minmax(0,1fr)}
+ .today-goal{width:100%;max-width:100%;justify-self:stretch}
+}
+@media(max-width:650px){
+ .today-goals{
+  margin:14px auto 18px;
+  padding:15px 12px!important;
+  border-radius:18px;
+ }
+ .today-goals-top{gap:10px;align-items:start}
+ .today-goals-top .goals-kick{font-size:11px!important}
+ .today-goals-status{padding:8px;min-width:60px}
+ .today-goals-status strong{font-size:21px}
+ .goals-permanent-note{
+  gap:10px;
+  padding:13px 12px;
+  margin:13px 0 16px;
+  border-radius:13px;
+ }
+ .goals-note-icon{width:37px;height:37px;flex-basis:37px;font-size:19px}
+ .goals-permanent-note strong{font-size:15px}
+ .goals-permanent-note small{font-size:10px}
+ .goals-note-pin{display:none}
+ .today-goals-form{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"goal goal" "minutes add";
+  gap:8px;
+  margin:14px 0;
+ }
+ .today-goals-form>input[name=goal]{
+  grid-area:goal;
+  width:100%;
+  min-width:0;
+  font-size:16px;
+  min-height:46px;
+  height:46px;
+ }
+ .today-goals-form>.cuiudo-timer-duration{
+  grid-area:minutes;
+  min-width:0;
+  width:100%;
+  height:46px;
+ }
+ .today-goals-form>.btn{grid-area:add;width:100%;height:46px}
+ .today-goals-list{grid-template-columns:minmax(0,1fr);gap:9px}
+ .today-goal{
+  padding:13px 12px;
+  border-radius:13px;
+  gap:9px;
+ }
+ .goal-card-heading .goal-card-title{font-size:14px}
+ .goal-card-status{font-size:10px}
+ .today-goal .goal-timer{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 10px;
+  width:100%;
+  padding:10px 0;
+ }
+ .goal-timer-clock{font-size:20px}
+ .goal-timer-controls{
+  gap:7px;
+  justify-content:flex-end;
+ }
+ .goal-timer-set input{
+  min-height:40px;
+  height:40px;
+  width:46px;
+  min-width:46px;
+  font-size:16px;
+ }
+ .goal-timer-controls button{
+  min-height:40px;
+  font-size:11px;
+  padding:8px 10px;
+ }
+ .today-goal-actions{
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  gap:8px;
+ }
+ .today-goal-actions .goal-action{
+  min-height:44px;
+  flex:1 1 auto;
+  text-align:center;
+ }
+ .today-goal-actions .goal-delete{
+  min-height:44px;
+  min-width:44px;
+  flex:0 0 44px;
+ }
+ .goal-victory.goal-gift{
+  padding:12px;
+  gap:9px;
+  border-radius:11px;
+ }
+ .goal-victory-emoji.goal-gift-icon{
+  width:38px;
+  height:38px;
+  flex-basis:38px;
+  font-size:24px;
+ }
+ .goal-victory-copy>b{font-size:14px}
+}
+@media(max-width:385px){
+ .goal-timer-controls{justify-content:flex-start}
+ .goal-timer-top{flex-basis:100%}
+ .today-goal-actions .goal-action{flex:1 1 115px}
+ .goal-victory-spark{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .goal-victory.goal-gift,
+ .goal-victory-emoji.goal-gift-icon{
+  animation:none!important;
+  transform:none!important;
+ }
+ .today-goal{transition:none!important}
+}
