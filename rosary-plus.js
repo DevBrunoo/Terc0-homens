@@ -281,7 +281,6 @@ function cuiudoRosary(){
 const cuiudoPreviousRender=render;
 render=function(){
  document.documentElement.lang=({pt:'pt-BR',en:'en',es:'es',la:'la'}[cuiudoLocale()]||'pt-BR');
- if(state.tab!=='terco'&&cuiudoMusic.isPlaying())cuiudoMusic.stop();
  setTheme();
  const pages={
   inicio:combatHome,terco:cuiudoRosary,devocionario:devocionario,
@@ -339,8 +338,5 @@ app.addEventListener('submit',evt=>{
  evt.preventDefault();
  state.rosaryIntention=String(evt.target.querySelector('textarea')?.value||'').slice(0,800);
  save();render();
-});
-if(document.addEventListener)document.addEventListener('visibilitychange',()=>{
- if(document.hidden&&cuiudoMusic.isPlaying()){cuiudoMusic.stop();render();}
 });
 render();
