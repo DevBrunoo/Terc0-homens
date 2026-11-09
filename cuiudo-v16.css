@@ -899,3 +899,68 @@
   .today-goals-status strong {font-size:19px;}
   .today-goal-actions .goal-action {flex-basis:85px;padding:9px 6px;}
 }
+
+
+/* v30 — Relógios individuais de atividade (responsivo e modo escuro). */
+.today-goals-form .cuiudo-timer-duration{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;
+ min-height:49px;padding:5px 9px 5px 12px;border:1px solid var(--line);
+ border-radius:12px;background:var(--bg);color:var(--subink);
+ font:650 12px/1.3 var(--font);white-space:nowrap
+}
+.cuiudo-timer-duration input{
+ box-sizing:border-box;flex:0 0 67px!important;width:67px!important;min-width:0!important;
+ min-height:34px!important;height:34px!important;padding:5px!important;text-align:center;
+ border:1px solid var(--line);border-radius:8px;font:700 16px/1.3 var(--font);
+ color:var(--ink);background:var(--surface)
+}
+.goal-timer{
+ display:flex;flex-direction:column;justify-content:center;align-items:stretch;
+ gap:5px;flex:0 1 205px;min-width:170px;padding:9px 11px;
+ border-radius:12px;border:1px solid var(--line);background:var(--surface-2)
+}
+.goal-timer-top{display:flex;gap:7px;align-items:center;justify-content:space-between}
+.goal-timer-label{color:var(--subink);font:650 10px/1.2 var(--font)}
+.goal-timer-clock{
+ font:800 21px/1 var(--font);letter-spacing:.01em;
+ font-variant-numeric:tabular-nums;color:var(--ink)
+}
+.goal-timer-controls{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+.goal-timer-controls button{
+ min-height:30px;max-width:100%;padding:4px 7px;
+ border:1px solid var(--line);border-radius:8px;
+ background:var(--surface);color:var(--ink);
+ font:700 10px/1.25 var(--font);cursor:pointer
+}
+.goal-timer-controls button:hover{border-color:var(--accent)}
+.goal-timer-set{display:flex;align-items:center;gap:3px;color:var(--dim);font:650 10px var(--font)}
+.goal-timer-set input{
+ box-sizing:border-box;width:45px;min-width:0;min-height:30px;padding:4px;
+ border:1px solid var(--line);border-radius:7px;text-align:center;
+ font:700 12px var(--font);color:var(--ink);background:var(--surface)
+}
+.goal-timer-state{font:500 10px/1.2 var(--font);color:var(--dim);text-align:right}
+.goal-timer-finished .goal-timer-clock{color:#b25335}
+@media(max-width:1100px){
+ .today-goal{flex-wrap:wrap}
+ .goal-timer{order:2;flex:1 1 215px}
+ .today-goal-actions{order:3}
+}
+@media(max-width:760px){
+ .today-goals-form .cuiudo-timer-duration{
+  box-sizing:border-box;min-width:0;width:100%;min-height:46px;
+  justify-content:space-between
+ }
+ .today-goal{flex-direction:column}
+ .goal-timer{box-sizing:border-box;order:2;flex:none;width:100%;min-width:0;gap:8px}
+ .goal-timer-top{justify-content:space-between}
+ .goal-timer-clock{font-size:24px}
+ .goal-timer-controls{justify-content:flex-start}
+ .goal-timer-state{text-align:left}
+ .today-goal-actions{order:3;width:100%}
+}
+@media(max-width:375px){
+ .goal-timer-controls{gap:4px}
+ .goal-timer-controls button{padding:6px}
+ .goal-timer-set input{width:42px}
+}

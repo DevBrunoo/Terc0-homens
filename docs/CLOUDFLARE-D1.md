@@ -32,3 +32,11 @@ no console do D1. Esse arquivo cria `public_goals` e seu índice.
 A rota pública de metas é `/api/goals` (GET e POST).
 As rotas antigas `/api/auth`, `/api/solo` e `/api/sync` ficam disponíveis
 por compatibilidade, mas a interface não pede cadastro ou conexão.
+
+## Cronômetros das metas
+
+- Duração em minutos escolhida no formulário de nova meta; se for maior que zero, inicia imediatamente.
+- Cada cartão possui contador, **Pausar**, **Continuar**, **Iniciar/Reiniciar**.
+- O D1 armazena `duration_sec`, `remaining_sec`, `timer_started_at` e `timer_state`; o tempo restante deriva do relógio, não de requisições a cada segundo.
+- Execute `migrations/0004_goal_timers.sql` uma vez em bancos existentes.
+- Os cronômetros seguem a mesma natureza pública das metas; qualquer visitante do site pode editá-los.

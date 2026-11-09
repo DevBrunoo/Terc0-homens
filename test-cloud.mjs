@@ -22,6 +22,11 @@ assert.match(read('global-goals.js'),/qualquer visitante/i);
 assert.doesNotMatch(read('global-goals.js'),/notes|rosaryIntention|examineDays/);
 assert.match(read('daily-goals.js'),/cuiudoGlobalGoals\?\.change/);
 assert.match(read('migrations/0003_public_goals.sql'),/CREATE TABLE IF NOT EXISTS public_goals/);
+assert.match(read('migrations/0004_goal_timers.sql'),/ADD COLUMN timer_started_at/);
+assert.match(read('functions/api/goals.js'),/timer_state/);
+assert.match(read('global-goals.js'),/remaining_sec/);
+assert.match(read('manifest.webmanifest'),/"short_name": "Terço"/);
+assert.match(read('index.html'),/apple-mobile-web-app-title" content="Terço"/);
 assert.match(read('migrations/0001_cuiudo_d1.sql'),/CREATE TABLE IF NOT EXISTS synced_state/);
 
 const security=await import('./server/cloud-security.js');
