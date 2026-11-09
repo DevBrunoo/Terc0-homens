@@ -964,3 +964,207 @@
  .goal-timer-controls button{padding:6px}
  .goal-timer-set input{width:42px}
 }
+
+
+/* v31 — painel enxuto: cards de metas menores e de leitura agradável. */
+.today-goals{
+ box-sizing:border-box;
+ width:100%;
+ max-width:1050px;
+ margin:17px auto 20px;
+ padding:clamp(15px,2.1vw,23px);
+ border-radius:19px;
+ box-shadow:0 4px 16px #00000008;
+}
+.today-goals h2{font-size:clamp(24px,2.55vw,31px);margin:4px 0 6px}
+.today-goals-top{gap:13px}
+.today-goals-top .goals-kick{font-size:13px;margin:6px 0}
+.today-goals-form{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 145px 102px;
+ gap:8px;
+ margin:15px 0 12px;
+ align-items:stretch;
+}
+.today-goals-form>input[name=goal]{
+ width:100%;min-width:0;min-height:43px;height:43px;
+ box-sizing:border-box;padding:9px 12px;font-size:14px
+}
+.today-goals-form>.cuiudo-timer-duration{min-width:0;min-height:43px;height:43px;padding:4px 7px;box-sizing:border-box}
+.today-goals-form>.btn{min-width:0;min-height:43px;height:43px;padding:8px 11px;font-size:12px}
+.today-goals-progress{height:5px}
+.today-goals-list{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px;
+ margin-top:11px;
+ align-items:start;
+}
+.today-goals-empty{grid-column:1/-1}
+.today-goal{
+ box-sizing:border-box;
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-areas:"main" "timer" "actions";
+ align-content:start;align-items:start;
+ gap:8px;
+ width:100%;max-width:100%;
+ margin:0;padding:12px 13px;
+ border-radius:13px;
+ background:var(--bg);
+}
+.today-goal-main{
+ grid-area:main;width:100%;min-width:0;
+ display:flex;gap:9px;align-items:flex-start;
+}
+.today-goal-icon{
+ flex:0 0 25px;width:25px;height:25px;
+ font-size:11px;border-radius:8px;
+}
+.today-goal-content{min-width:0}
+.today-goal-content>strong{
+ font-size:13px;line-height:1.4;
+ overflow-wrap:anywhere;
+}
+.today-goal .goal-timer{
+ grid-area:timer;
+ box-sizing:border-box;
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:center;justify-content:stretch;
+ gap:5px 8px;
+ min-width:0;width:100%;max-width:100%;
+ min-height:37px;
+ padding:5px 8px;
+ border-radius:9px;
+ flex:none;order:initial;
+}
+.goal-timer-top{justify-content:flex-start;gap:7px;min-width:0}
+.goal-timer-label{font-size:0;white-space:nowrap}
+.goal-timer-label::first-letter{font-size:13px}
+.goal-timer-clock{font-size:18px;white-space:nowrap}
+.goal-timer-controls{
+ display:flex;flex-wrap:nowrap;
+ justify-content:flex-end;align-items:center;
+ gap:4px;
+ min-width:0;
+}
+.goal-timer-set{gap:2px;font-size:10px}
+.goal-timer-set input{width:39px;min-width:0;min-height:28px;height:28px;padding:3px}
+.goal-timer-controls button{
+ min-height:28px;min-width:0;padding:4px 7px;
+ border-radius:7px;font-size:10px
+}
+.goal-timer-state{
+ display:none; /* estado segue disponível no atributo e no contador */
+}
+.today-goal-actions{
+ grid-area:actions;
+ display:flex;align-items:center;justify-content:flex-end;
+ width:100%;padding:0;margin:0;
+ gap:5px;order:initial;
+}
+.today-goal-actions .goal-action{
+ flex:0 1 auto;
+ min-height:32px;padding:6px 10px;
+ font-size:10px;white-space:nowrap;
+ border-radius:9px;
+}
+.today-goal-actions .goal-delete{
+ flex:0 0 33px;min-width:33px;min-height:32px;
+ padding:5px;border-radius:9px;font-size:18px;
+}
+.goal-gift{padding:9px 10px;gap:7px;margin-top:8px}
+.goal-gift-icon{font-size:19px}
+.goal-gift b{font-size:11px}
+.goal-gift small{font-size:10px}
+.goal-reality{font-size:11px;margin-top:6px}
+@media(max-width:980px){
+ .today-goals-list{grid-template-columns:minmax(0,1fr)}
+ .today-goal{max-width:640px;justify-self:center}
+}
+@media(max-width:650px){
+ .today-goals{padding:14px 12px;margin:13px auto 16px;border-radius:16px}
+ .today-goals-form{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"goal goal" "minutes add";
+  gap:7px;margin:13px 0 12px
+ }
+ .today-goals-form>input[name=goal]{
+  grid-area:goal;width:100%;font-size:16px;min-height:43px;
+ }
+ .today-goals-form>.cuiudo-timer-duration{grid-area:minutes;width:100%;min-height:43px}
+ .today-goals-form>.btn{grid-area:add;width:100%;min-height:43px}
+ .today-goals-list{grid-template-columns:minmax(0,1fr);gap:8px}
+ .today-goal{max-width:100%;padding:10px 11px;gap:7px;border-radius:12px}
+ .today-goal .goal-timer{
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:4px 6px;padding:5px 7px;
+ }
+ .goal-timer-clock{font-size:18px}
+ .goal-timer-controls button{min-height:30px;padding:5px 6px}
+ .today-goal-actions .goal-action{min-height:34px}
+ .today-goal-actions .goal-delete{min-height:34px}
+}
+@media(max-width:360px){
+ .today-goal .goal-timer{grid-template-columns:1fr}
+ .goal-timer-controls{justify-content:flex-start}
+ .today-goal-actions{flex-wrap:wrap;justify-content:flex-start}
+ .today-goal-actions .goal-action{flex:1 1 95px}
+}
+@media(prefers-reduced-motion:reduce){
+ .today-goal{transition:none}
+}
+
+/* Mistérios recomendados por dia e título da pintura acima da foto. */
+.rosary-today-callout{
+ display:flex;align-items:center;justify-content:space-between;gap:14px;
+ margin:14px 0 15px;padding:15px 18px;border:1px solid var(--line);
+ border-radius:15px;background:var(--surface);color:var(--ink);
+}
+.rosary-today-callout>div{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.rosary-today-date{
+ color:var(--accent);font:760 10px/1.35 var(--font);
+ text-transform:uppercase;letter-spacing:.05em
+}
+.rosary-today-callout strong{
+ font:760 clamp(16px,2vw,21px)/1.24 var(--font);
+ letter-spacing:-.02em;
+}
+.rosary-today-callout small{font:460 11px/1.5 var(--font);color:var(--subink)}
+.rosary-today-button{
+ flex:0 0 auto;min-height:39px;padding:8px 12px;
+ border:1px solid var(--line);border-radius:10px;
+ background:var(--surface-2);color:var(--ink);font:700 12px var(--font);cursor:pointer;
+}
+.rosary-today-chip{
+ display:inline-block;margin-left:6px;padding:3px 5px;border-radius:5px;
+ background:var(--accent);color:#fff;font:800 9px/1 var(--font);
+ letter-spacing:.02em;vertical-align:middle
+}
+.rosary-photo-wrap>.rosary-mystery-title{
+ order:1!important;max-width:100%;
+ margin:5px 0 3px!important;
+ font:760 clamp(23px,2.6vw,32px)/1.14 var(--font)!important;
+ letter-spacing:-.04em;color:var(--ink)
+}
+.rosary-photo-wrap>.rosary-mystery-reference{
+ order:2!important;display:block;
+ margin:0 0 13px!important;
+ font:540 12px/1.4 var(--font);color:var(--subink)
+}
+.rosary-photo-wrap>.eyebrow{order:0!important;margin-bottom:6px!important}
+.rosary-photo-wrap>.rosary-painting{order:3!important}
+.rosary-photo-wrap>.rosary-art-credit{order:4!important}
+@media(max-width:760px){
+ .rosary-today-callout{
+  padding:13px 14px;gap:10px;align-items:flex-start;
+  flex-direction:column;border-radius:13px
+ }
+ .rosary-today-button{width:100%}
+ .rosary-photo-wrap>.rosary-mystery-title{
+  font-size:clamp(22px,6.8vw,29px)!important;
+  margin:5px 0 4px!important
+ }
+ .rosary-photo-wrap>.rosary-mystery-reference{margin:0 0 11px!important}
+}

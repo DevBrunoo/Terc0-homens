@@ -141,3 +141,10 @@ for(const path of ['cuiudo-v16.css','rosary-beads.js','saints-i18n.js']){
  assert.ok(read('sw.js').includes(path),'SW não incluiu '+path);
 }
 console.log('✓ 8 imagens e cânticos locais validados, cache offline e interface ativos');
+
+
+// Identidade visual do cabeçalho deve coincidir com o nome do app instalado.
+runInContext('state.tab="inicio";render()',vm);
+assert.match(mount.innerHTML,/logo-type">Terço/);
+assert.match(read('feed-ui.js'),/document\.title=.*\| Terço/);
+assert.match(read('cuiudo-v16.css'),/grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);

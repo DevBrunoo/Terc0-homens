@@ -159,3 +159,14 @@ runInContext('cuiudoAmbient.stop()',audioContext);
 console.log('✓ AudioContext: início somente após toque, notas, volume zero, pausa e limpeza');
 
 console.log('✓ CUIÚDO 12: medalha, áudio opcional, 4 idiomas, 20 mistérios e 3 tamanhos');
+
+
+// A data seleciona automaticamente um dos quatro grupos;
+// título e referência bíblica devem aparecer ANTES da imagem.
+runInContext('state.tab="terco";state.group=dayGroup();state.mystery=0;state.appLang="pt";render()',vm);
+assert.match(mount.innerHTML,/rosary-today-callout/);
+assert.match(mount.innerHTML,/rosary-today-chip/);
+const mysteryPhotoSection=mount.innerHTML.split('class="mystery-visual rosary-photo-wrap"')[1]||'';
+assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-title')>=0);
+assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-title')<mysteryPhotoSection.indexOf('rosary-painting'));
+assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-reference')<mysteryPhotoSection.indexOf('rosary-painting'));
