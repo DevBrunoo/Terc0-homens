@@ -55,6 +55,87 @@ function cuiudoGoalGift(id){
  for(const c of String(id))sum=(sum*31+c.charCodeAt(0))>>>0;
  return list[sum%list.length];
 }
+
+/* Celebrações autorais: uma escolha estável por ID da meta, sem mensagens
+ * aleatórias mudando a cada sincronização. Referências são inspirações,
+ * não transcrições literais de uma tradução bíblica. */
+const cuiudoBlessings={
+ pt:[
+ ['🏆','Vai para cima! Hoje a fé virou atitude.','Tg 2,17'],
+ ['🌿','Fiel no pouco. É assim que se constrói a santidade.','Lc 16,10'],
+ ['⚔️','Coragem! Deus te deu forças e você fez sua parte.','Js 1,9'],
+ ['🔥','Sem desculpas: você combateu o bom combate.','2Tm 4,7'],
+ ['✨','Trabalho feito com amor também é oração.','Cl 3,23'],
+ ['🦁','Você perseverou. Não pare de crescer!','Rm 5,3–4'],
+ ['🌟','A preguiça não venceu esta batalha. Avante!','Pr 6,6'],
+ ['💪','Mais uma obra boa. Continue firme, sem desanimar.','Gl 6,9'],
+ ['🕊️','O bem feito em silêncio também tem valor diante de Deus.','Mt 6,4'],
+ ['🎯','Menos promessa, mais atitude. Você entregou!','1Cor 9,24'],
+ ['🚀','Pé na tábua e fé no coração. Missão cumprida!','Hb 12,1'],
+ ['🙏','Agradeça a Deus por esta pequena grande vitória.','Sl 118(117),24']
+ ],
+ en:[
+ ['🏆','Go forward! Today faith became action.','Jas 2:17'],
+ ['🌿','Faithful in small things. Holiness grows here.','Lk 16:10'],
+ ['⚔️','Be courageous. You did your part today.','Jos 1:9'],
+ ['🔥','No excuses: you fought the good fight.','2 Tim 4:7'],
+ ['✨','Work done with love can become prayer.','Col 3:23'],
+ ['🦁','You persevered. Keep growing.','Rom 5:3–4'],
+ ['🌟','Laziness did not win this battle.','Prov 6:6'],
+ ['💪','One more good work. Do not give up.','Gal 6:9'],
+ ['🕊️','Quiet goodness is precious before God.','Mt 6:4'],
+ ['🎯','Fewer promises, more action. Done!','1 Cor 9:24'],
+ ['🚀','Faith in your heart. Mission accomplished!','Heb 12:1'],
+ ['🙏','Thank God for this meaningful victory.','Ps 118:24']
+ ],
+ es:[
+ ['🏆','¡Adelante! Hoy la fe se convirtió en acción.','St 2,17'],
+ ['🌿','Fiel en lo pequeño. Así crece la santidad.','Lc 16,10'],
+ ['⚔️','¡Valor! Hoy cumpliste con tu deber.','Jos 1,9'],
+ ['🔥','Sin excusas: libraste el buen combate.','2 Tim 4,7'],
+ ['✨','El trabajo hecho con amor también es oración.','Col 3,23'],
+ ['🦁','Perseveraste. ¡Sigue creciendo!','Rom 5,3–4'],
+ ['🌟','La pereza no ganó esta batalla.','Prov 6,6'],
+ ['💪','Otra buena obra. ¡No te rindas!','Gal 6,9'],
+ ['🕊️','El bien silencioso es valioso ante Dios.','Mt 6,4'],
+ ['🎯','Menos promesas, más acción. ¡Lo lograste!','1 Cor 9,24'],
+ ['🚀','Fe en el corazón. ¡Misión cumplida!','Heb 12,1'],
+ ['🙏','Da gracias a Dios por esta victoria.','Sal 118,24']
+ ],
+ la:[
+ ['🏆','Age fortiter! Fides hodie in opere fulsit.','Iac 2,17'],
+ ['🌿','In parvis fidelis. Sic crescit sanctitas.','Lc 16,10'],
+ ['⚔️','Esto fortis. Officium tuum perfecisti.','Ios 1,9'],
+ ['🔥','Sine excusationibus: bonum certamen certasti.','2 Tim 4,7'],
+ ['✨','Opus cum caritate factum oratio fieri potest.','Col 3,23'],
+ ['🦁','Perseverasti. Perge in bonum!','Rom 5,3–4'],
+ ['🌟','Pigritia hodie non vicit.','Prov 6,6'],
+ ['💪','Aliud opus bonum. Noli deficere.','Gal 6,9'],
+ ['🕊️','Bonum occultum coram Deo pretiosum est.','Mt 6,4'],
+ ['🎯','Minus promittendum, plus agendum.','1 Cor 9,24'],
+ ['🚀','Fides in corde. Missio completa!','Heb 12,1'],
+ ['🙏','Deo gratias pro hac victoria age.','Ps 117,24']
+ ]
+};
+const cuiudoPermanentNotes={
+ pt:'Rezar terço e se cuidar espiritualmente e esteticamente',
+ en:'Pray the Rosary and care for yourself spiritually and aesthetically',
+ es:'Rezar el rosario y cuidarse espiritual y estéticamente',
+ la:'Rosarium orare et curam animae corporisque colere'
+};
+const cuiudoPinnedLabels={
+ pt:['COMPROMISSO ESSENCIAL','Fé, disciplina e cuidado de si — todos os dias.'],
+ en:['ESSENTIAL COMMITMENT','Faith, discipline and self-care — every day.'],
+ es:['COMPROMISO ESENCIAL','Fe, disciplina y cuidado de uno mismo — cada día.'],
+ la:['PROPOSITUM COTIDIANUM','Fides, disciplina et cura sui — cotidie.']
+};
+function cuiudoGoalBlessing(id){
+ let hash=0;
+ for(const c of String(id))hash=(Math.imul(hash,33)+c.charCodeAt(0))>>>0;
+ const list=cuiudoBlessings[cuiudoLocale()]||cuiudoBlessings.pt;
+ const [emoji,message,reference]=list[hash%list.length];
+ return {emoji,message,reference};
+}
 function cuiudoTimerSeconds(goal){
  const seconds=Number(goal.remaining_sec)||0;
  if(goal.timer_state==='running'&&Number.isFinite(goal.timer_started_at))
@@ -91,6 +172,12 @@ function cuiudoGoalChecklist(){
   '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
+  '<aside class="goals-permanent-note" aria-label="'+escapeHtml(cuiudoPinnedLabels[l][0])+'">'+
+   '<span class="goals-note-icon" aria-hidden="true">✝</span>'+
+   '<div><span class="goals-note-eyebrow">✦ '+escapeHtml(cuiudoPinnedLabels[l][0])+'</span>'+
+   '<strong>'+escapeHtml(cuiudoPermanentNotes[l])+'</strong>'+
+   '<small>'+escapeHtml(cuiudoPinnedLabels[l][1])+'</small></div>'+
+   '<span class="goals-note-pin" aria-hidden="true">SEMPRE</span></aside>'+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
   '<label class="cuiudo-timer-duration" title="Tempo para esta atividade"><span>⏱ Minutos</span><input type="number" name="minutes" inputmode="numeric" min="0" max="1440" step="1" value="25" aria-label="Duração da meta em minutos (zero para não iniciar)"></label>'+
@@ -102,10 +189,18 @@ function cuiudoGoalChecklist(){
    const status=goal.status||'pending',completed=status==='done',failed=status==='missed';
    return '<article class="today-goal '+(completed?'goal-completed':failed?'goal-missed':'goal-pending')+'">'+
    '<div class="today-goal-main"><span class="today-goal-icon" aria-hidden="true">'+(completed?'✓':failed?'!':String(i+1).padStart(2,'0'))+'</span>'+
-   '<div class="today-goal-content"><strong>'+escapeHtml(goal.text)+'</strong>'+
-   (completed?'<div class="goal-gift" role="status"><span class="goal-gift-icon" aria-hidden="true">🎁</span>'+
-    '<div><b>'+escapeHtml(t.gift)+': '+escapeHtml(cuiudoGoalGift(goal.id))+'</b><small>'+
-    escapeHtml(t.rewardText)+'</small></div><span aria-hidden="true">✦ ✧</span></div>':
+   '<div class="today-goal-content"><div class="goal-card-heading"><strong class="goal-card-title">'+escapeHtml(goal.text)+'</strong>'+
+   '<span class="goal-card-status '+(completed?'is-success':failed?'is-missed':'is-pending')+'">'+escapeHtml(completed?t.done:failed?t.undone:t.remaining)+'</span></div>'+
+   (completed?(()=>{
+      const blessing=cuiudoGoalBlessing(goal.id);
+      const inspiration={pt:'Inspirado em',en:'Inspired by',es:'Inspirado en',la:'Ex'}[l];
+      return '<div class="goal-gift goal-victory" role="status">'+
+       '<span class="goal-gift-icon goal-victory-emoji" aria-hidden="true">'+blessing.emoji+'</span>'+
+       '<div class="goal-victory-copy"><span class="goal-victory-kicker">✦ '+escapeHtml(t.gift)+' · '+escapeHtml(cuiudoGoalGift(goal.id))+'</span>'+
+       '<b>'+escapeHtml(blessing.message)+'</b>'+
+       '<small>'+escapeHtml(inspiration)+' '+escapeHtml(blessing.reference)+'</small></div>'+
+       '<span class="goal-victory-spark" aria-hidden="true">✦</span></div>';
+    })():
    failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p><p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div>'+cuiudoTimerPanel(goal)+'<div class="today-goal-actions">'+
@@ -153,7 +248,7 @@ app.addEventListener('submit',event=>{
  render();
 });
 app.addEventListener('click',event=>{
- const target=event.target.closest?.('[data-action^="cuiudo-goal-"]');
+ const target=event.target.closest?.('[data-action^="cuiudo-goal-"],[data-action^="cuiudo-timer-"]');
  if(!target)return;
  const action=target.dataset.action,id=target.dataset.id;
  const items=cuiudoGoalsToday(),index=items.findIndex(x=>x.id===id);
