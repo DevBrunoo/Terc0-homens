@@ -1,12 +1,36 @@
 import {response,dbReady,checkOrigin,readJSON,randomHex,sha256,passwordHash,sameHash,
   currentUser,issueSession,cookieValue,cookieHeader,rateLimit} from '../../server/cloud-security.js';
 
+const REQUIRED_TABLES=['users','sessions','synced_state','auth_limits'];
+async function verifyDatabase(context){
+  // Verifica o banco REALMENTE conectado ao binding do Pages (pode diferir do D1 aberto no painel).
+  const found=await context.env.DB.prepare(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('users','sessions','synced_state','auth_limits')"
+  ).all();
+  const names=new Set((found.results||[]).map(row=>row.name));
+  return REQUIRED_TABLES.filter(table=>!names.has(table));
+}
+
 export async function onRequestGet(context) {
-  if (!dbReady(context))return response({error:'D1 não configurado: binding DB'},503);
+  if (!dbReady(context))return response({
+    error:'Binding D1 DB não configurado neste ambiente do Pages (produção/preview).',
+    code:'D1_BINDING_MISSING'
+  },503);
   try {
+    const missing=await verifyDatabase(context);
+    if(missing.length)return response({
+      error:'O D1 conectado ao site não tem todas as tabelas. Confira se DB aponta para o banco em que executou o SQL.',
+      code:'D1_TABLES_MISSING',missing
+    },503);
     const user=await currentUser(context);
-    return response({user:user?{email:user.email,id:user.id}:null,configured:true});
-  }catch {return response({error:'Banco D1 ainda não inicializado. Execute a migração SQL.'},503);}
+    return response({user:user?{email:user.email,id:user.id}:null,configured:true,database:'ready'});
+  }catch(error){
+    console.error('[CUIUDO auth GET] D1 query failed',error);
+    return response({
+      error:'Não foi possível consultar o D1 conectado ao site. Veja os logs da Function no Cloudflare.',
+      code:'D1_QUERY_FAILED'
+    },503);
+  }
 }
 export async function onRequestPost(context) {
   if (!dbReady(context))return response({error:'Configure o binding D1 com o nome DB.'},503);
@@ -48,7 +72,21 @@ export async function onRequestPost(context) {
       return response({error:'Email ou senha incorretos.'},401);
     return response({ok:true,user:{id:user.id,email:user.email}},200,
       {'Set-Cookie':await issueSession(context,user.id)});
-  }catch{
-    return response({error:'Banco de dados indisponível. Verifique D1 e a migração.'},503);
+  }catch(error){
+    // Logs do servidor, sem email, senha nem dados enviados no corpo da requisição.
+    console.error('[CUIUDO auth POST] operation failed',error);
+    const message=String(error?.message||'');
+    if(/no such table|no such column/i.test(message))return response({
+      error:'O banco DB conectado a este site está sem a estrutura correta. Confira o D1 selecionado no binding de produção.',
+      code:'D1_SCHEMA_MISMATCH'
+    },503);
+    if(/D1_ERROR|SQLITE_ERROR|database is locked/i.test(message))return response({
+      error:'O Cloudflare D1 recusou a consulta. Confira o banco vinculado e os logs da Function.',
+      code:'D1_QUERY_FAILED'
+    },503);
+    return response({
+      error:'O cadastro ou login falhou no servidor. Veja os logs do Cloudflare Pages Functions para identificar a causa.',
+      code:'AUTH_SERVER_ERROR'
+    },503);
   }
 }

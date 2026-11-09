@@ -35,5 +35,17 @@ assert.match(security.cookieHeader(req,'a'.repeat(64)),/Secure/);
 const none={request:new Request('https://exemplo.pages.dev/api/auth'),env:{}};
 assert.equal((await auth.onRequestGet(none)).status,503);
 assert.equal((await sync.onRequestGet(none)).status,503);
+const wrongDb={request:new Request('https://exemplo.pages.dev/api/auth'),env:{
+ DB:{prepare(){return {async all(){return {results:[{name:'users'}]}}};}}
+}};
+const missingResponse=await auth.onRequestGet(wrongDb);
+assert.equal(missingResponse.status,503);
+assert.deepEqual((await missingResponse.json()).missing,['sessions','synced_state','auth_limits']);
+const healthyDb={request:new Request('https://exemplo.pages.dev/api/auth'),env:{
+ DB:{prepare(){return {async all(){return {results:['users','sessions','synced_state','auth_limits'].map(name=>({name}))}}};}}
+}};
+const goodResponse=await auth.onRequestGet(healthyDb);
+assert.equal(goodResponse.status,200);
+assert.equal((await goodResponse.json()).database,'ready');
 assert.match(read('functions/api/sync.js'),/revision=revision\+1/);
 console.log('✓ Cloudflare D1: rotas, senha PBKDF2, sessão HTTP-only, revisão e cliente sem cache');
