@@ -196,7 +196,7 @@ function render(){
  setTheme();
  const pages={inicio:home,terco:rosary,devocionario:devocionario,verdade:truth,desafios:challenges,exame:examine,diario:diary};
  app.innerHTML=renderShell((pages[state.tab]||home)());
- document.title=`${navItems.find(n=>n.id===state.tab)?.label||'Início'} | CUIÚDO`;
+ document.title=`${navItems.find(n=>n.id===state.tab)?.label||'Início'} | Terço`;
 }
 app.addEventListener('click',evt=>{
  const target=evt.target.closest('[data-action]');if(!target)return;
