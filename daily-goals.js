@@ -136,33 +136,6 @@ function cuiudoGoalBlessing(id){
  const [emoji,message,reference]=list[hash%list.length];
  return {emoji,message,reference};
 }
-function cuiudoTimerSeconds(goal){
- const seconds=Number(goal.remaining_sec)||0;
- if(goal.timer_state==='running'&&Number.isFinite(goal.timer_started_at))
-  return Math.max(0,seconds-Math.floor((Date.now()-goal.timer_started_at)/1000));
- return Math.max(0,seconds);
-}
-function cuiudoTimerClock(seconds){
- const n=Math.max(0,Math.floor(seconds));
- return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
-}
-function cuiudoTimerPanel(goal){
- const duration=Number(goal.duration_sec)||0,active=duration>0,seconds=cuiudoTimerSeconds(goal);
- const phase=goal.timer_state||'none',finished=phase==='finished'||(active&&phase==='running'&&seconds===0);
- return '<div class="goal-timer" data-goal-timer="'+escapeHtml(goal.id)+'">'+
-  '<div class="goal-timer-top"><span class="goal-timer-label">⏱ '+(active?'Tempo da atividade':'Definir tempo')+'</span>'+
-  '<strong class="goal-timer-clock" data-timer-clock="'+escapeHtml(goal.id)+'">'+(active?cuiudoTimerClock(seconds):'--:--')+'</strong></div>'+
-  '<div class="goal-timer-controls"><label class="goal-timer-set"><span>min</span>'+
-    '<input type="number" inputmode="numeric" min="1" max="1440" step="1" data-timer-minutes="'+escapeHtml(goal.id)+
-    '" value="'+(active?Math.ceil(duration/60):25)+'" aria-label="Minutos para '+escapeHtml(goal.text)+'"></label>'+
-  (active&&phase==='running'&&!finished?
-    '<button type="button" data-action="cuiudo-timer-pause" data-id="'+escapeHtml(goal.id)+'">Ⅱ Pausar</button>':
-   active&&!finished?'<button type="button" data-action="cuiudo-timer-resume" data-id="'+escapeHtml(goal.id)+'">▶ Continuar</button>':
-    '<button type="button" data-action="cuiudo-timer-start" data-id="'+escapeHtml(goal.id)+'">▶ Iniciar</button>')+
-  '<button type="button" data-action="cuiudo-timer-reset" data-id="'+escapeHtml(goal.id)+'">↻ Reiniciar</button></div>'+
-  '<small class="goal-timer-state">'+(finished?'Tempo encerrado':!active?'Escolha os minutos e inicie':phase==='paused'?'Pausado':'Contando automaticamente')+
-  '</small></div>';
-}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsToday();
  const metrics=cuiudoGoalCount();
@@ -180,7 +153,7 @@ function cuiudoGoalChecklist(){
    '<span class="goals-note-pin" aria-hidden="true">SEMPRE</span></aside>'+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
-  '<label class="cuiudo-timer-duration" title="Tempo para esta atividade"><span>⏱ Minutos</span><input type="number" name="minutes" inputmode="numeric" min="0" max="1440" step="1" value="25" aria-label="Duração da meta em minutos (zero para não iniciar)"></label>'+
+
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
   '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
   '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
@@ -203,7 +176,7 @@ function cuiudoGoalChecklist(){
     })():
    failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p><p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
-   '</div></div>'+cuiudoTimerPanel(goal)+'<div class="today-goal-actions">'+
+   '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
    '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>':
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
@@ -237,49 +210,22 @@ app.addEventListener('submit',event=>{
  const day=currentDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
- const inputMinutes=event.target.querySelector('input[name=minutes]');
- const minutes=Math.max(0,Math.min(1440,Math.floor(Number(inputMinutes?.value)||0)));
- const goal={id,text,status:'pending',
-  duration_sec:minutes*60,remaining_sec:minutes*60,
-  timer_started_at:minutes?Date.now():null,timer_state:minutes?'running':'none'};
+ const goal={id,text,status:'pending'};
  items.push(goal);
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change('upsert',day,goal);
  render();
 });
 app.addEventListener('click',event=>{
- const target=event.target.closest?.('[data-action^="cuiudo-goal-"],[data-action^="cuiudo-timer-"]');
+ const target=event.target.closest?.('[data-action^="cuiudo-goal-"]');
  if(!target)return;
  const action=target.dataset.action,id=target.dataset.id;
  const items=cuiudoGoalsToday(),index=items.findIndex(x=>x.id===id);
  if(index<0)return;
  const goal=items[index],day=currentDay();
- if(action.startsWith('cuiudo-timer-')){
-  if(action==='cuiudo-timer-pause'&&goal.timer_state==='running'){
-   goal.remaining_sec=cuiudoTimerSeconds(goal);
-   goal.timer_started_at=null;goal.timer_state=goal.remaining_sec?'paused':'finished';
-  }
-  if(action==='cuiudo-timer-resume'&&goal.timer_state!=='running'){
-   goal.remaining_sec=cuiudoTimerSeconds(goal);
-   if(goal.remaining_sec>0){goal.timer_started_at=Date.now();goal.timer_state='running';}
-  }
-  if(action==='cuiudo-timer-start'||action==='cuiudo-timer-reset'){
-   const input=app.querySelector('[data-timer-minutes="'+id+'"]');
-   const minutes=Math.max(1,Math.min(1440,Math.floor(Number(input?.value)||25)));
-   goal.duration_sec=minutes*60;goal.remaining_sec=goal.duration_sec;
-   goal.timer_started_at=Date.now();goal.timer_state='running';
-  }
-  cuiudoGoalsSave();
-  window.cuiudoGlobalGoals?.change('upsert',day,goal);
-  render();return;
- }
  if(action==='cuiudo-goal-done')items[index].status='done';
  if(action==='cuiudo-goal-missed')items[index].status='missed';
  if(action==='cuiudo-goal-reopen')items[index].status='pending';
- if((action==='cuiudo-goal-done'||action==='cuiudo-goal-missed')&&goal.timer_state==='running'){
-  goal.remaining_sec=cuiudoTimerSeconds(goal);
-  goal.timer_started_at=null;goal.timer_state=goal.remaining_sec?'paused':'finished';
- }
  const before={...goal};
  if(action==='cuiudo-goal-delete')items.splice(index,1);
  cuiudoGoalsSave();
@@ -288,21 +234,3 @@ app.addEventListener('click',event=>{
  render();
 });
 render();
-
-/* Cronômetros por timestamp: seguem contando mesmo com a tela bloqueada. */
-if(typeof window!=='undefined'&&typeof window.setInterval==='function'){
- window.setInterval(()=>{
-  if(typeof document==='undefined'||typeof document.querySelectorAll!=='function')return;
-  for(const clock of document.querySelectorAll('[data-timer-clock]')){
-   const id=clock.getAttribute('data-timer-clock');
-   const goal=cuiudoGoalsToday().find(item=>item.id===id);
-   if(!goal||!goal.duration_sec)continue;
-   const seconds=cuiudoTimerSeconds(goal),next=cuiudoTimerClock(seconds);
-   if(clock.textContent!==next)clock.textContent=next;
-   const panel=clock.closest('.goal-timer'),hint=panel?.querySelector('.goal-timer-state');
-   if(hint&&goal.timer_state==='running'&&seconds===0){
-    hint.textContent='Tempo encerrado';panel.classList.add('goal-timer-finished');
-   }
-  }
- },1000);
-}
