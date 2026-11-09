@@ -48,7 +48,7 @@ assert.doesNotMatch(mount.innerHTML,/id="cuiudo-more-menu"/);
 runInContext("state.tab='terco';state.appLang='pt';state.group='gozosos';state.mystery=0;render()",vm);
 assert.match(mount.innerHTML,/rosary-bead-visual/);
 assert.match(mount.innerHTML,/cuiudo-tiny-player/);
-assert.match(read('index.html'),/cloud-sync\.js/);
+assert.match(read('index.html'),/global-goals\.js/);
 for(const id of ['kyrie','sancte','puer','magnificat','adjutorium']){
  const url=runInContext('cuiudoMusic.tracks['+JSON.stringify(id)+'].source',vm);
  assert.ok(url.startsWith('https://commons.wikimedia.org/wiki/File:'),'Fonte musical '+id);
