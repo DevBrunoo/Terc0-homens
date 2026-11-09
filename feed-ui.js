@@ -77,6 +77,11 @@ function combatHome(){
   </div>
   <div class="cuiudo-hero-credit"><a href="${escapeHtml(lead.source)}" target="_blank" rel="noopener noreferrer">Guido Reni · domínio público ↗</a></div>
  </section>
+ <section class="cuiudo-grace-reflection" aria-labelledby="cuiudo-grace-title">
+  <span class="cuiudo-grace-eyebrow">✝ COMUNHÃO • GRAÇA • SANTIDADE</span>
+  <h2 id="cuiudo-grace-title">Quando a ansiedade, o medo e a tristeza pesarem, volte o coração para Deus.</h2>
+  <p>Busque a comunhão com Ele, a vida em graça e a santidade. <strong>Sentir essas dores não significa que Deus esteja ausente de você.</strong></p>
+ </section>
  <section class="cuiudo-feed-toolbar"><div><h2>CONFRONTO DO DIA.</h2><p>Arte, fé, trabalho e coragem. Sem passar a mão na cabeça.</p></div><label class="feed-searchbar"><span aria-hidden="true">⌕</span><input type="search" id="feed-search" placeholder="Buscar fé, São Miguel, trabalho..." autocomplete="off" value="${escapeHtml(state.feedTerm)}" aria-label="Pesquisar reflexões"></label></section>
  <div class="feed-filters" role="group" aria-label="Escolher tema do feed">${feedFilters.map(([id,label])=>`<button type="button" class="feed-filter" data-action="combat-filter" data-filter="${id}" aria-pressed="${state.feedFilter===id}">${escapeHtml(label)}</button>`).join('')}</div>
  <div class="feed-results" aria-live="polite"><span id="feed-result-count">${picks.length}</span> reflexões • conteúdo autoral • imagens licenciadas</div>

@@ -748,3 +748,38 @@
  .cuiudo-global-notice strong{width:100%}
  .cuiudo-global-notice button{margin-left:0;width:100%}
 }
+
+
+/* v28 — reflexão espiritual sobre comunhão, graça e santidade na página inicial. */
+.cuiudo-grace-reflection {
+  margin: 20px 0 24px;
+  padding: clamp(20px, 3.2vw, 34px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.cuiudo-grace-eyebrow {
+  display: inline-block;
+  margin-bottom: 11px;
+  font: 800 10px/1.4 var(--font);
+  letter-spacing: .1em;
+  color: var(--subink);
+}
+.cuiudo-grace-reflection h2 {
+  max-width: 850px;
+  margin: 0 0 11px;
+  font: 780 clamp(20px, 2.65vw, 30px)/1.16 var(--font);
+  letter-spacing: -.035em;
+  color: var(--ink);
+}
+.cuiudo-grace-reflection p {
+  max-width: 850px;
+  margin: 0;
+  color: var(--subink);
+  font: 470 clamp(13px, 1.3vw, 15px)/1.65 var(--font);
+}
+.cuiudo-grace-reflection p strong { color: var(--ink); font-weight: 750; }
+@media(max-width:600px) {
+  .cuiudo-grace-reflection { margin: 15px 0 19px; padding: 19px 17px; border-radius: 17px; }
+}
