@@ -2054,3 +2054,52 @@
  }
  .today-goal-actions{justify-content:center}
 }
+
+
+/* v35 — metas sem relógio: campo e cartões compactos. */
+.today-goals-form{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 104px;
+ grid-template-areas:"goal add";
+ align-items:stretch;
+ gap:9px;
+}
+.today-goals-form>input[name="goal"]{
+ grid-area:goal;
+ width:100%;
+ min-width:0;
+ max-width:100%;
+ box-sizing:border-box;
+}
+.today-goals-form>.btn{
+ grid-area:add;
+ width:100%;
+ min-width:0;
+ max-width:100%;
+ box-sizing:border-box;
+}
+.today-goal{
+ grid-template-areas:"main" "actions";
+ gap:10px;
+}
+.today-goal-actions{
+ grid-area:actions;
+ border-top:1px solid var(--line);
+ padding-top:9px;
+}
+@media(max-width:689px){
+ .today-goals-form{
+  grid-template-columns:minmax(0,1fr) 98px;
+  grid-template-areas:"goal add";
+  gap:7px;
+ }
+ .today-goals-form>input[name="goal"]{min-width:0;max-width:100%}
+ .today-goals-form>.btn{min-width:0;max-width:100%}
+}
+@media(max-width:365px){
+ .today-goals-form{
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"goal" "add";
+ }
+ .today-goals-form>.btn{min-height:43px}
+}
