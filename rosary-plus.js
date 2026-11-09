@@ -165,6 +165,11 @@ function cuiudoRosary(){
  const credits=art.source?'<a href="'+escapeHtml(art.source)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(art.credit)+' ↗</a>':escapeHtml(art.credit);
  const musicLabel=cuiudoMusic.isSupported()?musicLabels.title:t.musicUnsupported;
  const artworkAlt={pt:'Pintura ilustrativa: ',en:'Illustrative painting: ',es:'Pintura ilustrativa: ',la:'Imago sacra: '}[l];
+ const todayGroup=dayGroup(),todayName=cuiudoGroupName(todayGroup);
+ const dateLocale={pt:'pt-BR',en:'en-US',es:'es-ES',la:'pt-BR'}[l];
+ const todayDate=new Intl.DateTimeFormat(dateLocale,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+ const todayMessage={pt:'Hoje rezamos os Mistérios',en:'Today we pray the',es:'Hoy rezamos los Misterios',la:'Hodie contemplamur mysteria'}[l];
+ const todaySuffix={pt:'',en:' mysteries',es:'',la:''}[l];
  const meditationBlock='<div class="rosary-meditation-block"><span class="card-meta">'+escapeHtml(t.meditation)+'</span>'+
   '<p class="readable">'+escapeHtml(loc.meditation)+'</p>'+
   (context?'<div class="rosary-story-grid">'+
@@ -202,10 +207,16 @@ function cuiudoRosary(){
    '</aside></section>'+
   '<section class="benedict-rosary-tip"><img src="./assets/medalha-sao-bento-hd.svg" alt="Medalha de São Bento colorida" loading="lazy" onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/medalha-sao-bento-colorida.webp\';}">'+
    '<div><strong>CRUX SACRA SIT MIHI LUX</strong><p>'+escapeHtml(t.notMagic)+'</p></div></section>'+
+  '<section class="rosary-today-callout" aria-label="'+escapeHtml(t.today)+'">'+
+   '<div><span class="rosary-today-date">✝ '+escapeHtml(todayDate)+'</span>'+
+   '<strong>'+escapeHtml(todayMessage+' '+todayName+todaySuffix)+'</strong>'+
+   '<small>'+escapeHtml({pt:'Hoje este conjunto de mistérios é o recomendado. Os outros continuam disponíveis.',en:'These mysteries are recommended for today. Others remain available.',es:'Estos misterios corresponden a hoy. Los demás siguen disponibles.',la:'Haec mysteria diei conveniunt; alia praesto sunt.'}[l])+'</small></div>'+
+   (state.group!==todayGroup?'<button type="button" class="rosary-today-button" data-action="group" data-id="'+todayGroup+'">'+escapeHtml({pt:'Rezar o de hoje',en:'Pray today’s',es:'Rezar el de hoy',la:'Hodierna'}[l])+' ↗</button>':'')+
+  '</section>'+
   '<div class="group-picker" role="group" aria-label="'+escapeHtml(t.today)+'">'+
     groupNames.map(id=>'<button class="group-button '+(state.group===id?'active':'')+
     '" type="button" data-action="group" data-id="'+id+'" aria-pressed="'+(state.group===id)+'">'+
-    escapeHtml(cuiudoGroupName(id))+'</button>').join('')+'</div>'+
+    escapeHtml(cuiudoGroupName(id))+(id===todayGroup?' <span class="rosary-today-chip">'+escapeHtml({pt:'HOJE',en:'TODAY',es:'HOY',la:'HODIE'}[l])+'</span>':'')+'</button>').join('')+'</div>'+
   '<section class="rosary-length"><div><span class="card-meta">'+escapeHtml(cuiudoLengthHeading[l])+'</span>'+
    '<p>'+escapeHtml({pt:'As cinco dezenas permanecem iguais; só muda a profundidade da meditação.',en:'The five decades stay the same; only the depth of each meditation changes.',es:'Las cinco decenas permanecen iguales; solo cambia la profundidad de la meditación.',la:'Quinque decades manent; tantum meditationis profunditas mutatur.'}[l])+'</p></div>'+
    '<div class="meditation-size-buttons" role="group" aria-label="'+escapeHtml(cuiudoLengthHeading[l])+'">'+
@@ -214,9 +225,10 @@ function cuiudoRosary(){
    escapeHtml(cuiudoLengthLabels[l][i])+'</button>').join('')+'</div></section>'+
   '<section class="mystery-layout rosary-plus-layout"><div class="mystery-visual rosary-photo-wrap">'+
    '<span class="eyebrow">'+['I','II','III','IV','V'][state.mystery]+' · '+escapeHtml(cuiudoGroupName(state.group))+'</span>'+
+   '<h2 class="rosary-mystery-title">'+escapeHtml(loc.title)+'</h2><small class="rosary-mystery-reference">'+escapeHtml(m.ref)+'</small>'+
    '<div class="rosary-painting"><img src="'+escapeHtml(art.url)+'" alt="'+escapeHtml(artworkAlt+loc.title)+'" loading="eager" decoding="async" width="800" height="1000" '+
     'onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\'./assets/misterios/'+m.id+'.svg\';}">'+
-   '</div><h2>'+escapeHtml(loc.title)+'</h2><small>'+escapeHtml(m.ref)+'</small>'+
+   '</div>'+
    '<span class="rosary-art-credit">'+credits+'</span></div>'+
   '<div class="mystery-detail"><article class="card rosary-reading"><div class="scripture-verse">'+
    '<div class="scripture-top"><span class="card-meta">'+escapeHtml(t.scripture)+' · '+escapeHtml(versiculosPorMisterio[m.id].ref)+'</span>'+

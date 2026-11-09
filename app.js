@@ -85,13 +85,13 @@ function renderShell(content){
   <a href="#main-content" class="skip-link">Ir para o conteúdo</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — início"><span class="logo-mark" aria-hidden="true">✝</span><span class="logo-type">cuiúdo<span class="logo-dot">.</span></span></a>
+      <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="Terço — início"><span class="logo-mark" aria-hidden="true">✝</span><span class="logo-type">Terço<span class="logo-dot">.</span></span></a>
       <nav class="desktop-nav" aria-label="Navegação principal">${navItems.slice(0,4).map(x=>navButton(x)).join('')}<button type="button" class="nav-more ${state.mobileMore?'active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}">Mais ${icon('arrow')}</button></nav>
       <div class="header-tools"><button type="button" class="compact-menu" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}" title="Abrir menu">${icon('book')}<span>Menu</span></button>${themeControl}<button type="button" class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" aria-pressed="${state.mode==='brutal'}" title="Alternar intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'Sem desculpas':'Modo firme'}</span></button></div>
     </div>
   </header>
   <main class="main" id="main-content">${content}
-    <footer class="site-footer"><span>© CUIÚDO · FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. Versículos em traduções católicas históricas. As meditações são autorais; o exame não substitui a Confissão.</p></footer>
+    <footer class="site-footer"><span>© Terço · FÉ, CORAGEM E AÇÃO</span><p>Projeto independente de espiritualidade católica. Versículos em traduções católicas históricas. As meditações são autorais; o exame não substitui a Confissão.</p></footer>
   </main>
   <nav class="mobile-nav" aria-label="Navegação do celular">${navItems.slice(0,4).map(x=>navButton(x,'mobile-nav-button')).join('')}<button type="button" class="mobile-nav-button mobile-more ${state.mobileMore?'more-active':''}" data-action="toggle-more" aria-expanded="${Boolean(state.mobileMore)}" aria-label="Mais opções">${icon('book')}<span>Mais</span></button></nav>
   ${more}

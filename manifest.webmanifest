@@ -1,7 +1,7 @@
 {
   "name": "Terço",
   "short_name": "Terço",
-  "description": "CUIÚDO — oração, coragem e disciplina. Interface clara, terço diário, São Miguel, Bíblia e imagens reais.",
+  "description": "Terço — oração, coragem e disciplina. Terço diário, São Miguel, Bíblia e meditações.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

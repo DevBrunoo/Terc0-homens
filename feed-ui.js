@@ -113,10 +113,10 @@ renderShell=function(content){
  const popupY=Math.max(54,Math.round(Number(state.moreMenuTop)||75));
  const more=state.mobileMore?`<button class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div id="cuiudo-more-menu" class="more-panel cuiudo-more-menu" style="--cuiudo-more-x:${popupX}px;--cuiudo-more-y:${popupY}px" role="dialog" aria-label="Mais seções"><div class="more-panel-head"><strong>EXPLORAR</strong><button class="more-close" data-action="close-more" aria-label="Fechar">✕</button></div>${combatTabs.slice(5).map(t=>combatNavBtn(t,'more-nav-button')).join('')}</div>`:'';
  return `<div class="app-shell"><a class="skip-link" href="#main-content">Pular para conteúdo</a><header class="site-header"><div class="header-inner">
- <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="CUIÚDO — feed"><span class="logo-mark">✠</span><span class="logo-type">CUIÚDO<span class="logo-dot">.</span></span></a>
+ <a class="logo" href="#inicio" data-action="navigate" data-tab="inicio" aria-label="Terço — início"><span class="logo-mark">✠</span><span class="logo-type">Terço<span class="logo-dot">.</span></span></a>
  <nav class="desktop-nav" aria-label="Principal">${combatTabs.slice(0,5).map(t=>combatNavBtn(t)).join('')}<button type="button" class="nav-more" data-action="toggle-more" aria-controls="cuiudo-more-menu" aria-haspopup="true" aria-expanded="${Boolean(state.mobileMore)}"><span class="more-hamburger" aria-hidden="true">☰</span> Mais</button></nav>
  <div class="header-tools"><button type="button" class="compact-menu" data-action="toggle-more" aria-label="Abrir mais seções" aria-controls="cuiudo-more-menu" aria-haspopup="true" aria-expanded="${Boolean(state.mobileMore)}">☰ <span>Menu</span></button>${settings}<button class="mode-switch ${state.mode==='brutal'?'on':''}" data-action="toggle-mode" title="Intensidade das reflexões">${icon('flame')}<span>${state.mode==='brutal'?'SEM DESCULPAS':'FIRME'}</span></button></div></div></header>
- <main class="main" id="main-content">${content}<footer class="site-footer"><span>CUIÚDO — FÉ EM DEUS E PÉ NA TÁBUA ✠</span><p>Conteúdo autoral de combate espiritual e disciplina. Imagens de domínio público e Unsplash, creditadas em cada post. Sem violência física, garantias de sucesso ou substituição da Confissão sacramental.</p></footer></main>
+ <main class="main" id="main-content">${content}<footer class="site-footer"><span>TERÇO — FÉ EM DEUS E PÉ NA TÁBUA ✠</span><p>Conteúdo autoral de combate espiritual e disciplina. Imagens de domínio público e Unsplash, creditadas em cada post. Sem violência física, garantias de sucesso ou substituição da Confissão sacramental.</p></footer></main>
  <nav class="mobile-nav" aria-label="Principal no celular">${combatTabs.slice(0,5).map(t=>combatNavBtn(t,'mobile-nav-button')).join('')}</nav>${more}</div>`;
 };
 home=combatHome;
@@ -124,7 +124,7 @@ render=function(){
  setTheme();
  const pages={inicio:combatHome,terco:rosary,devocionario:devocionario,palavra:combatBible,diario:diary,verdade:truth,desafios:challenges,exame:examine};
  app.innerHTML=renderShell((pages[state.tab]||combatHome)());
- document.title=(combatTabs.find(t=>t.id===state.tab)?.label||'Feed')+' | CUIÚDO';
+ document.title=(combatTabs.find(t=>t.id===state.tab)?.label||'Início')+' | Terço';
  if(document.body?.classList)document.body.classList.toggle('combat-modal-open',Boolean(state.feedOpen));
 };
 state.feedSaved=state.feedSaved&&typeof state.feedSaved==='object'?state.feedSaved:{};
