@@ -21,6 +21,9 @@ runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
+assert.match(root.innerHTML,/goals-permanent-note/);
+assert.match(root.innerHTML,/Rezar terço e se cuidar espiritualmente e esteticamente/);
+assert.match(read('daily-goals.js'),/\[data-action\^="cuiudo-timer-"\]/);
 assert.match(root.innerHTML,/name="minutes"/);
 assert.equal(runInContext("cuiudoTimerClock(1501)",vm),"25:01");
 assert.equal(runInContext("cuiudoTimerSeconds({remaining_sec:1500,timer_state:'paused'})",vm),1500);
@@ -32,6 +35,17 @@ assert.match(root.innerHTML,/data-action="cuiudo-timer-start"/);
 assert.match(root.innerHTML,/Seu presente/);
 assert.match(root.innerHTML,/Você é muito macio/);
 assert.match(root.innerHTML,/goal-gift/);
+assert.match(root.innerHTML,/goal-victory/);
+assert.match(root.innerHTML,/Inspirado em/);
+assert.match(root.innerHTML,/goal-victory-emoji/);
+assert.equal((root.innerHTML.match(/class="goal-gift goal-victory"/g)||[]).length,1,
+ 'A celebração bíblica deve existir apenas na tarefa concluída');
+const completion=runInContext('cuiudoGoalBlessing("success")',vm);
+assert.ok(completion.emoji&&completion.message&&completion.reference);
+assert.equal(completion.message,runInContext('cuiudoGoalBlessing("success").message',vm),
+ 'A frase deve ser estável entre atualizações de dispositivos');
+const pendingCard=root.innerHTML.split('class="today-goal goal-pending"')[1].split('</article>')[0];
+assert.doesNotMatch(pendingCard,/goal-victory/);
 assert.match(root.innerHTML,/goal-reality/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-done"/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-missed"/);
@@ -40,7 +54,15 @@ assert.ok(memory.get('cuiudo-v1').includes('Estudar e rezar'));
 runInContext("state.dailyGoalDays[currentDay()][0].text='<script>alert(1)</script>';render()",vm);
 assert.ok(!root.innerHTML.includes('<script>alert(1)</script>'));
 assert.ok(root.innerHTML.includes('&lt;script&gt;'));
+// O compromisso permanente existe mesmo em uma lista vazia.
+runInContext('state.dailyGoalDays={[currentDay()]:[]};render()',vm);
+assert.match(root.innerHTML,/Rezar terço e se cuidar espiritualmente e esteticamente/);
+assert.match(root.innerHTML,/goals-permanent-note/);
+// Também existe na aba de desafios e em outros idiomas sem depender do banco.
 runInContext("state.tab='desafios';render()",vm);
+runInContext("state.appLang='es';render()",vm);
+assert.match(root.innerHTML,/Rezar el rosario y cuidarse/);
+runInContext("state.appLang='pt';render()",vm);
 assert.match(root.innerHTML,/today-goals/);
 runInContext("state.tab='terco';state.appLang='pt';render()",vm);
 assert.match(root.innerHTML,/data-action="combat-rosary-prev-track"/);
@@ -51,4 +73,6 @@ for(const id of ['catolico','templario','relaxar','relaxar2']){
 }
 assert.equal(runInContext('cuiudoMusic.isPlaying()',vm),false);
 for(const f of ['daily-goals.js','cuiudo-music.js','cuiudo-v13.css']){assert.ok(read('index.html').includes(f));assert.ok(read('sw.js').includes(f));}
-console.log('✓ v13: 3 trilhas, 2 MP3, medalha, 3 pinturas, meta concluída e mensagem de não conclusão');
+assert.match(read('cuiudo-v16.css'),/\.goal-victory\.goal-gift/);
+assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion/);
+console.log('✓ Metas v33: lembrete permanente, celebrações bíblicas somente em tarefas concluídas e controles de timer');
