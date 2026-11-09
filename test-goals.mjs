@@ -76,4 +76,6 @@ assert.match(read('cuiudo-v16.css'),/grid-template-areas:"goal add"/);
 assert.match(read('cuiudo-v16.css'),/v36 — Metas em LISTA VERTICAL/);
 assert.match(read('cuiudo-v16.css'),/grid-template-columns:minmax\(0,1fr\) max-content/);
 assert.match(read('cuiudo-v16.css'),/grid-template-areas:"main" "actions"/);
-console.log('✓ Metas v36: lista vertical responsiva sem cronômetro, lembrete e celebrações preservados');
+assert.match(read('cuiudo-v16.css'),/v37 — faixa de ação e quadro de metas com a mesma largura/);
+assert.match(read('cuiudo-v16.css'),/\.main > \.today-goals/);
+console.log('✓ Metas v37: lista vertical com largura alinhada ao banner de ação');

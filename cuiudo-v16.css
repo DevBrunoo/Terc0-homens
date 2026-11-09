@@ -2335,3 +2335,28 @@
 @media(hover:hover){
  .today-goal:hover{transform:none}
 }
+
+
+/* v37 — faixa de ação e quadro de metas com a mesma largura no site. */
+.main > .cuiudo-punch-strip,
+.main > .today-goals {
+ box-sizing:border-box;
+ width:100%;
+ max-width:100%;
+ margin-inline:0;
+}
+.today-goals {
+ box-sizing:border-box;
+ width:100%;
+ max-width:100%;
+ margin-left:0;
+ margin-right:0;
+}
+@media(max-width:760px){
+ .main > .today-goals{
+  width:100%;
+  max-width:100%;
+  margin-left:0;
+  margin-right:0;
+ }
+}
