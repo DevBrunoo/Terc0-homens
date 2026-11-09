@@ -225,10 +225,9 @@
   ui.user=null;ui.revision=0;ui.open=false;ui.busy=false;
   setDirty(false);
   try{localStorage.removeItem(OWNER);localStorage.removeItem(SOLO);}catch{}
-  // Em aparelho compartilhado, evita exibir diário e intenções da conta anterior.
-  ui.applying=true;
-  for(const k of KEYS)delete state[k];
-  saveOffline();ui.applying=false;
+  // Uso pessoal: desconectar não deve apagar metas, diário ou progresso offline.
+  // O próximo pareamento faz mesclagem dos dados locais com o banco escolhido.
+  ui.status='Dispositivo desconectado. Seus dados locais foram mantidos.';
   render();
  }
  // Capture: o app principal renderiza após cliques, mesmo para ações desconhecidas.
