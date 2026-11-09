@@ -4,13 +4,13 @@
  */
 (function(){
  'use strict';
- const OWNER='cuiudo-sync-owner',DIRTY='cuiudo-sync-dirty';
+ const OWNER='cuiudo-sync-owner',DIRTY='cuiudo-sync-dirty',SOLO='cuiudo-solo-code';
  const KEYS=['progress','decadePrayers','challengeDays','examineDays','missionDays',
   'dailyGoalDays','notes','feedSaved','feedDone','rosaryIntention','musicTrack','musicVolume',
   'theme','appLang','mode','rosaryLength','verseLang','designVersion'];
  const COLLECTIONS=new Set(['progress','decadePrayers','challengeDays','examineDays',
   'missionDays','dailyGoalDays','feedSaved','feedDone']);
- const ui={user:null,revision:0,open:false,mode:'login',status:'',available:null,busy:false,applying:false};
+ const ui={user:null,revision:0,open:false,mode:'start',showCode:false,status:'',available:null,busy:false,applying:false};
  let syncTimer=null,working=false,retryAt=0,changeSequence=0;
  const oldSave=save,oldShell=renderShell;
  const supported=typeof window.fetch==='function' && location.protocol!=='file:';
@@ -74,26 +74,35 @@
   const l=state.appLang||'pt';
   return ({pt:'Conta',en:'Account',es:'Cuenta',la:'Ratio'}[l]||'Conta');
  }
+ function secret(){try{return localStorage.getItem(SOLO)||'';}catch{return ''}}
  function accountPanel(){
   if(!ui.open)return '';
-  const info='As metas, o progresso do terço, suas intenções e o diário serão armazenados no D1 da sua conta. Use a mesma conta no celular e no notebook.';
-  const description=ui.available===false?'O banco D1 não está disponível nesta hospedagem. Configure o binding DB e a migração.':info;
+  const message=ui.available===false?
+   'A sincronização não está disponível. Confira o Cloudflare D1 e a ligação DB.':
+   'Sem cadastro, email ou senha. Um código privado conecta seu notebook e celular, sem tornar seus dados públicos.';
   return '<div class="cuiudo-auth-backdrop"><section class="cuiudo-auth-dialog" role="dialog" aria-modal="true" aria-labelledby="cuiudo-account-title">'+
-   '<div class="cuiudo-auth-head"><div><span>✝ CUIÚDO CLOUD</span><h2 id="cuiudo-account-title">Sincronizar aparelhos</h2></div>'+
+   '<div class="cuiudo-auth-head"><div><span>✝ CUIÚDO PESSOAL</span><h2 id="cuiudo-account-title">Sincronizar aparelhos</h2></div>'+
    '<button type="button" data-sync-action="close" aria-label="Fechar">×</button></div>'+
-   '<p class="cuiudo-auth-description">'+esc(description)+'</p>'+
-   (ui.user?'<p class="cuiudo-auth-email"><strong>Conta:</strong> '+esc(ui.user.email)+'</p>'+
-     '<div class="cuiudo-auth-actions"><button type="button" data-sync-action="refresh">Sincronizar agora</button>'+
-     '<button type="button" data-sync-action="logout">Sair da conta</button></div>':
-     '<div class="cuiudo-auth-modes"><button type="button" data-sync-action="mode" data-mode="login" aria-pressed="'+(ui.mode==='login')+'">Entrar</button>'+
-     '<button type="button" data-sync-action="mode" data-mode="register" aria-pressed="'+(ui.mode==='register')+'">Criar conta</button></div>'+
-     '<form id="cuiudo-auth-form" class="cuiudo-auth-form">'+
-     '<label>Email<input type="email" name="email" autocomplete="username" maxlength="254" required placeholder="seu@email.com"></label>'+
-     '<label>Senha (mínimo 12 caracteres)<input type="password" name="password" minlength="12" maxlength="128" autocomplete="'+(ui.mode==='register'?'new-password':'current-password')+'" required></label>'+
-     '<button type="submit" '+(ui.available===false||ui.busy?'disabled':'')+'>'+(ui.mode==='register'?'Criar conta':'Entrar e sincronizar')+'</button></form>'+
-     '<p class="cuiudo-auth-hint">Guarde sua senha: ainda não há recuperação por email.</p>')+
-   '<p class="cuiudo-sync-message" role="status" aria-live="polite">'+esc(ui.status||'O aplicativo continua funcionando offline mesmo sem login.')+'</p>'+
-   '<p class="cuiudo-auth-help"><a href="https://github.com/DevBrunoo/Terc0-homens/blob/main/docs/CLOUDFLARE-D1.md" target="_blank" rel="noopener noreferrer">Como configurar o Cloudflare D1 ↗</a></p>'+
+   '<p class="cuiudo-auth-description">'+esc(message)+'</p>'+
+   (ui.user?
+    '<p class="cuiudo-auth-email">☁ Sincronização ativa neste aparelho.</p>'+
+    (secret()?'<div class="cuiudo-auth-actions"><button type="button" data-sync-action="show-code">'+
+      (ui.showCode?'Ocultar código':'Ver código para outro aparelho')+'</button></div>'+
+      (ui.showCode?'<div class="cuiudo-solo-code"><code>'+esc(secret())+'</code>'+
+       '<button type="button" data-sync-action="copy-code">Copiar código</button></div>':''):
+      '<p class="cuiudo-auth-hint">O código original não está disponível neste navegador. Aparelhos já conectados continuam funcionando.</p>')+
+    '<div class="cuiudo-auth-actions"><button type="button" data-sync-action="refresh">Sincronizar agora</button>'+
+    '<button type="button" data-sync-action="logout">Desconectar este aparelho</button></div>':
+    '<div class="cuiudo-auth-modes"><button type="button" data-sync-action="mode" data-mode="start" aria-pressed="'+(ui.mode==='start')+'">Primeiro aparelho</button>'+
+    '<button type="button" data-sync-action="mode" data-mode="join" aria-pressed="'+(ui.mode==='join')+'">Outro aparelho</button></div>'+
+    (ui.mode==='start'?
+      '<p class="cuiudo-auth-description">Toque uma vez para criar um código só seu. Não é necessário cadastrar nada.</p>'+
+      '<button type="button" class="cuiudo-solo-primary" data-sync-action="create" '+(ui.busy||ui.available===false?'disabled':'')+'>Ativar sincronização</button>':
+      '<form id="cuiudo-solo-form" class="cuiudo-auth-form">'+
+      '<label>Código privado do primeiro aparelho<input type="text" name="code" autocomplete="off" autocapitalize="off" spellcheck="false" minlength="64" maxlength="90" required placeholder="Cole seu código pessoal"></label>'+
+      '<button type="submit" '+(ui.busy||ui.available===false?'disabled':'')+'>Conectar aparelho</button></form>')+
+    '<p class="cuiudo-auth-hint">Guarde o código em lugar seguro. Quem tiver acesso a ele poderá ver seus dados e não existe recuperação automática.</p>')+
+   '<p class="cuiudo-sync-message" role="status" aria-live="polite">'+esc(ui.status||'Suas metas continuam neste aparelho mesmo sem internet.')+'</p>'+
    '</section></div>';
  }
  renderShell=function(html){
@@ -128,7 +137,7 @@
   working=true;
   try{
    const result=await api('sync');
-   if(result.status===401){ui.user=null;ui.status='Sessão encerrada. Entre novamente.';render();return;}
+   if(result.status===401){ui.user=null;ui.status='Sessão encerrada. Reconecte com seu código pessoal.';render();return;}
    if(result.status>=400)throw new Error(result.error||'Falha ao consultar dados.');
    const remote=result.state||{},local=snapshot(),owner=getOwner();
    const sameOwner=!owner||owner===ui.user.id;
@@ -168,7 +177,7 @@
     setDirty(true);ui.status='Conflito de versões resolvido. Salvando novamente…';
     return;
    }
-   if(result.status===401){ui.user=null;ui.status='Faça login novamente.';return;}
+   if(result.status===401){ui.user=null;ui.status='Reconecte este aparelho com seu código.';return;}
    if(result.status>=400)throw new Error(result.error||'Não foi possível salvar.');
    retryAt=0;ui.revision=result.revision;
    if(sentSequence===changeSequence){
@@ -186,18 +195,24 @@
    if(result.status>=400){ui.available=false;ui.status=result.error||'D1 indisponível.';return;}
    ui.available=true;
    if(result.user){ui.user=result.user;await pull({initial:true});}
+   else if(secret())await pair('join',secret(),true);
   }catch(e){ui.available=false;ui.status=String(e.message||e);}
   render();
  }
- async function login(action,email,password){
+ async function pair(action,code='',automatic=false){
   if(ui.busy)return;
-  ui.busy=true;ui.status='Validando conta…';render();
+  ui.busy=true;ui.status=automatic?'Reconectando seu aparelho…':'Ativando a sincronização…';
+  if(!automatic)render();
   try{
-   const result=await api('auth',{method:'POST',body:JSON.stringify({action,email,password})});
-   if(result.status>=400)throw new Error(result.error||'Falha ao entrar.');
-   ui.user=result.user;ui.revision=0;ui.available=true;ui.status='Conta conectada. Carregando dados…';
+   const result=await api('solo',{method:'POST',body:JSON.stringify({action,code})});
+   if(result.status>=400)throw new Error(result.error||'Não foi possível conectar.');
+   if(result.code){try{localStorage.setItem(SOLO,result.code);}catch{}}
+   else if(code){try{localStorage.setItem(SOLO,code.trim().replace(/[\s-]/g,'').toLowerCase());}catch{}}
+   ui.user=result.user;ui.revision=0;ui.available=true;
+   ui.showCode=action==='create';
+   ui.status='Conectado. As metas e o terço serão sincronizados automaticamente.';
+   ui.busy=false;
    await pull({initial:true});
-   ui.open=false;
   }catch(e){ui.status=String(e.message||e);}
   finally{ui.busy=false;render();if(ui.user&&isDirty())schedule();}
  }
@@ -209,7 +224,7 @@
   try{await api('auth',{method:'POST',body:JSON.stringify({action:'logout'})});}catch{}
   ui.user=null;ui.revision=0;ui.open=false;ui.busy=false;
   setDirty(false);
-  try{localStorage.removeItem(OWNER);}catch{}
+  try{localStorage.removeItem(OWNER);localStorage.removeItem(SOLO);}catch{}
   // Em aparelho compartilhado, evita exibir diário e intenções da conta anterior.
   ui.applying=true;
   for(const k of KEYS)delete state[k];
@@ -223,17 +238,19 @@
   const action=b.dataset.syncAction;
   if(action==='open'){ui.open=true;render();}
   else if(action==='close'){ui.open=false;render();}
-  else if(action==='mode'){ui.mode=b.dataset.mode==='register'?'register':'login';ui.status='';render();}
+  else if(action==='mode'){ui.mode=b.dataset.mode==='join'?'join':'start';ui.status='';render();}
+  else if(action==='create')pair('create');
+  else if(action==='show-code'){ui.showCode=!ui.showCode;render();}
+  else if(action==='copy-code'){if(navigator.clipboard?.writeText)navigator.clipboard.writeText(secret()).then(()=>{ui.status='Código copiado. Cole no outro aparelho.';render();},()=>{ui.status='Copie o código manualmente.';render();});}
   else if(action==='refresh'){if(isDirty())flush();else pull();}
   else if(action==='logout')logout();
  },true);
  app.addEventListener('submit',event=>{
-  if(event.target.id!=='cuiudo-auth-form')return;
+  if(event.target.id!=='cuiudo-solo-form')return;
   event.preventDefault();event.stopImmediatePropagation();
   const form=event.target;
-  const email=form.querySelector('[name=email]')?.value||'';
-  const password=form.querySelector('[name=password]')?.value||'';
-  login(ui.mode,email,password);
+  const code=form.querySelector('[name=code]')?.value||'';
+  pair('join',code);
  },true);
  window.addEventListener('online',()=>{if(ui.user){if(isDirty())schedule();else pull();}});
  document.addEventListener('visibilitychange',()=>{
