@@ -170,3 +170,20 @@ const mysteryPhotoSection=mount.innerHTML.split('class="mystery-visual rosary-ph
 assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-title')>=0);
 assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-title')<mysteryPhotoSection.indexOf('rosary-painting'));
 assert.ok(mysteryPhotoSection.indexOf('rosary-mystery-reference')<mysteryPhotoSection.indexOf('rosary-painting'));
+
+
+// Layout: história sob a foto; reflexão e aplicação permanecem na coluna de leitura.
+for(const lang of ['pt','en','es','la']){
+ runInContext('state.appLang='+JSON.stringify(lang)+';state.tab="terco";state.group="gozosos";state.mystery=0;state.rosaryLength="large";render()',vm);
+ const html=mount.innerHTML;
+ const section=html.split('class="mystery-visual rosary-photo-wrap"')[1].split('<div class="mystery-detail">')[0];
+ assert.ok(section.indexOf('class="rosary-painting"') < section.indexOf('class="rosary-history-card"'),"História após a imagem "+lang);
+ assert.equal((html.match(/class="rosary-history-card"/g)||[]).length,1);
+ assert.match(html,/rosary-conscience-question/);
+ assert.match(html,/rosary-action-concrete/);
+ assert.match(html,/rosary-offering/);
+ assert.match(html,/rosary-story-think/);
+ assert.match(html,/rosary-story-apply/);
+ assert.doesNotMatch(html,/rosary-story-history/);
+ assert.ok(!html.includes(' | CUIÚDO'),"Título da aba Terço "+lang);
+}

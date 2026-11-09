@@ -172,19 +172,18 @@ function cuiudoRosary(){
  const todaySuffix={pt:'',en:' mysteries',es:'',la:''}[l];
  const meditationBlock='<div class="rosary-meditation-block"><span class="card-meta">'+escapeHtml(t.meditation)+'</span>'+
   '<p class="readable">'+escapeHtml(loc.meditation)+'</p>'+
-  (context?'<div class="rosary-story-grid">'+
-    [['history',0,'01'],['think',1,'02'],['apply',2,'03']].map(([key,i,number])=>
+  (context?'<div class="rosary-story-grid rosary-reflection-grid">'+
+    [['think',1,'02'],['apply',2,'03']].map(([key,i,number])=>
       '<article class="rosary-story-card rosary-story-'+key+'">'+
       '<div class="rosary-story-heading"><span>'+number+'</span><h3>'+escapeHtml(contextLabels[key])+'</h3></div>'+
       '<p>'+escapeHtml(context[i])+'</p></article>').join('')+
-    '<a class="rosary-story-source" href="'+escapeHtml(cuiudoMysteryContextSource)+'" target="_blank" rel="noopener noreferrer">'+
-    'Rosarium Virginis Mariae · Vatican ↗</a></div>':'')+
+    '</div>':'')+
   (length==='small'?'':('<div class="virtue-strip"><span>'+escapeHtml(t.virtue)+'</span><strong>'+escapeHtml(loc.virtue)+'</strong></div>'+
-    '<div class="question"><strong>'+escapeHtml(t.examine)+':</strong> '+escapeHtml(question)+'</div>'))+
+    '<div class="question rosary-conscience-question"><strong>'+escapeHtml(t.examine)+':</strong> '+escapeHtml(question)+'</div>'))+
   (length==='large'?('<div class="rosary-long"><h3>'+escapeHtml(t.reflection)+'</h3>'+
    '<blockquote class="confront">'+escapeHtml(strong)+'</blockquote>'+
-   '<p>'+escapeHtml(t.act)+': '+escapeHtml(concrete)+'</p>'+
-   '<div class="prayer-response"><span>'+escapeHtml(t.offering)+'</span><p>'+escapeHtml(prayer)+'</p></div></div>'):'')+'</div>';
+   '<p class="rosary-action-concrete"><strong>'+escapeHtml(t.act)+':</strong> '+escapeHtml(concrete)+'</p>'+
+   '<div class="prayer-response rosary-offering"><span>'+escapeHtml(t.offering)+'</span><p>'+escapeHtml(prayer)+'</p></div></div>'):'')+'</div>';
  return '<section class="rosary-plus-header"><div><span class="eyebrow">'+escapeHtml(t.today)+': '+escapeHtml(cuiudoGroupName(dayGroup()))+'</span>'+
   '<h1 class="page-title">'+escapeHtml(t.rosary)+'</h1><p class="page-desc">'+escapeHtml(t.intro)+'</p></div>'+
    '<aside class="rosary-music-control rosary-music-v13 cuiudo-tiny-player" aria-label="'+escapeHtml(musicLabel)+'">'+
@@ -229,7 +228,12 @@ function cuiudoRosary(){
    '<div class="rosary-painting"><img src="'+escapeHtml(art.url)+'" alt="'+escapeHtml(artworkAlt+loc.title)+'" loading="eager" decoding="async" width="800" height="1000" '+
     'onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\'./assets/misterios/'+m.id+'.svg\';}">'+
    '</div>'+
-   '<span class="rosary-art-credit">'+credits+'</span></div>'+
+   '<span class="rosary-art-credit">'+credits+'</span>'+
+   (context?'<article class="rosary-history-card" aria-label="'+escapeHtml(contextLabels.history)+'">'+
+     '<div class="rosary-story-heading"><span>01</span><h3>'+escapeHtml(contextLabels.history)+'</h3></div>'+
+     '<p>'+escapeHtml(context[0])+'</p>'+
+     '<a class="rosary-story-source" href="'+escapeHtml(cuiudoMysteryContextSource)+'" target="_blank" rel="noopener noreferrer">'+
+       'Rosarium Virginis Mariae · Vatican ↗</a></article>':'')+'</div>'+
   '<div class="mystery-detail"><article class="card rosary-reading"><div class="scripture-verse">'+
    '<div class="scripture-top"><span class="card-meta">'+escapeHtml(t.scripture)+' · '+escapeHtml(versiculosPorMisterio[m.id].ref)+'</span>'+
    '<span class="scripture-language">'+escapeHtml(cuiudoLangLabels[l])+'</span></div>'+
@@ -284,7 +288,7 @@ render=function(){
   palavra:combatBible,diario:diary,verdade:truth,desafios:challenges,exame:examine
  };
  app.innerHTML=renderShell((pages[state.tab]||combatHome)());
- document.title=(cuiudoNav[cuiudoLocale()][state.tab]||'CUIÚDO')+' | CUIÚDO';
+ document.title=(cuiudoNav[cuiudoLocale()][state.tab]||'Terço')+' | Terço';
  if(document.body?.classList)document.body.classList.toggle('combat-modal-open',Boolean(state.feedOpen));
 };
 state.appLang=['pt','en','es','la'].includes(state.appLang)?state.appLang:'pt';

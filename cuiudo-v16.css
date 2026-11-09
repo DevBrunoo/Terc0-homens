@@ -1168,3 +1168,104 @@
  }
  .rosary-photo-wrap>.rosary-mystery-reference{margin:0 0 11px!important}
 }
+
+
+/* v32: história do mistério logo abaixo da pintura; leitura ampliada. */
+.rosary-photo-wrap>.rosary-history-card{
+ order:5!important;
+ width:100%;
+ box-sizing:border-box;
+ min-width:0;
+ margin:17px 0 0;
+ padding:clamp(15px,2.1vw,21px);
+ border:1px solid var(--line);
+ border-radius:15px;
+ background:var(--surface-2);
+ color:var(--ink);
+}
+.rosary-history-card .rosary-story-heading{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin:0 0 10px;
+}
+.rosary-history-card .rosary-story-heading span{
+ flex:0 0 27px;
+ display:grid;
+ place-items:center;
+ width:27px;
+ height:27px;
+ border:1px solid var(--line);
+ border-radius:8px;
+ color:var(--subink);
+ font:750 10px/1 var(--font);
+}
+.rosary-history-card .rosary-story-heading h3{
+ margin:0;
+ color:var(--ink);
+ font:760 16px/1.45 var(--font);
+}
+.rosary-history-card p{
+ margin:0 0 12px;
+ color:var(--ink);
+ font:460 clamp(15px,1.55vw,17px)/1.75 var(--font);
+ overflow-wrap:anywhere;
+}
+.rosary-history-card .rosary-story-source{
+ display:inline-block;
+ margin-top:5px;
+ color:var(--subink);
+ font:580 11px/1.5 var(--font);
+ text-underline-offset:3px;
+}
+.rosary-meditation-block .rosary-conscience-question{
+ margin:20px 0 10px;
+ padding:17px 18px;
+ border-radius:13px;
+ color:var(--ink);
+ font:510 clamp(17px,1.65vw,19px)/1.65 var(--font);
+ overflow-wrap:anywhere;
+}
+.rosary-meditation-block .rosary-conscience-question strong{
+ font-weight:770;
+ color:var(--ink);
+}
+.rosary-long>p.rosary-action-concrete{
+ margin:18px 0 20px;
+ color:var(--ink);
+ font:510 clamp(17px,1.6vw,19px)/1.7 var(--font);
+ overflow-wrap:anywhere;
+}
+.rosary-action-concrete strong{font-weight:770;color:var(--ink)}
+.rosary-long .prayer-response.rosary-offering{
+ border-radius:14px;
+ padding:19px 21px;
+}
+.rosary-long .rosary-offering span{
+ display:block;
+ font:770 clamp(14px,1.4vw,16px)/1.5 var(--font);
+ letter-spacing:0;
+ color:var(--ink);
+}
+.rosary-long .rosary-offering p{
+ margin:9px 0 0;
+ color:var(--ink);
+ font:510 clamp(17px,1.65vw,20px)/1.73 var(--font);
+ overflow-wrap:anywhere;
+}
+@media(max-width:760px){
+ .rosary-photo-wrap>.rosary-history-card{
+  margin-top:14px;
+  padding:16px;
+  border-radius:13px;
+ }
+ .rosary-history-card p{font-size:16px;line-height:1.7}
+ .rosary-meditation-block .rosary-conscience-question{
+  padding:15px 16px;
+  font-size:17px;
+  line-height:1.65;
+ }
+ .rosary-long>p.rosary-action-concrete{font-size:17px;line-height:1.65}
+ .rosary-long .prayer-response.rosary-offering{padding:17px 16px}
+ .rosary-long .rosary-offering p{font-size:18px;line-height:1.66}
+}
