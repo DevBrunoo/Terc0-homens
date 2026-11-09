@@ -1,5 +1,5 @@
 /* CUIÚDO — checklist do dia, com metas definidas pela própria pessoa.
- * Checklists ficam apenas no localStorage. Nenhuma conta nem servidor.
+ * Checklists locais com sincronização opcional pelo Cloudflare D1.
  */
 const cuiudoGoalsText={
  pt:{heading:'Metas de hoje',sub:'Escreva o que precisa fazer. Depois assuma o resultado.',

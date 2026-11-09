@@ -712,3 +712,9 @@
 .cuiudo-solo-code{display:grid;gap:10px;margin:12px 0 16px;padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
 .cuiudo-solo-code code{font:550 12px/1.8 monospace;word-break:break-all;user-select:all;color:var(--ink)}
 .cuiudo-auth-modes button{font-size:11px}
+
+/* v25: status de sincronização visível em todas as telas */
+.cuiudo-cloud-alert{display:flex;flex-wrap:wrap;gap:5px 9px;align-items:center;justify-content:center;padding:9px 12px;margin:8px auto 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--subink);font:600 12px/1.4 var(--font);text-align:center}
+.cuiudo-cloud-alert button{border:0;background:transparent;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font:750 12px var(--font);cursor:pointer;padding:0}
+.cuiudo-cloud-alert.cuiudo-cloud-active{opacity:.9}
+@media(max-width:460px){.cuiudo-cloud-alert{font-size:11px;padding:8px}.cuiudo-cloud-alert button{font-size:11px}}

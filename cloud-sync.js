@@ -47,14 +47,21 @@
     const out={...remote[k]};
     for(const [day,item] of Object.entries(local[k])){
      if(!Object.hasOwn(out,day)){out[day]=item;continue;}
+     if(k==='dailyGoalDays'&&Array.isArray(out[day])&&Array.isArray(item)){
+      // Mesclar por ID: metas criadas no MESMO dia em dispositivos diferentes
+      // não podem substituir umas às outras.
+      const entries=new Map();
+      for(const goal of out[day])if(goal&&goal.id)entries.set(String(goal.id),goal);
+      for(const goal of item)if(goal&&goal.id){
+       const id=String(goal.id);
+       if(!entries.has(id)||preferLocal)entries.set(id,goal);
+      }
+      out[day]=[...entries.values()].slice(0,30);
+      continue;
+     }
      if(preferLocal){out[day]=item;continue;}
      if(k==='progress'&&Array.isArray(out[day])&&Array.isArray(item)){
       out[day]=out[day].map((v,i)=>Math.max(Number(v)||0,Number(item[i])||0));continue;
-     }
-     if(k==='dailyGoalDays'&&Array.isArray(out[day])&&Array.isArray(item)){
-      const entries=new Map();
-      for(const g of [...out[day],...item])if(g&&g.id)entries.set(g.id,g);
-      out[day]=[...entries.values()];continue;
      }
      if(k==='feedDone'&&typeof out[day]==='object'&&typeof item==='object'){
       out[day]={...item,...out[day]};continue;
@@ -108,8 +115,11 @@
  renderShell=function(html){
   const button='<button type="button" class="cuiudo-account-toggle" data-sync-action="open" title="Conta e sincronização" aria-label="'+esc(label()+' e sincronização')+'">'+
    '<span aria-hidden="true">'+(ui.user?'☁':'⇄')+'</span><span class="cuiudo-account-text">'+esc(ui.user?'Sincronizado':label())+'</span></button>';
+  const notice=ui.user?
+   '<div class="cuiudo-cloud-alert cuiudo-cloud-active" role="status">☁ Sincronização ligada · <button type="button" data-sync-action="open">Conferir nuvem</button></div>':
+   '<div class="cuiudo-cloud-alert" role="status">⇄ Metas salvas somente neste aparelho. <button type="button" data-sync-action="open">Ativar sincronização sem cadastro</button></div>';
   return oldShell(html).replace('<div class="header-tools">','<div class="header-tools">'+button)
-   .replace('<main class="main"',''+accountPanel()+'<main class="main"');
+   .replace('<main class="main" id="main-content">',''+accountPanel()+'<main class="main" id="main-content">'+notice);
  };
  save=function(){
   oldSave();
@@ -147,7 +157,12 @@
     // Não importamos automaticamente dados da conta anterior para a atual.
     try{localStorage.setItem('cuiudo-backup-conta-anterior',JSON.stringify(local));}catch{}
     combined=remote;
+   }else if(owner===ui.user.id&&!prefer){
+    // Aparelho já sincronizado, sem mudança pendente: o D1 é a fonte oficial.
+    // Evita trazer de volta metas já apagadas no outro aparelho.
+    combined=remote;
    }else{
+    // Primeiro pareamento: importa metas locais anteriores à nuvem.
     combined=merge(remote,local,prefer);
    }
    ui.revision=result.revision||0;
@@ -155,10 +170,9 @@
    try{localStorage.setItem(OWNER,ui.user.id);}catch{}
    if(JSON.stringify(combined)!==JSON.stringify(remote)||prefer){
     setDirty(true);
-    ui.status='Mesclando dados do notebook e celular…';
-    schedule();
+    ui.status='Metas locais encontradas. Enviando para a nuvem…';
    }else{
-    setDirty(false);ui.status='Dados atualizados nos dois aparelhos.';
+    setDirty(false);ui.status='Dados carregados e atualizados no D1.';
    }
    ui.available=true;
   }catch(e){ui.status=String(e.message||e);}
@@ -177,7 +191,7 @@
     setDirty(true);ui.status='Conflito de versões resolvido. Salvando novamente…';
     return;
    }
-   if(result.status===401){ui.user=null;ui.status='Reconecte este aparelho com seu código.';return;}
+   if(result.status===401){ui.user=null;ui.status='Sessão expirada. Reconecte com seu código pessoal.';return;}
    if(result.status>=400)throw new Error(result.error||'Não foi possível salvar.');
    retryAt=0;ui.revision=result.revision;
    if(sentSequence===changeSequence){

@@ -29,8 +29,13 @@ Pages, não upload manual do ZIP: Functions exigem Git ou Wrangler.
 4. **Redeploy** do projeto Pages após criar o binding.
 5. Execute também [`migrations/0002_cuiudo_solo.sql`](../migrations/0002_cuiudo_solo.sql) no D1 se o banco já existia.
 6. No notebook, abra **Conta → Primeiro aparelho → Ativar sincronização** e copie o código privado.
-7. No celular, abra **Conta → Outro aparelho**, cole o código e conecte.
+7. No celular, abra **Conta → Outro aparelho**, cole **o mesmo código** e conecte.
    Não é necessário cadastro, email ou senha.
+8. Teste: crie uma meta no notebook e abra o celular. Aguarde o status de
+   salvamento na nuvem e use **Sincronizar agora**. As contas/códigos diferentes
+   permanecem separados: para compartilhar metas, os aparelhos precisam do MESMO código.
+9. Se o banco tiver 0 linhas em `solo_keys` e `synced_state`, ainda não houve
+   pareamento ou gravação, mesmo que as metas apareçam na tela local.
 
 ## Como funciona
 - `/api/solo` cria ou conecta um dispositivo com código privado aleatório de 256 bits; somente o hash SHA-256 fica no D1.
