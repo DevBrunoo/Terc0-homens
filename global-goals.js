@@ -63,9 +63,11 @@
  function replaceGoals(rows){
   const grouped={};
   for(const row of rows){
-   if(!row||!validDay(row.day)||!validGoal({id:row.id,text:row.text,status:row.status==='deleted'?'pending':row.status}))continue;
+   if(!row||!validDay(row.day)||typeof row.id!=='string')continue;
    grouped[row.day]??=[];
-   if(row.status!=='deleted')grouped[row.day].push({id:row.id,text:row.text,status:row.status});
+   if(row.status==='deleted')continue; // Excluída no servidor: não reintroduzir no cliente.
+   if(!validGoal(row))continue;
+   grouped[row.day].push({id:row.id,text:row.text,status:row.status});
   }
   // Aplicar alterações ainda não enviadas para não sumirem da tela.
   for(const op of pending){

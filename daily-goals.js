@@ -1,5 +1,5 @@
 /* CUIÚDO — checklist do dia, com metas definidas pela própria pessoa.
- * Checklists locais com sincronização opcional pelo Cloudflare D1.
+ * Metas públicas compartilhadas automaticamente pelo D1; diário e intenções são locais.
  */
 const cuiudoGoalsText={
  pt:{heading:'Metas de hoje',sub:'Escreva o que precisa fazer. Depois assuma o resultado.',
@@ -114,8 +114,10 @@ app.addEventListener('submit',event=>{
  const day=currentDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
- items.push({id,text,status:'pending'});
+ const goal={id,text,status:'pending'};
+ items.push(goal);
  cuiudoGoalsSave();
+ window.cuiudoGlobalGoals?.change('upsert',day,goal);
  render();
 });
 app.addEventListener('click',event=>{
@@ -127,7 +129,11 @@ app.addEventListener('click',event=>{
  if(action==='cuiudo-goal-done')items[index].status='done';
  if(action==='cuiudo-goal-missed')items[index].status='missed';
  if(action==='cuiudo-goal-reopen')items[index].status='pending';
+ const day=currentDay(),before={...items[index]};
  if(action==='cuiudo-goal-delete')items.splice(index,1);
- cuiudoGoalsSave();render();
+ cuiudoGoalsSave();
+ window.cuiudoGlobalGoals?.change(action==='cuiudo-goal-delete'?'delete':'upsert',day,
+  action==='cuiudo-goal-delete'?before:items[index]);
+ render();
 });
 render();
