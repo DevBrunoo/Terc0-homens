@@ -11,6 +11,14 @@
  let pending=[],inFlight=false,pulling=false,connected=false;
  let timer=null,status='Carregando metas da nuvem…';
  const supported=typeof window.fetch==='function' && location.protocol!=='file:';
+ const timerFields=['duration_sec','remaining_sec','timer_started_at','timer_state'];
+ function copyGoal(g){
+  return {id:g.id,text:g.text,status:g.status||'pending',
+   duration_sec:Number.isSafeInteger(g.duration_sec)?g.duration_sec:0,
+   remaining_sec:Number.isSafeInteger(g.remaining_sec)?g.remaining_sec:0,
+   timer_started_at:Number.isSafeInteger(g.timer_started_at)?g.timer_started_at:null,
+   timer_state:['running','paused','finished'].includes(g.timer_state)?g.timer_state:'none'};
+ }
 
  function readLocal(key,fallback){
   try{const data=JSON.parse(localStorage.getItem(key)||'null');return data===null?fallback:data;}catch{return fallback;}
@@ -39,7 +47,7 @@
   if(!/^[A-Za-z0-9_.:-]{6,80}$/.test(op.id))return null;
   if(op.action==='delete')return {action:'delete',day:op.day,id:op.id};
   if(op.action!=='upsert'||!validGoal(op))return null;
-  return {action:'upsert',day:op.day,id:op.id,text:op.text.trim(),status:op.status||'pending'};
+  return {action:'upsert',day:op.day,...copyGoal(op),text:op.text.trim()};
  }
  pending=readLocal(QUEUE_KEY,[]).map(normalize).filter(Boolean);
  function updateStatus(message,online){
@@ -50,7 +58,7 @@
   const result={};
   for(const [day,goals] of Object.entries(state.dailyGoalDays||{})){
    if(!Array.isArray(goals))continue;
-   result[day]=goals.filter(validGoal).map(g=>({id:g.id,text:g.text,status:g.status||'pending'}));
+   result[day]=goals.filter(validGoal).map(copyGoal);
   }
   return result;
  }
@@ -61,15 +69,15 @@
    grouped[row.day]??=[];
    if(row.status==='deleted')continue; // Excluída no servidor: não reintroduzir no cliente.
    if(!validGoal(row))continue;
-   grouped[row.day].push({id:row.id,text:row.text,status:row.status});
+   grouped[row.day].push(copyGoal(row));
   }
   // Aplicar alterações ainda não enviadas para não sumirem da tela.
   for(const op of pending){
    const goals=grouped[op.day]??=[];
    const idx=goals.findIndex(g=>g.id===op.id);
    if(op.action==='delete'){if(idx>=0)goals.splice(idx,1);}
-   else if(idx>=0){goals[idx]={id:op.id,text:op.text,status:op.status};}
-   else goals.push({id:op.id,text:op.text,status:op.status});
+   else if(idx>=0){goals[idx]=copyGoal(op);}
+   else goals.push(copyGoal(op));
    grouped[op.day]=goals;
   }
   // Histórico fora da janela de leitura continua disponível apenas localmente.
@@ -172,7 +180,7 @@
  window.cuiudoGlobalGoals={
   change(action,day,goal){
    if(!goal)return;
-   queueOperation({action,day,id:goal.id,text:goal.text,status:goal.status||'pending'});
+   queueOperation({action,day,...copyGoal(goal)});
   },
   refresh(){return pull();},
   isConnected(){return connected;},

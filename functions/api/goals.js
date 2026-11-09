@@ -6,13 +6,23 @@ const validId=v=>typeof v==='string'&&/^[A-Za-z0-9_.:-]{6,80}$/.test(v);
 const validDay=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&
   !Number.isNaN(Date.parse(v+'T12:00:00Z'));
 const allowed=new Set(['pending','done','missed']);
+const timerStates=new Set(['none','running','paused','finished']);
+const validTimer=body=>{
+ const duration=body.duration_sec??0,remaining=body.remaining_sec??0,
+       started=body.timer_started_at??null,phase=body.timer_state??'none';
+ return Number.isSafeInteger(duration)&&duration>=0&&duration<=86400&&
+  Number.isSafeInteger(remaining)&&remaining>=0&&remaining<=duration&&
+  timerStates.has(phase)&&
+  (started===null||(Number.isSafeInteger(started)&&started>0&&started<=Date.now()+60000))&&
+  (phase!=='running'||(duration>0&&started!==null));
+};
 const cutoff=()=>new Date(Date.now()-121*86400000).toISOString().slice(0,10);
 
 export async function onRequestGet(context){
  if(!dbReady(context))return response({error:'Banco D1 indisponível.'},503);
  try{
   const data=await context.env.DB.prepare(
-   'SELECT id,day,text,status,updated_at FROM public_goals WHERE day>=? ORDER BY day,updated_at,id LIMIT 5000'
+   'SELECT id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals WHERE day>=? ORDER BY day,updated_at,id LIMIT 5000'
   ).bind(cutoff()).all();
   return response({goals:data.results||[],public:true,updatedAt:Date.now()});
  }catch(e){
@@ -37,7 +47,7 @@ export async function onRequestPost(context){
  if(action==='upsert'){
   status=body.status;
   goalText=typeof body.text==='string'?body.text.trim():'';
-  if(!allowed.has(status)||!goalText||goalText.length>180)
+  if(!allowed.has(status)||!goalText||goalText.length>180||!validTimer(body))
    return response({error:'Meta inválida (máximo de 180 caracteres).'},400);
  }
  try{
@@ -52,10 +62,16 @@ export async function onRequestPost(context){
    if((count?.n||0)>=30)return response({error:'Limite de 30 metas para este dia.'},409);
   }
   await db.prepare(
-   'INSERT INTO public_goals(id,day,text,status,updated_at) VALUES(?,?,?,?,?) '+
-   'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,updated_at=excluded.updated_at '+
+   'INSERT INTO public_goals(id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state) VALUES(?,?,?,?,?,?,?,?,?) '+
+   'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,updated_at=excluded.updated_at,'+
+   'duration_sec=excluded.duration_sec,remaining_sec=excluded.remaining_sec,'+
+   'timer_started_at=excluded.timer_started_at,timer_state=excluded.timer_state '+
    'WHERE public_goals.day=excluded.day'
-  ).bind(id,day,goalText,status,Date.now()).run();
+  ).bind(id,day,goalText,status,Date.now(),
+    action==='upsert'?(body.duration_sec??0):0,
+    action==='upsert'?(body.remaining_sec??0):0,
+    action==='upsert'?(body.timer_started_at??null):null,
+    action==='upsert'?(body.timer_state??'none'):'none').run();
   return response({ok:true,id,day,status,public:true});
  }catch(e){
   console.error('[CUIUDO public goals POST]',e);
