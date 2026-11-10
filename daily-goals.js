@@ -217,11 +217,11 @@ function cuiudoGoalChecklist(){
   '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
+  cuiudoEssentialCard(l)+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
 
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
-  cuiudoObstacleBox(l)+
   '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
   '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
    (metrics.total?Math.round(metrics.done/metrics.total*100):0)+'%"></span></div>'+
@@ -249,7 +249,7 @@ function cuiudoGoalChecklist(){
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div></article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
-  cuiudoEssentialCard(l)+
+  cuiudoObstacleBox(l)+
   '</section>';
 }
 const cuiudoPreviousHomeGoals=combatHome;

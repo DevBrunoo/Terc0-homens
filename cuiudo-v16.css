@@ -2473,3 +2473,20 @@
   width:100%;min-height:46px;justify-content:center;
  }
 }
+
+
+/* v41: Compromisso Essencial no topo e reflexão privada após a lista. */
+.today-goals>.goals-essential-footer.goals-permanent-note{
+ margin:14px 0 18px;
+}
+.today-goals>.goals-obstacle-box{
+ margin:20px 0 0;
+}
+@media(max-width:760px){
+ .today-goals>.goals-essential-footer.goals-permanent-note{
+  margin:12px 0 16px;
+ }
+ .today-goals>.goals-obstacle-box{
+  margin:16px 0 0;
+ }
+}
