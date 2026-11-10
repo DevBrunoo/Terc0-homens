@@ -235,6 +235,18 @@ function cuiudoEssentialCard(locale){
     (done?'checked ':'')+'aria-label="'+escapeHtml(t[1])+'">'+
    '<span class="goals-essential-label">'+escapeHtml(t[0])+'</span></label></aside>';
 }
+/* Cristiano Ronaldo, entrevista à TVI em agosto de 2014. */
+const cuiudoRonaldoQuote={
+ pt:['"Tenho de pensar que sou o melhor. Posso não ser, mas na minha cabeça sou o melhor."','Cristiano Ronaldo · TVI, 2014'],
+ en:['"I have to believe I am the best. Maybe I am not, but in my mind I am the best."','Cristiano Ronaldo · TVI, 2014'],
+ es:['"Tengo que pensar que soy el mejor. Puede que no lo sea, pero en mi mente soy el mejor."','Cristiano Ronaldo · TVI, 2014'],
+ la:['"Me optimum esse cogitare debeo. Fortasse non sum; sed in mente mea optimus sum."','Cristianus Ronaldo · TVI, 2014']
+};
+function cuiudoRonaldoMindset(locale){
+ const [quote,source]=cuiudoRonaldoQuote[locale]||cuiudoRonaldoQuote.pt;
+ return '<figure class="goals-mindset-quote"><blockquote>'+escapeHtml(quote)+'</blockquote>'+
+  '<figcaption>'+escapeHtml(source)+'</figcaption></figure>';
+}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
@@ -244,6 +256,7 @@ function cuiudoGoalChecklist(){
   '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
+  cuiudoRonaldoMindset(l)+
   cuiudoEssentialCard(l)+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+

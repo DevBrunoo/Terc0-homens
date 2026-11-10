@@ -21,6 +21,10 @@ runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
+assert.match(root.innerHTML,/Cristiano Ronaldo/);
+assert.match(root.innerHTML,/Posso não ser, mas na minha cabeça sou o melhor/);
+assert.ok(root.innerHTML.indexOf('goals-mindset-quote')<root.innerHTML.indexOf('goals-essential-footer'));
+
 assert.match(root.innerHTML,/data-action="cuiudo-obstacle-delete"/);
 assert.doesNotMatch(read('app.js'),/state\.notes=state\.notes\.slice\(0,100\)/);
 const rollover=runInContext(`(()=>{
