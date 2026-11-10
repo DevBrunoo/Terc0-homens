@@ -21,6 +21,26 @@ runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
+assert.match(root.innerHTML,/data-action="cuiudo-obstacle-delete"/);
+assert.doesNotMatch(read('app.js'),/state\.notes=state\.notes\.slice\(0,100\)/);
+const rollover=runInContext(`(()=>{
+ const original=currentDay;
+ try{
+  currentDay=()=> '2026-11-09';
+  state.dailyGoalDays={'2026-11-09':[{id:'1762700000000-old',text:'Meta anterior',status:'pending'}]};
+  cuiudoObstacleSave('Anotação da véspera');
+  currentDay=()=> '2026-11-10';
+  render();
+  return {
+   goal:cuiudoGoalsToday().some(goal=>goal.text==='Meta anterior'),
+   note:cuiudoObstacleRead()==='Anotação da véspera',
+   html:app.innerHTML.includes('Meta anterior')&&app.innerHTML.includes('Anotação da véspera')
+  };
+ }finally{currentDay=original;}
+})()`,vm);
+assert.deepEqual({...rollover},{goal:true,note:true,html:true});
+assert.match(read('daily-goals.js'),/Object\.entries\(state\.dailyGoalDays\|\|{}\)/);
+assert.doesNotMatch(read('daily-goals.js'),/keys\.slice\(0,Math\.max\(0,keys\.length-120\)\)/);
 assert.match(read('daily-goals.js'),/items\.unshift\(goal\)/,'Novas metas entram no início da fila');
 const ordering = runInContext("cuiudoGoalsNewestFirst([{id:'1700000000000-old',text:'Antiga'},{id:'1762800000000-new',text:'Nova'},{id:'1705000000000-mid',text:'Intermediária'}]).map(x=>x.text).join('|')",vm);
 assert.equal(ordering,'Nova|Intermediária|Antiga');
