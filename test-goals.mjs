@@ -22,6 +22,11 @@ assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
 assert.match(root.innerHTML,/Cristiano Ronaldo/);
+assert.match(root.innerHTML,/Fugir da sua cruz é a pior desgraça que você pode fazer\./);
+assert.ok(root.innerHTML.indexOf('goals-mindset-quote')<root.innerHTML.indexOf('goals-cross-reminder'));
+assert.ok(root.innerHTML.indexOf('goals-cross-reminder')<root.innerHTML.indexOf('goals-essential-footer'));
+assert.equal(runInContext('cuiudoCrossReminder.es',vm),'Huir de tu cruz es la peor desgracia que puedes cometer.');
+
 assert.match(root.innerHTML,/Posso não ser, mas na minha cabeça sou o melhor/);
 assert.ok(root.innerHTML.indexOf('goals-mindset-quote')<root.innerHTML.indexOf('goals-essential-footer'));
 

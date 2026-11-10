@@ -2584,3 +2584,32 @@
  .goals-mindset-quote blockquote{flex-basis:100%;font-size:12px}
  .goals-mindset-quote figcaption{font-size:10px}
 }
+
+/* v48 — lembrete de coragem e responsabilidade, junto às metas. */
+.today-goals>.goals-cross-reminder{
+ display:flex;
+ box-sizing:border-box;
+ gap:10px;
+ align-items:center;
+ width:100%;
+ min-width:0;
+ margin:0 0 8px;
+ padding:6px 10px;
+ color:var(--ink);
+ background:transparent;
+ border:0;
+}
+.goals-cross-reminder>span{
+ display:grid;
+ place-items:center;
+ flex:0 0 24px;
+ width:24px;
+ height:24px;
+ font-size:16px;
+ color:var(--accent);
+}
+.goals-cross-reminder>strong{
+ min-width:0;
+ font:720 clamp(12px,1.1vw,14px)/1.5 var(--font);
+ letter-spacing:-.01em;
+}

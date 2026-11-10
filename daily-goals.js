@@ -249,6 +249,16 @@ function cuiudoRonaldoMindset(locale){
  return '<figure class="goals-mindset-quote"><blockquote>'+escapeHtml(quote)+'</blockquote>'+
   '<figcaption>'+escapeHtml(source)+'</figcaption></figure>';
 }
+const cuiudoCrossReminder={
+ pt:'Fugir da sua cruz é a pior desgraça que você pode fazer.',
+ en:'Running away from your cross is the worst thing you can do.',
+ es:'Huir de tu cruz es la peor desgracia que puedes cometer.',
+ la:'Crucem tuam fugere pessima calamitas est.'
+};
+function cuiudoCrossReminderBox(locale){
+ return '<p class="goals-cross-reminder"><span aria-hidden="true">✝</span>'+
+  '<strong>'+escapeHtml(cuiudoCrossReminder[locale]||cuiudoCrossReminder.pt)+'</strong></p>';
+}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
@@ -259,6 +269,7 @@ function cuiudoGoalChecklist(){
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
   cuiudoRonaldoMindset(l)+
+  cuiudoCrossReminderBox(l)+
   cuiudoEssentialCard(l)+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
