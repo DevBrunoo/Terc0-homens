@@ -48,10 +48,19 @@ assert.doesNotMatch(read('daily-goals.js'),/keys\.slice\(0,Math\.max\(0,keys\.le
 assert.match(read('daily-goals.js'),/items\.unshift\(goal\)/,'Novas metas entram no início da fila');
 const ordering = runInContext("cuiudoGoalsNewestFirst([{id:'1700000000000-old',text:'Antiga'},{id:'1762800000000-new',text:'Nova'},{id:'1705000000000-mid',text:'Intermediária'}]).map(x=>x.text).join('|')",vm);
 assert.equal(ordering,'Nova|Intermediária|Antiga');
+const sortedByStatus=runInContext("cuiudoGoalsNewestFirst([{id:'1762800000003-done',text:'Concluída nova',status:'done'},{id:'1762800000002-missed',text:'Não concluída nova',status:'missed'},{id:'1762800000001-pending',text:'Pendente recente',status:'pending'},{id:'1700000000000-pending',text:'Pendente antiga',status:'pending'}]).map(x=>x.text).join('|')",vm);
+assert.equal(sortedByStatus,'Pendente recente|Pendente antiga|Concluída nova|Não concluída nova');
+const reopenedOrder=runInContext("cuiudoGoalsNewestFirst([{id:'1762800000003-done',text:'Reaberta',status:'pending'},{id:'1700000000000-pending',text:'Pendente antiga',status:'pending'},{id:'1762800000002-missed',text:'Não concluída',status:'missed'}]).map(x=>x.text).join('|')",vm);
+assert.equal(reopenedOrder,'Reaberta|Pendente antiga|Não concluída');
+
 assert.equal(runInContext("cuiudoGoalsNewestFirst([{id:'antiga-a'},{id:'antiga-b'}]).map(x=>x.id).join('|')",vm),'antiga-a|antiga-b',
  'Metas legadas mantêm a ordem entre si');
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'1700000000000-a',text:'Meta antiga',status:'pending'},{id:'1762800000000-b',text:'Meta recente',status:'pending'}]};render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Meta nova aparece acima da antiga');
+runInContext("state.dailyGoalDays[currentDay()][1].status='missed';render()",vm);
+assert.ok(root.innerHTML.indexOf('Meta antiga')<root.innerHTML.indexOf('Meta recente'),'Marcar não concluída move a meta para baixo');
+runInContext("state.dailyGoalDays[currentDay()][1].status='pending';render()",vm);
+assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Reabrir move a meta para o grupo pendente');
 runInContext("state.dailyGoalDays[currentDay()][0].status='done';render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Concluir uma meta não muda a ordem');
 

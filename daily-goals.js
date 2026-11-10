@@ -44,14 +44,16 @@ function cuiudoGoalsToday(){
  state.dailyGoalDays??={};
  return Object.values(state.dailyGoalDays).flatMap(items=>Array.isArray(items)?items:[]);
 }
-// A criação da meta está codificada no início do ID (Date.now()).
-// Assim, mudar o status nunca altera sua posição na fila, inclusive após o D1 sincronizar.
+// Metas pendentes vêm primeiro, da mais recente para a mais antiga.
+// Concluídas e não concluídas ficam abaixo das pendentes, sem apagar nada.
+// A ordem é calculada só por ID e status, estável após a sincronização do D1.
 function cuiudoGoalsNewestFirst(goals){
  const createdAt=goal=>{
   const match=/^(\d{13})(?:-|$)/.exec(String(goal?.id||''));
   return match?Number(match[1]):0;
  };
- return goals.slice().sort((a,b)=>createdAt(b)-createdAt(a));
+ const finished=goal=>goal?.status==='done'||goal?.status==='missed'?1:0;
+ return goals.slice().sort((a,b)=>finished(a)-finished(b)||createdAt(b)-createdAt(a));
 }
 function cuiudoGoalCount(){
  const items=cuiudoGoalsToday();
