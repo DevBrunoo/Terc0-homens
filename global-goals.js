@@ -160,20 +160,18 @@
     offset+=page.length;
    }
    const imported=readLocal(IMPORT_KEY,false);
-   if(!imported){
-    // Migrar automaticamente as metas que já existiam no navegador para o
-    // quadro público UMA VEZ. Tombstones remotas impedem ressurreição.
-    const known=new Set(rows.map(row=>row.id));
-    for(const [day,goals] of Object.entries(snapshotGoals())){
-     if(!withinWindow(day))continue;
-     for(const goal of goals){
-      if(!known.has(goal.id)&&!pending.some(p=>p.id===goal.id&&p.day===day)){
-       queueOperation({action:'upsert',day,...goal});
-      }
+   // Preservar metas locais não enviadas mesmo após a migração inicial.
+   // Tombstones impedem restaurar algo que o usuário excluiu de propósito.
+   const known=new Set(rows.map(row=>row.id));
+   for(const [day,goals] of Object.entries(snapshotGoals())){
+    if(!withinWindow(day))continue;
+    for(const goal of goals){
+     if(!known.has(goal.id)&&!pending.some(p=>p.id===goal.id&&p.day===day)){
+      queueOperation({action:'upsert',day,...goal});
      }
     }
-    writeLocal(IMPORT_KEY,true);
    }
+   if(!imported)writeLocal(IMPORT_KEY,true);
    connected=true;
    updateStatus(pending.length?'Enviando metas locais…':'Sincronizado automaticamente com o D1.',true);
    replaceGoals(rows);
