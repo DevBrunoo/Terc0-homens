@@ -2407,3 +2407,35 @@
  }
  .cuiudo-tiny-player .cuiudo-spotify-launch{min-height:34px;padding:6px 10px}
 }
+
+
+/* v39: lembrete diário privado sob o formulário de metas. */
+.goals-obstacle-box{
+ display:flex;flex-direction:column;box-sizing:border-box;gap:10px;
+ margin:5px 0 18px;padding:15px 17px;width:100%;min-width:0;
+ border:1px solid var(--line);border-radius:13px;
+ background:var(--surface-2);color:var(--ink)
+}
+.goals-obstacle-head{display:flex;align-items:flex-start;gap:11px}
+.goals-obstacle-symbol{
+ display:grid;place-items:center;flex:0 0 31px;width:31px;height:31px;
+ border:1px solid var(--line);border-radius:9px;background:var(--surface);
+ color:var(--subink);font-size:18px
+}
+.goals-obstacle-head>div{flex:1;min-width:0}
+.goals-obstacle-head strong{
+ display:block;margin-bottom:3px;font:750 clamp(13px,1.4vw,15px)/1.4 var(--font);color:var(--ink)
+}
+.goals-obstacle-head p{margin:0;color:var(--subink);font:480 12px/1.55 var(--font)}
+.goals-obstacle-input{
+ box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;min-height:75px;
+ padding:11px 13px;resize:vertical;border:1px solid var(--line);border-radius:10px;
+ color:var(--ink);background:var(--surface);font:480 14px/1.6 var(--font)
+}
+.goals-obstacle-input::placeholder{color:var(--dim)}
+.goals-obstacle-input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.goals-obstacle-status{text-align:right;color:var(--subink);font:560 10px/1.4 var(--font)}
+@media(max-width:760px){
+ .goals-obstacle-box{padding:13px 12px;gap:9px;border-radius:12px}
+ .goals-obstacle-input{font-size:16px;min-height:80px}
+}

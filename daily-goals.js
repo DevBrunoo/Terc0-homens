@@ -136,6 +136,41 @@ function cuiudoGoalBlessing(id){
  const [emoji,message,reference]=list[hash%list.length];
  return {emoji,message,reference};
 }
+
+/* Anotação diária local e privada: não incluir no estado sincronizado pelo D1. */
+const cuiudoObstacleKey='terco-obstaculos-diarios-v1';
+const cuiudoObstacleLabels={
+ pt:['O que atrapalhou seu dia?','Anote o que dificultou suas metas. Reconheça, aprenda e recomece.','Ex.: distrações, cansaço, imprevistos ou falta de organização…','Salvo só neste aparelho · privado','Erro ao salvar neste aparelho'],
+ en:['What got in your way today?','Note the obstacles, learn and begin again.','E.g. distractions, tiredness, unexpected events…','Saved only on this device · private','Unable to save on this device'],
+ es:['¿Qué dificultó tu día?','Anota los obstáculos, aprende y vuelve a empezar.','Ej.: distracciones, cansancio, imprevistos…','Guardado solo en este dispositivo · privado','No se pudo guardar'],
+ la:['Quid hodie impedivit?','Impedimenta nota, disce et rursus incipe.','Ex.: distractio, lassitudo, difficultates…','In hoc tantum instrumento servatum','Servari non potuit']
+};
+function cuiudoObstacleRead(){
+ try{
+  const all=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
+  return all&&typeof all==='object'&&!Array.isArray(all)&&typeof all[currentDay()]==='string'?all[currentDay()].slice(0,650):'';
+ }catch{return '';}
+}
+function cuiudoObstacleSave(value){
+ try{
+  const raw=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
+  const all=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};
+  const day=currentDay(),text=String(value||'').slice(0,650);
+  if(text.trim())all[day]=text;else delete all[day];
+  const days=Object.keys(all).sort();
+  for(const stale of days.slice(0,Math.max(0,days.length-120)))delete all[stale];
+  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(all));return true;
+ }catch{return false;}
+}
+function cuiudoObstacleBox(locale){
+ const t=cuiudoObstacleLabels[locale]||cuiudoObstacleLabels.pt;
+ return '<aside class="goals-obstacle-box" aria-labelledby="goals-obstacle-title">'+
+  '<div class="goals-obstacle-head"><span class="goals-obstacle-symbol" aria-hidden="true">✎</span>'+
+  '<div><strong id="goals-obstacle-title">'+escapeHtml(t[0])+'</strong><p>'+escapeHtml(t[1])+'</p></div></div>'+
+  '<label class="sr-only" for="cuiudo-obstacle-text">'+escapeHtml(t[0])+'</label>'+
+  '<textarea id="cuiudo-obstacle-text" class="goals-obstacle-input" rows="2" maxlength="650" placeholder="'+escapeHtml(t[2])+'">'+escapeHtml(cuiudoObstacleRead())+'</textarea>'+
+  '<div class="goals-obstacle-status" role="status" aria-live="polite">'+escapeHtml(t[3])+'</div></aside>';
+}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsToday();
  const metrics=cuiudoGoalCount();
@@ -155,6 +190,7 @@ function cuiudoGoalChecklist(){
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
 
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
+  cuiudoObstacleBox(l)+
   '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
   '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
    (metrics.total?Math.round(metrics.done/metrics.total*100):0)+'%"></span></div>'+
@@ -200,6 +236,15 @@ function cuiudoGoalsSave(){
  for(const stale of keys.slice(0,Math.max(0,keys.length-120)))delete days[stale];
  save();
 }
+app.addEventListener('input',event=>{
+ if(event.target?.id!=='cuiudo-obstacle-text')return;
+ const saved=cuiudoObstacleSave(event.target.value);
+ const status=event.target.closest('.goals-obstacle-box')?.querySelector('.goals-obstacle-status');
+ if(status){
+  const t=cuiudoObstacleLabels[cuiudoLocale()]||cuiudoObstacleLabels.pt;
+  status.textContent=saved?t[3]:t[4];
+ }
+});
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
  event.preventDefault();
