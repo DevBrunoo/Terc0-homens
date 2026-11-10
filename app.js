@@ -243,7 +243,7 @@ app.addEventListener('submit',evt=>{
  if(evt.target.id!=='journal-form')return;
  evt.preventDefault();const text=evt.target.querySelector('textarea')?.value.trim();
  if(!text)return;
- state.notes??=[];state.notes.unshift({time:new Date().toISOString(),text:text.slice(0,2000)});state.notes=state.notes.slice(0,100);
+ state.notes??=[];state.notes.unshift({time:new Date().toISOString(),text:text.slice(0,2000)});
  save();render();
 });
 render();
