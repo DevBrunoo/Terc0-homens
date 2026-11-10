@@ -32,9 +32,8 @@
  }
  const validDay=day=>/^\d{4}-\d{2}-\d{2}$/.test(day);
  function withinWindow(day){
-  if(!validDay(day))return false;
-  const now=Date.now(),time=Date.parse(day+'T12:00:00Z');
-  return Number.isFinite(time)&&time>=now-121*86400000&&time<=now+8*86400000;
+  // Não expirar metas antigas, inclusive na fila offline.
+  return validDay(day)&&Number.isFinite(Date.parse(day+'T12:00:00Z'));
  }
  function validGoal(goal){
   return goal && typeof goal==='object'&&
@@ -80,11 +79,7 @@
    else goals.push(copyGoal(op));
    grouped[op.day]=goals;
   }
-  // Histórico fora da janela de leitura continua disponível apenas localmente.
   const old=state.dailyGoalDays||{};
-  for(const [day,entries] of Object.entries(old)){
-   if(!withinWindow(day)&&Array.isArray(entries))grouped[day]=entries;
-  }
   // A atualização automática não deve apagar o que a pessoa está digitando
   // no campo de metas. Só redesenhar quando houver mudança real dos dados.
   if(JSON.stringify(grouped)===JSON.stringify(old))return;
@@ -116,8 +111,9 @@
   if(timer)clearTimeout(timer);
   timer=setTimeout(()=>{timer=null;flush();},300);
  }
- async function request(method,body){
-  const res=await fetch(ENDPOINT,{
+ async function request(method,body,offset=0){
+  const url=method==='GET'&&offset?ENDPOINT+'?offset='+offset:ENDPOINT;
+  const res=await fetch(url,{
    method,credentials:'same-origin',cache:'no-store',
    headers:{Accept:'application/json',...(body?{'Content-Type':'application/json'}:{})},
    ...(body?{body:JSON.stringify(body)}:{})
@@ -152,8 +148,17 @@
   if(!supported||pulling||inFlight)return;
   pulling=true;
   try{
-   const data=await request('GET');
-   const rows=Array.isArray(data.goals)?data.goals:[];
+   // Recuperar todas as páginas; não descartar metas antigas por limite de linhas.
+   const rows=[];
+   let offset=0,hasMore=true;
+   while(hasMore){
+    const data=await request('GET',null,offset);
+    const page=Array.isArray(data.goals)?data.goals:[];
+    rows.push(...page);
+    hasMore=data.hasMore===true;
+    if(hasMore&&!page.length)throw new Error('Não foi possível carregar todas as metas.');
+    offset+=page.length;
+   }
    const imported=readLocal(IMPORT_KEY,false);
    if(!imported){
     // Migrar automaticamente as metas que já existiam no navegador para o
