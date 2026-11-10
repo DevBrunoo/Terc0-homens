@@ -25,6 +25,11 @@ assert.match(read('migrations/0003_public_goals.sql'),/CREATE TABLE IF NOT EXIST
 assert.match(read('migrations/0004_goal_timers.sql'),/ADD COLUMN timer_started_at/);
 assert.match(read('functions/api/goals.js'),/timer_state/);
 assert.match(read('global-goals.js'),/remaining_sec/);
+assert.match(read('global-goals.js'),/let offset=0,hasMore=true/);
+assert.match(read('global-goals.js'),/hasMore=data\.hasMore===true/);
+assert.doesNotMatch(read('functions/api/goals.js'),/day>=\?|cutoff\(\)/);
+assert.match(read('functions/api/goals.js'),/GOALS_PAGE_SIZE=500/);
+assert.match(read('functions/api/goals.js'),/ORDER BY day,id LIMIT \? OFFSET \?/);
 assert.match(read('manifest.webmanifest'),/"short_name": "Terço"/);
 assert.match(read('index.html'),/apple-mobile-web-app-title" content="Terço"/);
 assert.match(read('migrations/0001_cuiudo_d1.sql'),/CREATE TABLE IF NOT EXISTS synced_state/);
