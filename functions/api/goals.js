@@ -16,15 +16,19 @@ const validTimer=body=>{
   (started===null||(Number.isSafeInteger(started)&&started>0&&started<=Date.now()+60000))&&
   (phase!=='running'||(duration>0&&started!==null));
 };
-const cutoff=()=>new Date(Date.now()-121*86400000).toISOString().slice(0,10);
+const GOALS_PAGE_SIZE=500;
 
 export async function onRequestGet(context){
  if(!dbReady(context))return response({error:'Banco D1 indisponível.'},503);
  try{
+  const params=new URL(context.request.url).searchParams;
+  const offsetParam=params.get('offset')||'0';
+  if(!/^\d{1,8}$/.test(offsetParam))return response({error:'Paginação inválida.'},400);
   const data=await context.env.DB.prepare(
-   'SELECT id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals WHERE day>=? ORDER BY day,updated_at,id LIMIT 5000'
-  ).bind(cutoff()).all();
-  return response({goals:data.results||[],public:true,updatedAt:Date.now()});
+   'SELECT id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
+  ).bind(GOALS_PAGE_SIZE,Number(offsetParam)).all();
+  const goals=data.results||[];
+  return response({goals,hasMore:goals.length===GOALS_PAGE_SIZE,public:true,updatedAt:Date.now()});
  }catch(e){
   console.error('[CUIUDO public goals GET]',e);
   return response({error:'Falha ao consultar as metas globais. Verifique a migração 0003.'},503);
@@ -40,9 +44,9 @@ export async function onRequestPost(context){
  const {action,day,id}=body;
  if(!['upsert','delete'].includes(action)||!validId(id)||!validDay(day))
   return response({error:'Identificador, data ou ação inválidos.'},400);
- const nowDay=new Date().toISOString().slice(0,10);
- if(day<cutoff()||day>new Date(Date.now()+7*86400000).toISOString().slice(0,10))
-  return response({error:'Só é possível alterar metas dos últimos 120 dias ou dos próximos sete dias.'},400);
+ // Metas antigas podem ser editadas e excluídas, sem vencimento automático.
+ if(day>new Date(Date.now()+7*86400000).toISOString().slice(0,10))
+  return response({error:'Não é possível criar metas muito no futuro.'},400);
  let status='deleted',goalText='';
  if(action==='upsert'){
   status=body.status;
