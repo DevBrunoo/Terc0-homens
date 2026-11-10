@@ -23,8 +23,13 @@ assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
 assert.match(root.innerHTML,/Cristiano Ronaldo/);
 assert.match(root.innerHTML,/Fugir da sua cruz é a pior desgraça que você pode fazer\./);
-assert.ok(root.innerHTML.indexOf('goals-mindset-quote')<root.innerHTML.indexOf('goals-cross-reminder'));
-assert.ok(root.innerHTML.indexOf('goals-cross-reminder')<root.innerHTML.indexOf('goals-essential-footer'));
+assert.match(root.innerHTML,/goals-alternating-quotes/);
+assert.equal((root.innerHTML.match(/class="goals-alternating-quotes"/g)||[]).length,1);
+assert.ok(root.innerHTML.indexOf('goals-cross-reminder')<root.innerHTML.indexOf('goals-mindset-quote'));
+assert.match(read('cuiudo-v16.css'),/animation:terco-quote-first 14s linear infinite/);
+assert.match(read('cuiudo-v16.css'),/animation-name:terco-quote-second/);
+assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion:reduce/);
+assert.ok(root.innerHTML.indexOf('goals-alternating-quotes')<root.innerHTML.indexOf('goals-essential-footer'));
 assert.equal(runInContext('cuiudoCrossReminder.es',vm),'Huir de tu cruz es la peor desgracia que puedes cometer.');
 
 assert.match(root.innerHTML,/Posso não ser, mas na minha cabeça sou o melhor/);

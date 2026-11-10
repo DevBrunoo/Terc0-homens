@@ -259,6 +259,13 @@ function cuiudoCrossReminderBox(locale){
  return '<p class="goals-cross-reminder"><span aria-hidden="true">✝</span>'+
   '<strong>'+escapeHtml(cuiudoCrossReminder[locale]||cuiudoCrossReminder.pt)+'</strong></p>';
 }
+/* Um único espaço, duas frases alternando sem recarregar a página. */
+function cuiudoAlternatingQuotes(locale){
+ return '<div class="goals-alternating-quotes" aria-label="Frases de motivação">'+
+  cuiudoCrossReminderBox(locale)+
+  cuiudoRonaldoMindset(locale)+
+  '</div>';
+}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
@@ -268,8 +275,7 @@ function cuiudoGoalChecklist(){
   '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
-  cuiudoRonaldoMindset(l)+
-  cuiudoCrossReminderBox(l)+
+  cuiudoAlternatingQuotes(l)+
   cuiudoEssentialCard(l)+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+

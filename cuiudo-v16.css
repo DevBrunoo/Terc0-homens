@@ -2613,3 +2613,94 @@
  font:720 clamp(12px,1.1vw,14px)/1.5 var(--font);
  letter-spacing:-.01em;
 }
+
+
+/* v49: alternar as duas frases em UM só espaço, 7 segundos cada.
+   Mesmo tamanho de bloco entre trocas; pausa de movimento no modo reduzido. */
+.today-goals>.goals-alternating-quotes{
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ width:100%;
+ min-width:0;
+ box-sizing:border-box;
+ margin:10px 0 15px;
+ border:1px solid var(--line);
+ border-left:3px solid var(--accent);
+ border-radius:11px;
+ background:var(--surface-2);
+ overflow:hidden;
+}
+.goals-alternating-quotes>.goals-cross-reminder,
+.goals-alternating-quotes>.goals-mindset-quote{
+ grid-row:1;
+ grid-column:1;
+ align-self:stretch;
+ display:flex;
+ align-items:center;
+ box-sizing:border-box;
+ width:100%;
+ min-width:0;
+ margin:0;
+ padding:12px 14px;
+ border:0;
+ border-radius:0;
+ background:transparent;
+ color:var(--ink);
+ animation:terco-quote-first 14s linear infinite;
+}
+.goals-alternating-quotes>.goals-mindset-quote{
+ flex-wrap:wrap;
+ justify-content:space-between;
+ gap:5px 18px;
+ animation-name:terco-quote-second;
+}
+.goals-alternating-quotes>.goals-cross-reminder{
+ gap:10px;
+}
+.goals-alternating-quotes>.goals-cross-reminder>span{
+ flex:0 0 24px;
+ display:grid;
+ place-items:center;
+ width:24px;
+ height:24px;
+ font-size:16px;
+ color:var(--accent);
+}
+.goals-alternating-quotes>.goals-cross-reminder>strong{
+ min-width:0;
+ font:720 clamp(12px,1.1vw,14px)/1.5 var(--font);
+}
+.goals-alternating-quotes>.goals-mindset-quote blockquote{
+ flex:1 1 320px;
+ margin:0;
+ font:650 clamp(12px,1.12vw,14px)/1.5 var(--font);
+}
+.goals-alternating-quotes>.goals-mindset-quote figcaption{
+ flex:0 0 auto;
+ color:var(--subink);
+ font:550 10px/1.35 var(--font);
+}
+@keyframes terco-quote-first{
+ 0%,46%{opacity:1;visibility:visible}
+ 50%,96%{opacity:0;visibility:hidden}
+ 100%{opacity:1;visibility:visible}
+}
+@keyframes terco-quote-second{
+ 0%,46%{opacity:0;visibility:hidden}
+ 50%,96%{opacity:1;visibility:visible}
+ 100%{opacity:0;visibility:hidden}
+}
+@media(max-width:700px){
+ .today-goals>.goals-alternating-quotes{margin:9px 0 12px}
+ .goals-alternating-quotes>.goals-cross-reminder,
+ .goals-alternating-quotes>.goals-mindset-quote{padding:10px 12px}
+ .goals-alternating-quotes>.goals-mindset-quote blockquote{flex-basis:100%;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .goals-alternating-quotes>.goals-cross-reminder{
+  animation:none;
+  opacity:1;
+  visibility:visible;
+ }
+ .goals-alternating-quotes>.goals-mindset-quote{display:none}
+}
