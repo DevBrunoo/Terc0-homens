@@ -45,6 +45,15 @@ function cuiudoGoalsToday(){
  const items=state.dailyGoalDays[day];
  return Array.isArray(items)?items:[];
 }
+// A criação da meta está codificada no início do ID (Date.now()).
+// Assim, mudar o status nunca altera sua posição na fila, inclusive após o D1 sincronizar.
+function cuiudoGoalsNewestFirst(goals){
+ const createdAt=goal=>{
+  const match=/^(\d{13})(?:-|$)/.exec(String(goal?.id||''));
+  return match?Number(match[1]):0;
+ };
+ return goals.slice().sort((a,b)=>createdAt(b)-createdAt(a));
+}
 function cuiudoGoalCount(){
  const items=cuiudoGoalsToday();
  return {total:items.length,done:items.filter(x=>x.status==='done').length,failed:items.filter(x=>x.status==='missed').length};
@@ -209,7 +218,7 @@ function cuiudoEssentialCard(locale){
    '<span class="goals-essential-label">'+escapeHtml(t[0])+'</span></label></aside>';
 }
 function cuiudoGoalChecklist(){
- const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsToday();
+ const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
  const pending=Math.max(0,metrics.total-metrics.done-metrics.failed);
  return '<section class="today-goals" aria-label="'+escapeHtml(t.heading)+'">'+
@@ -293,7 +302,7 @@ app.addEventListener('submit',event=>{
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
  const goal={id,text,status:'pending'};
- items.push(goal);
+ items.unshift(goal);
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change('upsert',day,goal);
  render();

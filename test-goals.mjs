@@ -21,6 +21,16 @@ runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
+assert.match(read('daily-goals.js'),/items\.unshift\(goal\)/,'Novas metas entram no início da fila');
+const ordering = runInContext("cuiudoGoalsNewestFirst([{id:'1700000000000-old',text:'Antiga'},{id:'1762800000000-new',text:'Nova'},{id:'1705000000000-mid',text:'Intermediária'}]).map(x=>x.text).join('|')",vm);
+assert.equal(ordering,'Nova|Intermediária|Antiga');
+assert.equal(runInContext("cuiudoGoalsNewestFirst([{id:'antiga-a'},{id:'antiga-b'}]).map(x=>x.id).join('|')",vm),'antiga-a|antiga-b',
+ 'Metas legadas mantêm a ordem entre si');
+runInContext("state.dailyGoalDays={[currentDay()]:[{id:'1700000000000-a',text:'Meta antiga',status:'pending'},{id:'1762800000000-b',text:'Meta recente',status:'pending'}]};render()",vm);
+assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Meta nova aparece acima da antiga');
+runInContext("state.dailyGoalDays[currentDay()][0].status='done';render()",vm);
+assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Concluir uma meta não muda a ordem');
+
 assert.match(root.innerHTML,/O que atrapalhou seu dia\?/);
 assert.match(root.innerHTML,/id="cuiudo-obstacle-text"/);
 assert.match(root.innerHTML,/Salvo só neste aparelho/);
