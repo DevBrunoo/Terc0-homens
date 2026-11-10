@@ -171,6 +171,43 @@ function cuiudoObstacleBox(locale){
   '<textarea id="cuiudo-obstacle-text" class="goals-obstacle-input" rows="2" maxlength="650" placeholder="'+escapeHtml(t[2])+'">'+escapeHtml(cuiudoObstacleRead())+'</textarea>'+
   '<div class="goals-obstacle-status" role="status" aria-live="polite">'+escapeHtml(t[3])+'</div></aside>';
 }
+
+/* Compromisso diário persistente e particular deste navegador. */
+const cuiudoEssentialKey='terco-compromisso-essencial-v1';
+const cuiudoEssentialLabels={
+ pt:['Concluído hoje','Marcar compromisso como concluído hoje'],
+ en:['Completed today','Mark this commitment as completed today'],
+ es:['Completado hoy','Marcar compromiso como completado hoy'],
+ la:['Hodie completum','Hodie complevi']
+};
+function cuiudoEssentialDone(day=currentDay()){
+ try{
+  const all=JSON.parse(localStorage.getItem(cuiudoEssentialKey)||'{}');
+  return !!(all&&typeof all==='object'&&!Array.isArray(all)&&all[day]===true);
+ }catch{return false;}
+}
+function cuiudoEssentialSave(done){
+ try{
+  const data=JSON.parse(localStorage.getItem(cuiudoEssentialKey)||'{}');
+  const all=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
+  const day=currentDay();
+  if(done)all[day]=true;else delete all[day];
+  const days=Object.keys(all).sort();
+  for(const stale of days.slice(0,Math.max(0,days.length-120)))delete all[stale];
+  localStorage.setItem(cuiudoEssentialKey,JSON.stringify(all));return true;
+ }catch{return false;}
+}
+function cuiudoEssentialCard(locale){
+ const done=cuiudoEssentialDone(),t=cuiudoEssentialLabels[locale]||cuiudoEssentialLabels.pt;
+ return '<aside class="goals-permanent-note goals-essential-footer'+(done?' is-completed':'')+'" aria-label="'+escapeHtml(cuiudoPinnedLabels[locale][0])+'">'+
+  '<span class="goals-note-icon" aria-hidden="true">✝</span>'+
+  '<div><span class="goals-note-eyebrow">✦ '+escapeHtml(cuiudoPinnedLabels[locale][0])+'</span>'+
+  '<strong>'+escapeHtml(cuiudoPermanentNotes[locale])+'</strong>'+
+  '<small>'+escapeHtml(cuiudoPinnedLabels[locale][1])+'</small></div>'+
+  '<label class="goals-essential-check"><input type="checkbox" id="cuiudo-essential-done" '+
+    (done?'checked ':'')+'aria-label="'+escapeHtml(t[1])+'">'+
+   '<span class="goals-essential-label">'+escapeHtml(t[0])+'</span></label></aside>';
+}
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsToday();
  const metrics=cuiudoGoalCount();
@@ -180,12 +217,6 @@ function cuiudoGoalChecklist(){
   '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
   '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
-  '<aside class="goals-permanent-note" aria-label="'+escapeHtml(cuiudoPinnedLabels[l][0])+'">'+
-   '<span class="goals-note-icon" aria-hidden="true">✝</span>'+
-   '<div><span class="goals-note-eyebrow">✦ '+escapeHtml(cuiudoPinnedLabels[l][0])+'</span>'+
-   '<strong>'+escapeHtml(cuiudoPermanentNotes[l])+'</strong>'+
-   '<small>'+escapeHtml(cuiudoPinnedLabels[l][1])+'</small></div>'+
-   '<span class="goals-note-pin" aria-hidden="true">SEMPRE</span></aside>'+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
 
@@ -218,6 +249,7 @@ function cuiudoGoalChecklist(){
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div></article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
+  cuiudoEssentialCard(l)+
   '</section>';
 }
 const cuiudoPreviousHomeGoals=combatHome;
@@ -244,6 +276,12 @@ app.addEventListener('input',event=>{
   const t=cuiudoObstacleLabels[cuiudoLocale()]||cuiudoObstacleLabels.pt;
   status.textContent=saved?t[3]:t[4];
  }
+});
+app.addEventListener('change',event=>{
+ if(event.target?.id!=='cuiudo-essential-done')return;
+ const desired=Boolean(event.target.checked);
+ if(cuiudoEssentialSave(desired))render();
+ else event.target.checked=!desired;
 });
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
