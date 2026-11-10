@@ -55,16 +55,19 @@ assert.doesNotMatch(read('daily-goals.js'),/cuiudoTimer|setInterval|input\[name=
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
 assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-timer-clock|goal-timer|cuiudo-timer-/);
-assert.match(root.innerHTML,/Seu presente/);
+assert.match(root.innerHTML,/Missão cumprida/);
 assert.match(root.innerHTML,/Você é muito macio/);
 assert.match(root.innerHTML,/goal-gift/);
 assert.match(root.innerHTML,/goal-victory/);
 assert.match(root.innerHTML,/Inspirado em/);
-assert.match(root.innerHTML,/goal-victory-emoji/);
+assert.doesNotMatch(root.innerHTML,/goal-victory-emoji|goal-victory-spark|goal-gift-icon/);
+assert.doesNotMatch(read('daily-goals.js'),/\p{Extended_Pictographic}/u);
 assert.equal((root.innerHTML.match(/class="goal-gift goal-victory"/g)||[]).length,1,
  'A celebração bíblica deve existir apenas na tarefa concluída');
 const completion=runInContext('cuiudoGoalBlessing("success")',vm);
-assert.ok(completion.emoji&&completion.message&&completion.reference);
+assert.ok(completion.message&&completion.reference);
+assert.equal(Object.hasOwn(completion,'emoji'),false);
+assert.match(completion.message,/\S/);
 assert.equal(completion.message,runInContext('cuiudoGoalBlessing("success").message',vm),
  'A frase deve ser estável entre atualizações de dispositivos');
 const pendingCard=root.innerHTML.split('class="today-goal goal-pending"')[1].split('</article>')[0];
@@ -108,4 +111,4 @@ assert.match(read('cuiudo-v16.css'),/\.main > \.today-goals/);
 assert.doesNotMatch(read('global-goals.js'),/terco-obstaculos-diarios-v1/);
 assert.match(read('cuiudo-v16.css'),/goals-obstacle-box/);
 assert.match(read('cuiudo-v16.css'),/goals-essential-footer/);
-console.log('✓ Metas v41: compromisso no topo, obstáculos abaixo das tarefas, salvamentos preservados');
+console.log('✓ Metas v42: conquista firme e sem emojis; compromisso no topo e obstáculos embaixo');

@@ -104,7 +104,7 @@ assert.match(html,/feed\.css/);
 assert.match(html,/apple\.css/);
 assert.match(read('apple.css'),/\.cuiudo-hero/);
 assert.match(read('apple.css'),/\.poster-grid/);
-assert.match(read('sw.js'),/terco-compromisso-topo-obstaculos-fim-v41/);
+assert.match(read('sw.js'),/terco-conquistas-sem-emoji-v42/);
 assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);

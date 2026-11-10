@@ -5,7 +5,7 @@ const cuiudoGoalsText={
  pt:{heading:'Metas de hoje',sub:'Escreva o que precisa fazer. Depois assuma o resultado.',
   label:'Nova meta',placeholder:'Ex.: estudar 40 minutos, rezar o terço, resolver uma pendência',
   add:'Adicionar',done:'Concluí',missed:'Não concluí',reopen:'Reabrir',remove:'Excluir',
-  complete:'Concluídas',remaining:'Pendente',gift:'Seu presente',empty:'Sua primeira meta começa aqui.',
+  complete:'Concluídas',remaining:'Pendente',gift:'Missão cumprida',empty:'Sua primeira meta começa aqui.',
   comeback:'Você é muito macio! Reorganize-se, levante e faça acontecer.',
   confession:'Preguiça é pecado, omissão é pecado, não fazer o que cumpre é coisa de macio frango, você vai ter que se confessar.',
   confessionButton:'Examinar e corrigir',
@@ -14,7 +14,7 @@ const cuiudoGoalsText={
  en:{heading:"Today's goals",sub:'Write down what needs doing. Then own the result.',
   label:'New goal',placeholder:'E.g. study for 40 minutes, pray the Rosary',add:'Add',
   done:'Completed',missed:'Not completed',reopen:'Reopen',remove:'Delete',
-  complete:'Completed',remaining:'Pending',gift:'Your gift',empty:'Your first goal starts here.',
+  complete:'Completed',remaining:'Pending',gift:'Mission accomplished',empty:'Your first goal starts here.',
   comeback:'You have gone soft! Stand up, regroup and get it done.',
   confession:'Deliberate neglect of real duties may be sinful. Examine your conscience and bring culpable failures to Confession; not every missed personal goal is a mortal sin.',
   confessionButton:'Examine and act',
@@ -23,7 +23,7 @@ const cuiudoGoalsText={
  es:{heading:'Metas de hoy',sub:'Escribe lo que debes hacer y asume el resultado.',
   label:'Nueva meta',placeholder:'Ej.: estudiar 40 minutos, rezar el Rosario',add:'Añadir',
   done:'Cumplí',missed:'No cumplí',reopen:'Reabrir',remove:'Eliminar',
-  complete:'Cumplidas',remaining:'Pendientes',gift:'Tu regalo',empty:'Tu primera meta empieza aquí.',
+  complete:'Cumplidas',remaining:'Pendientes',gift:'Misión cumplida',empty:'Tu primera meta empieza aquí.',
   comeback:'¡Estás demasiado blando! Levántate, reorganízate y hazlo.',
   confession:'La pereza y la omisión deliberada de deberes reales pueden ser pecado. Examina tu conciencia y lleva a la Confesión las faltas culpables; no toda meta incumplida es pecado mortal.',
   confessionButton:'Examinar y actuar',
@@ -61,60 +61,60 @@ function cuiudoGoalGift(id){
  * não transcrições literais de uma tradução bíblica. */
 const cuiudoBlessings={
  pt:[
- ['🏆','Vai para cima! Hoje a fé virou atitude.','Tg 2,17'],
- ['🌿','Fiel no pouco. É assim que se constrói a santidade.','Lc 16,10'],
- ['⚔️','Coragem! Deus te deu forças e você fez sua parte.','Js 1,9'],
- ['🔥','Sem desculpas: você combateu o bom combate.','2Tm 4,7'],
- ['✨','Trabalho feito com amor também é oração.','Cl 3,23'],
- ['🦁','Você perseverou. Não pare de crescer!','Rm 5,3–4'],
- ['🌟','A preguiça não venceu esta batalha. Avante!','Pr 6,6'],
- ['💪','Mais uma obra boa. Continue firme, sem desanimar.','Gl 6,9'],
- ['🕊️','O bem feito em silêncio também tem valor diante de Deus.','Mt 6,4'],
- ['🎯','Menos promessa, mais atitude. Você entregou!','1Cor 9,24'],
- ['🚀','Pé na tábua e fé no coração. Missão cumprida!','Hb 12,1'],
- ['🙏','Agradeça a Deus por esta pequena grande vitória.','Sl 118(117),24']
+ ['Fé que não vira atitude é discurso. Hoje você fez a sua parte. Amanhã, de novo.','Tg 2,17'],
+ ['Não despreze o dever pequeno. A disciplina se constrói quando ninguém está olhando.','Lc 16,10'],
+ ['Você enfrentou a tarefa e venceu a resistência. Coragem se prova com ação.','Js 1,9'],
+ ['Combate vencido. Não afrouxe: continue firme na luta pelo que é certo.','2Tm 4,7'],
+ ['Você entregou trabalho, não desculpas. Faça tudo com dedicação e propósito.','Cl 3,23'],
+ ['Você não fugiu do esforço. Perseverou. É assim que se forja o caráter.','Rm 5,3–4'],
+ ['Hoje a preguiça não deu as ordens. Você assumiu o controle do seu dever.','Pr 6,6'],
+ ['Tarefa cumprida. Não se acomode na vitória: amanhã há mais bem a fazer.','Gl 6,9'],
+ ['Sem plateia e sem aplausos: você fez o que precisava. Deus vê o que é sincero.','Mt 6,4'],
+ ['Você parou de adiar e entrou em ação. Disciplina vence conversa fiada.','1Cor 9,24'],
+ ['Passo dado. Continue a corrida com firmeza, sem abandonar o que começou.','Hb 12,1'],
+ ['Missão cumprida. Agradeça a Deus, endireite a postura e siga em frente.','Sl 118(117),24']
  ],
  en:[
- ['🏆','Go forward! Today faith became action.','Jas 2:17'],
- ['🌿','Faithful in small things. Holiness grows here.','Lk 16:10'],
- ['⚔️','Be courageous. You did your part today.','Jos 1:9'],
- ['🔥','No excuses: you fought the good fight.','2 Tim 4:7'],
- ['✨','Work done with love can become prayer.','Col 3:23'],
- ['🦁','You persevered. Keep growing.','Rom 5:3–4'],
- ['🌟','Laziness did not win this battle.','Prov 6:6'],
- ['💪','One more good work. Do not give up.','Gal 6:9'],
- ['🕊️','Quiet goodness is precious before God.','Mt 6:4'],
- ['🎯','Fewer promises, more action. Done!','1 Cor 9:24'],
- ['🚀','Faith in your heart. Mission accomplished!','Heb 12:1'],
- ['🙏','Thank God for this meaningful victory.','Ps 118:24']
+ ['Faith without action is just talk. You acted today. Do it again tomorrow.','Jas 2:17'],
+ ['Do not dismiss a small duty. Discipline grows when nobody is watching.','Lk 16:10'],
+ ['You faced the task instead of running from it. Courage is action.','Jos 1:9'],
+ ['Battle won. Do not back down: keep fighting for what is right.','2 Tim 4:7'],
+ ['You delivered work, not excuses. Do everything with purpose.','Col 3:23'],
+ ['You did not run from effort. You persevered. That builds character.','Rom 5:3–4'],
+ ['Laziness did not give the orders today. You fulfilled your duty.','Prov 6:6'],
+ ['Task completed. Do not settle: more good work lies ahead.','Gal 6:9'],
+ ['No audience, no applause: you did what needed doing. God sees sincerity.','Mt 6:4'],
+ ['You stopped delaying and took action. Discipline beats empty talk.','1 Cor 9:24'],
+ ['One step taken. Keep running with resolve; do not abandon the path.','Heb 12:1'],
+ ['Mission accomplished. Thank God, stand tall and move forward.','Ps 118:24']
  ],
  es:[
- ['🏆','¡Adelante! Hoy la fe se convirtió en acción.','St 2,17'],
- ['🌿','Fiel en lo pequeño. Así crece la santidad.','Lc 16,10'],
- ['⚔️','¡Valor! Hoy cumpliste con tu deber.','Jos 1,9'],
- ['🔥','Sin excusas: libraste el buen combate.','2 Tim 4,7'],
- ['✨','El trabajo hecho con amor también es oración.','Col 3,23'],
- ['🦁','Perseveraste. ¡Sigue creciendo!','Rom 5,3–4'],
- ['🌟','La pereza no ganó esta batalla.','Prov 6,6'],
- ['💪','Otra buena obra. ¡No te rindas!','Gal 6,9'],
- ['🕊️','El bien silencioso es valioso ante Dios.','Mt 6,4'],
- ['🎯','Menos promesas, más acción. ¡Lo lograste!','1 Cor 9,24'],
- ['🚀','Fe en el corazón. ¡Misión cumplida!','Heb 12,1'],
- ['🙏','Da gracias a Dios por esta victoria.','Sal 118,24']
+ ['La fe sin acción es solo discurso. Hoy actuaste. Mañana, otra vez.','St 2,17'],
+ ['No desprecies un deber pequeño. La disciplina crece sin espectadores.','Lc 16,10'],
+ ['Enfrentaste la tarea. El valor se demuestra con hechos.','Jos 1,9'],
+ ['Combate ganado. No retrocedas: sigue luchando por el bien.','2 Tim 4,7'],
+ ['Entregaste trabajo, no excusas. Haz todo con propósito.','Col 3,23'],
+ ['No huiste del esfuerzo. Perseveraste. Así se forja el carácter.','Rom 5,3–4'],
+ ['Hoy la pereza no mandó. Cumpliste tu deber.','Prov 6,6'],
+ ['Tarea cumplida. No te acomodes: queda mucho bien por hacer.','Gal 6,9'],
+ ['Sin público ni aplausos: cumpliste. Dios ve lo que es sincero.','Mt 6,4'],
+ ['Dejaste de posponer y actuaste. La disciplina vence las palabras vacías.','1 Cor 9,24'],
+ ['Un paso más. Sigue con firmeza; no abandones el camino.','Heb 12,1'],
+ ['Misión cumplida. Da gracias a Dios y sigue adelante.','Sal 118,24']
  ],
  la:[
- ['🏆','Age fortiter! Fides hodie in opere fulsit.','Iac 2,17'],
- ['🌿','In parvis fidelis. Sic crescit sanctitas.','Lc 16,10'],
- ['⚔️','Esto fortis. Officium tuum perfecisti.','Ios 1,9'],
- ['🔥','Sine excusationibus: bonum certamen certasti.','2 Tim 4,7'],
- ['✨','Opus cum caritate factum oratio fieri potest.','Col 3,23'],
- ['🦁','Perseverasti. Perge in bonum!','Rom 5,3–4'],
- ['🌟','Pigritia hodie non vicit.','Prov 6,6'],
- ['💪','Aliud opus bonum. Noli deficere.','Gal 6,9'],
- ['🕊️','Bonum occultum coram Deo pretiosum est.','Mt 6,4'],
- ['🎯','Minus promittendum, plus agendum.','1 Cor 9,24'],
- ['🚀','Fides in corde. Missio completa!','Heb 12,1'],
- ['🙏','Deo gratias pro hac victoria age.','Ps 117,24']
+ ['Fides sine operibus inanis est. Hodie egisti; cras iterum age.','Iac 2,17'],
+ ['Officium parvum ne spernas. Disciplina in occulto crescit.','Lc 16,10'],
+ ['Opus aggressus es, non fugisti. Fortitudo operibus probatur.','Ios 1,9'],
+ ['Certamen confectum. Persta in pugna pro bono.','2 Tim 4,7'],
+ ['Opus, non excusationes, obtulisti. Omnia diligenter age.','Col 3,23'],
+ ['Laborem non fugisti. Perseverantia animum confirmat.','Rom 5,3–4'],
+ ['Pigritia hodie non imperavit. Officium perfecisti.','Prov 6,6'],
+ ['Opus completum. Noli consistere: alia bona facienda sunt.','Gal 6,9'],
+ ['Sine plausu opus perfecisti. Deus sinceritatem videt.','Mt 6,4'],
+ ['Moras vicisti et egisti. Disciplina verba vana superat.','1 Cor 9,24'],
+ ['Unum iter confecisti. Constanter ad metam procede.','Heb 12,1'],
+ ['Missio completa. Deo gratias age et fortiter procede.','Ps 117,24']
  ]
 };
 const cuiudoPermanentNotes={
@@ -133,8 +133,8 @@ function cuiudoGoalBlessing(id){
  let hash=0;
  for(const c of String(id))hash=(Math.imul(hash,33)+c.charCodeAt(0))>>>0;
  const list=cuiudoBlessings[cuiudoLocale()]||cuiudoBlessings.pt;
- const [emoji,message,reference]=list[hash%list.length];
- return {emoji,message,reference};
+ const [message,reference]=list[hash%list.length];
+ return {message,reference};
 }
 
 /* Anotação diária local e privada: não incluir no estado sincronizado pelo D1. */
@@ -235,11 +235,10 @@ function cuiudoGoalChecklist(){
       const blessing=cuiudoGoalBlessing(goal.id);
       const inspiration={pt:'Inspirado em',en:'Inspired by',es:'Inspirado en',la:'Ex'}[l];
       return '<div class="goal-gift goal-victory" role="status">'+
-       '<span class="goal-gift-icon goal-victory-emoji" aria-hidden="true">'+blessing.emoji+'</span>'+
-       '<div class="goal-victory-copy"><span class="goal-victory-kicker">✦ '+escapeHtml(t.gift)+' · '+escapeHtml(cuiudoGoalGift(goal.id))+'</span>'+
+       '<div class="goal-victory-copy"><span class="goal-victory-kicker">'+escapeHtml(t.gift)+' · '+escapeHtml(cuiudoGoalGift(goal.id))+'</span>'+
        '<b>'+escapeHtml(blessing.message)+'</b>'+
        '<small>'+escapeHtml(inspiration)+' '+escapeHtml(blessing.reference)+'</small></div>'+
-       '<span class="goal-victory-spark" aria-hidden="true">✦</span></div>';
+       '</div>';
     })():
    failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p><p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+

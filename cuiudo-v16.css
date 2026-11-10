@@ -2490,3 +2490,29 @@
   margin:16px 0 0;
  }
 }
+
+
+/* v42: conquistas com tipografia firme, sem emoji, imagem ou figura decorativa. */
+.goal-victory.goal-gift{
+ display:block;
+ border-left:3px solid #27865c;
+ padding:14px 16px;
+ animation:none;
+}
+.goal-victory .goal-victory-copy{
+ display:flex;
+ width:100%;
+ gap:7px;
+}
+.goal-victory .goal-victory-kicker{
+ font:800 10px/1.4 var(--font);
+ letter-spacing:.075em;
+ text-transform:uppercase;
+}
+.goal-victory .goal-victory-copy>b{
+ font:760 clamp(14px,1.38vw,17px)/1.5 var(--font);
+ letter-spacing:-.01em;
+}
+.goal-victory .goal-victory-copy>small{
+ font:570 11px/1.4 var(--font);
+}
