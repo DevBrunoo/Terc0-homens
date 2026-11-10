@@ -39,11 +39,10 @@ const cuiudoGoalsText={
   undone:'Non completa',earned:['Medalia Fortitudinis','Signum Disciplinae','Stella Constantiae','Praemium Promissi Servati'],
   rewardText:'Promissum servasti. Donum tuum honor virtualis est.'}
 };
+/* Metas continuam visíveis depois da meia-noite. */
 function cuiudoGoalsToday(){
  state.dailyGoalDays??={};
- const day=currentDay();
- const items=state.dailyGoalDays[day];
- return Array.isArray(items)?items:[];
+ return Object.values(state.dailyGoalDays).flatMap(items=>Array.isArray(items)?items:[]);
 }
 // A criação da meta está codificada no início do ID (Date.now()).
 // Assim, mudar o status nunca altera sua posição na fila, inclusive após o D1 sincronizar.
@@ -154,21 +153,38 @@ const cuiudoObstacleLabels={
  es:['¿Qué dificultó tu día?','Anota los obstáculos, aprende y vuelve a empezar.','Ej.: distracciones, cansancio, imprevistos…','Guardado solo en este dispositivo · privado','No se pudo guardar'],
  la:['Quid hodie impedivit?','Impedimenta nota, disce et rursus incipe.','Ex.: distractio, lassitudo, difficultates…','In hoc tantum instrumento servatum','Servari non potuit']
 };
-function cuiudoObstacleRead(){
+function cuiudoObstacleEntries(){
  try{
-  const all=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
-  return all&&typeof all==='object'&&!Array.isArray(all)&&typeof all[currentDay()]==='string'?all[currentDay()].slice(0,650):'';
- }catch{return '';}
+  const value=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
+  return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
+ }catch{return {};}
+}
+function cuiudoObstacleLastDay(){
+ const entries=cuiudoObstacleEntries();
+ return Object.keys(entries).filter(day=>typeof entries[day]==='string'&&entries[day].trim()).sort().at(-1)||null;
+}
+function cuiudoObstacleRead(){
+ const day=cuiudoObstacleLastDay();
+ return day?cuiudoObstacleEntries()[day].slice(0,650):'';
 }
 function cuiudoObstacleSave(value){
  try{
-  const raw=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
-  const all=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};
-  const day=currentDay(),text=String(value||'').slice(0,650);
-  if(text.trim())all[day]=text;else delete all[day];
-  const days=Object.keys(all).sort();
-  for(const stale of days.slice(0,Math.max(0,days.length-120)))delete all[stale];
-  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(all));return true;
+  const entries=cuiudoObstacleEntries();
+  // Editar a anotação existente, sem zerá-la depois da meia-noite.
+  const day=cuiudoObstacleLastDay()||currentDay();
+  const text=String(value||'').slice(0,650);
+  if(text.trim())entries[day]=text;
+  else delete entries[day]; // Ação explícita de apagar o texto.
+  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(entries));return true;
+ }catch{return false;}
+}
+function cuiudoObstacleDelete(){
+ try{
+  const day=cuiudoObstacleLastDay();
+  if(!day)return true;
+  const entries=cuiudoObstacleEntries();
+  delete entries[day];
+  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(entries));return true;
  }catch{return false;}
 }
 function cuiudoObstacleBox(locale){
@@ -178,7 +194,10 @@ function cuiudoObstacleBox(locale){
   '<div><strong id="goals-obstacle-title">'+escapeHtml(t[0])+'</strong><p>'+escapeHtml(t[1])+'</p></div></div>'+
   '<label class="sr-only" for="cuiudo-obstacle-text">'+escapeHtml(t[0])+'</label>'+
   '<textarea id="cuiudo-obstacle-text" class="goals-obstacle-input" rows="2" maxlength="650" placeholder="'+escapeHtml(t[2])+'">'+escapeHtml(cuiudoObstacleRead())+'</textarea>'+
-  '<div class="goals-obstacle-status" role="status" aria-live="polite">'+escapeHtml(t[3])+'</div></aside>';
+  '<div class="goals-obstacle-bottom"><span class="goals-obstacle-status" role="status" aria-live="polite">'+escapeHtml(t[3])+'</span>'+
+  '<button type="button" class="goals-obstacle-delete" data-action="cuiudo-obstacle-delete">'+
+  escapeHtml({pt:'Excluir anotação',en:'Delete note',es:'Eliminar anotación',la:'Dele annotationem'}[locale]||'Excluir anotação')+
+  '</button></div></aside>';
 }
 
 /* Compromisso diário persistente e particular deste navegador. */
@@ -201,8 +220,7 @@ function cuiudoEssentialSave(done){
   const all=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
   const day=currentDay();
   if(done)all[day]=true;else delete all[day];
-  const days=Object.keys(all).sort();
-  for(const stale of days.slice(0,Math.max(0,days.length-120)))delete all[stale];
+  // Histórico do compromisso não é apagado automaticamente.
   localStorage.setItem(cuiudoEssentialKey,JSON.stringify(all));return true;
  }catch{return false;}
 }
@@ -271,9 +289,7 @@ combatHome=function(){
 const cuiudoPreviousChallengesGoals=challenges;
 challenges=function(){return cuiudoGoalChecklist()+cuiudoPreviousChallengesGoals();};
 function cuiudoGoalsSave(){
- const days=state.dailyGoalDays||{};
- const keys=Object.keys(days).sort();
- for(const stale of keys.slice(0,Math.max(0,keys.length-120)))delete days[stale];
+ // Somente a pessoa pode excluir metas.
  save();
 }
 app.addEventListener('input',event=>{
@@ -308,12 +324,20 @@ app.addEventListener('submit',event=>{
  render();
 });
 app.addEventListener('click',event=>{
- const target=event.target.closest?.('[data-action^="cuiudo-goal-"]');
+ const target=event.target.closest?.('[data-action^="cuiudo-goal-"],[data-action="cuiudo-obstacle-delete"]');
  if(!target)return;
  const action=target.dataset.action,id=target.dataset.id;
- const items=cuiudoGoalsToday(),index=items.findIndex(x=>x.id===id);
- if(index<0)return;
- const goal=items[index],day=currentDay();
+ if(action==='cuiudo-obstacle-delete'){
+  if(!cuiudoObstacleRead())return;
+  if(typeof confirm==='function'&&!confirm('Excluir esta anotação?'))return;
+  if(cuiudoObstacleDelete())render();
+  return;
+ }
+ // Localizar a data original para editar/excluir uma meta antiga no D1.
+ const found=Object.entries(state.dailyGoalDays||{}).find(([,arr])=>Array.isArray(arr)&&arr.some(item=>item.id===id));
+ if(!found)return;
+ const [day,items]=found,index=items.findIndex(x=>x.id===id);
+ const goal=items[index];
  if(action==='cuiudo-goal-done')items[index].status='done';
  if(action==='cuiudo-goal-missed')items[index].status='missed';
  if(action==='cuiudo-goal-reopen')items[index].status='pending';
