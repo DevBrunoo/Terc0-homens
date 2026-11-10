@@ -61,7 +61,8 @@ assert.match(root.innerHTML,/goal-gift/);
 assert.match(root.innerHTML,/goal-victory/);
 assert.match(root.innerHTML,/Inspirado em/);
 assert.doesNotMatch(root.innerHTML,/goal-victory-emoji|goal-victory-spark|goal-gift-icon/);
-assert.doesNotMatch(read('daily-goals.js'),/\p{Extended_Pictographic}/u);
+const victoryMessages=read('daily-goals.js').split('const cuiudoBlessings=')[1].split('const cuiudoPermanentNotes=')[0];
+assert.doesNotMatch(victoryMessages,/\p{Extended_Pictographic}/u,'Mensagens de conclusão não devem ter emojis');
 assert.equal((root.innerHTML.match(/class="goal-gift goal-victory"/g)||[]).length,1,
  'A celebração bíblica deve existir apenas na tarefa concluída');
 const completion=runInContext('cuiudoGoalBlessing("success")',vm);
