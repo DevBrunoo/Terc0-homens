@@ -2870,3 +2870,39 @@
  .cuiudo-countdown-readout{flex-basis:100%}
  .cuiudo-countdown-options{width:100%}
 }
+
+/* v55 — temporizador ainda menor, sem modificar a lógica. */
+.today-goal .cuiudo-countdown{
+ padding:5px 8px;
+ gap:4px;
+ border-radius:8px;
+}
+.cuiudo-countdown-readout{gap:5px}
+.cuiudo-countdown-readout span,
+.cuiudo-countdown-readout small{
+ font-size:9px;
+ line-height:1.2;
+}
+.cuiudo-countdown-readout strong{
+ font-size:17px;
+ line-height:1;
+}
+.cuiudo-countdown-options{gap:4px}
+.cuiudo-countdown-options label{gap:4px;font-size:9px}
+.cuiudo-countdown-options input{
+ width:46px;
+ min-height:28px;
+ height:28px;
+ padding:3px 4px;
+ font-size:11px;
+ border-radius:6px;
+}
+.cuiudo-countdown-options button{
+ min-height:28px;
+ padding:4px 7px;
+ font-size:9px;
+ border-radius:6px;
+}
+@media(max-width:760px){
+ .today-goal .cuiudo-countdown{padding:6px 7px;gap:5px}
+}
