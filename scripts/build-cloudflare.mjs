@@ -10,7 +10,7 @@ const files=[
  'data.js','brutal.js','devocionario.js','feed-data.js','app.js','feed-ui.js',
  'ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-artwork.js',
  'rosary-context.js','rosary-plus.js','spotify-dock.js','rosary-beads.js','saints-i18n.js',
- 'daily-goals.js','conscience-duty.js','global-goals.js',
+ 'daily-goals.js','conscience-duty.js','global-goals.js','holiness-path.js',
  'sw.js','manifest.webmanifest','.nojekyll'
 ];
 for(const f of files){

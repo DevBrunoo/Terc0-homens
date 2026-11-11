@@ -2745,3 +2745,28 @@
 @media(prefers-reduced-motion:reduce){
  .cuiudo-luck-menu summary::after{transition:none}
 }
+
+/* Caminhos da Santidade — página própria dentro de Explorar. */
+.holiness-page{max-width:1140px;margin:0 auto 35px;color:var(--ink)}
+.holiness-header{padding:clamp(20px,3.5vw,44px) 0 26px}
+.holiness-header h1{margin:13px 0;font:790 clamp(34px,5vw,57px)/1.08 var(--font);letter-spacing:-.055em}
+.holiness-header p{max-width:690px;margin:0;color:var(--subink);font:480 15px/1.75 var(--font)}
+.holiness-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.holiness-side{display:flex;flex-direction:column;min-width:0;padding:24px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.holiness-side-title{display:flex;align-items:center;gap:12px;margin-bottom:19px}
+.holiness-side-title>span{display:grid;place-items:center;flex:0 0 39px;width:39px;height:39px;border-radius:11px;background:var(--surface-2);font-size:20px}
+.holiness-good .holiness-side-title>span{color:#27865c}
+.holiness-bad .holiness-side-title>span{color:#b06347}
+.holiness-side h2{margin:0;font:760 clamp(17px,2vw,23px)/1.25 var(--font);letter-spacing:-.03em}
+.holiness-items{display:grid;align-content:start;gap:7px;list-style:none;flex:1;margin:0 0 18px;padding:0}
+.holiness-items li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font:550 13px/1.5 var(--font);overflow-wrap:anywhere}
+.holiness-items li span{min-width:0;flex:1}
+.holiness-items li button{flex:0 0 28px;min-height:28px;border:0;background:transparent;color:var(--subink);font-size:20px;cursor:pointer}
+.holiness-items li.holiness-empty{color:var(--subink);font-style:italic}
+.holiness-form{display:flex;gap:7px}
+.holiness-form input{flex:1;min-width:0;min-height:44px;box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:500 13px var(--font)}
+.holiness-form button{flex:0 0 auto;min-height:44px;padding:9px 12px;border:0;border-radius:9px;background:var(--ink);color:var(--bg);font:730 12px var(--font);cursor:pointer}
+.holiness-bible,.holiness-privacy{color:var(--subink);font:500 12px/1.6 var(--font)}
+.holiness-bible{margin:19px 0 5px}
+.holiness-privacy{margin:0}
+@media(max-width:760px){.holiness-grid{grid-template-columns:1fr;gap:12px}.holiness-side{padding:16px}.holiness-form input{font-size:16px}}
