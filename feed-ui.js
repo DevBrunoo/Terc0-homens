@@ -79,8 +79,8 @@ function combatHome(){
  </section>
  <section class="cuiudo-grace-reflection" aria-labelledby="cuiudo-grace-title">
   <span class="cuiudo-grace-eyebrow">✝ COMUNHÃO • GRAÇA • SANTIDADE</span>
-  <h2 id="cuiudo-grace-title">Cristo foi flagelado, carregou a Cruz e deu a vida por você. Levante-se e vá para cima.</h2>
-  <p>Ansiedade, mente acelerada, medo e tristeza não são sinais de falta de Deus. Mas não entregue sua vida ao medo: reze, procure apoio quando precisar e enfrente um dever de cada vez. <strong>Jesus não fugiu da Cruz. Com a graça de Deus, encare o problema, levante-se e faça a sua parte!</strong></p>
+  <h2 id="cuiudo-grace-title">Ansiedade, mente acelerada, medo e tristeza é falta de Deus.</h2>
+  <p>Ele morreu na cruz por você e sofreu chicotadas e tudo de mal. <strong>Sfd o problema, vai para cima!</strong></p>
  </section>
  <section class="cuiudo-feed-toolbar"><div><h2>CONFRONTO DO DIA.</h2><p>Arte, fé, trabalho e coragem. Sem passar a mão na cabeça.</p></div><label class="feed-searchbar"><span aria-hidden="true">⌕</span><input type="search" id="feed-search" placeholder="Buscar fé, São Miguel, trabalho..." autocomplete="off" value="${escapeHtml(state.feedTerm)}" aria-label="Pesquisar reflexões"></label></section>
  <div class="feed-filters" role="group" aria-label="Escolher tema do feed">${feedFilters.map(([id,label])=>`<button type="button" class="feed-filter" data-action="combat-filter" data-filter="${id}" aria-pressed="${state.feedFilter===id}">${escapeHtml(label)}</button>`).join('')}</div>
