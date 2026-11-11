@@ -80,7 +80,18 @@ function navButton(item,cls='nav-button'){
 function renderShell(content){
  const themes=[{id:'light',label:'Claro',ico:'sun'},{id:'dark',label:'Escuro',ico:'moon'},{id:'system',label:'Auto',ico:'rotate'}];
  const themeControl=`<div class="appearance-control" role="group" aria-label="Escolher tema">${themes.map(t=>`<button type="button" class="theme-option ${state.theme===t.id?'selected':''}" data-action="set-theme" data-theme="${t.id}" title="Tema ${t.label}" aria-label="Tema ${t.label}" aria-pressed="${state.theme===t.id}">${icon(t.ico)}<span>${t.label}</span></button>`).join('')}</div>`;
- const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.map(x=>navButton(x,'more-nav-button')).join('')}</div>`:'';
+ const more=state.mobileMore?`<button type="button" class="more-backdrop" data-action="close-more" aria-label="Fechar menu"></button><div class="more-panel" role="dialog" aria-modal="true" aria-label="Mais áreas"><div class="more-panel-head"><strong>Explorar</strong><button class="more-close" data-action="close-more" aria-label="Fechar menu">✕</button></div>${navItems.map(x=>navButton(x,'more-nav-button')).join('')}<details class="cuiudo-luck-menu">
+  <summary><span class="cuiudo-luck-icon" aria-hidden="true">☰</span><span>Da sorte 🍀</span></summary>
+  <ul aria-label="Lembretes de fé e ação">
+    <li><button type="button" data-action="navigate" data-tab="terco">Rezar o terço</button></li>
+    <li>Pedir ajuda a Nossa Senhora e a Deus</li>
+    <li>Amar a Deus</li>
+    <li><button type="button" data-action="navigate" data-tab="terco">Escutar louvor</button></li>
+    <li>Estudar</li>
+    <li>Trabalhar</li>
+    <li>Faça tudo rápido, mesmo que desleixado</li>
+  </ul>
+</details></div>`:'';
  return `<div class="app-shell">
   <a href="#main-content" class="skip-link">Ir para o conteúdo</a>
   <header class="site-header">

@@ -2704,3 +2704,44 @@
  }
  .goals-alternating-quotes>.goals-mindset-quote{display:none}
 }
+
+
+/* Menu hambúrguer Mais > Da sorte 🍀: lembretes de oração e ação. */
+.cuiudo-luck-menu{
+ margin:11px 1px 3px;background:#172b39;color:#dbe8f1;
+ border:1px solid #2d4355;border-radius:14px;overflow:hidden;
+}
+.cuiudo-luck-menu summary{
+ display:flex;align-items:center;gap:10px;padding:14px 15px;
+ list-style:none;cursor:pointer;user-select:none;
+ font:750 16px/1.4 Arial,Helvetica,sans-serif;color:#edf5fa;
+}
+.cuiudo-luck-menu summary::-webkit-details-marker{display:none}
+.cuiudo-luck-menu summary::after{
+ content:"⌄";margin-left:auto;color:#a9c3d4;
+ transition:transform .16s ease;
+}
+.cuiudo-luck-menu[open] summary::after{transform:rotate(180deg)}
+.cuiudo-luck-menu summary:focus-visible,
+.cuiudo-luck-menu button:focus-visible{
+ outline:2px solid #b8dcff;outline-offset:-3px;border-radius:8px;
+}
+.cuiudo-luck-icon{font-size:15px;line-height:1;color:#bfdbec}
+.cuiudo-luck-menu ul{
+ list-style:none;display:grid;gap:2px;
+ margin:0;padding:0 9px 12px;
+}
+.cuiudo-luck-menu li{
+ margin:0;padding:9px 10px;
+ font:500 13px/1.55 Arial,Helvetica,sans-serif;
+ color:#dbe8f1;overflow-wrap:anywhere;
+}
+.cuiudo-luck-menu li button{
+ display:block;width:100%;margin:0;padding:0;border:0;
+ background:transparent;color:inherit;text-align:left;
+ font:inherit;cursor:pointer;
+}
+.cuiudo-luck-menu li:has(button):hover{background:#254152;border-radius:8px}
+@media(prefers-reduced-motion:reduce){
+ .cuiudo-luck-menu summary::after{transition:none}
+}
