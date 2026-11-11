@@ -2785,3 +2785,88 @@
 .cuiudo-countdown-options button{min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:700 11px var(--font);cursor:pointer}
 .cuiudo-countdown-options button[data-action="cuiudo-goal-timer-start"],.cuiudo-countdown-options button[data-action="cuiudo-goal-timer-resume"]{background:var(--ink);color:var(--bg)}
 @media(max-width:760px){.today-goal:has(.cuiudo-countdown){grid-template-areas:"main" "actions" "timer"}.cuiudo-countdown{padding:11px}.cuiudo-countdown-options{width:100%}.cuiudo-countdown-readout{flex-basis:100%}}
+
+/* Caminhos da Santidade: meditação e quatro citações com fontes verificáveis. */
+.holiness-wisdom{margin:0 0 27px}
+.holiness-wisdom-intro{
+ padding:clamp(19px,2.7vw,31px);
+ border:1px solid var(--line);
+ border-radius:18px;
+ background:var(--surface-2);
+ color:var(--ink);
+}
+.holiness-wisdom-intro .eyebrow{font-size:10px;letter-spacing:.09em}
+.holiness-wisdom-intro h2{
+ max-width:790px;margin:12px 0 13px;
+ font:760 clamp(22px,3vw,34px)/1.19 var(--font);
+ letter-spacing:-.045em;
+}
+.holiness-wisdom-intro p{
+ max-width:830px;margin:0;
+ font:475 clamp(13px,1.15vw,15px)/1.75 var(--font);
+ color:var(--subink);
+}
+.holiness-wisdom-intro .holiness-wisdom-emphasis{
+ margin-top:13px;font-weight:685;color:var(--ink);
+}
+.holiness-quotes-label{
+ margin:23px 0 12px;
+ font:790 10px/1.4 var(--font);
+ letter-spacing:.13em;color:var(--subink);
+}
+.holiness-quotes{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;
+}
+.holiness-saint-quote{
+ box-sizing:border-box;display:flex;flex-direction:column;
+ justify-content:space-between;gap:15px;
+ min-width:0;margin:0;padding:19px 20px;
+ border:1px solid var(--line);border-radius:15px;
+ background:var(--surface);
+}
+.holiness-saint-quote blockquote{
+ margin:0;font:645 clamp(14px,1.35vw,17px)/1.55 var(--font);
+ color:var(--ink);letter-spacing:-.016em;
+}
+.holiness-saint-quote figcaption{
+ display:flex;gap:6px 12px;align-items:center;justify-content:space-between;
+ flex-wrap:wrap;color:var(--subink);font:520 11px/1.5 var(--font);
+}
+.holiness-saint-quote figcaption strong{font-weight:720}
+.holiness-saint-quote figcaption a{color:var(--subink);text-decoration:underline;text-underline-offset:2px}
+.holiness-saint-quote figcaption a:hover{color:var(--ink)}
+@media(max-width:660px){
+ .holiness-wisdom{margin-bottom:20px}
+ .holiness-wisdom-intro{padding:17px;border-radius:14px}
+ .holiness-quotes{grid-template-columns:1fr;gap:9px}
+ .holiness-saint-quote{padding:15px 16px;gap:10px;border-radius:13px}
+}
+/* v52: temporizador ainda mais compacto, mantendo controles legíveis. */
+.today-goal .cuiudo-countdown{
+ gap:7px;padding:8px 10px;border-radius:9px;
+}
+.cuiudo-countdown-readout{gap:7px}
+.cuiudo-countdown-readout span,.cuiudo-countdown-readout small{
+ font-size:10px;line-height:1.25;
+}
+.cuiudo-countdown-readout strong{
+ font-size:20px;line-height:1;
+}
+.cuiudo-countdown-options{gap:5px}
+.cuiudo-countdown-options label{gap:5px;font-size:10px}
+.cuiudo-countdown-options input{
+ width:54px;min-height:31px;height:31px;
+ padding:4px 6px;font-size:12px;border-radius:7px;
+}
+.cuiudo-countdown-options button{
+ min-height:31px;padding:5px 9px;font-size:10px;border-radius:7px;
+}
+@media(max-width:760px){
+ .today-goal .cuiudo-countdown{padding:8px 9px;gap:6px}
+ .cuiudo-countdown-readout{flex-basis:auto}
+ .cuiudo-countdown-options{width:auto}
+}
+@media(max-width:440px){
+ .cuiudo-countdown-readout{flex-basis:100%}
+ .cuiudo-countdown-options{width:100%}
+}

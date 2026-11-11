@@ -148,3 +148,13 @@ runInContext('state.tab="inicio";render()',vm);
 assert.match(mount.innerHTML,/logo-type">Terço/);
 assert.match(read('feed-ui.js'),/document\.title=.*\| Terço/);
 assert.match(read('cuiudo-v16.css'),/grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+
+/* Regressões da página de santidade e do temporizador compacto. */
+assert.match(read('holiness-path.js'),/function holinessWisdom/);
+assert.match(read('holiness-path.js'),/holinessQuotes/);
+assert.match(read('holiness-path.js'),/Quando a vida volta a fazer sentido/);
+assert.match(read('holiness-path.js'),/Santo Agostinho/);
+assert.match(read('holiness-path.js'),/Santa Teresa de Jesus/);
+assert.match(read('holiness-path.js'),/São João da Cruz/);
+assert.match(read('cuiudo-v16.css'),/v52: temporizador ainda mais compacto/);
+assert.match(read('sw.js'),/terco-santidade-reflexoes-relogio-v52/);

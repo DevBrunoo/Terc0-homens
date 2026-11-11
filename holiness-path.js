@@ -29,10 +29,36 @@
    '<input id="holiness-'+type+'" name="item" type="text" required maxlength="180" autocomplete="off" placeholder="'+escapeHtml(t[good?5:6])+'">'+
    '<button type="submit">'+escapeHtml(t[3])+' +</button></form></section>';
  }
+
+ /* Meditações autorais e citações atribuídas conforme documentos da Santa Sé.
+  * Traduções de EN/ES/LA são versões de leitura do app, não transcrições literais. */
+ const holinessReflections={"pt":{"tag":"TEMPO DE RECOMEÇAR","title":"Quando a vida volta a fazer sentido","body":"Depois de tantas lutas, pode chegar um momento em que o coração encontra paz e a vida começa a fazer mais sentido. Deus nos fala pela Palavra, pela oração, pelos sacramentos e pelo amor que colocamos em prática. Escute com discernimento: nem toda coincidência é um sinal, nem toda dificuldade é castigo.","closing":"Quando as coisas começam a dar certo, agradeça. Quando ainda não dão, persevere. Santidade é caminhar com Cristo nos dois momentos.","saints":"PALAVRAS DOS SANTOS","source":"Ver fonte"},"en":{"tag":"A TIME TO BEGIN AGAIN","title":"When life begins to make sense again","body":"After many struggles, peace may return and life may begin to make sense again. God speaks through Scripture, prayer, the sacraments, and love put into action. Discern carefully: not every coincidence is a sign, and not every hardship is punishment.","closing":"When things go well, give thanks. When they do not, persevere. Holiness means walking with Christ through both.","saints":"WORDS OF THE SAINTS","source":"Source"},"es":{"tag":"TIEMPO DE RECOMENZAR","title":"Cuando la vida vuelve a tener sentido","body":"Después de muchas luchas, puede llegar la paz y la vida vuelve a tener sentido. Dios nos habla por la Escritura, la oración, los sacramentos y el amor que ponemos en práctica. Discierne: no toda coincidencia es una señal ni toda dificultad es un castigo.","closing":"Cuando las cosas salen bien, agradece. Cuando todavía no, persevera. La santidad es caminar con Cristo en ambos momentos.","saints":"PALABRAS DE LOS SANTOS","source":"Ver fuente"},"la":{"tag":"TEMPUS RENOVATIONIS","title":"Cum vita iterum sensum invenit","body":"Post multas difficultates pax redire potest et vita novum sensum accipere. Deus nobis per Scripturam, orationem, sacramenta et caritatem operibus expressam loquitur. Prudenter discerne: non omnis casus signum est, nec omnis difficultas poena.","closing":"Cum res bene eveniunt, gratias age. Cum difficiles sunt, persevera. Sanctitas est cum Christo in utroque tempore ambulare.","saints":"VERBA SANCTORUM","source":"Fons"}};
+ const holinessQuotes=[{"who":{"pt":"Santo Agostinho","en":"Saint Augustine","es":"San Agustín","la":"Sanctus Augustinus"},"text":{"pt":"Fizeste-nos para ti, e inquieto está o nosso coração, enquanto não repousa em ti.","en":"You have made us for yourself, and our heart is restless until it rests in you.","es":"Nos hiciste para ti, y nuestro corazón está inquieto hasta que descanse en ti.","la":"Fecisti nos ad te et inquietum est cor nostrum, donec requiescat in te."},"source":"https://www.vatican.va/content/leo-xiv/pt/speeches/2025/august/documents/20250802-veglia-tor-vergata.html"},{"who":{"pt":"Santa Teresa de Jesus","en":"Saint Teresa of Ávila","es":"Santa Teresa de Jesús","la":"Sancta Teresia a Iesu"},"text":{"pt":"Só Deus basta.","en":"God alone suffices.","es":"Solo Dios basta.","la":"Solus Deus sufficit."},"source":"https://www.vatican.va/archive/cathechism_po/index_new/p1s2c1_198-421_po.html"},{"who":{"pt":"Santa Teresinha do Menino Jesus","en":"Saint Thérèse of Lisieux","es":"Santa Teresita del Niño Jesús","la":"Sancta Teresia a Iesu Infante"},"text":{"pt":"Tudo é graça.","en":"Everything is grace.","es":"Todo es gracia.","la":"Omnia gratia sunt."},"source":"https://www.vatican.va/content/john-paul-ii/pt/speeches/1986/march/documents/hf_jp-ii_spe_19860315_vescovi-brasile-curia.html"},{"who":{"pt":"São João da Cruz","en":"Saint John of the Cross","es":"San Juan de la Cruz","la":"Sanctus Ioannes a Cruce"},"text":{"pt":"No entardecer da vida, seremos julgados sobre o amor.","en":"At the evening of life, we shall be judged on love.","es":"Al atardecer de la vida, seremos juzgados sobre el amor.","la":"In vitae vespera de amore iudicabimur."},"source":"https://www.vatican.va/content/john-paul-ii/pt/letters/1994/documents/hf_jp-ii_let_02021994_families.html"}];
+ function holinessWisdom(lang){
+  const l=['pt','en','es','la'].includes(lang)?lang:'pt';
+  const t=holinessReflections[l];
+  return '<section class="holiness-wisdom" aria-label="'+escapeHtml(t.title)+'">'+
+   '<div class="holiness-wisdom-intro">'+
+    '<span class="eyebrow">'+escapeHtml(t.tag)+'</span>'+
+    '<h2>'+escapeHtml(t.title)+'</h2>'+
+    '<p>'+escapeHtml(t.body)+'</p>'+
+    '<p class="holiness-wisdom-emphasis">'+escapeHtml(t.closing)+'</p>'+
+   '</div>'+
+   '<h3 class="holiness-quotes-label">'+escapeHtml(t.saints)+'</h3>'+
+   '<div class="holiness-quotes">'+holinessQuotes.map(q=>
+    '<figure class="holiness-saint-quote">'+
+     '<blockquote>“'+escapeHtml(q.text[l])+'”</blockquote>'+
+     '<figcaption><strong>'+escapeHtml(q.who[l])+'</strong>'+
+     '<a href="'+escapeHtml(q.source)+'" rel="noopener noreferrer" target="_blank" aria-label="'+escapeHtml(t.source+': '+q.who[l])+'">'+escapeHtml(t.source)+' ↗</a>'+
+     '</figcaption></figure>'
+   ).join('')+'</div>'+
+  '</section>';
+ }
+
  function page(){
   const t=labels[cuiudoLocale()]||labels.pt;
   return '<section class="holiness-page"><header class="holiness-header"><span class="eyebrow">✝ '+escapeHtml(t[0])+'</span>'+
-   '<h1>'+escapeHtml(t[0])+'</h1><p>'+escapeHtml(t[9])+'</p></header>'+
+   '<h1>'+escapeHtml(t[0])+'</h1><p>'+escapeHtml(t[9])+'</p></header>'+holinessWisdom(cuiudoLocale())+
    '<div class="holiness-grid">'+section('good',t)+section('bad',t)+'</div>'+
    '<p class="holiness-bible">1Ts 5,21 — discernir e guardar o que é bom.</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p></section>';
  }
