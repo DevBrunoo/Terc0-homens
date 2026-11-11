@@ -266,6 +266,51 @@ function cuiudoAlternatingQuotes(locale){
   cuiudoRonaldoMindset(locale)+
   '</div>';
 }
+
+/* Temporizador por meta — já compatível com os campos do Cloudflare D1. */
+let cuiudoTimerOpened=null;
+const cuiudoTimerLabels={
+ pt:{label:'Temporizador',minutes:'Minutos',start:'Iniciar',pause:'Pausar',resume:'Retomar',reset:'Reiniciar',running:'Contando',paused:'Pausado',done:'Tempo encerrado',ready:'Pronto'},
+ en:{label:'Timer',minutes:'Minutes',start:'Start',pause:'Pause',resume:'Resume',reset:'Reset',running:'Running',paused:'Paused',done:'Time is up',ready:'Ready'},
+ es:{label:'Temporizador',minutes:'Minutos',start:'Iniciar',pause:'Pausar',resume:'Continuar',reset:'Reiniciar',running:'Contando',paused:'Pausado',done:'Tiempo agotado',ready:'Listo'},
+ la:{label:'Temporarium',minutes:'Minuta',start:'Incipe',pause:'Siste',resume:'Perge',reset:'Renova',running:'Currit',paused:'Intermissum',done:'Tempus finitum',ready:'Paratum'}
+};
+function cuiudoTimerSeconds(goal,now=Date.now()){
+ const total=Number.isSafeInteger(goal?.duration_sec)?Math.max(0,goal.duration_sec):0;
+ const left=Number.isSafeInteger(goal?.remaining_sec)?Math.max(0,Math.min(total,goal.remaining_sec)):total;
+ if(goal?.timer_state!=='running')return left;
+ const start=Number(goal.timer_started_at);
+ return Number.isSafeInteger(start)&&start>0?Math.max(0,left-Math.floor(Math.max(0,now-start)/1000)):left;
+}
+function cuiudoTimerFormat(n){
+ const s=Math.max(0,Math.floor(n)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);
+ return (h?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+function cuiudoTimerPanel(goal,locale){
+ const t=cuiudoTimerLabels[locale]||cuiudoTimerLabels.pt;
+ const total=Number.isSafeInteger(goal.duration_sec)&&goal.duration_sec>0?goal.duration_sec:1500;
+ const left=goal.duration_sec?cuiudoTimerSeconds(goal):total;
+ const phase=goal.duration_sec&&left===0?'finished':goal.timer_state||'none';
+ const action=phase==='running'?'pause':phase==='paused'?'resume':'start';
+ const caption=phase==='running'?t.pause:phase==='paused'?t.resume:t.start;
+ const status=phase==='running'?t.running:phase==='paused'?t.paused:phase==='finished'?t.done:t.ready;
+ const id=escapeHtml(goal.id);
+ return '<div class="cuiudo-countdown" data-timer-for="'+id+'">'+
+  '<div class="cuiudo-countdown-readout"><span>'+escapeHtml(t.label)+'</span>'+
+  '<strong data-cuiudo-clock="'+id+'">'+cuiudoTimerFormat(left)+'</strong>'+
+  '<small data-cuiudo-clock-status>'+escapeHtml(status)+'</small></div>'+
+  '<div class="cuiudo-countdown-options"><label>'+escapeHtml(t.minutes)+
+  ' <input data-timer-minutes type="number" min="1" max="1440" step="1" inputmode="numeric" value="'+Math.round(total/60)+'"></label>'+
+  (phase==='finished'?'':'<button type="button" data-action="cuiudo-goal-timer-'+action+'" data-id="'+id+'">'+escapeHtml(caption)+'</button>')+
+  '<button type="button" data-action="cuiudo-goal-timer-reset" data-id="'+id+'">'+escapeHtml(t.reset)+'</button>'+
+  '</div></div>';
+}
+function cuiudoTimerStop(goal){
+ if(goal.timer_state!=='running')return;
+ goal.remaining_sec=cuiudoTimerSeconds(goal);
+ goal.timer_started_at=null;goal.timer_state=goal.remaining_sec===0?'finished':'paused';
+}
+
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
@@ -303,9 +348,11 @@ function cuiudoGoalChecklist(){
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
-   '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>':
+   '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>'+
+    '<button class="goal-action goal-timer-button" type="button" data-action="cuiudo-goal-timer-toggle" data-id="'+escapeHtml(goal.id)+'" aria-expanded="'+(cuiudoTimerOpened===goal.id?'true':'false')+'">⏱ '+escapeHtml(cuiudoTimerLabels[l].label)+'</button>':
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
-   '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div></article>';
+   '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div>'+
+   (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
   cuiudoObstacleBox(l)+
   '</section>';
@@ -370,6 +417,35 @@ app.addEventListener('click',event=>{
  if(!found)return;
  const [day,items]=found,index=items.findIndex(x=>x.id===id);
  const goal=items[index];
+ if(action==='cuiudo-goal-timer-toggle'){
+  cuiudoTimerOpened=cuiudoTimerOpened===id?null:id;
+  render();return;
+ }
+ if(action.startsWith('cuiudo-goal-timer-')){
+  if(goal.status!=='pending')return;
+  if(action==='cuiudo-goal-timer-pause')cuiudoTimerStop(goal);
+  if(action==='cuiudo-goal-timer-resume'&&goal.timer_state==='paused'&&goal.remaining_sec>0){
+   goal.timer_started_at=Date.now();goal.timer_state='running';
+  }
+  if(action==='cuiudo-goal-timer-start'||action==='cuiudo-goal-timer-reset'){
+   const field=target.closest('.today-goal')?.querySelector('[data-timer-minutes]');
+   const minutes=Number(field?.value||25);
+   if(!Number.isSafeInteger(minutes)||minutes<1||minutes>1440){
+    field?.setCustomValidity?.('Escolha um valor de 1 a 1440 minutos.');
+    field?.reportValidity?.();return;
+   }
+   goal.duration_sec=minutes*60;goal.remaining_sec=goal.duration_sec;
+   goal.timer_started_at=action==='cuiudo-goal-timer-start'?Date.now():null;
+   goal.timer_state=action==='cuiudo-goal-timer-start'?'running':'paused';
+  }
+  cuiudoGoalsSave();
+  window.cuiudoGlobalGoals?.change('upsert',day,goal);
+  render();return;
+ }
+ if(action==='cuiudo-goal-done'||action==='cuiudo-goal-missed'){
+  cuiudoTimerStop(goal);
+  if(cuiudoTimerOpened===id)cuiudoTimerOpened=null;
+ }
  if(action==='cuiudo-goal-done')items[index].status='done';
  if(action==='cuiudo-goal-missed')items[index].status='missed';
  if(action==='cuiudo-goal-reopen')items[index].status='pending';
@@ -381,3 +457,23 @@ app.addEventListener('click',event=>{
  render();
 });
 render();
+
+/* Contagem real por timestamp, atualizada só no relógio para preservar formulários. */
+if(typeof window.setInterval==='function')window.setInterval(()=>{
+ if(typeof document.querySelectorAll!=='function')return;
+ document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
+  const id=node.getAttribute('data-cuiudo-clock');
+  const match=Object.entries(state.dailyGoalDays||{}).find(([,arr])=>Array.isArray(arr)&&arr.some(g=>g.id===id));
+  if(!match)return;
+  const goal=match[1].find(g=>g.id===id);
+  if(!goal)return;
+  const seconds=cuiudoTimerSeconds(goal);
+  node.textContent=cuiudoTimerFormat(seconds);
+  if(goal.timer_state==='running'&&seconds===0){
+   cuiudoTimerStop(goal);
+   cuiudoGoalsSave();
+   window.cuiudoGlobalGoals?.change('upsert',match[0],goal);
+   render();
+  }
+ });
+},1000);

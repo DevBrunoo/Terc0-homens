@@ -2770,3 +2770,18 @@
 .holiness-bible{margin:19px 0 5px}
 .holiness-privacy{margin:0}
 @media(max-width:760px){.holiness-grid{grid-template-columns:1fr;gap:12px}.holiness-side{padding:16px}.holiness-form input{font-size:16px}}
+
+/* Terceiro botão da meta: temporizador expansível. */
+.today-goal:has(.cuiudo-countdown){grid-template-areas:"main actions" "timer timer"}
+.today-goal-actions .goal-timer-button{background:var(--surface-2);color:var(--ink)}
+.today-goal-actions .goal-timer-button[aria-expanded="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cuiudo-countdown{grid-area:timer;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%;min-width:0;box-sizing:border-box;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2)}
+.cuiudo-countdown-readout{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cuiudo-countdown-readout span,.cuiudo-countdown-readout small{font:650 11px/1.35 var(--font);color:var(--subink)}
+.cuiudo-countdown-readout strong{font:800 26px/1 var(--font);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.cuiudo-countdown-options{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cuiudo-countdown-options label{display:flex;align-items:center;gap:6px;color:var(--subink);font:650 11px var(--font)}
+.cuiudo-countdown-options input{box-sizing:border-box;width:65px;min-height:38px;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-align:center;font:700 14px var(--font)}
+.cuiudo-countdown-options button{min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:700 11px var(--font);cursor:pointer}
+.cuiudo-countdown-options button[data-action="cuiudo-goal-timer-start"],.cuiudo-countdown-options button[data-action="cuiudo-goal-timer-resume"]{background:var(--ink);color:var(--bg)}
+@media(max-width:760px){.today-goal:has(.cuiudo-countdown){grid-template-areas:"main" "actions" "timer"}.cuiudo-countdown{padding:11px}.cuiudo-countdown-options{width:100%}.cuiudo-countdown-readout{flex-basis:100%}}
