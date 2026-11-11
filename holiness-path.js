@@ -38,12 +38,15 @@
   const l=['pt','en','es','la'].includes(lang)?lang:'pt';
   const t=holinessReflections[l];
   return '<section class="holiness-wisdom" aria-label="'+escapeHtml(t.title)+'">'+
+   '<div class="holiness-wisdom-feature">'+
+    '<figure class="holiness-restart-art"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Hunt-light-of-the-world.jpeg/500px-Hunt-light-of-the-world.jpeg" alt="Cristo batendo à porta com uma lanterna, pintura A Luz do Mundo de William Holman Hunt" loading="lazy" decoding="async" width="500" height="992">'+
+    '<figcaption><a href="https://commons.wikimedia.org/wiki/File:Hunt-light-of-the-world.jpeg" target="_blank" rel="noopener noreferrer">A Luz do Mundo · William Holman Hunt ↗</a></figcaption></figure>'+
    '<div class="holiness-wisdom-intro">'+
     '<span class="eyebrow">'+escapeHtml(t.tag)+'</span>'+
     '<h2>'+escapeHtml(t.title)+'</h2>'+
     '<p>'+escapeHtml(t.body)+'</p>'+
     '<p class="holiness-wisdom-emphasis">'+escapeHtml(t.closing)+'</p>'+
-   '</div>'+
+   '</div></div>'+
    '<h3 class="holiness-quotes-label">'+escapeHtml(t.saints)+'</h3>'+
    '<div class="holiness-quotes">'+holinessQuotes.map(q=>
     '<figure class="holiness-saint-quote">'+
@@ -58,9 +61,10 @@
  function page(){
   const t=labels[cuiudoLocale()]||labels.pt;
   return '<section class="holiness-page"><header class="holiness-header"><span class="eyebrow">✝ '+escapeHtml(t[0])+'</span>'+
-   '<h1>'+escapeHtml(t[0])+'</h1><p>'+escapeHtml(t[9])+'</p></header>'+holinessWisdom(cuiudoLocale())+
+   '<h1>'+escapeHtml(t[0])+'</h1><p>'+escapeHtml(t[9])+'</p></header>'+
    '<div class="holiness-grid">'+section('good',t)+section('bad',t)+'</div>'+
-   '<p class="holiness-bible">1Ts 5,21 — discernir e guardar o que é bom.</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p></section>';
+   '<p class="holiness-bible">1Ts 5,21 — discernir e guardar o que é bom.</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p>'+
+   holinessWisdom(cuiudoLocale())+'</section>';
  }
  if(!combatTabs.some(t=>t.id==='santidade'))combatTabs.push({id:'santidade',label:'Caminhos da Santidade',mobile:'Santidade',icon:'heart'});
  for(const [lang,text] of [['pt','Caminhos da Santidade'],['en','Paths to Holiness'],['es','Caminos de Santidad'],['la','Viae Sanctitatis']])cuiudoNav[lang].santidade=text;
