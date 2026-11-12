@@ -305,6 +305,39 @@ function cuiudoTimerPanel(goal,locale){
   '<button type="button" data-action="cuiudo-goal-timer-reset" data-id="'+id+'">'+escapeHtml(t.reset)+'</button>'+
   '</div></div>';
 }
+
+/* Aviso sonoro do temporizador. Web Audio é habilitado no clique de Iniciar/Retomar. */
+let cuiudoTimerAudioContext=null;
+function cuiudoTimerUnlockAudio(){
+ try{
+  const Type=window.AudioContext||window.webkitAudioContext;
+  if(!Type)return;
+  if(!cuiudoTimerAudioContext)cuiudoTimerAudioContext=new Type();
+  if(cuiudoTimerAudioContext.state==='suspended'){
+   const p=cuiudoTimerAudioContext.resume();p?.catch?.(()=>{});
+  }
+ }catch{}
+}
+function cuiudoTimerSound(){
+ try{
+  const ctx=cuiudoTimerAudioContext;
+  if(!ctx||ctx.state==='closed')return;
+  if(ctx.state==='suspended'){const p=ctx.resume();p?.catch?.(()=>{});}
+  const base=ctx.currentTime+0.03;
+  for(let i=0;i<3;i++){
+   const at=base+i*0.32;
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type='sine';
+   osc.frequency.setValueAtTime(i===1?659.25:880,at);
+   gain.gain.setValueAtTime(0.0001,at);
+   gain.gain.exponentialRampToValueAtTime(0.20,at+0.02);
+   gain.gain.exponentialRampToValueAtTime(0.0001,at+0.23);
+   osc.connect(gain);gain.connect(ctx.destination);
+   osc.start(at);osc.stop(at+0.24);
+  }
+ }catch{}
+}
+
 function cuiudoTimerStop(goal){
  if(goal.timer_state!=='running')return;
  goal.remaining_sec=cuiudoTimerSeconds(goal);
@@ -425,6 +458,7 @@ app.addEventListener('click',event=>{
   if(goal.status!=='pending')return;
   if(action==='cuiudo-goal-timer-pause')cuiudoTimerStop(goal);
   if(action==='cuiudo-goal-timer-resume'&&goal.timer_state==='paused'&&goal.remaining_sec>0){
+   cuiudoTimerUnlockAudio();
    goal.timer_started_at=Date.now();goal.timer_state='running';
   }
   if(action==='cuiudo-goal-timer-start'||action==='cuiudo-goal-timer-reset'){
@@ -437,6 +471,7 @@ app.addEventListener('click',event=>{
    goal.duration_sec=minutes*60;goal.remaining_sec=goal.duration_sec;
    goal.timer_started_at=action==='cuiudo-goal-timer-start'?Date.now():null;
    goal.timer_state=action==='cuiudo-goal-timer-start'?'running':'paused';
+   if(action==='cuiudo-goal-timer-start')cuiudoTimerUnlockAudio();
   }
   cuiudoGoalsSave();
   window.cuiudoGlobalGoals?.change('upsert',day,goal);
@@ -458,22 +493,32 @@ app.addEventListener('click',event=>{
 });
 render();
 
-/* Contagem real por timestamp, atualizada só no relógio para preservar formulários. */
-if(typeof window.setInterval==='function')window.setInterval(()=>{
- if(typeof document.querySelectorAll!=='function')return;
- document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
-  const id=node.getAttribute('data-cuiudo-clock');
-  const match=Object.entries(state.dailyGoalDays||{}).find(([,arr])=>Array.isArray(arr)&&arr.some(g=>g.id===id));
-  if(!match)return;
-  const goal=match[1].find(g=>g.id===id);
-  if(!goal)return;
-  const seconds=cuiudoTimerSeconds(goal);
-  node.textContent=cuiudoTimerFormat(seconds);
-  if(goal.timer_state==='running'&&seconds===0){
+/* Atualiza todos os temporizadores, mesmo fechados; alarme apenas na transição. */
+function cuiudoTimerTick(){
+ let finished=0;
+ for(const [day,items] of Object.entries(state.dailyGoalDays||{})){
+  if(!Array.isArray(items))continue;
+  for(const goal of items){
+   if(!goal||goal.status!=='pending'||goal.timer_state!=='running')continue;
+   if(cuiudoTimerSeconds(goal)>0)continue;
    cuiudoTimerStop(goal);
    cuiudoGoalsSave();
-   window.cuiudoGlobalGoals?.change('upsert',match[0],goal);
-   render();
+   window.cuiudoGlobalGoals?.change('upsert',day,goal);
+   cuiudoTimerSound();
+   finished++;
   }
- });
-},1000);
+ }
+ if(finished)render();
+ else if(typeof document.querySelectorAll==='function'){
+  document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
+   const id=node.getAttribute('data-cuiudo-clock');
+   const goal=Object.values(state.dailyGoalDays||{}).flatMap(x=>Array.isArray(x)?x:[]).find(g=>g.id===id);
+   if(goal)node.textContent=cuiudoTimerFormat(cuiudoTimerSeconds(goal));
+  });
+ }
+ return finished;
+}
+if(typeof window.setInterval==='function')window.setInterval(cuiudoTimerTick,1000);
+if(typeof document.addEventListener==='function')document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden)cuiudoTimerTick();
+});

@@ -166,3 +166,14 @@ assert.doesNotMatch(read('global-goals.js'),/terco-obstaculos-diarios-v1/);
 assert.match(read('cuiudo-v16.css'),/goals-obstacle-box/);
 assert.match(read('cuiudo-v16.css'),/goals-essential-footer/);
 console.log('✓ Metas v42: conquista firme e sem emojis; compromisso no topo e obstáculos embaixo');
+
+/* Checa o término de temporizadores com o painel fechado; não repetir o aviso. */
+const timeup=runInContext(`(()=>{
+ const day=currentDay(),g={id:'timer-test',text:'Foco',status:'pending',duration_sec:60,remaining_sec:1,timer_started_at:Date.now()-4000,timer_state:'running'};
+ state.dailyGoalDays={[day]:[g]};
+ const first=cuiudoTimerTick(),second=cuiudoTimerTick();
+ return {first,second,status:g.timer_state,remaining:g.remaining_sec};
+})()`,vm);
+assert.deepEqual({...timeup},{first:1,second:0,status:'finished',remaining:0});
+assert.match(read('daily-goals.js'),/function cuiudoTimerSound/);
+assert.match(read('daily-goals.js'),/cuiudoTimerUnlockAudio\(\)/);
