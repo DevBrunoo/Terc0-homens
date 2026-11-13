@@ -223,6 +223,16 @@ function cuiudoRosary(){
    ['small','medium','large'].map((size,i)=>'<button type="button" class="meditation-size '+(length===size?'active':'')+
    '" data-action="combat-meditation-length" data-length="'+size+'" aria-pressed="'+(length===size)+'">'+
    escapeHtml(cuiudoLengthLabels[l][i])+'</button>').join('')+'</div></section>'+
+  // Atalhos extras só no celular; mesmos eventos da seleção de mistérios inferior.
+  '<nav class="rosary-top-mysteries" aria-label="'+escapeHtml({pt:'Escolher mistério',en:'Choose a mystery',es:'Elegir misterio',la:'Mysterium eligere'}[l])+'">'+
+   '<span class="rosary-top-mysteries-label">'+escapeHtml({pt:'Escolher mistério',en:'Choose a mystery',es:'Elegir misterio',la:'Mysterium eligere'}[l])+'</span>'+
+   '<div class="rosary-top-mysteries-buttons">'+g.mysteries.map((item,i)=>{
+    const finished=typeof cuiudoDecadeComplete==='function'?cuiudoDecadeComplete(i):progress[i]===10;
+    return '<button type="button" class="rosary-mystery-step '+(state.mystery===i?'current':'')+
+     (finished?' complete':'')+'" data-action="mystery" data-index="'+i+
+     '" aria-label="'+escapeHtml((i+1)+'º: '+cuiudoMystery(item).title)+'" aria-current="'+(state.mystery===i?'step':'false')+
+     '">'+(finished?'✓':i+1)+'</button>';
+   }).join('')+'</div></nav>'+
   '<section class="mystery-layout rosary-plus-layout"><div class="mystery-visual rosary-photo-wrap">'+
    '<span class="eyebrow">'+['I','II','III','IV','V'][state.mystery]+' · '+escapeHtml(cuiudoGroupName(state.group))+'</span>'+
    '<h2 class="rosary-mystery-title">'+escapeHtml(loc.title)+'</h2><small class="rosary-mystery-reference">'+escapeHtml(m.ref)+'</small>'+
