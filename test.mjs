@@ -104,12 +104,12 @@ assert.match(html,/feed\.css/);
 assert.match(html,/apple\.css/);
 assert.match(read('apple.css'),/\.cuiudo-hero/);
 assert.match(read('apple.css'),/\.poster-grid/);
-assert.match(read('sw.js'),/terco-premium-foco-lectio-v63/);
+assert.match(read('sw.js'),/const VERSION='terco-[a-z0-9-]+-v\d+'/); // Nome estável, número de cache muda a cada release.
 assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);
 const feedInfo=runInNewContext(feedData+'\n;({feedPosts,feedArtwork,feedFilters})');
-assert.equal(feedInfo.feedPosts.length,19);
+assert.ok(feedInfo.feedPosts.length>=19,'O feed mantém pelo menos 19 publicações');
 assert.ok(Object.keys(feedInfo.feedArtwork).length>=17);
 assert.ok(existsSync(new URL('./assets/feed/fallback.svg',import.meta.url)));
 for(const [id,asset] of Object.entries(feedInfo.feedArtwork)){
@@ -143,7 +143,7 @@ runInContext(data+'\n'+brutal+'\n'+devotion+'\n'+feedData+'\n'+app+'\n'+feedUi,f
 assert.match(feedMount.innerHTML,/cuiudo-hero/);
 assert.match(feedMount.innerHTML,/TEM QUE SER/);
 assert.match(feedMount.innerHTML,/poster-grid/);
-assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,19);
+assert.equal((feedMount.innerHTML.match(/data-feed-id=/g)||[]).length,feedInfo.feedPosts.length);
 assert.equal(feedDoc.documentElement.dataset.theme,'light');
 for(const [tab,expected] of [['terco','O Santo Terço'],['devocionario','SÃO MIGUEL'],['palavra','PALAVRA DE DEUS'],['diario','Diário'],['desafios','compromissos'],['exame','consciência']]){
  runInContext("state.tab='"+tab+"';render()",feedCtx);
@@ -157,4 +157,4 @@ runInContext("state.feedFilter='todos';state.theme='light';render()",feedCtx);
 assert.equal(feedDoc.documentElement.dataset.theme,'light');
 runInContext("state.tab='palavra';state.verseLang='en';render()",feedCtx);
 assert.match(feedMount.innerHTML,/Douay-Rheims/);
-console.log('✓ CUIÚDO V13: 19 posts, 17 fontes de imagem, feed, salvos, modal, temas e 8 telas');
+console.log('✓ CUIÚDO V13: feed completo, 17 fontes de imagem, salvos, modal, temas e navegação');

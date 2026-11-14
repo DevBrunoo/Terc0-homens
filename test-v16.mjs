@@ -157,4 +157,4 @@ assert.match(read('holiness-path.js'),/Santo Agostinho/);
 assert.match(read('holiness-path.js'),/Santa Teresa de Jesus/);
 assert.match(read('holiness-path.js'),/São João da Cruz/);
 assert.match(read('cuiudo-v16.css'),/v52: temporizador ainda mais compacto/);
-assert.match(read('sw.js'),/terco-premium-foco-lectio-v63/);
+assert.match(read('sw.js'),/const VERSION='terco-[a-z0-9-]+-v\d+'/);
