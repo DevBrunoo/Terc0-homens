@@ -412,22 +412,22 @@ const cuiudoChartLabels={
   done:'Concluídas',pending:'Pendentes',missed:'Não concluídas',high:'Alta',medium:'Média',low:'Baixa',
   empty:'Ainda não há metas registradas neste período.',noData:'Sem metas',summary:'metas concluídas',of:'de',
   axis:'Percentual concluído',note:'Percentual baseado nas metas cadastradas em cada dia e em sua situação atual; não representa a data de conclusão.',
-  priorityNote:'Cada prioridade mostra o percentual de metas concluídas naquele nível. Metas antigas sem prioridade são classificadas como Média.'},
+  priorityNote:'Cada prioridade mostra o percentual de metas concluídas naquele nível. Metas antigas sem prioridade são classificadas como Média.',noteLabel:'Como calculamos'},
  en:{title:'Your progress',subtitle:'Track completion of your recorded goals.',status:'By day',priority:'By priority',period:'Period',days:'days',
   done:'Completed',pending:'Pending',missed:'Not completed',high:'High',medium:'Medium',low:'Low',
   empty:'There are no goals recorded in this period yet.',noData:'No goals',summary:'goals completed',of:'of',
   axis:'Completion rate',note:'Percentages use each goal’s creation date and current status, not its completion date.',
-  priorityNote:'Each priority shows completion rate at that level. Older goals without a priority are counted as Medium.'},
+  priorityNote:'Each priority shows completion rate at that level. Older goals without a priority are counted as Medium.',noteLabel:'How it is calculated'},
  es:{title:'Tu progreso',subtitle:'Evolución del cumplimiento de tus metas.',status:'Por día',priority:'Por prioridad',period:'Período',days:'días',
   done:'Cumplidas',pending:'Pendientes',missed:'No cumplidas',high:'Alta',medium:'Media',low:'Baja',
   empty:'Todavía no hay metas en este período.',noData:'Sin metas',summary:'metas cumplidas',of:'de',
   axis:'Porcentaje cumplido',note:'Porcentajes calculados por la fecha de creación y el estado actual de las metas, no por la fecha en que se completaron.',
-  priorityNote:'Cada prioridad muestra el porcentaje cumplido en su nivel. Metas anteriores sin prioridad se consideran Media.'},
+  priorityNote:'Cada prioridad muestra el porcentaje cumplido en su nivel. Metas anteriores sin prioridad se consideran Media.',noteLabel:'Cómo se calcula'},
  la:{title:'Progressus tuus',subtitle:'Progressus propositorum tuorum.',status:'Per diem',priority:'Per prioritatem',period:'Tempus',days:'dies',
   done:'Completae',pending:'Pendentes',missed:'Non completae',high:'Alta',medium:'Media',low:'Humilis',
   empty:'Nulla proposita hoc tempore reperta.',noData:'Nulla proposita',summary:'proposita completa',of:'ex',
   axis:'Proportio completa',note:'Computatio ex die creationis et statu praesenti, non ex die completionis.',
-  priorityNote:'Singula prioritas rationem completorum ostendit. Proposita antiqua sine prioritate Media habentur.'}
+  priorityNote:'Singula prioritas rationem completorum ostendit. Proposita antiqua sine prioritate Media habentur.',noteLabel:'Ratio computationis'}
 };
 function cuiudoChartRows(days=14,endDay=currentDay()){
  const count=[7,14,30].includes(Number(days))?Number(days):14;
@@ -508,7 +508,7 @@ function cuiudoGoalsBarChart(locale){
    '<div class="cuiudo-chart-barplot" style="--chart-count:'+bars.length+'">'+tiles+'</div></div>';
  }
  return '<section class="cuiudo-goals-chart" aria-label="'+escapeHtml(t.title)+'">'+head+controls+content+
-  '<p class="cuiudo-chart-footnote">'+escapeHtml(t.note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></section>';
+  '<details class="cuiudo-chart-footnote"><summary>'+escapeHtml(t.noteLabel)+'</summary><p>'+escapeHtml(t.note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></details></section>';
 }
 
 function cuiudoGoalChecklist(){
