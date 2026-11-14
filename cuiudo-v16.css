@@ -3218,3 +3218,43 @@
  .cuiudo-chart-head p{display:none}
 }
 @media(prefers-reduced-motion:reduce){.cuiudo-chart-bar-fill{transition:none!important}}
+
+
+/* Criar meta exige importância — seleção explícita, pequena e responsiva. */
+.today-goals-form{
+ grid-template-columns:minmax(0,1fr) minmax(205px,238px) 104px;
+ grid-template-areas:"goal priority add";
+}
+.today-goals-form>.goal-create-priority{
+ grid-area:priority;display:flex;align-items:center;gap:7px;min-width:0;
+ padding:5px 8px 5px 11px;min-height:46px;border:1px solid var(--line);
+ border-radius:11px;background:var(--surface-2);
+ color:var(--ink);font:700 11px/1.35 var(--font);white-space:nowrap;
+}
+.today-goals-form>.goal-create-priority select{
+ flex:1;min-width:0;width:100%;min-height:33px;max-width:100%;
+ padding:5px 7px;border:1px solid var(--line);border-radius:7px;
+ background:var(--surface);color:var(--ink);font:600 11px/1.4 var(--font);
+ cursor:pointer;
+}
+.today-goals-form>.goal-create-priority select:invalid{color:var(--subink)}
+.today-goals-form>.goal-create-priority select:focus-visible{
+ outline:2px solid var(--accent);outline-offset:2px;
+}
+@media(max-width:750px){
+ .today-goals-form{
+  grid-template-columns:minmax(0,1fr) 115px;
+  grid-template-areas:"goal goal" "priority add";
+  gap:7px;
+ }
+ .today-goals-form>.goal-create-priority{min-width:0;min-height:43px}
+ .today-goals-form>.goal-create-priority select{min-width:0;font-size:11px}
+ .today-goals-form>.btn{grid-area:add;min-height:43px;height:auto}
+}
+@media(max-width:365px){
+ .today-goals-form{
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"goal" "priority" "add";
+ }
+ .today-goals-form>.goal-create-priority select{flex:1}
+}
