@@ -113,15 +113,22 @@ assert.ok(feedInfo.feedPosts.length>=19,'O feed mantém pelo menos 19 publicaç�
 assert.ok(Object.keys(feedInfo.feedArtwork).length>=17);
 assert.ok(existsSync(new URL('./assets/feed/fallback.svg',import.meta.url)));
 for(const [id,asset] of Object.entries(feedInfo.feedArtwork)){
-  assert.match(asset.url,/^\.\/assets\/feed\/[a-z0-9-]+\.webp$/,'Imagem deve estar no repositório: '+id);
+  assert.match(asset.url,/^\.\/assets\/feed\/[a-z0-9-]+\.(?:webp|svg)$/,'Imagem deve estar no repositório: '+id);
   const file=new URL(asset.url.replace(/^\.\//,''),import.meta.url);
   assert.ok(existsSync(file),'Arquivo não encontrado: '+asset.url);
   const content=readFileSync(file);
-  assert.ok(content.length>8000,'WebP pequeno: '+id);
-  assert.equal(content.subarray(0,4).toString('ascii'),'RIFF','Cabeçalho WebP: '+id);
-  assert.equal(content.subarray(8,12).toString('ascii'),'WEBP','Assinatura WebP: '+id);
+  if(asset.url.endsWith('.svg')){
+    const svg=content.toString('utf8');
+    assert.ok(svg.length>2000,'SVG pequeno: '+id);
+    assert.match(svg,/^<svg\s/,'Cabeçalho SVG: '+id);
+    assert.match(svg,/<\/svg>\s*$/,'Fechamento SVG: '+id);
+  } else {
+    assert.ok(content.length>8000,'WebP pequeno: '+id);
+    assert.equal(content.subarray(0,4).toString('ascii'),'RIFF','Cabeçalho WebP: '+id);
+    assert.equal(content.subarray(8,12).toString('ascii'),'WEBP','Assinatura WebP: '+id);
+  }
 }
-console.log('✓ 17/17 imagens WebP armazenadas no repositório e verificadas');
+console.log('✓ Imagens WebP e cartazes SVG armazenados no repositório e verificados');
 assert.ok(feedInfo.feedFilters.some(([id])=>id==='miguel'));
 for(const file of ['feed-ui.js','feed-data.js']){
  const out=spawnSync(process.execPath,['--check',new URL('./'+file,import.meta.url).pathname]);
