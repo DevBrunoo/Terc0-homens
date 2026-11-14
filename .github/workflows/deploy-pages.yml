@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Buscar o repositório
         uses: actions/checkout@v4
-      - name: Validar site e as 14 imagens locais
+      - name: Validar site e as 19 imagens locais
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -27,12 +27,12 @@ jobs:
           root=Path('.')
           code=(root/'feed-data.js').read_text(encoding='utf-8')
           paths=re.findall(r'"url": "(\./assets/feed/[^"]+\.webp)"',code)
-          assert len(paths)==17, f'Esperadas 17 imagens, existem {len(paths)}'
+          assert len(paths)==19, f'Esperadas 19 imagens, existem {len(paths)}'
           for p in paths:
               data=Path(p).read_bytes()
               assert data[:4]==b'RIFF' and data[8:12]==b'WEBP', f'{p} inválido'
           assert (root/'apple.css').is_file(), 'Tema Apple ausente'
-          print('17/17 imagens WEBP OK; index, CSS e JS prontos')
+          print('19/19 imagens WEBP OK; index, CSS e JS prontos')
           PY
       - name: Preparar pacote do site
         run: |

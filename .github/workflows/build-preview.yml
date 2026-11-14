@@ -19,7 +19,7 @@ jobs:
           import re
           data=Path('feed-data.js').read_text(encoding='utf-8')
           refs=re.findall(r'"url": "(\./assets/feed/[a-z0-9-]+\.webp)"',data)
-          assert len(refs)==17, f'Imagens cadastradas: {len(refs)} (esperado 17)'
+          assert len(refs)==19, f'Imagens cadastradas: {len(refs)} (esperado 19)'
           assert len(set(refs))==len(refs), 'Referências duplicadas'
           for ref in refs:
               image=Path(ref)
