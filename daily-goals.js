@@ -267,6 +267,7 @@ function cuiudoAlternatingQuotes(locale){
   '</div>';
 }
 
+const cuiudoPriorityLabels={pt:['Alta','Média','Baixa','Prioridade'],en:['High','Medium','Low','Priority'],es:['Alta','Media','Baja','Prioridad'],la:['Alta','Media','Humilis','Prioritas']};
 /* Temporizador por meta — já compatível com os campos do Cloudflare D1. */
 let cuiudoTimerOpened=null;
 const cuiudoTimerLabels={
@@ -324,16 +325,16 @@ function cuiudoTimerSound(){
   if(!ctx||ctx.state==='closed')return;
   if(ctx.state==='suspended'){const p=ctx.resume();p?.catch?.(()=>{});}
   const base=ctx.currentTime+0.03;
-  for(let i=0;i<3;i++){
-   const at=base+i*0.32;
+  for(let i=0;i<12;i++){
+   const at=base+i*0.30;
    const osc=ctx.createOscillator(),gain=ctx.createGain();
-   osc.type='sine';
+   osc.type='square';
    osc.frequency.setValueAtTime(i===1?659.25:880,at);
    gain.gain.setValueAtTime(0.0001,at);
-   gain.gain.exponentialRampToValueAtTime(0.20,at+0.02);
-   gain.gain.exponentialRampToValueAtTime(0.0001,at+0.23);
+   gain.gain.exponentialRampToValueAtTime(0.38,at+0.02);
+   gain.gain.exponentialRampToValueAtTime(0.0001,at+0.26);
    osc.connect(gain);gain.connect(ctx.destination);
-   osc.start(at);osc.stop(at+0.24);
+   osc.start(at);osc.stop(at+0.27);
   }
  }catch{}
 }
@@ -367,6 +368,7 @@ function cuiudoGoalChecklist(){
    return '<article class="today-goal '+(completed?'goal-completed':failed?'goal-missed':'goal-pending')+'">'+
    '<div class="today-goal-main"><span class="today-goal-icon" aria-hidden="true">'+(completed?'✓':failed?'!':String(i+1).padStart(2,'0'))+'</span>'+
    '<div class="today-goal-content"><div class="goal-card-heading"><strong class="goal-card-title">'+escapeHtml(goal.text)+'</strong>'+
+   '<label class="goal-priority-label">'+escapeHtml(cuiudoPriorityLabels[l][3])+' <select class="goal-priority-select" data-goal-priority="'+escapeHtml(goal.id)+'" aria-label="'+escapeHtml(cuiudoPriorityLabels[l][3])+'">'+['high','medium','low'].map((p,j)=>'<option value="'+p+'" '+((goal.priority||'medium')===p?'selected':'')+'>'+escapeHtml(cuiudoPriorityLabels[l][j])+'</option>').join('')+'</select></label>'+
    '<span class="goal-card-status '+(completed?'is-success':failed?'is-missed':'is-pending')+'">'+escapeHtml(completed?t.done:failed?t.undone:t.remaining)+'</span></div>'+
    (completed?(()=>{
       const blessing=cuiudoGoalBlessing(goal.id);
@@ -419,6 +421,15 @@ app.addEventListener('change',event=>{
  if(cuiudoEssentialSave(desired))render();
  else event.target.checked=!desired;
 });
+app.addEventListener('change',event=>{
+ const select=event.target?.closest?.('[data-goal-priority]');if(!select)return;
+ const id=select.dataset.goalPriority,priority=select.value;
+ if(!['high','medium','low'].includes(priority))return;
+ const found=Object.entries(state.dailyGoalDays||{}).find(([,items])=>Array.isArray(items)&&items.some(g=>g.id===id));
+ if(!found)return;
+ const [day,items]=found,goal=items.find(g=>g.id===id);
+ goal.priority=priority;cuiudoGoalsSave();window.cuiudoGlobalGoals?.change('upsert',day,goal);
+});
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
  event.preventDefault();
@@ -429,7 +440,7 @@ app.addEventListener('submit',event=>{
  const day=currentDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
- const goal={id,text,status:'pending'};
+ const goal={id,text,status:'pending',priority:'medium'};
  items.unshift(goal);
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change('upsert',day,goal);
@@ -519,6 +530,7 @@ function cuiudoTimerTick(){
  return finished;
 }
 if(typeof window.setInterval==='function')window.setInterval(cuiudoTimerTick,1000);
+if(typeof window.addEventListener==='function')window.addEventListener('focus',cuiudoTimerTick);
 if(typeof document.addEventListener==='function')document.addEventListener('visibilitychange',()=>{
  if(!document.hidden)cuiudoTimerTick();
 });
