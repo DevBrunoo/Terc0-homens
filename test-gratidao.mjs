@@ -43,8 +43,12 @@ assert.match(initialHome,/Minha moto, minha vida, o terço/);
 assert.doesNotMatch(initialHome,/class="grat-home-open"|class="grat-home-save"/,'Sem botões extras na inicial');
 assert.ok(initialHome.indexOf('cuiudo-punch-strip')<initialHome.indexOf('grat-home'),
  'Cartão aparece depois da faixa de abertura');
-assert.ok(initialHome.indexOf('today-goals')<initialHome.indexOf('grat-home'),
- 'Cartão aparece abaixo do checklist de metas');
+assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('today-goals'),
+ 'Cartão aparece acima do checklist de metas');
+assert.match(initialHome,/<div class="cuiudo-home-top-row"><section class="cuiudo-punch-strip"/,
+ 'Faixa motivacional e gratidão compartilham uma linha no desktop');
+assert.ok(initialHome.indexOf('cuiudo-punch-strip')<initialHome.indexOf('grat-home'),
+ 'Gratidão fica depois da faixa motivacional, antes das metas');
 assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('benedict-hero'),
  'Cartão aparece antes da imagem principal');
 assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('cuiudo-grace-reflection'),
