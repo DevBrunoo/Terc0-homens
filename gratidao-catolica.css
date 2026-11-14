@@ -1,0 +1,97 @@
+/* Gratidão Católica — interface responsiva discreta, legível e sem gamificação de fé. */
+.grat-page{width:min(100%,1130px);margin:0 auto 32px;display:grid;gap:21px;color:var(--ink);font-family:var(--font,Arial,sans-serif)}
+.grat-page *{box-sizing:border-box}
+.grat-hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,.8fr);align-items:stretch;gap:16px}
+.grat-hero>div:first-child{display:grid;align-content:center;gap:11px;padding:25px clamp(15px,4vw,34px);border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.grat-kicker{font:800 10px/1.5 var(--font,Arial,sans-serif);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.grat-hero h1{font:800 clamp(27px,4vw,42px)/1.12 var(--font,Arial,sans-serif);letter-spacing:-.045em;margin:0}
+.grat-hero p{font:450 clamp(13px,1.8vw,15px)/1.65 var(--font,Arial,sans-serif);color:var(--subink);margin:0;max-width:52ch}
+.grat-scripture{position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:23px;background:var(--ink);color:var(--bg);border-radius:18px;overflow:hidden}
+.grat-cross{position:absolute;top:-12px;right:10px;font-size:105px;line-height:1;opacity:.10;pointer-events:none}
+.grat-scripture blockquote{position:relative;margin:0;font:700 clamp(18px,2.1vw,24px)/1.35 var(--font,Arial,sans-serif);letter-spacing:-.028em}
+.grat-scripture small{position:relative;font:600 11px/1.4 var(--font,Arial,sans-serif);opacity:.7}
+.grat-pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grat-pillar{display:grid;grid-template-columns:30px 1fr;align-content:start;column-gap:9px;row-gap:2px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.grat-pillar-number{grid-row:span 2;display:grid;place-items:center;width:29px;height:29px;border:1px solid var(--line);border-radius:9px;color:var(--accent);font-size:11px;font-weight:800}
+.grat-pillar strong{font:750 13px/1.4 var(--font,Arial,sans-serif)}
+.grat-pillar small{color:var(--subink);font:450 11px/1.5 var(--font,Arial,sans-serif)}
+.grat-main{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(240px,.85fr);gap:14px;align-items:start}
+.grat-writing{min-width:0;padding:clamp(15px,3vw,25px);border-radius:16px;display:grid;gap:12px}
+.grat-form-header{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:9px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.grat-form-header h2{font:800 clamp(19px,2.8vw,25px)/1.2 var(--font,Arial,sans-serif);letter-spacing:-.025em;margin:4px 0 0;text-transform:capitalize}
+.grat-writing form{display:grid;gap:15px}
+.grat-thanks{padding:0;border:0;min-width:0;display:grid;gap:10px}
+.grat-thanks legend{font:750 15px/1.4 var(--font,Arial,sans-serif);margin:0 0 10px;padding:0}
+.grat-field{display:grid;gap:5px;min-width:0}
+.grat-field label{font:700 12px/1.45 var(--font,Arial,sans-serif);color:var(--ink)}
+.grat-hint{font:450 11px/1.6 var(--font,Arial,sans-serif);color:var(--subink);margin:0;max-width:75ch}
+.grat-field textarea{width:100%;min-height:67px;resize:vertical;display:block;padding:10px 12px;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;color:var(--ink);font:450 13px/1.55 var(--font,Arial,sans-serif);outline:0;transition:border-color .15s,box-shadow .15s}
+.grat-field textarea::placeholder{color:var(--subink);opacity:.85}
+.grat-field textarea:focus-visible{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+.grat-other{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 12px}
+.grat-form-footer{display:flex;flex-wrap:wrap;gap:11px;align-items:center;padding-top:4px}
+.grat-form-footer .btn{min-height:42px}
+.grat-private{color:var(--subink);font:450 10px/1.55 var(--font,Arial,sans-serif);max-width:340px}
+.grat-message{font:650 12px/1.5 var(--font,Arial,sans-serif);color:var(--accent);min-height:0}
+.grat-message:empty{display:none}
+.grat-aside{display:grid;gap:12px;min-width:0}
+.grat-side-card{display:grid;gap:13px;padding:20px;border:1px solid var(--line);border-radius:15px;background:var(--surface)}
+.grat-side-card>p{font:750 18px/1.35 var(--font,Arial,sans-serif);letter-spacing:-.025em;margin:0}
+.grat-side-warning{padding:12px;border-radius:10px;background:var(--surface-2);border-left:2px solid var(--accent);color:var(--subink);font:500 12px/1.7 var(--font,Arial,sans-serif)}
+.grat-side-card>small{font:650 10px/1.5 var(--font,Arial,sans-serif);color:var(--subink)}
+.grat-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:var(--line)}
+.grat-stats>div{background:var(--surface);padding:17px 12px;display:grid;gap:5px}
+.grat-stats strong{font:800 26px/1 var(--font,Arial,sans-serif);font-variant-numeric:tabular-nums}
+.grat-stats span{font:500 10px/1.4 var(--font,Arial,sans-serif);color:var(--subink)}
+.grat-tools{display:flex;flex-wrap:wrap;gap:8px}
+.grat-quiet{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:39px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:700 11px/1.4 var(--font,Arial,sans-serif);text-align:center;text-decoration:none}
+.grat-quiet:hover{border-color:var(--accent)}
+#grat-import{position:absolute;width:1px;height:1px;opacity:0;clip-path:inset(50%);overflow:hidden}
+.grat-upload:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.grat-history{display:grid;gap:12px;padding:4px 0 15px}
+.grat-history-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.grat-history-head h2{font:800 22px/1.3 var(--font,Arial,sans-serif);letter-spacing:-.03em;margin:0}
+.grat-history-head>span{font:550 11px/1.4 var(--font,Arial,sans-serif);color:var(--subink)}
+.grat-history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.grat-history-item{display:flex;align-items:start;justify-content:space-between;gap:9px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-width:0}
+.grat-history-item>div:first-child{min-width:0;flex:1}
+.grat-history-item time{font:750 12px/1.5 var(--font,Arial,sans-serif);text-transform:capitalize}
+.grat-history-item p{color:var(--subink);margin:5px 0 0;font:450 12px/1.5 var(--font,Arial,sans-serif);overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.grat-history-actions{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.grat-history-actions button{cursor:pointer;min-height:35px;padding:7px 9px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font:650 10px/1.3 var(--font,Arial,sans-serif)}
+.grat-history-actions button:hover{border-color:var(--accent)}
+.grat-empty{font:500 13px/1.6 var(--font,Arial,sans-serif);color:var(--subink);margin:0;padding:21px;border:1px dashed var(--line);border-radius:12px}
+.grat-home{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:15px 0;padding:18px 22px;border-left:3px solid var(--accent)}
+.grat-home>div{min-width:0;flex:1 1 275px}
+.grat-home h2{font:800 clamp(18px,2.5vw,23px)/1.3 var(--font,Arial,sans-serif);letter-spacing:-.03em;margin:5px 0}
+.grat-home p{font:450 12px/1.6 var(--font,Arial,sans-serif);color:var(--subink);margin:0;max-width:64ch}
+.grat-home .btn{min-height:41px}
+.grat-page button:focus-visible,.grat-page label.grat-upload:focus-visible,.grat-home button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:880px){
+ .grat-main{grid-template-columns:minmax(0,1fr)}
+ .grat-aside{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .grat-tools{grid-column:1/-1}
+}
+@media(max-width:650px){
+ .grat-page{gap:14px;padding-bottom:16px}
+ .grat-hero{grid-template-columns:1fr;gap:9px}
+ .grat-hero>div:first-child{padding:18px}
+ .grat-scripture{padding:15px 18px;min-height:110px}
+ .grat-scripture blockquote{font-size:18px}
+ .grat-pillars{grid-template-columns:1fr;gap:6px}
+ .grat-pillar{padding:9px 11px}
+ .grat-pillar small{font-size:11px}
+ .grat-other{grid-template-columns:1fr}
+ .grat-writing{padding:15px}
+ .grat-aside{grid-template-columns:1fr}
+ .grat-tools{grid-column:auto}
+ .grat-history-grid{grid-template-columns:1fr}
+ .grat-home{padding:15px}
+ .grat-home .btn{width:100%;justify-content:center}
+}
+@media(max-width:360px){
+ .grat-history-item{flex-wrap:wrap}
+ .grat-history-actions{justify-content:flex-start}
+ .grat-form-footer .btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.grat-field textarea{transition:none}}
