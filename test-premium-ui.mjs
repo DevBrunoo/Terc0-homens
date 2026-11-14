@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createContext,runInContext} from 'node:vm';
 const src=readFileSync(new URL('./cuiudo-premium.js',import.meta.url),'utf8');
+const devotionalSrc=readFileSync(new URL('./cuiudo-lectio-devotional.js',import.meta.url),'utf8');
 const callbacks={click:[],change:[],submit:[]},memory=new Map();
 const classSet=new Set(),changes=[];
 const app={innerHTML:'',addEventListener(type,fn){(callbacks[type]??=[]).push(fn)}};
 const now='2026-11-14';
-const group={mysteries:Array.from({length:5},(_,i)=>({id:'m'+i,title:'Mistério '+i,ref:'Lc 1,1'}))};
+const ids=['anunciacao','visitacao','nascimento','apresentacao','encontro'];
+const group={mysteries:ids.map((id,i)=>({id,title:'Mistério '+i,ref:'Lc 1,1',question:'O que mudou?',action:'Pratique a caridade.'}))};
 const verses=Object.fromEntries(group.mysteries.map(m=>[m.id,{
  ref:'Lc 1,1',pt:'Palavra do Evangelho',en:'Word of the Gospel',
  ptSource:'https://www.vatican.va/',enSource:'https://www.vatican.va/'
@@ -32,6 +34,7 @@ const ctx=createContext({
  cuiudoTimerStop:g=>{g.timer_state='paused'},Notification:undefined,
  console,confirm:()=>true,alert(){},Date
 });
+runInContext(devotionalSrc,ctx,{timeout:1500});
 runInContext(src,ctx,{timeout:1500});
 assert.ok(ctx.window.cuiudoPremium);
 assert.match(ctx.window.cuiudoPremium.goalExtras('pt'),/Proteção e recuperação/);
@@ -41,6 +44,18 @@ ctx.state.tab='lectio';runInContext('render()',ctx);
 assert.match(app.innerHTML,/Lectio Divina/);
 assert.match(app.innerHTML,/Palavra do Evangelho/);
 assert.match(app.innerHTML,/cuiudo-lectio-form/);
+assert.match(app.innerHTML,/DEVOCIONAL DO DIA/);
+assert.match(app.innerHTML,/A coragem do sim/);
+assert.match(app.innerHTML,/Meditação/);
+assert.match(app.innerHTML,/Exame do coração/);
+assert.match(app.innerHTML,/Propósito de hoje/);
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-lectio-devotional-toggle',id:'anunciacao'},
+ closest(){return this}}});
+assert.match(app.innerHTML,/Devocional realizado · Desfazer/);
+assert.ok(memory.get('terco-lectio-devocionais-v1').includes('2026-11-14:anunciacao'));
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-lectio-devotional-toggle',id:'anunciacao'},
+ closest(){return this}}});
+assert.doesNotMatch(app.innerHTML,/Devocional realizado · Desfazer/);
 ctx.state.tab='inicio';
 for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-open',id:'1763000000000-test'},
  closest(){return this}}});
@@ -54,6 +69,7 @@ assert.equal(changes.length,1,'Alteração sincronizada');
 for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-done'},
  closest(){return this}}});
 assert.equal(ctx.state.dailyGoalDays[now][0].status,'done');
+assert.ok(Number.isSafeInteger(ctx.state.dailyGoalDays[now][0].completed_at),'Conclusão em modo foco também deve registrar o horário');
 assert.equal(changes.length,2,'Conclusão sincronizada');
 assert.ok(!ctx.window.cuiudoPremium.goalExtras('pt').includes('cuiudo-focus-dialog'));
 console.log('✓ Interface premium: Lectio, navegação, backup, foco, timer e conclusão');

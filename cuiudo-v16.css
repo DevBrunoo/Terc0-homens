@@ -2516,12 +2516,17 @@
 .goal-victory .goal-victory-copy>small{
  font:570 11px/1.4 var(--font);
 }
-.goal-victory-time{
+.goal-victory-time,
+.goal-reality-time{
  display:block;
  color:var(--subink);
  font:600 11px/1.4 var(--font);
  font-variant-numeric:tabular-nums;
  overflow-wrap:anywhere;
+}
+.goal-reality-time{
+ margin-top:4px;
+ margin-bottom:4px;
 }
 
 

@@ -153,6 +153,7 @@
    '<article class="cuiudo-lectio-verse"><span>'+escapeHtml(t.scripture)+' · '+escapeHtml(verse.ref)+'</span>'+
    '<h2>'+escapeHtml(m.title)+'</h2><blockquote>'+escapeHtml(text)+'</blockquote>'+
    '<a href="'+escapeHtml(href)+'" target="_blank" rel="noopener noreferrer">Ler capítulo completo · fonte ↗</a></article>'+
+   (window.cuiudoDevotionalCard?.(m)||'')+
    '<div class="cuiudo-lectio-steps">'+t.steps.map((name,i)=>
     '<article><span>'+String(i+1).padStart(2,'0')+'</span><div><h3>'+escapeHtml(name)+'</h3>'+
     '<p>'+escapeHtml(t.prompt[i])+'</p></div></article>').join('')+'</div>'+
@@ -224,7 +225,7 @@
    g.timer_started_at=Date.now();g.timer_state='running';cuiudoTimerArmAudio(g);
   }
   if(action==='done'){
-   cuiudoTimerCancelAudio(g.id);cuiudoTimerStop(g);g.status='done';activeFocus=null;
+   cuiudoTimerCancelAudio(g.id);cuiudoTimerStop(g);g.status='done';g.completed_at=Date.now();delete g.missed_at;activeFocus=null;
   }
   syncGoal(found);render();
  }
