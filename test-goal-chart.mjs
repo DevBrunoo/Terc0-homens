@@ -68,7 +68,7 @@ assert.match(runInContext("cuiudoGoalsBarChart('en')",vm),/There are no goals re
 for(const locale of ['pt','en','es','la'])assert.match(
  runInContext('cuiudoGoalsBarChart('+JSON.stringify(locale)+')',vm),/cuiudo-goals-chart/
 );
-assert.match(read('sw.js'),/terco-grafico-compacto-v62/);
+assert.match(read('sw.js'),/terco-premium-foco-lectio-v63/);
 assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-fill/);
 assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion/);
 console.log('✓ Barras percentuais: 0% real, sem dados, prioridades, datas, 7/14/30 dias e quatro idiomas');
