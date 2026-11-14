@@ -6,7 +6,7 @@ const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 const run=spawnSync(process.execPath,['--check',new URL('./daily-goals.js',import.meta.url).pathname]);
 assert.equal(run.status,0,'daily-goals.js: '+run.stderr);
 const source=read('daily-goals.js');
-const from=source.indexOf("let cuiudoChartMode='status';");
+const from=source.indexOf("const cuiudoChartPrefs=");
 const to=source.indexOf('function cuiudoGoalChecklist(){',from);
 assert.ok(from>=0&&to>from,'Bloco do gráfico encontrado');
 const vm=createContext({
