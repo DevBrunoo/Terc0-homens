@@ -39,6 +39,24 @@ const cuiudoGoalsText={
   undone:'Non completa',earned:['Medalia Fortitudinis','Signum Disciplinae','Stella Constantiae','Praemium Promissi Servati'],
   rewardText:'Promissum servasti. Donum tuum honor virtualis est.'}
 };
+/* Horário real da conclusão, persistido junto à meta e apresentado sempre
+ * no fuso de Brasília, mesmo que o visitante esteja em outro fuso. */
+const cuiudoCompletedAtLabels={
+ pt:'Concluída em',en:'Completed on',es:'Completada el',la:'Completa die'
+};
+function cuiudoGoalCompletedTime(goal,locale){
+ const stamp=goal?.completed_at;
+ if(!Number.isSafeInteger(stamp)||stamp<=0)return '';
+ const date=new Date(stamp);
+ if(!Number.isFinite(date.getTime()))return '';
+ const language={pt:'pt-BR',en:'en-US',es:'es-ES',la:'pt-BR'}[locale]||'pt-BR';
+ const when=new Intl.DateTimeFormat(language,{
+  timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'
+ }).format(date);
+ const label=cuiudoCompletedAtLabels[locale]||cuiudoCompletedAtLabels.pt;
+ return '<time class="goal-victory-time" datetime="'+date.toISOString()+'">'+
+  escapeHtml(label+' '+when+' (Brasília)')+'</time>';
+}
 /* Metas continuam visíveis depois da meia-noite. */
 function cuiudoGoalsToday(){
  state.dailyGoalDays??={};
@@ -591,7 +609,8 @@ function cuiudoGoalChecklist(){
       const inspiration={pt:'Inspirado em',en:'Inspired by',es:'Inspirado en',la:'Ex'}[l];
       return '<div class="goal-gift goal-victory" role="status">'+
        '<div class="goal-victory-copy"><span class="goal-victory-kicker">'+escapeHtml(t.gift)+' · '+escapeHtml(cuiudoGoalGift(goal.id))+'</span>'+
-       '<b>'+escapeHtml(blessing.message)+'</b>'+
+       '<b>'+escapeHtml(blessing.message)+'</b>'+ 
+        cuiudoGoalCompletedTime(goal,l)+
        '<small>'+escapeHtml(inspiration)+' '+escapeHtml(blessing.reference)+'</small></div>'+
        '</div>';
     })():
@@ -742,9 +761,14 @@ app.addEventListener('click',event=>{
   cuiudoTimerStop(goal);
   if(cuiudoTimerOpened===id)cuiudoTimerOpened=null;
  }
- if(action==='cuiudo-goal-done')items[index].status='done';
- if(action==='cuiudo-goal-missed')items[index].status='missed';
- if(action==='cuiudo-goal-reopen')items[index].status='pending';
+ if(action==='cuiudo-goal-done'){
+  goal.status='done';
+  goal.completed_at=Date.now();
+ }
+ if(action==='cuiudo-goal-missed'||action==='cuiudo-goal-reopen'){
+  goal.status=action==='cuiudo-goal-missed'?'missed':'pending';
+  delete goal.completed_at;
+ }
  const before={...goal};
  if(action==='cuiudo-goal-delete'){
   cuiudoTimerCancelAudio(id);
