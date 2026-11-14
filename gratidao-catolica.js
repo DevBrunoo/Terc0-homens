@@ -208,11 +208,11 @@
  const previousHome=combatHome;
  combatHome=function(){
   const home=previousHome();
-  const opener='<section class="cuiudo-punch-strip"';
-  const start=home.indexOf(opener);
-  const end=start>=0?home.indexOf('</section>',start):-1;
-  // Mostrar a gratidão logo depois da faixa de abertura, antes do checklist e da imagem principal.
-  return end>=0?home.slice(0,end+10)+homeTile()+home.slice(end+10):homeTile()+home;
+  // A lista de metas termina imediatamente antes do banner de São Bento.
+  // Assim, o diário fica abaixo de todas as metas e acima da imagem principal.
+  const marker='<section class="benedict-hero">';
+  const index=home.indexOf(marker);
+  return index>=0?home.slice(0,index)+homeTile()+home.slice(index):home+homeTile();
  };
  const previousRender=render;
  render=function(){
