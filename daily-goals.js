@@ -365,7 +365,7 @@ function cuiudoGoalChecklist(){
    (metrics.total?Math.round(metrics.done/metrics.total*100):0)+'%"></span></div>'+
   '<div class="today-goals-list">'+(goals.length?goals.map((goal,i)=>{
    const status=goal.status||'pending',completed=status==='done',failed=status==='missed';
-   return '<article class="today-goal '+(completed?'goal-completed':failed?'goal-missed':'goal-pending')+'">'+
+   return '<article class="today-goal '+(completed?'goal-completed':failed?'goal-missed':'goal-pending')+'" data-priority="'+(['high','medium','low'].includes(goal.priority)?goal.priority:'medium')+'">'+
    '<div class="today-goal-main"><span class="today-goal-icon" aria-hidden="true">'+(completed?'✓':failed?'!':String(i+1).padStart(2,'0'))+'</span>'+
    '<div class="today-goal-content"><div class="goal-card-heading"><strong class="goal-card-title">'+escapeHtml(goal.text)+'</strong>'+
    '<label class="goal-priority-label">'+escapeHtml(cuiudoPriorityLabels[l][3])+' <select class="goal-priority-select" data-goal-priority="'+escapeHtml(goal.id)+'" aria-label="'+escapeHtml(cuiudoPriorityLabels[l][3])+'">'+['high','medium','low'].map((p,j)=>'<option value="'+p+'" '+((goal.priority||'medium')===p?'selected':'')+'>'+escapeHtml(cuiudoPriorityLabels[l][j])+'</option>').join('')+'</select></label>'+
@@ -429,6 +429,7 @@ app.addEventListener('change',event=>{
  if(!found)return;
  const [day,items]=found,goal=items.find(g=>g.id===id);
  goal.priority=priority;cuiudoGoalsSave();window.cuiudoGlobalGoals?.change('upsert',day,goal);
+ select.closest('.today-goal')?.setAttribute('data-priority',priority);
 });
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
