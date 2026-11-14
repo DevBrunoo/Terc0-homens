@@ -405,8 +405,13 @@ function cuiudoTimerStop(goal){
 /* Percentuais de conclusão: barras verticais inspiradas no modelo enviado.
  * Usa apenas registros verdadeiros: dias sem metas são marcados como sem dados.
  * A data das metas é a data do cadastro, não a da conclusão. */
-let cuiudoChartMode='status';
-let cuiudoChartRange=14;
+const cuiudoChartPrefs=(()=>{
+ try{if(typeof localStorage!=='undefined')return JSON.parse(localStorage.getItem('terco-grafico-preferencias-v1')||'{}')||{}}catch{}
+ return {};
+})();
+let cuiudoChartMode=['status','priority'].includes(cuiudoChartPrefs.mode)?cuiudoChartPrefs.mode:'status';
+let cuiudoChartRange=[7,14,30].includes(cuiudoChartPrefs.range)?cuiudoChartPrefs.range:7;
+function cuiudoSaveChartPrefs(){try{localStorage.setItem('terco-grafico-preferencias-v1',JSON.stringify({mode:cuiudoChartMode,range:cuiudoChartRange}))}catch{}}
 const cuiudoChartLabels={
  pt:{title:'Seu desempenho',subtitle:'Evolução da disciplina nas metas registradas.',status:'Por dia',priority:'Por prioridade',period:'Período',days:'dias',
   done:'Concluídas',pending:'Pendentes',missed:'Não concluídas',high:'Alta',medium:'Média',low:'Baixa',
@@ -477,9 +482,35 @@ function cuiudoChartBars(rows,mode='status'){
 function cuiudoGoalsBarChart(locale){
  const t=cuiudoChartLabels[locale]||cuiudoChartLabels.pt;
  const rows=cuiudoChartRows(cuiudoChartRange);
- const bars=cuiudoChartBars(rows,cuiudoChartMode);
- const count=rows.reduce((sum,row)=>sum+row.done+row.pending+row.missed,0);
- const done=rows.reduce((sum,row)=>sum+row.done,0);
+ const history=typeof window!=='undefined'?window.cuiudoGoalHistory:null;
+ const useHistory=Boolean(history?.loaded&&history.events.length);
+ const historicRows=useHistory?history.byDay(cuiudoChartRange):[];
+ let bars=cuiudoChartBars(rows,cuiudoChartMode);
+ let count=rows.reduce((sum,row)=>sum+row.done+row.pending+row.missed,0);
+ let done=rows.reduce((sum,row)=>sum+row.done,0);
+ if(useHistory){
+  if(cuiudoChartMode==='status'){
+   bars=historicRows.map(row=>({
+    key:row.day,label:row.day.slice(8,10)+'/'+row.day.slice(5,7),
+    done:row.completed,total:row.resolved,
+    percent:row.resolved?Math.round(row.completed/row.resolved*100):null
+   }));
+  }else{
+   const days=new Set(historicRows.map(x=>x.day));
+   bars=['high','medium','low'].map(priority=>{
+    const relevant=history.events.filter(e=>e.priority===priority&&
+     ['completed','missed'].includes(e.event_type)&&days.has((()=>{
+      const d=new Date(e.occurred_at);
+      return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+     })()));
+    const d=relevant.filter(e=>e.event_type==='completed').length;
+    return {key:priority,label:t[priority],done:d,total:relevant.length,
+     percent:relevant.length?Math.round(d/relevant.length*100):null};
+   });
+  }
+  done=historicRows.reduce((sum,row)=>sum+row.completed,0);
+  count=historicRows.reduce((sum,row)=>sum+row.resolved,0);
+ }
  const rate=count?Math.round(done/count*100):null;
  const controls='<div class="cuiudo-chart-controls">'+
   '<div class="cuiudo-chart-modes" role="group" aria-label="'+escapeHtml(t.title)+'">'+
@@ -487,28 +518,47 @@ function cuiudoGoalsBarChart(locale){
   '</div><label class="cuiudo-chart-period">'+escapeHtml(t.period)+' <select id="cuiudo-chart-range" aria-label="'+escapeHtml(t.period)+'">'+
   [7,14,30].map(days=>'<option value="'+days+'"'+(cuiudoChartRange===days?' selected':'')+'>'+days+' '+escapeHtml(t.days)+'</option>').join('')+
   '</select></label></div>';
- const summary='<div class="cuiudo-chart-summary"><strong>'+ (rate===null?'—':rate+'%')+'</strong>'+
+ const summary='<div class="cuiudo-chart-summary"><strong>'+(rate===null?'—':rate+'%')+'</strong>'+
   '<span>'+done+' '+escapeHtml(t.of)+' '+count+' '+escapeHtml(t.summary)+'</span></div>';
  const head='<header class="cuiudo-chart-head"><div class="cuiudo-chart-intro"><span class="cuiudo-chart-eyebrow">✦ '+escapeHtml(t.axis)+'</span>'+
   '<h3>'+escapeHtml(t.title)+'</h3><p>'+escapeHtml(t.subtitle)+'</p></div>'+summary+'</header>';
  let content='<p class="cuiudo-chart-empty">'+escapeHtml(t.empty)+'</p>';
- if(count){
+ if(bars.some(x=>x.total>0)){
   const tiles=bars.map(bar=>{
    const label=cuiudoChartMode==='priority'?t[bar.key]:bar.label;
    const detail=label+': '+bar.done+' '+t.of+' '+bar.total+' '+t.summary+
-     (bar.percent===null?'': ' ('+bar.percent+'%)');
-   return '<div class="cuiudo-chart-bar-item'+(bar.percent===null?' is-empty':'')+'" role="img" aria-label="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'" title="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'">'+
+    (bar.percent===null?'':' ('+bar.percent+'%)');
+   const green=bar.percent!==null&&bar.percent>=50;
+   const height=useHistory?Math.min(100,Math.round(bar.done/Math.max(1,...bars.map(b=>b.done))*100)):bar.percent;
+   return '<div class="cuiudo-chart-bar-item'+(bar.percent===null?' is-empty':green?' is-success':' is-warning')+
+    '" role="img" aria-label="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'" title="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'">'+
     '<div class="cuiudo-chart-bar-stage"><div class="cuiudo-chart-bar-track">'+
     (bar.percent===null?'<span class="cuiudo-chart-bar-nodata" aria-hidden="true"></span>':
-     '<span class="cuiudo-chart-bar-fill" style="height:'+bar.percent+'%" aria-hidden="true"></span>')+
+     '<span class="cuiudo-chart-bar-fill" style="height:'+height+'%" aria-hidden="true"></span>')+
     '</div></div><strong class="cuiudo-chart-percent">'+(bar.percent===null?'—':bar.percent+'%')+'</strong>'+
     '<span class="cuiudo-chart-bar-label">'+escapeHtml(label)+'</span></div>';
   }).join('');
+  // O traço azul indica percentual de conclusões entre metas resolvidas.
+  // Pontos sem dados interrompem a linha para não inventar observações.
+  const segments=[];let seg=[];
+  bars.forEach((bar,i)=>{
+   if(bar.percent===null){if(seg.length)segments.push(seg);seg=[];return;}
+   seg.push([((i+.5)/bars.length*100).toFixed(3),(94-bar.percent*.88).toFixed(3)]);
+  });
+  if(seg.length)segments.push(seg);
+  const line=segments.map(points=>
+   '<polyline points="'+points.map(x=>x.join(',')).join(' ')+'" fill="none" stroke="#3187c6" stroke-width="1.9" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>'
+  ).join('');
+  const dots=segments.flat().map(point=>'<circle cx="'+point[0]+'" cy="'+point[1]+'" r=".8" fill="#3187c6" stroke="white" stroke-width=".35" vector-effect="non-scaling-stroke"/>').join('');
+  const overlay=cuiudoChartMode==='status'?'<svg class="cuiudo-chart-trend" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="'+escapeHtml(useHistory?'Linha azul: percentual de metas resolvidas com sucesso em cada dia.':'Linha azul: percentual atual concluído por data de cadastro.')+'">'+line+dots+'</svg>':'';
   content='<div class="cuiudo-chart-scroll" role="region" tabindex="0" aria-label="'+escapeHtml(t.axis)+'">'+
-   '<div class="cuiudo-chart-barplot" style="--chart-count:'+bars.length+'">'+tiles+'</div></div>';
+   '<div class="cuiudo-chart-plot-wrap" style="--chart-count:'+bars.length+'">'+
+   '<div class="cuiudo-chart-barplot">'+tiles+'</div>'+overlay+'</div></div>';
  }
+ const note=useHistory?'Histórico real: barras = conclusões registradas no dia; linha azul = percentual concluído entre metas resolvidas no dia. Os eventos são registrados a partir desta atualização, sem inventar o passado.':
+  t.note;
  return '<section class="cuiudo-goals-chart" aria-label="'+escapeHtml(t.title)+'">'+head+controls+content+
-  '<details class="cuiudo-chart-footnote"><summary>'+escapeHtml(t.noteLabel)+'</summary><p>'+escapeHtml(t.note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></details></section>';
+  '<details class="cuiudo-chart-footnote"><summary>'+escapeHtml(t.noteLabel)+'</summary><p>'+escapeHtml(note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></details></section>';
 }
 
 function cuiudoGoalChecklist(){
@@ -579,6 +629,7 @@ app.addEventListener('click',event=>{
  const mode=button.dataset.mode;
  if(!['status','priority'].includes(mode)||mode===cuiudoChartMode)return;
  cuiudoChartMode=mode;
+ cuiudoSaveChartPrefs();
  render();
 });
 app.addEventListener('change',event=>{
@@ -586,6 +637,7 @@ app.addEventListener('change',event=>{
  const range=Number(event.target.value);
  if(![7,14,30].includes(range)||range===cuiudoChartRange)return;
  cuiudoChartRange=range;
+ cuiudoSaveChartPrefs();
  render();
 });
 
