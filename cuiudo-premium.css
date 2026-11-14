@@ -115,3 +115,39 @@
  .cuiudo-focus-scrim{backdrop-filter:none}
  .cuiudo-chart-plot-wrap .cuiudo-chart-bar-fill{transition:none!important}
 }
+
+
+/* Devocional da Lectio Divina — leitura confortável, compacto e responsivo. */
+.cuiudo-devotional{
+ display:grid;gap:15px;
+ padding:clamp(17px,3.2vw,28px);
+ border:1px solid var(--line);
+ border-left:3px solid var(--accent);
+ border-radius:16px;background:var(--surface);
+}
+.cuiudo-devotional-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.cuiudo-devotional-eyebrow{font:800 10px/1.4 var(--font);letter-spacing:.1em;color:var(--accent)}
+.cuiudo-devotional-header h2{font:800 clamp(19px,3vw,25px)/1.2 var(--font);letter-spacing:-.025em;color:var(--ink);margin:7px 0 0}
+.cuiudo-devotional-reference{font:650 11px/1.4 var(--font);color:var(--subink)}
+.cuiudo-devotional-intro{font:500 11px/1.5 var(--font);color:var(--subink);margin:-6px 0 0}
+.cuiudo-devotional-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.cuiudo-devotional-body section{min-width:0;display:grid;align-content:start;gap:7px;padding:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px}
+.cuiudo-devotional-body h3{margin:0;color:var(--subink);font:800 10px/1.4 var(--font);letter-spacing:.045em;text-transform:uppercase}
+.cuiudo-devotional-body p{margin:0;color:var(--ink);font:470 13px/1.65 var(--font);overflow-wrap:anywhere}
+.cuiudo-devotional-prayer{border-left:2px solid var(--accent)!important}
+.cuiudo-devotional-action{border-left:2px solid var(--ink)!important}
+.cuiudo-devotional-footer{display:flex;align-items:center;flex-wrap:wrap;gap:11px}
+.cuiudo-devotional-footer button{
+ min-height:44px;max-width:100%;padding:10px 15px;border:1px solid var(--line);
+ border-radius:10px;color:var(--bg);background:var(--ink);
+ font:750 12px/1.35 var(--font);cursor:pointer;
+}
+.cuiudo-devotional-footer button[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--accent)}
+.cuiudo-devotional-footer small{font:500 11px/1.5 var(--font);color:var(--subink)}
+.cuiudo-devotional :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:620px){
+ .cuiudo-devotional{gap:13px;padding:16px}
+ .cuiudo-devotional-body{grid-template-columns:1fr}
+ .cuiudo-devotional-body section{padding:12px}
+ .cuiudo-devotional-footer button{width:100%}
+}
