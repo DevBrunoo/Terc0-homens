@@ -214,3 +214,25 @@ body{font-family:var(--body);letter-spacing:-.005em}
  .poster-card,.poster-open img{transition:none!important}
 }
 @media (min-width:991px){.compact-menu{display:none!important}}
+
+/* Cartazes editoriais inspirados nas referências enviadas.
+   Arte vetorial com texto integrado; preservar o enquadramento completo. */
+.poster-card.poster-reference .poster-open{background:#171310;}
+.poster-card.poster-reference .poster-open img,
+.feed-modal-image.poster-reference img{object-fit:contain;object-position:center;filter:none;}
+.poster-card.poster-reference .poster-open img{transform:none;}
+.poster-card.poster-reference:hover .poster-open img{transform:none;}
+.poster-card.poster-reference .poster-shade,
+.poster-card.poster-reference .poster-topline,
+.feed-modal-image.poster-reference .poster-shade{display:none;}
+.poster-card.poster-reference.wide .poster-open{aspect-ratio:1.08;}
+.poster-card.poster-reference:not(.wide) .poster-open{aspect-ratio:.87;}
+.feed-modal-image.poster-reference{background:#171310;}
+@media(max-width:760px){
+ .poster-card.poster-reference:not(.wide){grid-column:span 2;}
+ .poster-card.poster-reference.wide .poster-open{aspect-ratio:1.02;}
+ .poster-card.poster-reference:not(.wide) .poster-open{aspect-ratio:.92;}
+}
+@media(prefers-reduced-motion:reduce){
+ .poster-card.poster-reference .poster-open img{transition:none;}
+}
