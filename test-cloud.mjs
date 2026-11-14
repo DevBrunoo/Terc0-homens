@@ -34,7 +34,7 @@ assert.match(read('daily-goals.js'),/delete goal.completed_at/);
 assert.match(read('global-goals.js'),/missed_at:g.status==='missed'/);
 assert.match(read('functions/api/goals.js'),/AS missed_at/);
 assert.match(read('functions/api/goals.js'),/body.missed_at/);
-assert.match(read('daily-goals.js'),/goal.missed_at=Date.now\\(\\)/);
+assert.match(read('daily-goals.js'),/goal.missed_at=Date.now\(\)/);
 assert.match(read('daily-goals.js'),/delete goal.missed_at/);
 assert.match(read('global-goals.js'),/let offset=0,hasMore=true/);
 assert.match(read('global-goals.js'),/hasMore=data\.hasMore===true/);
