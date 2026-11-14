@@ -2986,3 +2986,52 @@
 :root[data-theme="dark"] .today-goal[data-priority="medium"] .goal-priority-select{background:#3a3021;color:#ffda91}
 :root[data-theme="dark"] .today-goal[data-priority="low"] .goal-priority-select{background:#20372e;color:#a1e2b8}
 @media(max-width:480px){.today-goal .goal-priority-label{font-size:10px}.today-goal .goal-priority-select{min-height:36px;font-size:11px}}
+
+
+/* Gráfico de linhas das metas: responsivo, com estados e prioridades visíveis. */
+.cuiudo-goals-chart{--goal-chart-done:#21865f;--goal-chart-pending:#bc8424;--goal-chart-missed:#b65c65;
+ --goal-chart-high:#bb4d54;--goal-chart-medium:#bc8424;--goal-chart-low:#3c8f96;
+ margin:20px 0 12px;padding:clamp(13px,2.3vw,22px);border:1px solid var(--line);
+ border-radius:16px;background:var(--surface);min-width:0}
+.cuiudo-chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px 18px;flex-wrap:wrap}
+.cuiudo-chart-head h3{font:800 clamp(16px,2vw,20px)/1.3 var(--font);color:var(--ink);margin:0 0 4px}
+.cuiudo-chart-head p{font:450 12px/1.6 var(--font);color:var(--subink);margin:0}
+.cuiudo-chart-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cuiudo-chart-modes{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.cuiudo-chart-modes button{min-height:34px;padding:6px 11px;border:0;border-radius:7px;color:var(--subink);background:transparent;cursor:pointer;font:700 11px/1.3 var(--font)}
+.cuiudo-chart-modes button[aria-pressed="true"]{color:var(--ink);background:var(--surface);box-shadow:0 1px 5px #00000016}
+.cuiudo-chart-modes button:focus-visible,.cuiudo-chart-period select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cuiudo-chart-period{display:inline-flex;align-items:center;gap:6px;font:650 11px/1.2 var(--font);color:var(--subink)}
+.cuiudo-chart-period select{min-height:40px;padding:6px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:700 11px var(--font)}
+.cuiudo-chart-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:16px 0 2px}
+.cuiudo-chart-legend-item{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font:650 11px/1.25 var(--font)}
+.cuiudo-chart-legend-item i{display:inline-block;width:19px;height:4px;border-radius:5px;background:var(--goal-chart-color)}
+.cuiudo-chart-line{fill:none;stroke:var(--goal-chart-color);stroke-width:2.7;stroke-linejoin:round;stroke-linecap:round}
+.cuiudo-chart-dot{fill:var(--goal-chart-color);stroke:var(--surface);stroke-width:1.8}
+.cuiudo-goals-chart .is-done{--goal-chart-color:var(--goal-chart-done)}
+.cuiudo-goals-chart .is-pending{--goal-chart-color:var(--goal-chart-pending)}
+.cuiudo-goals-chart .is-missed{--goal-chart-color:var(--goal-chart-missed)}
+.cuiudo-goals-chart .is-high{--goal-chart-color:var(--goal-chart-high)}
+.cuiudo-goals-chart .is-medium{--goal-chart-color:var(--goal-chart-medium)}
+.cuiudo-goals-chart .is-low{--goal-chart-color:var(--goal-chart-low)}
+.cuiudo-chart-scroll{overflow-x:auto;overscroll-behavior-x:contain;min-width:0;width:100%;-webkit-overflow-scrolling:touch}
+.cuiudo-chart-svg{display:block;min-width:500px;width:100%;height:auto;max-height:290px;margin-top:8px;overflow:visible}
+.cuiudo-chart-grid{stroke:var(--line);stroke-width:1;stroke-dasharray:3 5}
+.cuiudo-chart-axis{fill:var(--subink);font:11px Arial,sans-serif}
+.cuiudo-chart-footnote{margin:10px 0 0;color:var(--subink);font:450 10px/1.6 var(--font)}
+.cuiudo-chart-empty{padding:24px 12px;text-align:center;color:var(--subink);font:600 12px/1.6 var(--font)}
+:root[data-theme="dark"] .cuiudo-goals-chart{--goal-chart-done:#70cf9f;--goal-chart-pending:#f0b75a;
+ --goal-chart-missed:#f18a92;--goal-chart-high:#ff858c;--goal-chart-medium:#f0b75a;--goal-chart-low:#72c5c9}
+@media(max-width:760px){
+ .cuiudo-goals-chart{padding:13px 11px;border-radius:13px}
+ .cuiudo-chart-head{gap:10px}
+ .cuiudo-chart-controls{width:100%;justify-content:space-between}
+ .cuiudo-chart-modes button{min-height:39px;padding:7px 10px}
+ .cuiudo-chart-legend{gap:7px 11px}
+ .cuiudo-chart-svg{min-width:460px}
+}
+@media(max-width:380px){
+ .cuiudo-chart-controls{align-items:stretch;flex-direction:column}
+ .cuiudo-chart-modes{justify-content:space-around}
+ .cuiudo-chart-period{justify-content:flex-start}
+}
