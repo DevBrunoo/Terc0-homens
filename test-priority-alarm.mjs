@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {runInNewContext} from 'node:vm';
+import {createContext,runInContext} from 'node:vm';
 import {spawnSync} from 'node:child_process';
 const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 for(const p of ['daily-goals.js','global-goals.js','functions/api/goals.js','sw.js']){
@@ -22,19 +22,20 @@ class TestAudioContext {
 }
 const ctx={window:{AudioContext:TestAudioContext},state:{dailyGoalDays:{}},
  cuiudoLocale:()=>'pt',Notification:undefined,document:{hidden:false},navigator:{}};
-runInNewContext(slice,ctx);
+const sandbox=createContext(ctx);
+runInContext(slice,sandbox);
 const now=Date.now();
 const goal={id:'test-timer',text:'Estudar',status:'pending',duration_sec:60,
  remaining_sec:60,timer_started_at:now,timer_state:'running'};
 ctx.state.dailyGoalDays={'2026-11-14':[goal]};
 ctx.cuiudoTimerArmAudio(goal);
-const job=ctx.cuiudoTimerAudioJobs.get(goal.id);
+const job=runInContext('cuiudoTimerAudioJobs.get("test-timer")',sandbox);
 assert.ok(job,'Alarme armado após o clique');
 assert.equal(job.nodes.length,28,'14 avisos em duas frequências');
 assert.ok(started[0]>=100+58&&started[0]<=100+62,'Áudio pré-agendado para o fim do tempo');
 ctx.cuiudoTimerStop(goal);
 assert.equal(goal.timer_state,'paused');
-assert.equal(ctx.cuiudoTimerAudioJobs.size,0,'Pausar cancela o alarme');
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Pausar cancela o alarme');
 assert.ok(stopped.length>=28,'Nós agendados cancelados');
 const html=read('daily-goals.js');
 assert.match(html,/data-goal-priority/);
