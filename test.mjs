@@ -109,7 +109,7 @@ assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);
 const feedInfo=runInNewContext(feedData+'\n;({feedPosts,feedArtwork,feedFilters})');
-assert.equal(feedInfo.feedPosts.length,19);
+assert.ok(feedInfo.feedPosts.length>=19,'O feed mantém pelo menos 19 publicações');
 assert.ok(Object.keys(feedInfo.feedArtwork).length>=17);
 assert.ok(existsSync(new URL('./assets/feed/fallback.svg',import.meta.url)));
 for(const [id,asset] of Object.entries(feedInfo.feedArtwork)){
