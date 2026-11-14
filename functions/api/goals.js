@@ -1,16 +1,15 @@
 import {response,dbReady,checkOrigin,readJSON,rateLimit} from '../../server/cloud-security.js';
 
-// Quadro GLOBAL intencionalmente público. Não recebe diário, intenções ou dados pessoais.
-// Qualquer pessoa que conheça a URL pode visualizar e alterar estas metas.
+// Metas GLOBAIS: sem conta. Somente dados do quadro público, nunca intenções/diário.
 const validId=v=>typeof v==='string'&&/^[A-Za-z0-9_.:-]{6,80}$/.test(v);
 const validDay=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&
-  !Number.isNaN(Date.parse(v+'T12:00:00Z'));
+ !Number.isNaN(Date.parse(v+'T12:00:00Z'));
 const allowed=new Set(['pending','done','missed']);
 const priorities=new Set(['high','medium','low']);
 const timerStates=new Set(['none','running','paused','finished']);
 const validTimer=body=>{
  const duration=body.duration_sec??0,remaining=body.remaining_sec??0,
-       started=body.timer_started_at??null,phase=body.timer_state??'none';
+  started=body.timer_started_at??null,phase=body.timer_state??'none';
  return Number.isSafeInteger(duration)&&duration>=0&&duration<=86400&&
   Number.isSafeInteger(remaining)&&remaining>=0&&remaining<=duration&&
   timerStates.has(phase)&&
@@ -18,7 +17,6 @@ const validTimer=body=>{
   (phase!=='running'||(duration>0&&started!==null));
 };
 const GOALS_PAGE_SIZE=500;
-
 export async function onRequestGet(context){
  if(!dbReady(context))return response({error:'Banco D1 indisponível.'},503);
  try{
@@ -36,6 +34,19 @@ export async function onRequestGet(context){
  }
 }
 
+function goalEvent(previous,action,status,priority){
+ if(action==='delete')return previous&&previous.status!=='deleted'?'deleted':null;
+ if(!previous)return 'created';
+ if(previous.status==='deleted')return 'restored';
+ if(previous.status!==status){
+  if(status==='done')return 'completed';
+  if(status==='missed')return 'missed';
+  if(status==='pending')return 'reopened';
+ }
+ if((previous.priority||'medium')!==priority)return 'priority';
+ return null;
+}
+
 export async function onRequestPost(context){
  if(!dbReady(context))return response({error:'Banco D1 indisponível.'},503);
  if(!checkOrigin(context.request))return response({error:'Origem não permitida.'},403);
@@ -45,7 +56,7 @@ export async function onRequestPost(context){
  const {action,day,id}=body;
  if(!['upsert','delete'].includes(action)||!validId(id)||!validDay(day))
   return response({error:'Identificador, data ou ação inválidos.'},400);
- // Metas antigas podem ser editadas e excluídas, sem vencimento automático.
+ // Metas antigas podem continuar sendo atualizadas e restauradas, sem expiração automática.
  if(day>new Date(Date.now()+7*86400000).toISOString().slice(0,10))
   return response({error:'Não é possível criar metas muito no futuro.'},400);
  let status='deleted',goalText='',priority='medium';
@@ -57,27 +68,42 @@ export async function onRequestPost(context){
    return response({error:'Meta inválida (máximo de 180 caracteres).'},400);
  }
  try{
-  // Requisições anônimas são limitadas por IP para evitar abuso automatizado.
+  // Alterações são anônimas e limitadas para reduzir abuso.
   if(!await rateLimit(context,'public-goals','',100,600000))
    return response({error:'Muitas alterações. Aguarde alguns minutos.'},429);
-  const db=context.env.DB;
-  const exists=await db.prepare('SELECT day FROM public_goals WHERE id=?').bind(id).first();
-  if(exists && exists.day!==day)return response({error:'Identificador em uso por outra data.'},409);
-  if(!exists&&status!=='deleted'){
+  const db=context.env.DB,now=Date.now();
+  const previous=await db.prepare('SELECT day,status,priority FROM public_goals WHERE id=?').bind(id).first();
+  if(previous&&previous.day!==day)return response({error:'Identificador em uso por outra data.'},409);
+  if((!previous||previous.status==='deleted')&&action==='upsert'){
    const count=await db.prepare("SELECT count(*) AS n FROM public_goals WHERE day=? AND status!='deleted'").bind(day).first();
    if((count?.n||0)>=30)return response({error:'Limite de 30 metas para este dia.'},409);
   }
-  await db.prepare(
-   'INSERT INTO public_goals(id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state) VALUES(?,?,?,?,?,?,?,?,?,?) '+
-   'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,priority=excluded.priority,updated_at=excluded.updated_at,'+
-   'duration_sec=excluded.duration_sec,remaining_sec=excluded.remaining_sec,'+
-   'timer_started_at=excluded.timer_started_at,timer_state=excluded.timer_state '+
-   'WHERE public_goals.day=excluded.day'
-  ).bind(id,day,goalText,status,priority,Date.now(),
+  const statements=[];
+  if(action==='delete'&&previous){
+   // Exclusão reversível: manter texto, prioridade e data no banco (lixeira).
+   statements.push(db.prepare("UPDATE public_goals SET status='deleted',updated_at=?,timer_state='none',timer_started_at=NULL WHERE id=? AND day=?")
+    .bind(now,id,day));
+  }else{
+   statements.push(db.prepare(
+    'INSERT INTO public_goals(id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state) VALUES(?,?,?,?,?,?,?,?,?,?) '+
+    'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,priority=excluded.priority,updated_at=excluded.updated_at,'+
+    'duration_sec=excluded.duration_sec,remaining_sec=excluded.remaining_sec,'+
+    'timer_started_at=excluded.timer_started_at,timer_state=excluded.timer_state '+
+    'WHERE public_goals.day=excluded.day'
+   ).bind(id,day,goalText,status,priority,now,
     action==='upsert'?(body.duration_sec??0):0,
     action==='upsert'?(body.remaining_sec??0):0,
     action==='upsert'?(body.timer_started_at??null):null,
-    action==='upsert'?(body.timer_state??'none'):'none').run();
+    action==='upsert'?(body.timer_state??'none'):'none'));
+  }
+  const kind=goalEvent(previous,action,status,priority);
+  if(kind){
+   statements.push(db.prepare(
+    'INSERT INTO goal_events(goal_id,goal_day,event_type,priority,occurred_at) VALUES(?,?,?,?,?)'
+   ).bind(id,day,kind,action==='delete'?(previous?.priority||'medium'):priority,now));
+  }
+  // D1 batch commits both goal and history together. No retroactive fabricated events.
+  await db.batch(statements);
   return response({ok:true,id,day,status,public:true});
  }catch(e){
   console.error('[CUIUDO public goals POST]',e);
