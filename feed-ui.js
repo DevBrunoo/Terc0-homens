@@ -58,7 +58,7 @@ function combatPostDetail(p){
        <button type="button" class="btn btn-secondary" data-action="combat-save" data-id="${p.id}">${combatSaved(p.id)?'♥ Salvo':'♡ Salvar'}</button>
        <button type="button" class="btn btn-secondary" data-action="combat-share" data-id="${p.id}">Compartilhar</button>
       </div>
-      <div class="feed-credit">Imagem: ${escapeHtml(a.credit)}. ${escapeHtml(a.license)}. <a target="_blank" rel="noopener noreferrer" href="${escapeHtml(a.source)}">Ver origem e licença ↗</a></div>
+      <div class="feed-credit">Imagem: ${escapeHtml(a.credit)}. ${escapeHtml(a.license)}. <a target="_blank" rel="noopener noreferrer" href="${escapeHtml(a.source)}">${inspired?'Ver arquivo da imagem ↗':'Ver origem e licença ↗'}</a></div>
     </div>
    </div>
   </div>`;

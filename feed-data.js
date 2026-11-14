@@ -104,16 +104,16 @@ const feedArtwork = Object.freeze({
     "license": "Domínio público"
   },
   "fidelidade-faroeste": {
-    "url": "./assets/feed/fidelidade-faroeste.svg",
-    "credit": "Cartaz vetorial original inspirado na referência enviada",
-    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/fidelidade-faroeste.svg",
-    "license": "Arte produzida para o aplicativo"
+    "url": "./assets/feed/fidelidade-original.webp",
+    "credit": "Cowboy — imagem original enviada",
+    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/fidelidade-original.webp",
+    "license": "Imagem de referência fornecida pelo usuário"
   },
   "perseveranca-campo": {
-    "url": "./assets/feed/perseveranca-campo.svg",
-    "credit": "Cartaz vetorial original inspirado na referência enviada",
-    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/perseveranca-campo.svg",
-    "license": "Arte produzida para o aplicativo"
+    "url": "./assets/feed/perseveranca-original.webp",
+    "credit": "Campo — imagem original enviada",
+    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/perseveranca-original.webp",
+    "license": "Imagem de referência fornecida pelo usuário"
   }
 });
 const feedFilters = Object.freeze([["todos","Para você"],["miguel","São Miguel"],["rural","Rural / trabalho"],["jesus","Jesus"],["coragem","Vai pra cima"],["santidade","Santidade"],["salvos","Salvos"]]);
