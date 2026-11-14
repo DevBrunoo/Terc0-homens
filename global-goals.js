@@ -91,6 +91,7 @@
   const end=focused?input.selectionEnd:null;
   state.dailyGoalDays=grouped;
   saveLocal();
+  window.cuiudoTimerReconcileAudio?.();
   render();
   const nextInput=document.getElementById('cuiudo-goal-text');
   if(nextInput&&draft){
