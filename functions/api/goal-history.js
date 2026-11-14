@@ -6,7 +6,7 @@ export async function onRequestGet(context){
  if(!dbReady(context))return response({error:'Banco D1 indisponível.'},503);
  try{
   const raw=new URL(context.request.url).searchParams.get('offset')||'0';
-  if(!/^\\d{1,7}$/.test(raw))return response({error:'Página inválida.'},400);
+  if(!/^\d{1,7}$/.test(raw))return response({error:'Página inválida.'},400);
   const result=await context.env.DB.prepare(
    'SELECT event_id,goal_id,goal_day,event_type,priority,occurred_at FROM goal_events '+
    'ORDER BY event_id DESC LIMIT 500 OFFSET ?'
