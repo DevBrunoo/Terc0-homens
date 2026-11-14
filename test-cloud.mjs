@@ -76,3 +76,16 @@ assert.match(read('functions/api/goals.js'),/priority=excluded\.priority/);
 assert.match(read('functions/api/goals.js'),/priorities\.has\(priority\)/);
 assert.match(read('global-goals.js'),/priority:\['high','medium','low'\]/);
 assert.match(read('global-goals.js'),/cuiudoTimerReconcileAudio/);
+
+// Nova fase: histórico real e recuperação sem apagar dados existentes.
+assert.match(read('migrations/0006_goal_events.sql'),/CREATE TABLE IF NOT EXISTS goal_events/);
+assert.match(read('functions/api/goals.js'),/db\.batch\(statements\)/);
+assert.match(read('functions/api/goals.js'),/goalEvent\(previous,action,status,priority\)/);
+assert.match(read('functions/api/goals.js'),/status='deleted'/);
+assert.match(read('global-goals.js'),/getTrash\(\)/);
+assert.match(read('global-goals.js'),/restore\(id\)/);
+assert.match(read('index.html'),/goal-history\.js/);
+assert.match(read('index.html'),/cuiudo-premium\.js/);
+assert.match(read('index.html'),/cuiudo-premium\.css/);
+assert.match(read('sw.js'),/cuiudo-premium\.js/);
+assert.match(read('sw.js'),/goal-history\.js/);
