@@ -44,8 +44,10 @@ const cuiudoGoalsText={
 const cuiudoCompletedAtLabels={
  pt:'Concluída em',en:'Completed on',es:'Completada el',la:'Completa die'
 };
-function cuiudoGoalCompletedTime(goal,locale){
- const stamp=goal?.completed_at;
+const cuiudoMissedAtLabels={
+ pt:'Não concluída em',en:'Marked not completed on',es:'No completada el',la:'Non completa die'
+};
+function cuiudoGoalMarkedTime(stamp,locale,label,className){
  if(!Number.isSafeInteger(stamp)||stamp<=0)return '';
  const date=new Date(stamp);
  if(!Number.isFinite(date.getTime()))return '';
@@ -53,9 +55,16 @@ function cuiudoGoalCompletedTime(goal,locale){
  const when=new Intl.DateTimeFormat(language,{
   timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'
  }).format(date);
- const label=cuiudoCompletedAtLabels[locale]||cuiudoCompletedAtLabels.pt;
- return '<time class="goal-victory-time" datetime="'+date.toISOString()+'">'+
+ return '<time class="'+className+'" datetime="'+date.toISOString()+'">'+
   escapeHtml(label+' '+when+' (Brasília)')+'</time>';
+}
+function cuiudoGoalCompletedTime(goal,locale){
+ return cuiudoGoalMarkedTime(goal?.completed_at,locale,
+  cuiudoCompletedAtLabels[locale]||cuiudoCompletedAtLabels.pt,'goal-victory-time');
+}
+function cuiudoGoalMissedTime(goal,locale){
+ return cuiudoGoalMarkedTime(goal?.missed_at,locale,
+  cuiudoMissedAtLabels[locale]||cuiudoMissedAtLabels.pt,'goal-reality-time');
 }
 /* Metas continuam visíveis depois da meia-noite. */
 function cuiudoGoalsToday(){
@@ -614,7 +623,9 @@ function cuiudoGoalChecklist(){
        '<small>'+escapeHtml(inspiration)+' '+escapeHtml(blessing.reference)+'</small></div>'+
        '</div>';
     })():
-   failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p><p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
+   failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p>'+
+    cuiudoGoalMissedTime(goal,l)+
+    '<p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
@@ -764,10 +775,17 @@ app.addEventListener('click',event=>{
  if(action==='cuiudo-goal-done'){
   goal.status='done';
   goal.completed_at=Date.now();
+  delete goal.missed_at;
  }
- if(action==='cuiudo-goal-missed'||action==='cuiudo-goal-reopen'){
-  goal.status=action==='cuiudo-goal-missed'?'missed':'pending';
+ if(action==='cuiudo-goal-missed'){
+  goal.status='missed';
+  goal.missed_at=Date.now();
   delete goal.completed_at;
+ }
+ if(action==='cuiudo-goal-reopen'){
+  goal.status='pending';
+  delete goal.completed_at;
+  delete goal.missed_at;
  }
  const before={...goal};
  if(action==='cuiudo-goal-delete'){
