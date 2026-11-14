@@ -6,6 +6,7 @@ const validId=v=>typeof v==='string'&&/^[A-Za-z0-9_.:-]{6,80}$/.test(v);
 const validDay=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&
   !Number.isNaN(Date.parse(v+'T12:00:00Z'));
 const allowed=new Set(['pending','done','missed']);
+const priorities=new Set(['high','medium','low']);
 const timerStates=new Set(['none','running','paused','finished']);
 const validTimer=body=>{
  const duration=body.duration_sec??0,remaining=body.remaining_sec??0,
@@ -25,7 +26,7 @@ export async function onRequestGet(context){
   const offsetParam=params.get('offset')||'0';
   if(!/^\d{1,8}$/.test(offsetParam))return response({error:'Paginação inválida.'},400);
   const data=await context.env.DB.prepare(
-   'SELECT id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
+   'SELECT id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
   ).bind(GOALS_PAGE_SIZE,Number(offsetParam)).all();
   const goals=data.results||[];
   return response({goals,hasMore:goals.length===GOALS_PAGE_SIZE,public:true,updatedAt:Date.now()});
@@ -47,11 +48,12 @@ export async function onRequestPost(context){
  // Metas antigas podem ser editadas e excluídas, sem vencimento automático.
  if(day>new Date(Date.now()+7*86400000).toISOString().slice(0,10))
   return response({error:'Não é possível criar metas muito no futuro.'},400);
- let status='deleted',goalText='';
+ let status='deleted',goalText='',priority='medium';
  if(action==='upsert'){
   status=body.status;
   goalText=typeof body.text==='string'?body.text.trim():'';
-  if(!allowed.has(status)||!goalText||goalText.length>180||!validTimer(body))
+  priority=body.priority??'medium';
+  if(!allowed.has(status)||!priorities.has(priority)||!goalText||goalText.length>180||!validTimer(body))
    return response({error:'Meta inválida (máximo de 180 caracteres).'},400);
  }
  try{
@@ -66,12 +68,12 @@ export async function onRequestPost(context){
    if((count?.n||0)>=30)return response({error:'Limite de 30 metas para este dia.'},409);
   }
   await db.prepare(
-   'INSERT INTO public_goals(id,day,text,status,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state) VALUES(?,?,?,?,?,?,?,?,?) '+
-   'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,updated_at=excluded.updated_at,'+
+   'INSERT INTO public_goals(id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state) VALUES(?,?,?,?,?,?,?,?,?,?) '+
+   'ON CONFLICT(id) DO UPDATE SET text=excluded.text,status=excluded.status,priority=excluded.priority,updated_at=excluded.updated_at,'+
    'duration_sec=excluded.duration_sec,remaining_sec=excluded.remaining_sec,'+
    'timer_started_at=excluded.timer_started_at,timer_state=excluded.timer_state '+
    'WHERE public_goals.day=excluded.day'
-  ).bind(id,day,goalText,status,Date.now(),
+  ).bind(id,day,goalText,status,priority,Date.now(),
     action==='upsert'?(body.duration_sec??0):0,
     action==='upsert'?(body.remaining_sec??0):0,
     action==='upsert'?(body.timer_started_at??null):null,

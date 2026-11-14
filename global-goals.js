@@ -14,6 +14,7 @@
  const timerFields=['duration_sec','remaining_sec','timer_started_at','timer_state'];
  function copyGoal(g){
   return {id:g.id,text:g.text,status:g.status||'pending',
+   priority:['high','medium','low'].includes(g.priority)?g.priority:'medium',
    duration_sec:Number.isSafeInteger(g.duration_sec)?g.duration_sec:0,
    remaining_sec:Number.isSafeInteger(g.remaining_sec)?g.remaining_sec:0,
    timer_started_at:Number.isSafeInteger(g.timer_started_at)?g.timer_started_at:null,
@@ -90,6 +91,7 @@
   const end=focused?input.selectionEnd:null;
   state.dailyGoalDays=grouped;
   saveLocal();
+  window.cuiudoTimerReconcileAudio?.();
   render();
   const nextInput=document.getElementById('cuiudo-goal-text');
   if(nextInput&&draft){

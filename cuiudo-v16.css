@@ -2974,3 +2974,15 @@
  .rosary-top-mysteries-buttons{gap:5px}
  .rosary-top-mysteries-buttons .rosary-mystery-step{height:40px;width:min(100%,40px)}
 }
+
+/* Prioridade por meta: botão claro, acessível e legível no celular. */
+.today-goal .goal-priority-label{display:inline-flex;align-items:center;gap:6px;color:var(--subink);font:650 11px/1.35 var(--font)}
+.today-goal .goal-priority-select{min-height:32px;max-width:110px;padding:5px 24px 5px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:750 11px/1.2 var(--font);cursor:pointer}
+.today-goal .goal-priority-select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.today-goal[data-priority="high"] .goal-priority-select{border-color:#b84747;color:#a92e2e;background:#fff1f0}
+.today-goal[data-priority="medium"] .goal-priority-select{border-color:#b17a32;color:#875617;background:#fff7e6}
+.today-goal[data-priority="low"] .goal-priority-select{border-color:#4f8572;color:#206c4d;background:#ecf8f0}
+:root[data-theme="dark"] .today-goal[data-priority="high"] .goal-priority-select{background:#402525;color:#ffbcbb}
+:root[data-theme="dark"] .today-goal[data-priority="medium"] .goal-priority-select{background:#3a3021;color:#ffda91}
+:root[data-theme="dark"] .today-goal[data-priority="low"] .goal-priority-select{background:#20372e;color:#a1e2b8}
+@media(max-width:480px){.today-goal .goal-priority-label{font-size:10px}.today-goal .goal-priority-select{min-height:36px;font-size:11px}}

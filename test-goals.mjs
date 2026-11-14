@@ -103,7 +103,7 @@ assert.ok(!memory.get('cuiudo-v1')?.includes('terco-compromisso-essencial'));
 assert.ok(runInContext('cuiudoEssentialSave(false)',vm));
 assert.equal(runInContext('cuiudoEssentialDone()',vm),false);
 assert.match(root.innerHTML,/Rezar terço e se cuidar espiritualmente e esteticamente/);
-assert.doesNotMatch(root.innerHTML,/name="minutes"|cuiudo-timer-|goal-timer|data-timer-clock/);
+assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-cuiudo-clock=/,'Painel expansível só aparece ao abrir o timer');
 assert.match(read('daily-goals.js'),/function cuiudoTimerSeconds/);
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
