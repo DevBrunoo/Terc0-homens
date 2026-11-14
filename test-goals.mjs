@@ -65,6 +65,37 @@ assert.equal(sortedByStatus,'Pendente recente|Pendente antiga|Concluída nova|N�
 const reopenedOrder=runInContext("cuiudoGoalsNewestFirst([{id:'1762800000003-done',text:'Reaberta',status:'pending'},{id:'1700000000000-pending',text:'Pendente antiga',status:'pending'},{id:'1762800000002-missed',text:'Não concluída',status:'missed'}]).map(x=>x.text).join('|')",vm);
 assert.equal(reopenedOrder,'Reaberta|Pendente antiga|Não concluída');
 
+// Pendências ordenadas por importância antes da antiguidade.
+const byImportance=runInContext(`cuiudoGoalsNewestFirst([
+ {id:'1762800000000-low',text:'Baixa recente',status:'pending',priority:'low'},
+ {id:'1700000000000-high',text:'Alta antiga',status:'pending',priority:'high'},
+ {id:'1762800000001-med',text:'Média recente',status:'pending',priority:'medium'},
+ {id:'1750000000000-legacy',text:'Sem prioridade antiga',status:'pending'},
+ {id:'1762800000002-high',text:'Alta nova',status:'pending',priority:'high'}
+]).map(g=>g.text).join('|')`,vm);
+assert.equal(byImportance,'Alta nova|Alta antiga|Média recente|Sem prioridade antiga|Baixa recente',
+ 'Alta vem primeiro, depois Média (inclui legadas), por fim Baixa; desempate por recência');
+const statusBeforeImportance=runInContext(`cuiudoGoalsNewestFirst([
+ {id:'1762800000004-done',text:'Alta concluída',status:'done',priority:'high'},
+ {id:'1762800000003-missed',text:'Alta não concluída',status:'missed',priority:'high'},
+ {id:'1762800000002-pending',text:'Baixa pendente',status:'pending',priority:'low'},
+ {id:'1762800000001-other',text:'Média pendente',status:'pending',priority:'medium'}
+]).map(g=>g.text).join('|')`,vm);
+assert.equal(statusBeforeImportance,'Média pendente|Baixa pendente|Alta concluída|Alta não concluída',
+ 'Concluídas e não concluídas devem ficar depois de todas as pendentes');
+runInContext(`state.dailyGoalDays={[currentDay()]:[
+ {id:'1762800000002-low',text:'Estudar assunto leve',status:'pending',priority:'low'},
+ {id:'1762800000001-high',text:'Resolver obrigação urgente',status:'pending',priority:'high'},
+ {id:'1762800000003-mid',text:'Responder mensagens',status:'pending',priority:'medium'}
+]};render()`,vm);
+const titles=['Resolver obrigação urgente','Responder mensagens','Estudar assunto leve'];
+assert.ok(titles.every((title,i)=>i===0||root.innerHTML.indexOf(titles[i-1])<root.innerHTML.indexOf(title)),
+ 'A lista renderizada segue Alta → Média → Baixa');
+runInContext("state.dailyGoalDays[currentDay()][0].priority='high';render()",vm);
+assert.ok(root.innerHTML.indexOf('Estudar assunto leve')<root.innerHTML.indexOf('Responder mensagens'),
+ 'Mudar importância reorganiza a lista ao renderizar');
+assert.match(read('daily-goals.js'),/goal\.priority=priority;cuiudoGoalsSave\(\);window\.cuiudoGlobalGoals\?\.change\('upsert',day,goal\);\s*render\(\)/,
+ 'Alterar a prioridade de uma meta deve reorganizar imediatamente o checklist');
 assert.equal(runInContext("cuiudoGoalsNewestFirst([{id:'antiga-a'},{id:'antiga-b'}]).map(x=>x.id).join('|')",vm),'antiga-a|antiga-b',
  'Metas legadas mantêm a ordem entre si');
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'1700000000000-a',text:'Meta antiga',status:'pending'},{id:'1762800000000-b',text:'Meta recente',status:'pending'}]};render()",vm);
