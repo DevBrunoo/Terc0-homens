@@ -112,6 +112,6 @@ assert.equal(context.window.cuiudoGratidao.read()['2026-11-14'].thanks[0],quickT
 assert.equal(context.window.cuiudoGratidao.read()['2026-11-14'].thanks[1],'Recebi uma ajuda','Não perde as outras anotações');
 const compactDone=runInContext('combatHome()',context);
 assert.match(compactDone,/>Sou grato pela minha moto, minha vida e pelo terço<\/textarea>/);
-assert.match(compactDone,/Gratidão de hoje/);
+assert.match(compactDone,/Hoje sou grato por\.\.\./);
 assert.ok(memory.get('terco-gratidao-catolica-v1'),'Registro local preservado');
 console.log('✓ Gratidão: navegação, privacidade, escrita, XSS, histórico, exclusão e compatibilidade de build');
