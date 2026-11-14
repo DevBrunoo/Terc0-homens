@@ -694,9 +694,9 @@ function cuiudoGoalChecklist(){
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
   cuiudoGodMomentBox(l)+
+  cuiudoObstacleBox(l)+
   cuiudoGoalsBarChart(l)+
   (window.cuiudoPremium?.goalExtras?.(l)||'')+
-  cuiudoObstacleBox(l)+
   '</section>';
 }
 const cuiudoPreviousHomeGoals=combatHome;
