@@ -93,7 +93,7 @@ combatHome=function(){
  if(start<0)return html+cuiudoDutyHero();
  // Percorrer seções aninhadas para posicionar o exame DEPOIS das metas,
  // inclusive do desempenho e da anotação "O que atrapalhou seu dia?".
- const sections=/<\\/?section\\b[^>]*>/gi;
+ const sections=/<\/?section\b[^>]*>/gi;
  sections.lastIndex=start;
  let depth=0,end=-1,tag;
  while((tag=sections.exec(html))){
