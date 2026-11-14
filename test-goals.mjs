@@ -116,6 +116,13 @@ assert.match(root.innerHTML,/Missão cumprida/);
 assert.match(root.innerHTML,/Você é muito macio/);
 assert.match(root.innerHTML,/goal-gift/);
 assert.match(root.innerHTML,/goal-victory/);
+// O selo mostra o instante real, com data e horário fixos de Brasília.
+assert.doesNotMatch(root.innerHTML,/goal-victory-time/,'Sem registro real, não inventar horário');
+runInContext("state.dailyGoalDays[currentDay()].find(g=>g.id==='success').completed_at=Date.UTC(2026,10,14,14,59);render()",vm);
+assert.match(root.innerHTML,/Concluída em 14\/11\/2026, 11:59 \(Brasília\)/);
+assert.match(root.innerHTML,/datetime="2026-11-14T14:59:00.000Z"/);
+runInContext("delete state.dailyGoalDays[currentDay()].find(g=>g.id==='success').completed_at;render()",vm);
+assert.doesNotMatch(root.innerHTML,/goal-victory-time/);
 assert.match(root.innerHTML,/Inspirado em/);
 assert.doesNotMatch(root.innerHTML,/goal-victory-emoji|goal-victory-spark|goal-gift-icon/);
 const victoryMessages=read('daily-goals.js').split('const cuiudoBlessings=')[1].split('const cuiudoPermanentNotes=')[0];
