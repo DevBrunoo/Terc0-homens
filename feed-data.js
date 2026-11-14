@@ -102,6 +102,18 @@ const feedArtwork = Object.freeze({
     "credit": "Frederic Remington, The Smoke Signal (1905)",
     "source": "https://commons.wikimedia.org/wiki/File:The_Smoke_Signal,_1905,_by_Frederic_S._Remington.jpg",
     "license": "Domínio público"
+  },
+  "fidelidade-faroeste": {
+    "url": "./assets/feed/fidelidade-faroeste.svg",
+    "credit": "Cartaz vetorial original inspirado na referência enviada",
+    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/fidelidade-faroeste.svg",
+    "license": "Arte produzida para o aplicativo"
+  },
+  "perseveranca-campo": {
+    "url": "./assets/feed/perseveranca-campo.svg",
+    "credit": "Cartaz vetorial original inspirado na referência enviada",
+    "source": "https://github.com/DevBrunoo/Terc0-homens/blob/main/assets/feed/perseveranca-campo.svg",
+    "license": "Arte produzida para o aplicativo"
   }
 });
 const feedFilters = Object.freeze([["todos","Para você"],["miguel","São Miguel"],["rural","Rural / trabalho"],["jesus","Jesus"],["coragem","Vai pra cima"],["santidade","Santidade"],["salvos","Salvos"]]);
@@ -109,7 +121,7 @@ const feedPosts = Object.freeze([
   {
     "id": "u11",
     "category": "santidade",
-    "art": "cowboy-remington",
+    "art": "fidelidade-faroeste",
     "title": "O CUIÚDO NÃO TROCA DEUS POR PRAZER PASSAGEIRO. O MACIO TROCA SEUS PRINCÍPIOS POR QUALQUER TENTAÇÃO.",
     "kicker": "FIRMEZA NA FÉ",
     "ref": "Mt 26,41",
@@ -119,7 +131,7 @@ const feedPosts = Object.freeze([
   {
     "id": "u12",
     "category": "rural",
-    "art": "vai-pra-cima",
+    "art": "perseveranca-campo",
     "title": "QUEM QUER TENTA, ERRA, INSISTE, MELHORA, TENTA DE NOVO E DÁ UM JEITO. QUEM NÃO QUER DÁ UMA DESCULPA.",
     "kicker": "TENTA DE NOVO",
     "ref": "Gl 6,9",
