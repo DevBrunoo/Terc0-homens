@@ -11,7 +11,7 @@ const files=[
  'ambient-audio.js','cuiudo-music.js','rosary-i18n.js','rosary-artwork.js',
  'rosary-context.js','rosary-plus.js','spotify-dock.js','rosary-beads.js','saints-i18n.js',
  'daily-goals.js','conscience-duty.js','global-goals.js','holiness-path.js',
- 'goal-history.js','cuiudo-premium.js',
+ 'goal-history.js','cuiudo-lectio-devotional.js','cuiudo-premium.js',
  'sw.js','manifest.webmanifest','.nojekyll'
 ];
 for(const f of files){
