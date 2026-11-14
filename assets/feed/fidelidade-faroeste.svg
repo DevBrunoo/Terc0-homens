@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 780" role="img" aria-labelledby="title desc">
+<title id="title">Fidelidade a Deus acima da tentação</title>
+<desc id="desc">Pôster de faroeste em tons de sépia com um vaqueiro e a mensagem: O cuiúdo não troca Deus por prazer passageiro. O macio troca seus princípios por qualquer tentação.</desc>
+<defs>
+<linearGradient id="paper" x1="0" x2=".7" y1="0" y2="1"><stop stop-color="#f5deb0"/><stop offset=".55" stop-color="#c8ab79"/><stop offset="1" stop-color="#947747"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#e8c793"/><stop offset="1" stop-color="#e0b26b" stop-opacity="0"/></radialGradient>
+<filter id="rough"><feTurbulence baseFrequency=".018" numOctaves="3" seed="6"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".1"/></feComponentTransfer></filter>
+<linearGradient id="coat" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#602d2b"/><stop offset=".52" stop-color="#a04d45"/><stop offset="1" stop-color="#382523"/></linearGradient>
+</defs>
+<rect width="720" height="780" rx="18" fill="url(#paper)"/>
+<rect width="720" height="780" rx="18" filter="url(#rough)" opacity=".7"/>
+<circle cx="558" cy="162" r="230" fill="url(#glow)"/>
+<g opacity=".43" fill="#372921" font-family="Georgia,serif" font-weight="900"><text x="36" y="110" font-size="39">$2500</text><text x="30" y="167" font-size="66">REWARD</text><text x="35" y="201" font-size="18">WANTED · WILD WEST</text></g>
+<path d="M0 666 Q115 560 243 637 Q385 596 505 658 Q623 589 720 639 L720 780 H0Z" fill="#544d37" opacity=".48"/>
+<g transform="translate(130 68)">
+<path d="M168 365 L115 602 L80 714 L174 714 L248 475 L306 710 L417 710 L288 373Z" fill="#4c4535" stroke="#35291f" stroke-width="12"/>
+<path d="M173 160 C105 180 86 237 96 351 L79 487 161 504 194 393 234 455 315 408 320 277 276 174Z" fill="url(#coat)" stroke="#402a28" stroke-width="13"/>
+<path d="M258 210 Q370 249 360 367 L410 450 373 477 314 417 272 336Z" fill="#8d4640" stroke="#56302c" stroke-width="11"/>
+<path d="M135 203 Q70 254 64 373 L36 434 91 456 141 394 182 264Z" fill="#873f3b" stroke="#4f2f2c" stroke-width="11"/>
+<path d="M160 142 Q148 88 185 58 Q241 35 275 78 L263 163 215 201 180 184Z" fill="#9d6b4c" stroke="#5b382c" stroke-width="11"/>
+<path d="M138 80 Q178 61 288 73 Q345 82 334 99 Q295 120 219 110 Q147 115 113 101Z" fill="#4d3128"/>
+<path d="M171 79 L173 22 Q212 -5 277 20 L281 82Z" fill="#4d3128" stroke="#37251f" stroke-width="8"/>
+<path d="M182 137 L210 150 234 133 M189 173 Q225 191 245 168" fill="none" stroke="#573829" stroke-width="8" stroke-linecap="round"/>
+</g>
+<g transform="translate(504 626)"><ellipse cx="108" cy="31" rx="101" ry="17" fill="#3f2919"/><rect x="13" y="30" width="185" height="116" rx="14" fill="#704928" stroke="#4c3024" stroke-width="10"/><path d="M37 30V145M75 30V145M121 30V145M164 30V145M13 75H198M13 122H198" stroke="#34281b" stroke-width="8" opacity=".67"/></g>
+<rect x="26" y="276" width="668" height="323" rx="18" fill="#170f0d" opacity=".62"/>
+<g fill="#fffaf0" stroke="#15120f" stroke-width="7" paint-order="stroke fill" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="44">
+<text x="360" y="335">O CUIÚDO NÃO TROCA</text>
+<text x="360" y="391">DEUS POR PRAZER</text>
+<text x="360" y="447">PASSAGEIRO.</text>
+<text x="360" y="513">O MACIO TROCA SEUS</text>
+<text x="360" y="569">PRINCÍPIOS POR TENTAÇÃO.</text>
+</g>
+<text x="360" y="744" fill="#fff6e5" font-family="Arial,sans-serif" font-size="18" font-weight="800" text-anchor="middle" letter-spacing="3">FÉ ACIMA DO IMPULSO</text>
+</svg>
