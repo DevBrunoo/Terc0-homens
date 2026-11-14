@@ -2441,6 +2441,18 @@
 }
 
 
+/* Reflexão espiritual discreta: abaixo da lista, antes do desempenho. */
+.today-goals>.goals-obstacle-box.goals-god-moment-box{
+ margin:14px 0 12px;
+ background:var(--surface);
+}
+.goals-god-moment-box .goals-obstacle-symbol{color:var(--accent)}
+.goals-god-moment-box .goals-obstacle-input{min-height:62px}
+@media(max-width:760px){
+ .today-goals>.goals-obstacle-box.goals-god-moment-box{margin:12px 0 10px}
+ .goals-god-moment-box .goals-obstacle-input{min-height:70px}
+}
+
 /* v40 — Compromisso Essencial agora é o último cartão em Metas de hoje. */
 .goals-permanent-note.goals-essential-footer{
  box-sizing:border-box;width:100%;margin:17px 0 0;padding:16px 18px;gap:13px;
