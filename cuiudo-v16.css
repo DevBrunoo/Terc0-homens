@@ -2492,14 +2492,14 @@
  margin:14px 0 18px;
 }
 .today-goals>.goals-obstacle-box{
- margin:20px 0 0;
+ margin:10px 0 12px;
 }
 @media(max-width:760px){
  .today-goals>.goals-essential-footer.goals-permanent-note{
   margin:12px 0 16px;
  }
  .today-goals>.goals-obstacle-box{
-  margin:16px 0 0;
+  margin:10px 0 12px;
  }
 }
 
