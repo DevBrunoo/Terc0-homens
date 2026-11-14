@@ -295,6 +295,12 @@ function cuiudoAlternatingQuotes(locale){
 }
 
 const cuiudoPriorityLabels={pt:['Alta','Média','Baixa','Prioridade'],en:['High','Medium','Low','Priority'],es:['Alta','Media','Baja','Prioridad'],la:['Alta','Media','Humilis','Prioritas']};
+const cuiudoCreatePriorityText={
+ pt:{label:'Importância *',choose:'Escolha o nível de importância'},
+ en:{label:'Importance *',choose:'Choose an importance level'},
+ es:{label:'Importancia *',choose:'Elige el nivel de importancia'},
+ la:{label:'Momentum *',choose:'Gradum momenti elige'}
+};
 /* Temporizador por meta — já compatível com os campos do Cloudflare D1. */
 let cuiudoTimerOpened=null;
 const cuiudoTimerLabels={
@@ -601,7 +607,11 @@ function cuiudoGoalChecklist(){
   cuiudoEssentialCard(l)+
   '<form id="cuiudo-goal-form" class="today-goals-form"><label class="sr-only" for="cuiudo-goal-text">'+escapeHtml(t.label)+'</label>'+
   '<input id="cuiudo-goal-text" name="goal" maxlength="180" required autocomplete="off" placeholder="'+escapeHtml(t.placeholder)+'">'+
-
+  '<label class="goal-create-priority" for="cuiudo-goal-priority">'+escapeHtml(cuiudoCreatePriorityText[l].label)+
+  '<select id="cuiudo-goal-priority" name="priority" required aria-required="true">'+
+  '<option value="" selected disabled>'+escapeHtml(cuiudoCreatePriorityText[l].choose)+'</option>'+
+  ['high','medium','low'].map((p,i)=>'<option value="'+p+'">'+escapeHtml(cuiudoPriorityLabels[l][i])+'</option>').join('')+
+  '</select></label>'+
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
   '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
   '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
@@ -704,12 +714,19 @@ app.addEventListener('submit',event=>{
  event.preventDefault();
  const input=event.target.querySelector('input[name=goal]');
  const text=String(input?.value||'').trim().slice(0,180);
+ const select=event.target.querySelector('select[name=priority]');
+ const priority=String(select?.value||'');
  if(!text)return;
+ // Sem seleção explícita de prioridade, a meta não pode ser criada nem enviada ao D1.
+ if(!['high','medium','low'].includes(priority)){
+  select?.reportValidity?.();
+  return;
+ }
  state.dailyGoalDays??={};
  const day=currentDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
- const goal={id,text,status:'pending',priority:'medium'};
+ const goal={id,text,status:'pending',priority};
  items.unshift(goal);
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change('upsert',day,goal);
