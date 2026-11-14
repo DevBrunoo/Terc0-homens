@@ -21,7 +21,7 @@ const nav={pt:{},en:{},es:{},la:{}},tabs=[{id:'inicio'}];
 let calls=0,confirmed=0;
 const context=createContext({
  state,app,combatTabs:tabs,cuiudoNav:nav,
- combatHome:()=>'<div class="homepage">Home</div>',
+ combatHome:()=>'<section class="cuiudo-hero"></section><section class="cuiudo-grace-reflection"></section><section class="poster-grid"></section>',
  render(){calls++;},renderShell:s=>s,
  setTheme(){},currentDay:()=> '2026-11-14',
  cuiudoLocale:()=>state.appLang,
@@ -35,7 +35,15 @@ runInContext(source,context,{timeout:2000});
 assert.ok(tabs.some(x=>x.id==='gratidao'),'Navegação inclui gratidão');
 assert.equal(nav.pt.gratidao,'Gratidão');
 assert.equal(nav.en.gratidao,'Gratitude');
-assert.match(runInContext('combatHome()',context),/data-tab="gratidao"/);
+const initialHome=runInContext('combatHome()',context);
+assert.match(initialHome,/id="grat-home-form"/,'Formulário compacto para salvar na própria tela inicial');
+assert.match(initialHome,/data-tab="gratidao"/,'Acesso ao diário completo');
+assert.ok(initialHome.indexOf('cuiudo-hero')<initialHome.indexOf('grat-home'),
+ 'Cartão aparece depois do destaque inicial');
+assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('cuiudo-grace-reflection'),
+ 'Cartão aparece antes do feed e das reflexões');
+assert.equal((initialHome.match(/class="grat-home"/g)||[]).length,1,'Não duplicar cartão');
+assert.doesNotMatch(initialHome,/grat-home card/,'Cartão não usa espaçamento do card grande');
 assert.equal(context.window.cuiudoGratidao.read()['2026-11-14'],undefined);
 state.tab='gratidao';runInContext('render()',context);
 assert.match(app.innerHTML,/Diário da Gratidão/);
@@ -79,4 +87,22 @@ state.tab='inicio';runInContext('render()',context);
 assert.equal(calls,1,'Demais páginas permanecem delegadas ao render original');
 state.tab='gratidao';runInContext('render()',context);
 assert.match(app.innerHTML,/Recebi uma ajuda/);
+// Entrada rápida na home: atualiza a primeira gratidão sem descartar as demais anotações.
+const feedback={textContent:''},quickForm={
+ id:'grat-home-form',
+ querySelector(q){assert.equal(q,'[name="gratitude"]');return {value:'Agradeço pela paz de hoje'}},
+ closest(q){assert.equal(q,'.grat-home');return {querySelector(){return feedback}}}
+};
+let prevented=false;
+submit({target:quickForm,preventDefault(){prevented=true}});
+const afterQuick=context.window.cuiudoGratidao.read()['2026-11-14'];
+assert.ok(prevented);
+assert.equal(afterQuick.thanks[0],'Agradeço pela paz de hoje');
+assert.equal(afterQuick.thanks[1],'Recebi uma ajuda');
+assert.equal(afterQuick.action,'Estudar vinte minutos');
+assert.equal(feedback.textContent,'Salvo');
+const compactDone=runInContext('combatHome()',context);
+assert.match(compactDone,/value="Agradeço pela paz de hoje"/);
+assert.match(compactDone,/Gratidão de hoje/);
+assert.ok(memory.get('terco-gratidao-catolica-v1'),'Registro local preservado');
 console.log('✓ Gratidão: navegação, privacidade, escrita, XSS, histórico, exclusão e compatibilidade de build');
