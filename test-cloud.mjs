@@ -25,6 +25,12 @@ assert.match(read('migrations/0003_public_goals.sql'),/CREATE TABLE IF NOT EXIST
 assert.match(read('migrations/0004_goal_timers.sql'),/ADD COLUMN timer_started_at/);
 assert.match(read('functions/api/goals.js'),/timer_state/);
 assert.match(read('global-goals.js'),/remaining_sec/);
+assert.match(read('global-goals.js'),/completed_at:g.status==='done'/);
+assert.match(read('functions/api/goals.js'),/AS completed_at/);
+assert.match(read('functions/api/goals.js'),/event_type='completed'/);
+assert.match(read('functions/api/goals.js'),/body.completed_at/);
+assert.match(read('daily-goals.js'),/goal.completed_at=Date.now\(\)/);
+assert.match(read('daily-goals.js'),/delete goal.completed_at/);
 assert.match(read('global-goals.js'),/let offset=0,hasMore=true/);
 assert.match(read('global-goals.js'),/hasMore=data\.hasMore===true/);
 assert.doesNotMatch(read('functions/api/goals.js'),/day>=\?|cutoff\(\)/);
