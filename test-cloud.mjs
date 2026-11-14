@@ -70,3 +70,9 @@ assert.equal(goodResponse.status,200);
 assert.equal((await goodResponse.json()).database,'ready');
 assert.match(read('functions/api/sync.js'),/revision=revision\+1/);
 console.log('✓ Cloudflare D1: metas globais públicas e dados pessoais isolados');
+
+assert.match(read('migrations/0005_goal_priority.sql'),/ADD COLUMN priority/);
+assert.match(read('functions/api/goals.js'),/priority=excluded\.priority/);
+assert.match(read('functions/api/goals.js'),/priorities\.has\(priority\)/);
+assert.match(read('global-goals.js'),/priority:\['high','medium','low'\]/);
+assert.match(read('global-goals.js'),/cuiudoTimerReconcileAudio/);
