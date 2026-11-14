@@ -90,8 +90,19 @@ const cuiudoDutyOldHome=combatHome;
 combatHome=function(){
  const html=cuiudoDutyOldHome();
  const start=html.indexOf('<section class="today-goals"');
- const close=start>=0?html.indexOf('</section>',start):-1;
- if(close<0)return html+cuiudoDutyHero();
- return html.slice(0,close+10)+cuiudoDutyHero()+html.slice(close+10);
+ if(start<0)return html+cuiudoDutyHero();
+ // Percorrer seções aninhadas para posicionar o exame DEPOIS das metas,
+ // inclusive do desempenho e da anotação "O que atrapalhou seu dia?".
+ const sections=/<\\/?section\\b[^>]*>/gi;
+ sections.lastIndex=start;
+ let depth=0,end=-1,tag;
+ while((tag=sections.exec(html))){
+  if(tag[0].startsWith('</')){
+   depth--;
+   if(depth===0){end=sections.lastIndex;break;}
+  }else depth++;
+ }
+ if(end<0)return html+cuiudoDutyHero();
+ return html.slice(0,end)+cuiudoDutyHero()+html.slice(end);
 };
 render();
