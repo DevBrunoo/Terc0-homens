@@ -19,9 +19,9 @@ assert.match(app.innerHTML,/duty-hero/,'Banner do exame de deveres visível');
 assert.match(app.innerHTML,/today-goals/,'Checklist de metas existente preservado');
 assert.ok(app.innerHTML.indexOf('goals-god-moment-box')<app.innerHTML.indexOf('cuiudo-goals-chart'),
  'Onde vejo Deus acima do gráfico de desempenho');
-assert.ok(app.innerHTML.indexOf('cuiudo-goals-chart')<app.innerHTML.indexOf('goals-obstacle-box'),
+assert.ok(app.innerHTML.indexOf('cuiudo-goals-chart')<app.innerHTML.indexOf('id="goals-obstacle-title"'),
  'Obstáculos abaixo do desempenho');
-assert.ok(app.innerHTML.indexOf('goals-obstacle-box')<app.innerHTML.indexOf('class="duty-hero"'),
+assert.ok(app.innerHTML.indexOf('id="goals-obstacle-title"')<app.innerHTML.indexOf('class="duty-hero"'),
  'O que atrapalhou seu dia fica imediatamente antes do exame de consciência');
 assert.ok(app.innerHTML.indexOf('class="duty-hero"')<app.innerHTML.indexOf('class="benedict-hero"'),
  'Exame ainda aparece antes do banner principal');
