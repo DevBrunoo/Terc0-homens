@@ -19,7 +19,8 @@
    duration_sec:Number.isSafeInteger(g.duration_sec)?g.duration_sec:0,
    remaining_sec:Number.isSafeInteger(g.remaining_sec)?g.remaining_sec:0,
    timer_started_at:Number.isSafeInteger(g.timer_started_at)?g.timer_started_at:null,
-   timer_state:['running','paused','finished'].includes(g.timer_state)?g.timer_state:'none'};
+   timer_state:['running','paused','finished'].includes(g.timer_state)?g.timer_state:'none',
+    completed_at:g.status==='done'&&Number.isSafeInteger(g.completed_at)&&g.completed_at>0?g.completed_at:null};
  }
 
  function readLocal(key,fallback){
