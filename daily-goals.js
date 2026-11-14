@@ -401,6 +401,102 @@ function cuiudoTimerStop(goal){
  goal.timer_started_at=null;goal.timer_state=goal.remaining_sec===0?'finished':'paused';
 }
 
+
+/* Gráfico de linhas das metas públicas: usa somente datas e estados reais do D1.
+ * Agrupamento por data de cadastro; o banco atual não armazena a data exata de conclusão.
+ * Metas são preservadas após a meia-noite; a janela controla apenas a exibição. */
+let cuiudoChartMode='status';
+let cuiudoChartRange=14;
+const cuiudoChartLabels={
+ pt:{title:'Evolução das metas',subtitle:'Acompanhe as metas registradas em cada dia.',status:'Situação',priority:'Prioridades',period:'Período',days:'dias',
+  done:'Concluídas',pending:'Pendentes',missed:'Não concluídas',high:'Alta',medium:'Média',low:'Baixa',
+  empty:'Sem metas registradas neste período.',note:'O gráfico considera a data em que a meta foi cadastrada e seu estado atual — não a data em que foi concluída.',
+  priorityNote:'Na visão de prioridades, são contadas apenas as metas ainda pendentes.'},
+ en:{title:'Goal trends',subtitle:'Follow goals registered on each date.',status:'Status',priority:'Priorities',period:'Period',days:'days',
+  done:'Completed',pending:'Pending',missed:'Not completed',high:'High',medium:'Medium',low:'Low',
+  empty:'No goals recorded in this period.',note:'This chart uses the date each goal was created and its current status, not its completion date.',
+  priorityNote:'The priority view counts pending goals only.'},
+ es:{title:'Evolución de las metas',subtitle:'Sigue las metas registradas cada día.',status:'Estado',priority:'Prioridades',period:'Período',days:'días',
+  done:'Cumplidas',pending:'Pendientes',missed:'No cumplidas',high:'Alta',medium:'Media',low:'Baja',
+  empty:'No hay metas registradas en este período.',note:'El gráfico usa la fecha de creación y el estado actual de cada meta, no la fecha de cumplimiento.',
+  priorityNote:'Las prioridades incluyen solo las metas pendientes.'},
+ la:{title:'Progressus propositorum',subtitle:'Proposita per dies consignata.',status:'Status',priority:'Prioritates',period:'Tempus',days:'dies',
+  done:'Completae',pending:'Pendentes',missed:'Non completae',high:'Alta',medium:'Media',low:'Humilis',
+  empty:'Nulla proposita hoc tempore.',note:'Dies creationis et status praesens ostenduntur, non dies perfectionis.',
+  priorityNote:'Prioritates tantum propositorum pendentium numerantur.'}
+};
+function cuiudoChartRows(days=14,endDay=currentDay()){
+ const count=[7,14,30].includes(Number(days))?Number(days):14;
+ const end=Date.parse(String(endDay)+'T12:00:00Z');
+ if(!Number.isFinite(end))return [];
+ const goalsByDay=state.dailyGoalDays||{};
+ return Array.from({length:count},(_,i)=>{
+  const day=new Date(end-(count-1-i)*86400000).toISOString().slice(0,10);
+  const goals=Array.isArray(goalsByDay[day])?goalsByDay[day]:[];
+  const row={day,done:0,pending:0,missed:0,high:0,medium:0,low:0};
+  for(const goal of goals){
+   if(!goal)continue;
+   const status=['pending','done','missed'].includes(goal.status)?goal.status:'pending';
+   row[status]++;
+   if(status==='pending'){
+    const priority=['high','medium','low'].includes(goal.priority)?goal.priority:'medium';
+    row[priority]++;
+   }
+  }
+  return row;
+ });
+}
+function cuiudoGoalsLineChart(locale){
+ const t=cuiudoChartLabels[locale]||cuiudoChartLabels.pt;
+ const rows=cuiudoChartRows(cuiudoChartRange);
+ const sets=cuiudoChartMode==='priority'?['high','medium','low']:['done','pending','missed'];
+ const columns=sets.map(key=>({key,label:t[key]}));
+ const count=rows.reduce((n,row)=>n+row.done+row.pending+row.missed,0);
+ const controls='<div class="cuiudo-chart-controls">'+
+  '<div class="cuiudo-chart-modes" role="group" aria-label="'+escapeHtml(t.title)+'">'+
+  ['status','priority'].map(mode=>'<button type="button" data-action="cuiudo-chart-mode" data-mode="'+mode+'" aria-pressed="'+(cuiudoChartMode===mode?'true':'false')+'">'+escapeHtml(t[mode])+'</button>').join('')+
+  '</div><label class="cuiudo-chart-period">'+escapeHtml(t.period)+' <select id="cuiudo-chart-range" aria-label="'+escapeHtml(t.period)+'">'+
+  [7,14,30].map(days=>'<option value="'+days+'"'+(cuiudoChartRange===days?' selected':'')+'>'+days+' '+escapeHtml(t.days)+'</option>').join('')+
+  '</select></label></div>';
+ const legend='<div class="cuiudo-chart-legend">'+columns.map(item=>
+  '<span class="cuiudo-chart-legend-item is-'+item.key+'"><i aria-hidden="true"></i>'+escapeHtml(item.label)+'</span>').join('')+'</div>';
+ let plot='<p class="cuiudo-chart-empty">'+escapeHtml(t.empty)+'</p>';
+ if(count>0){
+  const xStart=43,xEnd=750,yTop=16,yBottom=210;
+  const x=i=>xStart+(xEnd-xStart)*i/Math.max(1,rows.length-1);
+  const max=Math.max(1,...rows.flatMap(row=>sets.map(key=>row[key])));
+  const step=Math.max(1,Math.ceil(max/4)),top=Math.ceil(max/step)*step;
+  const y=value=>yBottom-(yBottom-yTop)*value/top;
+  const lines=[];
+  for(let value=0;value<=top;value+=step){
+   const yy=y(value).toFixed(1);
+   lines.push('<line class="cuiudo-chart-grid" x1="'+xStart+'" y1="'+yy+'" x2="'+xEnd+'" y2="'+yy+'"></line>'+
+     '<text class="cuiudo-chart-axis" x="31" y="'+(Number(yy)+4).toFixed(1)+'" text-anchor="end">'+value+'</text>');
+  }
+  const tickIndices=new Set([0,rows.length-1]);
+  const stride=rows.length<=7?2:rows.length<=14?3:7;
+  for(let i=0;i<rows.length;i+=stride)tickIndices.add(i);
+  for(const i of [...tickIndices].sort((a,b)=>a-b)){
+   lines.push('<text class="cuiudo-chart-axis" x="'+x(i).toFixed(1)+'" y="239" text-anchor="middle">'+
+    escapeHtml(rows[i].day.slice(8,10)+'/'+rows[i].day.slice(5,7))+'</text>');
+  }
+  for(const {key,label} of columns){
+   const path=rows.map((row,i)=>(i===0?'M':'L')+x(i).toFixed(1)+' '+y(row[key]).toFixed(1)).join(' ');
+   lines.push('<path class="cuiudo-chart-line is-'+key+'" d="'+path+'"></path>');
+   for(let i=0;i<rows.length;i++){
+    const row=rows[i],date=row.day.slice(8,10)+'/'+row.day.slice(5,7);
+    lines.push('<circle class="cuiudo-chart-dot is-'+key+'" cx="'+x(i).toFixed(1)+'" cy="'+y(row[key]).toFixed(1)+'" r="3.8">'+
+     '<title>'+escapeHtml(date+' — '+label+': '+row[key])+'</title></circle>');
+   }
+  }
+  const details=columns.map(item=>item.label+': '+rows.reduce((sum,row)=>sum+row[item.key],0)).join(' · ');
+  plot='<div class="cuiudo-chart-scroll"><svg class="cuiudo-chart-svg" viewBox="0 0 776 253" role="img" aria-label="'+escapeHtml(t.title+'. '+details)+'">'+lines.join('')+'</svg></div>';
+ }
+ return '<section class="cuiudo-goals-chart" aria-label="'+escapeHtml(t.title)+'">'+
+  '<header class="cuiudo-chart-head"><div><h3>'+escapeHtml(t.title)+'</h3><p>'+escapeHtml(t.subtitle)+'</p></div>'+controls+'</header>'+
+  legend+plot+'<p class="cuiudo-chart-footnote">'+escapeHtml(t.note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></section>';
+}
+
 function cuiudoGoalChecklist(){
  const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
  const metrics=cuiudoGoalCount();
@@ -445,6 +541,7 @@ function cuiudoGoalChecklist(){
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div>'+
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
+  cuiudoGoalsLineChart(l)+
   cuiudoObstacleBox(l)+
   '</section>';
 }
@@ -462,6 +559,22 @@ function cuiudoGoalsSave(){
  // Somente a pessoa pode excluir metas.
  save();
 }
+app.addEventListener('click',event=>{
+ const button=event.target?.closest?.('[data-action="cuiudo-chart-mode"]');
+ if(!button)return;
+ const mode=button.dataset.mode;
+ if(!['status','priority'].includes(mode)||mode===cuiudoChartMode)return;
+ cuiudoChartMode=mode;
+ render();
+});
+app.addEventListener('change',event=>{
+ if(event.target?.id!=='cuiudo-chart-range')return;
+ const range=Number(event.target.value);
+ if(![7,14,30].includes(range)||range===cuiudoChartRange)return;
+ cuiudoChartRange=range;
+ render();
+});
+
 app.addEventListener('input',event=>{
  if(event.target?.id!=='cuiudo-obstacle-text')return;
  const saved=cuiudoObstacleSave(event.target.value);
