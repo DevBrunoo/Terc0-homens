@@ -207,9 +207,12 @@
   combatTabs.push({id:'gratidao',label:'Gratidão e Propósito',mobile:'Gratidão',icon:'heart'});
  const previousHome=combatHome;
  combatHome=function(){
-  const home=previousHome(),marker='<section class="cuiudo-grace-reflection"';
-  // Inserir logo após a imagem principal, antes do feed; sem duplicar nem criar bloco no rodapé.
-  return home.includes(marker)?home.replace(marker,homeTile()+marker):homeTile()+home;
+  const home=previousHome();
+  const opener='<section class="cuiudo-punch-strip"';
+  const start=home.indexOf(opener);
+  const end=start>=0?home.indexOf('</section>',start):-1;
+  // Mostrar a gratidão logo depois da faixa de abertura, antes do checklist e da imagem principal.
+  return end>=0?home.slice(0,end+10)+homeTile()+home.slice(end+10):homeTile()+home;
  };
  const previousRender=render;
  render=function(){
