@@ -17,6 +17,14 @@ assert.match(app.innerHTML,/medalha-sao-bento-hd\.svg/,'Medalha em vetor HD vis�
 assert.match(app.innerHTML,/sao-bento-arte-enviada\.webp/,'Arte de São Bento enviada visível na home');
 assert.match(app.innerHTML,/duty-hero/,'Banner do exame de deveres visível');
 assert.match(app.innerHTML,/today-goals/,'Checklist de metas existente preservado');
+assert.ok(app.innerHTML.indexOf('goals-god-moment-box')<app.innerHTML.indexOf('cuiudo-goals-chart'),
+ 'Onde vejo Deus acima do gráfico de desempenho');
+assert.ok(app.innerHTML.indexOf('cuiudo-goals-chart')<app.innerHTML.indexOf('goals-obstacle-box'),
+ 'Obstáculos abaixo do desempenho');
+assert.ok(app.innerHTML.indexOf('goals-obstacle-box')<app.innerHTML.indexOf('class="duty-hero"'),
+ 'O que atrapalhou seu dia fica imediatamente antes do exame de consciência');
+assert.ok(app.innerHTML.indexOf('class="duty-hero"')<app.innerHTML.indexOf('class="benedict-hero"'),
+ 'Exame ainda aparece antes do banner principal');
 runInContext("state.tab='exame';render()",vm);
 assert.equal((app.innerHTML.match(/class="duty-card"/g)||[]).length,7,'Sete temas do exame de consciência');
 for(const key of ['Preguiça espiritual','Pecado por omissão','Negligência','Procrastinação','talentos','caridade','desânimo']){
