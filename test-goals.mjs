@@ -23,6 +23,11 @@ assert.match(root.innerHTML,/today-goals/);
 assert.match(root.innerHTML,/cuiudo-goals-chart/);
 assert.match(root.innerHTML,/cuiudo-chart-range/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
+assert.match(root.innerHTML,/Onde vejo Deus no meu dia\?/,'Campo espiritual na tela de metas');
+assert.ok(root.innerHTML.indexOf('class="today-goals-list"')<root.innerHTML.indexOf('goals-god-moment-box'),
+ 'Reflexão sobre Deus deve ficar abaixo das metas');
+assert.ok(root.innerHTML.indexOf('goals-god-moment-box')<root.innerHTML.indexOf('cuiudo-goals-chart'),
+ 'Reflexão sobre Deus deve ficar acima do desempenho');
 assert.match(root.innerHTML,/Cristiano Ronaldo/);
 assert.match(root.innerHTML,/Fugir da sua cruz é a pior desgraça que você pode fazer\./);
 assert.match(root.innerHTML,/goals-alternating-quotes/);
@@ -38,6 +43,11 @@ assert.match(root.innerHTML,/Posso não ser, mas na minha cabeça sou o melhor/)
 assert.ok(root.innerHTML.indexOf('goals-mindset-quote')<root.innerHTML.indexOf('goals-essential-footer'));
 
 assert.match(root.innerHTML,/data-action="cuiudo-obstacle-delete"/);
+assert.match(root.innerHTML,/data-action="cuiudo-god-moment-delete"/);
+assert.equal(runInContext("cuiudoGodMomentSave('Encontrei Deus na oração do terço')",vm),true);
+assert.equal(runInContext("cuiudoGodMomentRead()",vm),'Encontrei Deus na oração do terço');
+runInContext('render()',vm);
+assert.match(root.innerHTML,/Encontrei Deus na oração do terço/,'Mantém a anotação ao renderizar');
 assert.doesNotMatch(read('app.js'),/state\.notes=state\.notes\.slice\(0,100\)/);
 const rollover=runInContext(`(()=>{
  const original=currentDay;
