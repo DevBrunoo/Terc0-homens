@@ -28,7 +28,7 @@ assert.doesNotMatch(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
 assert.match(mount.innerHTML,/Você é muito macio!/);
 assert.match(mount.innerHTML,/cuiudo-grace-reflection/);
 assert.match(mount.innerHTML,/COMUNHÃO • GRAÇA • SANTIDADE/);
-assert.match(mount.innerHTML,/Sentir essas dores não significa que Deus esteja ausente/);
+assert.match(mount.innerHTML,/Sfd o problema, vai para cima!/);
 assert.match(mount.innerHTML,/cuiudo-photo-gallery/);
 assert.equal((mount.innerHTML.match(/class="cuiudo-gallery-card"/g)||[]).length,10);
 assert.match(mount.innerHTML,/class="nav-more" data-action="toggle-more"/);
