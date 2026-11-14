@@ -600,12 +600,14 @@ function cuiudoGoalChecklist(){
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
    '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>'+
-    '<button class="goal-action goal-timer-button" type="button" data-action="cuiudo-goal-timer-toggle" data-id="'+escapeHtml(goal.id)+'" aria-expanded="'+(cuiudoTimerOpened===goal.id?'true':'false')+'">⏱ '+escapeHtml(cuiudoTimerLabels[l].label)+'</button>':
+    '<button class="goal-action goal-timer-button" type="button" data-action="cuiudo-goal-timer-toggle" data-id="'+escapeHtml(goal.id)+'" aria-expanded="'+(cuiudoTimerOpened===goal.id?'true':'false')+'">⏱ '+escapeHtml(cuiudoTimerLabels[l].label)+'</button>'+
+    '<button class="goal-action cuiudo-focus-launch" type="button" data-action="cuiudo-focus-open" data-id="'+escapeHtml(goal.id)+'">◎ '+escapeHtml({pt:'Foco',en:'Focus',es:'Foco',la:'Intentio'}[l])+'</button>':
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div>'+
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
   cuiudoGoalsBarChart(l)+
+  (window.cuiudoPremium?.goalExtras?.(l)||'')+
   cuiudoObstacleBox(l)+
   '</section>';
 }
@@ -622,6 +624,7 @@ challenges=function(){return cuiudoGoalChecklist()+cuiudoPreviousChallengesGoals
 function cuiudoGoalsSave(){
  // Somente a pessoa pode excluir metas.
  save();
+ window.cuiudoPremium?.backup?.();
 }
 app.addEventListener('click',event=>{
  const button=event.target?.closest?.('[data-action="cuiudo-chart-mode"]');
