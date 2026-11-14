@@ -104,7 +104,7 @@ assert.match(html,/feed\.css/);
 assert.match(html,/apple\.css/);
 assert.match(read('apple.css'),/\.cuiudo-hero/);
 assert.match(read('apple.css'),/\.poster-grid/);
-assert.match(read('sw.js'),/terco-premium-foco-lectio-v63/);
+assert.match(read('sw.js'),/const VERSION='terco-[a-z0-9-]+-v\d+'/); // Nome estável, número de cache muda a cada release.
 assert.match(read('sw.js'),/\.webp/);
 assert.match(feedStyles,/\.poster-grid/);
 assert.match(feedStyles,/@keyframes cuiudoPunch/);
