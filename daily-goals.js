@@ -71,16 +71,19 @@ function cuiudoGoalsToday(){
  state.dailyGoalDays??={};
  return Object.values(state.dailyGoalDays).flatMap(items=>Array.isArray(items)?items:[]);
 }
-// Metas pendentes vêm primeiro, da mais recente para a mais antiga.
-// Concluídas e não concluídas ficam abaixo das pendentes, sem apagar nada.
-// A ordem é calculada só por ID e status, estável após a sincronização do D1.
+// Pendentes primeiro. Em cada grupo: Alta → Média → Baixa.
+// Empates: mais recente primeiro. Concluídas e não concluídas ficam no fim.
+// Prioridade ausente em metas antigas equivale a Média, sem alterar os registros.
+// Ordenação apenas visual, estável após a sincronização do D1.
 function cuiudoGoalsNewestFirst(goals){
  const createdAt=goal=>{
   const match=/^(\d{13})(?:-|$)/.exec(String(goal?.id||''));
   return match?Number(match[1]):0;
  };
  const finished=goal=>goal?.status==='done'||goal?.status==='missed'?1:0;
- return goals.slice().sort((a,b)=>finished(a)-finished(b)||createdAt(b)-createdAt(a));
+ const importance=goal=>({high:0,medium:1,low:2})[goal?.priority]??1;
+ return goals.slice().sort((a,b)=>
+  finished(a)-finished(b)||importance(a)-importance(b)||createdAt(b)-createdAt(a));
 }
 function cuiudoGoalCount(){
  const items=cuiudoGoalsToday();
@@ -707,7 +710,7 @@ app.addEventListener('change',event=>{
  if(!found)return;
  const [day,items]=found,goal=items.find(g=>g.id===id);
  goal.priority=priority;cuiudoGoalsSave();window.cuiudoGlobalGoals?.change('upsert',day,goal);
- select.closest('.today-goal')?.setAttribute('data-priority',priority);
+ render(); // Atualiza imediatamente a posição da meta no checklist.
 });
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
