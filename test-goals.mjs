@@ -109,8 +109,8 @@ assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-cuiudo-clock=/,'Pain
 assert.match(read('daily-goals.js'),/function cuiudoTimerSeconds/);
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
-assert.match(root.innerHTML,/cuiudo-chart-svg/);
-assert.match(root.innerHTML,/cuiudo-chart-line is-done/);
+assert.match(root.innerHTML,/cuiudo-chart-barplot/);
+assert.match(root.innerHTML,/cuiudo-chart-bar-fill/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-timer-toggle"/);
 assert.match(root.innerHTML,/Missão cumprida/);
 assert.match(root.innerHTML,/Você é muito macio/);
