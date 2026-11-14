@@ -96,7 +96,7 @@
   const found=foundGoal(activeFocus);
   if(!found||found.goal.status!=='pending'){activeFocus=null;return ''}
   const {goal}=found,t=lang();
-  const seconds=goal.duration_sec?cuiudoTimerSeconds(goal):Math.max(60,Number(prefs.focusMinutes)||25)*60;
+  const seconds=goal.duration_sec?cuiudoTimerSeconds(goal):Math.max(1,Number(prefs.focusMinutes)||25)*60;
   const running=goal.timer_state==='running',paused=goal.timer_state==='paused';
   const status=running?'Sessão em andamento':paused?'Sessão pausada':seconds===0?'Sessão encerrada':'Escolha o tempo e comece';
   return '<div class="cuiudo-focus-backdrop"><button type="button" class="cuiudo-focus-scrim" data-action="cuiudo-focus-close" aria-label="'+escapeHtml(t.exit)+'"></button>'+
