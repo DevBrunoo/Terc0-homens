@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 840" role="img" aria-labelledby="title desc">
+<title id="title">Quem quer insiste e dá um jeito</title>
+<desc id="desc">Campo rural ao pôr do sol, trator e estrada sinuosa, com passos de perseverança e a mensagem: Quem quer tenta, erra, insiste, melhora, tenta de novo e dá um jeito; quem não quer dá uma desculpa.</desc>
+<defs><linearGradient id="sky" x1="0" y1="0" x2=".1" y2="1"><stop stop-color="#101e34"/><stop offset=".36" stop-color="#554339"/><stop offset=".64" stop-color="#dc7633"/><stop offset=".8" stop-color="#f8b74c"/><stop offset="1" stop-color="#4a281a"/></linearGradient><radialGradient id="sun"><stop stop-color="#fff7ca"/><stop offset=".2" stop-color="#ffe69a"/><stop offset=".7" stop-color="#f8ab42" stop-opacity=".5"/><stop offset="1" stop-color="#e9a039" stop-opacity="0"/></radialGradient><linearGradient id="field" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#543a2b"/><stop offset="1" stop-color="#171c1c"/></linearGradient></defs>
+<rect width="720" height="840" fill="url(#sky)"/>
+<g opacity=".32" fill="#dfc2a0"><path d="M-30 184Q150 136 341 185T750 165V197Q350 236-30 214Z"/><path d="M0 287Q146 248 302 293T720 269V298Q309 319 0 318Z"/><path d="M0 390Q264 354 417 394T720 375V411Q373 421 0 410Z"/></g>
+<circle cx="185" cy="535" r="205" fill="url(#sun)"/><circle cx="185" cy="535" r="39" fill="#fff1bd"/>
+<path d="M0 564Q196 550 368 575T720 565V840H0Z" fill="url(#field)"/>
+<g stroke="#231d18" stroke-width="2.5" opacity=".75"><path d="M-80 652L700 570M-60 701L680 573M-50 760L670 574M-40 828L650 575M20 840L660 575M125 840L670 575M250 840L680 575M420 840L690 575M605 840L705 575"/></g>
+<g transform="translate(388 587)" fill="#1c2425" stroke="#111615" stroke-width="8" stroke-linejoin="round">
+<circle cx="76" cy="153" r="72"/><circle cx="302" cy="162" r="103"/><circle cx="76" cy="153" r="32" fill="#727b6a"/><circle cx="302" cy="162" r="48" fill="#727b6a"/>
+<path d="M28 85L70 33H178L218 87H358L387 130H375V175H192L174 144H110L99 116H24Z" fill="#293d36"/>
+<path d="M129 30V-57H268L309 60H216L188 30Z" fill="#293d36"/>
+<path d="M154 -36H253L275 39H151Z" fill="#4e6365" opacity=".6"/>
+<path d="M196 84V-38M215 97L170 75" stroke="#0f191c" fill="none"/>
+</g>
+<path d="M181 100C585 65 617 200 413 258S45 335 196 400S656 433 536 515S155 556 396 625" fill="none" stroke="#050708" stroke-width="12" stroke-linecap="round" opacity=".68"/>
+<path d="M181 100C585 65 617 200 413 258S45 335 196 400S656 433 536 515S155 556 396 625" fill="none" stroke="#fff9ef" stroke-width="6" stroke-linecap="round"/>
+<g font-family="Georgia,'Times New Roman',serif" font-size="31" font-weight="900" stroke="#080c11" stroke-width="6" paint-order="stroke fill" fill="#fff6e6" text-anchor="middle">
+<text x="142" y="77">QUEM QUER</text>
+<text x="444" y="137">TENTA</text>
+<text x="497" y="216">ERRA</text>
+<text x="202" y="316">INSISTE</text>
+<text x="476" y="385">MELHORA</text>
+<text x="464" y="493" font-size="27">TENTA DE NOVO</text>
+</g>
+<g font-family="Arial,Helvetica,sans-serif" font-weight="900" text-anchor="middle" paint-order="stroke fill" stroke="#10200e" stroke-width="6">
+<text x="170" y="547" font-size="40" fill="#aaf254">DÁ UM JEITO</text>
+<text x="200" y="713" font-size="29" fill="#fff9f1" stroke="#12181c">QUEM NÃO QUER</text>
+<text x="357" y="790" font-size="34" fill="#aaf254">DÁ UMA DESCULPA</text>
+</g>
+</svg>
