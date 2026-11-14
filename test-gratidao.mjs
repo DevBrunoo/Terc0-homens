@@ -5,6 +5,11 @@ const source=readFileSync(new URL('./gratidao-catolica.js',import.meta.url),'utf
 const index=readFileSync(new URL('./index.html',import.meta.url),'utf8');
 const build=readFileSync(new URL('./scripts/build-cloudflare.mjs',import.meta.url),'utf8');
 const worker=readFileSync(new URL('./sw.js',import.meta.url),'utf8');
+for(const workflow of ['.github/workflows/deploy-pages.yml','.github/workflows/build-preview.yml']){
+ const text=readFileSync(new URL('./'+workflow,import.meta.url),'utf8');
+ assert.match(text,/node scripts\/build-cloudflare\.mjs/,'Distribuição deve incluir todos os módulos: '+workflow);
+}
+
 for(const file of [index,build,worker]){
  assert.match(file,/gratidao-catolica\.js/,'Script incluso em HTML, build e PWA');
  assert.match(file,/gratidao-catolica\.css/,'Estilos inclusos em HTML, build e PWA');
