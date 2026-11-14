@@ -20,6 +20,8 @@ const vm=createContext({document:doc,window:{scrollTo(){},location:{hash:''},mat
 runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
+assert.match(root.innerHTML,/cuiudo-goals-chart/);
+assert.match(root.innerHTML,/cuiudo-chart-range/);
 assert.match(root.innerHTML,/cuiudo-goal-form/);
 assert.match(root.innerHTML,/Cristiano Ronaldo/);
 assert.match(root.innerHTML,/Fugir da sua cruz é a pior desgraça que você pode fazer\./);
@@ -107,6 +109,8 @@ assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-cuiudo-clock=/,'Pain
 assert.match(read('daily-goals.js'),/function cuiudoTimerSeconds/);
 runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
+assert.match(root.innerHTML,/cuiudo-chart-svg/);
+assert.match(root.innerHTML,/cuiudo-chart-line is-done/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-timer-toggle"/);
 assert.match(root.innerHTML,/Missão cumprida/);
 assert.match(root.innerHTML,/Você é muito macio/);
