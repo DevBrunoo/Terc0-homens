@@ -36,15 +36,14 @@ jobs:
           PY
       - name: Preparar aplicativo completo com imagens
         run: |
+          node scripts/build-cloudflare.mjs
           mkdir -p package
-          cp index.html apple.css rosary-plus.css cuiudo-v13.css cuiudo-v14.css cuiudo-v15.css cuiudo-v16.css styles.css feed.css app.js feed-ui.js feed-data.js ambient-audio.js cuiudo-music.js rosary-i18n.js rosary-artwork.js rosary-context.js rosary-plus.js rosary-beads.js saints-i18n.js daily-goals.js conscience-duty.js cloud-sync.js data.js brutal.js devocionario.js manifest.webmanifest sw.js .nojekyll package/
-          cp -R assets package/
+          cp -R dist/. package/
           cat > package/COMO_ABRIR.txt <<'TXT'
-          CUIÚDO — Versão completa com imagens locais
+          CUIÚDO — Versão completa com imagens e módulos locais
           Os arquivos devem ficar juntos: abra index.html no navegador.
-          Para usar como site, hospede a pasta package/ em um servidor estático.
-          Não é preciso baixar imagens externas.
-          Para ativar o site oficial no GitHub, Settings -> Pages -> Source: GitHub Actions.
+          Para funcionar como site, hospede a pasta package/ em um servidor estático.
+          Funções D1 só funcionam quando hospedadas no Cloudflare Pages.
           TXT
       - name: Disponibilizar ZIP de prévia no GitHub Actions
         uses: actions/upload-artifact@v4
