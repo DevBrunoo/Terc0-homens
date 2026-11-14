@@ -6,7 +6,7 @@
   "description": "Terço católico e desafios de fé e ação",
   "scripts": {
     "dev": "node server.mjs",
-    "test": "node test.mjs && node test-rosary.mjs && node test-goals.mjs && node test-fixes.mjs && node test-duty.mjs && node test-v16.mjs && node test-cloud.mjs && node test-spotify.mjs && node test-priority-alarm.mjs && node test-goal-chart.mjs && node test-premium.mjs && node test-premium-ui.mjs",
+    "test": "node test.mjs && node test-rosary.mjs && node test-goals.mjs && node test-fixes.mjs && node test-duty.mjs && node test-v16.mjs && node test-cloud.mjs && node test-spotify.mjs && node test-priority-alarm.mjs && node test-goal-chart.mjs && node test-premium.mjs && node test-premium-ui.mjs && node test-gratidao.mjs",
     "build:cloudflare": "node scripts/build-cloudflare.mjs"
   }
 }
