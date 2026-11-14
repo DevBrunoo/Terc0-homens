@@ -24,7 +24,10 @@ export async function onRequestGet(context){
   const offsetParam=params.get('offset')||'0';
   if(!/^\d{1,8}$/.test(offsetParam))return response({error:'Paginação inválida.'},400);
   const data=await context.env.DB.prepare(
-   'SELECT id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
+   'SELECT id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state,'+
+    "CASE WHEN status='done' THEN (SELECT MAX(occurred_at) FROM goal_events "+
+    "WHERE goal_id=public_goals.id AND event_type='completed') ELSE NULL END AS completed_at "+
+    'FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
   ).bind(GOALS_PAGE_SIZE,Number(offsetParam)).all();
   const goals=data.results||[];
   return response({goals,hasMore:goals.length===GOALS_PAGE_SIZE,public:true,updatedAt:Date.now()});
@@ -100,7 +103,10 @@ export async function onRequestPost(context){
   if(kind){
    statements.push(db.prepare(
     'INSERT INTO goal_events(goal_id,goal_day,event_type,priority,occurred_at) VALUES(?,?,?,?,?)'
-   ).bind(id,day,kind,action==='delete'?(previous?.priority||'medium'):priority,now));
+   ).bind(id,day,kind,action==='delete'?(previous?.priority||'medium'):priority,
+     // O clique é a referência, mesmo se a sincronização ocorrer após ficar offline.
+     kind==='completed'&&Number.isSafeInteger(body.completed_at)&&body.completed_at>0&&
+     body.completed_at<=now+60000?body.completed_at:now));
   }
   // D1 batch commits both goal and history together. No retroactive fabricated events.
   await db.batch(statements);
