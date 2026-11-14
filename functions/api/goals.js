@@ -25,8 +25,8 @@ export async function onRequestGet(context){
   if(!/^\d{1,8}$/.test(offsetParam))return response({error:'Paginação inválida.'},400);
   const data=await context.env.DB.prepare(
    'SELECT id,day,text,status,priority,updated_at,duration_sec,remaining_sec,timer_started_at,timer_state,'+
-    "CASE WHEN status='done' THEN (SELECT MAX(occurred_at) FROM goal_events "+
-    "WHERE goal_id=public_goals.id AND event_type='completed') ELSE NULL END AS completed_at "+
+    "CASE WHEN status='done' THEN (SELECT occurred_at FROM goal_events "+
+    "WHERE goal_id=public_goals.id AND event_type='completed' ORDER BY event_id DESC LIMIT 1) ELSE NULL END AS completed_at "+
     'FROM public_goals ORDER BY day,id LIMIT ? OFFSET ?'
   ).bind(GOALS_PAGE_SIZE,Number(offsetParam)).all();
   const goals=data.results||[];
