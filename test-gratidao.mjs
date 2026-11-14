@@ -37,7 +37,10 @@ assert.equal(nav.pt.gratidao,'Gratidão');
 assert.equal(nav.en.gratidao,'Gratitude');
 const initialHome=runInContext('combatHome()',context);
 assert.match(initialHome,/id="grat-home-form"/,'Formulário compacto para salvar na própria tela inicial');
-assert.match(initialHome,/data-tab="gratidao"/,'Acesso ao diário completo');
+assert.match(initialHome,/id="grat-home-text"[^>]*name="gratitude"/,'Área pequena para escrever várias graças');
+assert.match(initialHome,/Hoje sou grato por/);
+assert.match(initialHome,/Minha moto, minha vida, o terço/);
+assert.doesNotMatch(initialHome,/class="grat-home-open"|class="grat-home-save"/,'Sem botões extras na inicial');
 assert.ok(initialHome.indexOf('cuiudo-hero')<initialHome.indexOf('grat-home'),
  'Cartão aparece depois do destaque inicial');
 assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('cuiudo-grace-reflection'),
@@ -101,8 +104,14 @@ assert.equal(afterQuick.thanks[0],'Agradeço pela paz de hoje');
 assert.equal(afterQuick.thanks[1],'Recebi uma ajuda');
 assert.equal(afterQuick.action,'Estudar vinte minutos');
 assert.equal(feedback.textContent,'Salvo');
+const input=listeners.input[0];
+const quickTextarea={id:'grat-home-text',form:quickForm,value:'Sou grato pela minha moto, minha vida e pelo terço'};
+quickForm.querySelector=()=>quickTextarea;
+input({target:quickTextarea});
+assert.equal(context.window.cuiudoGratidao.read()['2026-11-14'].thanks[0],quickTextarea.value,'Salva automaticamente ao digitar');
+assert.equal(context.window.cuiudoGratidao.read()['2026-11-14'].thanks[1],'Recebi uma ajuda','Não perde as outras anotações');
 const compactDone=runInContext('combatHome()',context);
-assert.match(compactDone,/value="Agradeço pela paz de hoje"/);
+assert.match(compactDone,/>Sou grato pela minha moto, minha vida e pelo terço<\/textarea>/);
 assert.match(compactDone,/Gratidão de hoje/);
 assert.ok(memory.get('terco-gratidao-catolica-v1'),'Registro local preservado');
 console.log('✓ Gratidão: navegação, privacidade, escrita, XSS, histórico, exclusão e compatibilidade de build');
