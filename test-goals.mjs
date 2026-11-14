@@ -126,7 +126,7 @@ assert.doesNotMatch(root.innerHTML,/goal-victory-time/);
 // Não inventar um instante para metas antigas; exibir o real quando disponível.
 assert.doesNotMatch(root.innerHTML,/goal-reality-time/);
 runInContext("state.dailyGoalDays[currentDay()].find(g=>g.id==='failed').missed_at=Date.UTC(2026,10,14,19,12);render()",vm);
-assert.match(root.innerHTML,/Não concluída em 14\\/11\\/2026, 16:12 \\(Brasília\\)/);
+assert.match(root.innerHTML,/Não concluída em 14\/11\/2026, 16:12 \(Brasília\)/);
 assert.match(root.innerHTML,/datetime="2026-11-14T19:12:00.000Z"/);
 runInContext("delete state.dailyGoalDays[currentDay()].find(g=>g.id==='failed').missed_at;render()",vm);
 assert.doesNotMatch(root.innerHTML,/goal-reality-time/);
