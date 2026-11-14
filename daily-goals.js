@@ -232,6 +232,50 @@ function cuiudoObstacleBox(locale){
   '</button></div></aside>';
 }
 
+/* Pequena reflexão privada da presença de Deus, preservada até a pessoa apagar. */
+const cuiudoGodMomentKey='terco-presenca-de-deus-v1';
+const cuiudoGodMomentLabels={
+ pt:['Onde vejo Deus no meu dia?','Reconheça uma graça, um gesto de amor ou um momento de oração.','Ex.: na minha vida, no terço, no cuidado recebido…','Salvo só neste aparelho · privado','Erro ao salvar neste aparelho','Excluir anotação'],
+ en:['Where did I see God today?','Recall a grace, a kind gesture or a moment of prayer.','E.g. in my life, during the Rosary, in someone’s kindness…','Saved only on this device · private','Unable to save on this device','Delete note'],
+ es:['¿Dónde veo a Dios en mi día?','Reconoce una gracia, un gesto de amor o un momento de oración.','Ej.: en mi vida, en el rosario, en la ayuda recibida…','Guardado solo en este dispositivo · privado','No se pudo guardar','Eliminar nota'],
+ la:['Ubi Deum hodie conspexi?','Gratiam vel caritatem vel orationis momentum memorare.','Ex.: in vita, rosario, auxilio accepto…','In hoc instrumento servatum · privatum','Servari non potuit','Delere']
+};
+function cuiudoGodMomentEntries(){
+ try{
+  const value=JSON.parse(localStorage.getItem(cuiudoGodMomentKey)||'{}');
+  return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
+ }catch{return {};}
+}
+function cuiudoGodMomentLastDay(){
+ const entries=cuiudoGodMomentEntries();
+ return Object.keys(entries).filter(day=>typeof entries[day]==='string'&&entries[day].trim()).sort().at(-1)||null;
+}
+function cuiudoGodMomentRead(){
+ const day=cuiudoGodMomentLastDay();
+ return day?cuiudoGodMomentEntries()[day].slice(0,650):'';
+}
+function cuiudoGodMomentSave(value){
+ try{
+  const entries=cuiudoGodMomentEntries();
+  const day=cuiudoGodMomentLastDay()||currentDay();
+  const note=String(value||'').slice(0,650);
+  if(note.trim())entries[day]=note;
+  else delete entries[day]; // Apenas uma ação da pessoa pode apagar a anotação.
+  localStorage.setItem(cuiudoGodMomentKey,JSON.stringify(entries));
+  return true;
+ }catch{return false;}
+}
+function cuiudoGodMomentBox(locale){
+ const t=cuiudoGodMomentLabels[locale]||cuiudoGodMomentLabels.pt;
+ return '<aside class="goals-obstacle-box goals-god-moment-box" aria-labelledby="goals-god-moment-title">'+
+  '<div class="goals-obstacle-head"><span class="goals-obstacle-symbol" aria-hidden="true">✝</span>'+
+  '<div><strong id="goals-god-moment-title">'+escapeHtml(t[0])+'</strong><p>'+escapeHtml(t[1])+'</p></div></div>'+
+  '<label class="sr-only" for="cuiudo-god-moment-text">'+escapeHtml(t[0])+'</label>'+
+  '<textarea id="cuiudo-god-moment-text" class="goals-obstacle-input" rows="2" maxlength="650" placeholder="'+escapeHtml(t[2])+'">'+escapeHtml(cuiudoGodMomentRead())+'</textarea>'+
+  '<div class="goals-obstacle-bottom"><span class="goals-obstacle-status" role="status" aria-live="polite">'+escapeHtml(t[3])+'</span>'+
+  '<button type="button" class="goals-obstacle-delete" data-action="cuiudo-god-moment-delete">'+escapeHtml(t[5])+'</button></div></aside>';
+}
+
 /* Compromisso diário persistente e particular deste navegador. */
 const cuiudoEssentialKey='terco-compromisso-essencial-v1';
 const cuiudoEssentialLabels={
@@ -649,6 +693,7 @@ function cuiudoGoalChecklist(){
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div>'+
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
+  cuiudoGodMomentBox(l)+
   cuiudoGoalsBarChart(l)+
   (window.cuiudoPremium?.goalExtras?.(l)||'')+
   cuiudoObstacleBox(l)+
@@ -687,6 +732,21 @@ app.addEventListener('change',event=>{
  render();
 });
 
+app.addEventListener('input',event=>{
+ if(event.target?.id!=='cuiudo-god-moment-text')return;
+ const saved=cuiudoGodMomentSave(event.target.value);
+ const status=event.target.closest('.goals-god-moment-box')?.querySelector('.goals-obstacle-status');
+ if(status){
+  const t=cuiudoGodMomentLabels[cuiudoLocale()]||cuiudoGodMomentLabels.pt;
+  status.textContent=saved?t[3]:t[4];
+ }
+});
+app.addEventListener('click',event=>{
+ const button=event.target?.closest?.('[data-action="cuiudo-god-moment-delete"]');
+ if(!button||!cuiudoGodMomentRead())return;
+ if(typeof confirm==='function'&&!confirm('Excluir esta anotação sobre onde você viu Deus?'))return;
+ if(cuiudoGodMomentSave(''))render();
+});
 app.addEventListener('input',event=>{
  if(event.target?.id!=='cuiudo-obstacle-text')return;
  const saved=cuiudoObstacleSave(event.target.value);
