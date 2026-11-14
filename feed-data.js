@@ -107,6 +107,26 @@ const feedArtwork = Object.freeze({
 const feedFilters = Object.freeze([["todos","Para você"],["miguel","São Miguel"],["rural","Rural / trabalho"],["jesus","Jesus"],["coragem","Vai pra cima"],["santidade","Santidade"],["salvos","Salvos"]]);
 const feedPosts = Object.freeze([
   {
+    "id": "u11",
+    "category": "santidade",
+    "art": "cowboy-remington",
+    "title": "O CUIÚDO NÃO TROCA DEUS POR PRAZER PASSAGEIRO. O MACIO TROCA SEUS PRINCÍPIOS POR QUALQUER TENTAÇÃO.",
+    "kicker": "FIRMEZA NA FÉ",
+    "ref": "Mt 26,41",
+    "reflection": "Nem todo prazer é pecado. A questão é não vender a consciência por um impulso, uma aprovação ou uma satisfação momentânea. Cristo nos chama à vigilância, à liberdade interior e à fidelidade no concreto.",
+    "action": "Reconheça uma tentação recorrente, evite hoje um gatilho e escolha uma atitude fiel aos seus princípios."
+  },
+  {
+    "id": "u12",
+    "category": "rural",
+    "art": "vai-pra-cima",
+    "title": "QUEM QUER TENTA, ERRA, INSISTE, MELHORA, TENTA DE NOVO E DÁ UM JEITO. QUEM NÃO QUER DÁ UMA DESCULPA.",
+    "kicker": "TENTA DE NOVO",
+    "ref": "Gl 6,9",
+    "reflection": "Errar faz parte do aprendizado. Perseverar é corrigir a rota e voltar ao que é bom, sem confundir dificuldades reais com desculpas. Nem todo obstáculo depende de você; faça com coragem a parte que está ao seu alcance.",
+    "action": "Retome por 15 minutos uma tarefa importante. Corrija um erro da última tentativa e dê o próximo passo possível."
+  },
+  {
     "id": "m01",
     "category": "miguel",
     "art": "miguel-reni",
