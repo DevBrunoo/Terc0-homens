@@ -26,12 +26,13 @@ function combatMatches(p){
 }
 function combatPoster(p,i){
  const art=feedArtwork[p.art];
- return `<article class="poster-card ${i===0?'wide':''}" data-feed-id="${escapeHtml(p.id)}">
+ const inspired=p.art==='fidelidade-faroeste'||p.art==='perseveranca-campo';
+ return `<article class="poster-card ${i===0?'wide':''} ${inspired?'poster-reference':''}" data-feed-id="${escapeHtml(p.id)}">
    <button type="button" class="poster-open" data-action="combat-open" data-id="${p.id}" aria-label="Abrir reflexão ${escapeHtml(p.title)}">
     <img src="${escapeHtml(art.url)}" loading="lazy" decoding="async" alt="${escapeHtml(art.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}" />
     <span class="poster-shade" aria-hidden="true"></span>
     <span class="poster-topline"><span class="poster-label">${escapeHtml(p.kicker)}</span><span class="poster-index">${String(i+1).padStart(2,'0')}</span></span>
-    <strong class="poster-words">${escapeHtml(p.title)}</strong>
+    <strong class="poster-words ${inspired?'sr-only':''}">${escapeHtml(p.title)}</strong>
    </button>
    <div class="poster-control-row"><span class="post-topic">${escapeHtml(p.ref)}</span><span class="poster-actions">
     <button type="button" data-action="combat-save" data-id="${p.id}" aria-pressed="${combatSaved(p.id)}" aria-label="${combatSaved(p.id)?'Remover dos salvos':'Salvar reflexão'}">${combatSaved(p.id)?'♥':'♡'}</button>
@@ -41,10 +42,11 @@ function combatPoster(p,i){
 }
 function combatPostDetail(p){
  const a=feedArtwork[p.art];
+ const inspired=p.art==='fidelidade-faroeste'||p.art==='perseveranca-campo';
  return `<div class="feed-overlay" data-action="combat-close" role="presentation">
    <div class="feed-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(p.title)}">
     <button type="button" data-action="combat-close" class="feed-close" aria-label="Fechar reflexão">×</button>
-    <div class="feed-modal-image"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words">${escapeHtml(p.title)}</strong></div>
+    <div class="feed-modal-image ${inspired?'poster-reference':''}"><img src="${escapeHtml(a.url)}" alt="${escapeHtml(a.credit)}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='./assets/feed/fallback.svg';this.style.objectFit='cover';}" /><span class="poster-shade" aria-hidden="true"></span><strong class="poster-words ${inspired?'sr-only':''}">${escapeHtml(p.title)}</strong></div>
     <div class="feed-modal-content">
       <span class="feed-modal-kicker">${escapeHtml(p.kicker)} • CUIÚDO</span>
       <h2>SEM DESCULPA. COM FÉ E ATITUDE.</h2>
