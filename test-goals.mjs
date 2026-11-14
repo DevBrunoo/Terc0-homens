@@ -26,8 +26,10 @@ assert.match(root.innerHTML,/cuiudo-goal-form/);
 assert.match(root.innerHTML,/Onde vejo Deus no meu dia\?/,'Campo espiritual na tela de metas');
 assert.ok(root.innerHTML.indexOf('class="today-goals-list"')<root.innerHTML.indexOf('goals-god-moment-box'),
  'Reflexão sobre Deus deve ficar abaixo das metas');
-assert.ok(root.innerHTML.indexOf('goals-god-moment-box')<root.innerHTML.indexOf('cuiudo-goals-chart'),
- 'Reflexão sobre Deus deve ficar acima do desempenho');
+assert.ok(root.innerHTML.indexOf('goals-god-moment-box')<root.innerHTML.indexOf('id="goals-obstacle-title"'),
+ 'Reflexão sobre Deus deve ficar antes do registro de obstáculos');
+assert.ok(root.innerHTML.indexOf('id="goals-obstacle-title"')<root.innerHTML.indexOf('cuiudo-goals-chart'),
+ 'O que atrapalhou meu dia deve aparecer acima do desempenho');
 assert.match(root.innerHTML,/Cristiano Ronaldo/);
 assert.match(root.innerHTML,/Fugir da sua cruz é a pior desgraça que você pode fazer\./);
 assert.match(root.innerHTML,/goals-alternating-quotes/);
