@@ -38,6 +38,10 @@ assert.equal(bars.find(x=>x.key==='2026-11-12').percent,null,'Dia sem metas não
 const html=runInContext("cuiudoGoalsBarChart('pt')",vm);
 assert.match(html,/Seu desempenho/);
 assert.match(html,/cuiudo-chart-barplot/);
+assert.match(html,/cuiudo-chart-footnote/);
+assert.match(html,/<details class="cuiudo-chart-footnote"><summary>Como calculamos<\/summary>/);
+assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-stage\s*\{\s*height:76px/);
+assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-stage\s*\{\s*height:58px/);
 assert.match(html,/cuiudo-chart-bar-fill/);
 assert.match(html,/25%/);
 assert.match(html,/0%/);
@@ -64,7 +68,7 @@ assert.match(runInContext("cuiudoGoalsBarChart('en')",vm),/There are no goals re
 for(const locale of ['pt','en','es','la'])assert.match(
  runInContext('cuiudoGoalsBarChart('+JSON.stringify(locale)+')',vm),/cuiudo-goals-chart/
 );
-assert.match(read('sw.js'),/terco-barras-metas-v61/);
+assert.match(read('sw.js'),/terco-grafico-compacto-v62/);
 assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-fill/);
 assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion/);
 console.log('✓ Barras percentuais: 0% real, sem dados, prioridades, datas, 7/14/30 dias e quatro idiomas');
