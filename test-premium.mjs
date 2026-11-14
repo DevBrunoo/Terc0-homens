@@ -46,8 +46,8 @@ assert.equal(data.find(x=>x.day==='2026-11-14').missed,1);
 assert.equal(data.find(x=>x.day==='2026-11-14').created,1);
 assert.ok(data.find(x=>x.day==='2026-11-13').completed===0,'Não atribuir conclusão à data da criação');
 assert.match(read('index.html'),/cuiudo-premium\.css/);
-assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\\.css/);
-assert.match(read('scripts/build-cloudflare.mjs'),/goal-history\\.js/);
+assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\.css/);
+assert.match(read('scripts/build-cloudflare.mjs'),/goal-history\.js/);
 assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\\.js/);
 
 assert.match(read('index.html'),/cuiudo-premium\.js/);
