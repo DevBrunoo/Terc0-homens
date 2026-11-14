@@ -208,11 +208,15 @@
  const previousHome=combatHome;
  combatHome=function(){
   const home=previousHome();
-  // A lista de metas termina imediatamente antes do banner de São Bento.
-  // Assim, o diário fica abaixo de todas as metas e acima da imagem principal.
-  const marker='<section class="benedict-hero">';
-  const index=home.indexOf(marker);
-  return index>=0?home.slice(0,index)+homeTile()+home.slice(index):home+homeTile();
+  // No desktop, a gratidão fica ao lado da faixa motivacional no topo.
+  // No celular, aparece imediatamente abaixo da faixa e antes das metas.
+  const marker='<section class="cuiudo-punch-strip"';
+  const start=home.indexOf(marker);
+  const end=start>=0?home.indexOf('</section>',start):-1;
+  if(end<0)return homeTile()+home;
+  const after=end+'</section>'.length;
+  return home.slice(0,start)+'<div class="cuiudo-home-top-row">'+
+   home.slice(start,after)+homeTile()+'</div>'+home.slice(after);
  };
  const previousRender=render;
  render=function(){
