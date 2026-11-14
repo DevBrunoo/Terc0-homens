@@ -304,44 +304,100 @@ function cuiudoTimerPanel(goal,locale){
   ' <input data-timer-minutes type="number" min="1" max="1440" step="1" inputmode="numeric" value="'+Math.round(total/60)+'"></label>'+
   (phase==='finished'?'':'<button type="button" data-action="cuiudo-goal-timer-'+action+'" data-id="'+id+'">'+escapeHtml(caption)+'</button>')+
   '<button type="button" data-action="cuiudo-goal-timer-reset" data-id="'+id+'">'+escapeHtml(t.reset)+'</button>'+
+  '<button type="button" data-action="cuiudo-goal-timer-test" data-id="'+id+'">'+escapeHtml({pt:'Testar som',en:'Test sound',es:'Probar sonido',la:'Sonum tempta'}[locale]||'Testar som')+'</button>'+
+  (typeof Notification!=='undefined'&&Notification.permission==='default'?'<button type="button" data-action="cuiudo-goal-timer-notifications" data-id="'+id+'">'+escapeHtml({pt:'Ativar avisos',en:'Enable alerts',es:'Activar avisos',la:'Nuntios permitte'}[locale]||'Ativar avisos')+'</button>':'')+
   '</div></div>';
 }
 
-/* Aviso sonoro do temporizador. Web Audio é habilitado no clique de Iniciar/Retomar. */
+/* O áudio é agendado quando o usuário inicia o timer. O Web Audio pode
+ * disparar o som mesmo com outra aba em primeiro plano, sem depender de
+ * setInterval. O sistema pode suspender abas em celulares; notificações são
+ * um reforço, não uma garantia quando o navegador/app for encerrado. */
 let cuiudoTimerAudioContext=null;
+const cuiudoTimerAudioJobs=new Map();
 function cuiudoTimerUnlockAudio(){
  try{
   const Type=window.AudioContext||window.webkitAudioContext;
   if(!Type)return;
-  if(!cuiudoTimerAudioContext)cuiudoTimerAudioContext=new Type();
+  if(!cuiudoTimerAudioContext||cuiudoTimerAudioContext.state==='closed')
+   cuiudoTimerAudioContext=new Type();
   if(cuiudoTimerAudioContext.state==='suspended'){
    const p=cuiudoTimerAudioContext.resume();p?.catch?.(()=>{});
   }
  }catch{}
+}
+function cuiudoTimerScheduleTone(ctx,at){
+ const nodes=[];
+ try{
+  for(let i=0;i<14;i++){
+   const t=at+i*0.34;
+   for(let layer=0;layer<2;layer++){
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type=layer===0?'square':'sine';
+    osc.frequency.setValueAtTime(layer===0?(i%3===2?740:880):1320,t);
+    gain.gain.setValueAtTime(0.0001,t);
+    gain.gain.exponentialRampToValueAtTime(layer===0?0.32:0.12,t+0.018);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t+0.29);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(t);osc.stop(t+0.30);
+    nodes.push(osc);
+   }
+  }
+ }catch{}
+ return nodes;
+}
+function cuiudoTimerCancelAudio(id){
+ const job=cuiudoTimerAudioJobs.get(id);
+ if(!job)return;
+ cuiudoTimerAudioJobs.delete(id);
+ for(const node of job.nodes){try{node.stop()}catch{}}
+}
+function cuiudoTimerArmAudio(goal){
+ cuiudoTimerCancelAudio(goal.id);
+ if(goal.timer_state!=='running'||!Number.isSafeInteger(goal.timer_started_at))return;
+ cuiudoTimerUnlockAudio();
+ const ctx=cuiudoTimerAudioContext;
+ if(!ctx)return;
+ const when=goal.timer_started_at+goal.remaining_sec*1000;
+ const at=ctx.currentTime+Math.max(0,(when-Date.now())/1000)+0.02;
+ const nodes=cuiudoTimerScheduleTone(ctx,at);
+ cuiudoTimerAudioJobs.set(goal.id,{when,nodes,ctx});
 }
 function cuiudoTimerSound(){
  try{
   const ctx=cuiudoTimerAudioContext;
   if(!ctx||ctx.state==='closed')return;
   if(ctx.state==='suspended'){const p=ctx.resume();p?.catch?.(()=>{});}
-  const base=ctx.currentTime+0.03;
-  for(let i=0;i<12;i++){
-   const at=base+i*0.30;
-   const osc=ctx.createOscillator(),gain=ctx.createGain();
-   osc.type='square';
-   osc.frequency.setValueAtTime(i===1?659.25:880,at);
-   gain.gain.setValueAtTime(0.0001,at);
-   gain.gain.exponentialRampToValueAtTime(0.38,at+0.02);
-   gain.gain.exponentialRampToValueAtTime(0.0001,at+0.26);
-   osc.connect(gain);gain.connect(ctx.destination);
-   osc.start(at);osc.stop(at+0.27);
-  }
+  cuiudoTimerScheduleTone(ctx,ctx.currentTime+0.03);
  }catch{}
 }
+function cuiudoTimerNotify(goal){
+ try{
+  if(typeof Notification==='undefined'||Notification.permission!=='granted'||!document.hidden)return;
+  const locale=cuiudoLocale(),t=cuiudoTimerLabels[locale]||cuiudoTimerLabels.pt;
+  const title=t.done,opts={body:goal.text,tag:'cuiudo-timer-'+goal.id,
+   icon:'./assets/icon.svg',requireInteraction:true};
+  if(navigator.serviceWorker?.ready){
+   navigator.serviceWorker.ready.then(reg=>reg.showNotification(title,opts))
+    .catch(()=>{try{new Notification(title,opts)}catch{}});
+  }else new Notification(title,opts);
+ }catch{}
+}
+function cuiudoTimerReconcileAudio(){
+ for(const [id,job] of cuiudoTimerAudioJobs){
+  const goal=Object.values(state.dailyGoalDays||{}).flatMap(x=>Array.isArray(x)?x:[]).find(g=>g.id===id);
+  const when=goal?.timer_state==='running'?goal.timer_started_at+goal.remaining_sec*1000:null;
+  if(goal?.status==='pending'&&when===job.when)continue;
+  cuiudoTimerCancelAudio(id);
+  if(goal?.status==='pending'&&goal.timer_state==='running')cuiudoTimerArmAudio(goal);
+ }
+}
+window.cuiudoTimerReconcileAudio=cuiudoTimerReconcileAudio;
 
 function cuiudoTimerStop(goal){
  if(goal.timer_state!=='running')return;
  goal.remaining_sec=cuiudoTimerSeconds(goal);
+ if(goal.remaining_sec>0)cuiudoTimerCancelAudio(goal.id);
  goal.timer_started_at=null;goal.timer_state=goal.remaining_sec===0?'finished':'paused';
 }
 
@@ -468,10 +524,19 @@ app.addEventListener('click',event=>{
  }
  if(action.startsWith('cuiudo-goal-timer-')){
   if(goal.status!=='pending')return;
+  if(action==='cuiudo-goal-timer-test'){
+   cuiudoTimerUnlockAudio();cuiudoTimerSound();return;
+  }
+  if(action==='cuiudo-goal-timer-notifications'){
+   if(typeof Notification!=='undefined'&&Notification.permission==='default')
+    Notification.requestPermission().then(()=>render()).catch(()=>{});
+   return;
+  }
   if(action==='cuiudo-goal-timer-pause')cuiudoTimerStop(goal);
   if(action==='cuiudo-goal-timer-resume'&&goal.timer_state==='paused'&&goal.remaining_sec>0){
    cuiudoTimerUnlockAudio();
    goal.timer_started_at=Date.now();goal.timer_state='running';
+   cuiudoTimerArmAudio(goal);
   }
   if(action==='cuiudo-goal-timer-start'||action==='cuiudo-goal-timer-reset'){
    const field=target.closest('.today-goal')?.querySelector('[data-timer-minutes]');
@@ -480,16 +545,18 @@ app.addEventListener('click',event=>{
     field?.setCustomValidity?.('Escolha um valor de 1 a 1440 minutos.');
     field?.reportValidity?.();return;
    }
+   cuiudoTimerCancelAudio(goal.id);
    goal.duration_sec=minutes*60;goal.remaining_sec=goal.duration_sec;
    goal.timer_started_at=action==='cuiudo-goal-timer-start'?Date.now():null;
    goal.timer_state=action==='cuiudo-goal-timer-start'?'running':'paused';
-   if(action==='cuiudo-goal-timer-start')cuiudoTimerUnlockAudio();
+   if(action==='cuiudo-goal-timer-start')cuiudoTimerArmAudio(goal);
   }
   cuiudoGoalsSave();
   window.cuiudoGlobalGoals?.change('upsert',day,goal);
   render();return;
  }
  if(action==='cuiudo-goal-done'||action==='cuiudo-goal-missed'){
+  cuiudoTimerCancelAudio(id);
   cuiudoTimerStop(goal);
   if(cuiudoTimerOpened===id)cuiudoTimerOpened=null;
  }
@@ -497,7 +564,10 @@ app.addEventListener('click',event=>{
  if(action==='cuiudo-goal-missed')items[index].status='missed';
  if(action==='cuiudo-goal-reopen')items[index].status='pending';
  const before={...goal};
- if(action==='cuiudo-goal-delete')items.splice(index,1);
+ if(action==='cuiudo-goal-delete'){
+  cuiudoTimerCancelAudio(id);
+  items.splice(index,1);
+ }
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change(action==='cuiudo-goal-delete'?'delete':'upsert',day,
   action==='cuiudo-goal-delete'?before:items[index]);
@@ -516,7 +586,10 @@ function cuiudoTimerTick(){
    cuiudoTimerStop(goal);
    cuiudoGoalsSave();
    window.cuiudoGlobalGoals?.change('upsert',day,goal);
-   cuiudoTimerSound();
+   const armed=cuiudoTimerAudioJobs.get(goal.id);
+   if(!armed||armed.ctx.state!=='running')cuiudoTimerSound();
+   cuiudoTimerAudioJobs.delete(goal.id);
+   cuiudoTimerNotify(goal);
    finished++;
   }
  }
