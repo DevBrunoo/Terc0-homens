@@ -47,4 +47,47 @@ assert.match(read('sw.js'),/notificationclick/);
 assert.match(read('global-goals.js'),/priority:\['high','medium','low'\]/);
 assert.match(read('functions/api/goals.js'),/priorities\.has\(priority\)/);
 assert.match(read('migrations/0005_goal_priority.sql'),/DEFAULT 'medium'/);
+// Não permitir cadastrar meta sem importância, nem assumir 'Média' automaticamente.
+assert.match(source,/id="cuiudo-goal-priority"/);
+assert.match(source,/name="priority" required aria-required="true"/);
+assert.match(source,/option value="" selected disabled/);
+assert.match(source,/goal-create-priority/);
+assert.match(read('cuiudo-v16.css'),/grid-template-areas:"goal priority add"/);
+const submitStart=source.indexOf("app.addEventListener('submit',event=>{\n if(event.target?.id!=='cuiudo-goal-form')return;");
+const submitEnd=source.indexOf("app.addEventListener('click',event=>{",submitStart);
+assert.ok(submitStart>=0&&submitEnd>submitStart,'Localizar envio de novas metas');
+const events=[],changes=[];
+let saveCount=0,renderCount=0,validationCount=0;
+const subCtx=createContext({
+ app:{addEventListener(type,fn){events.push([type,fn])}},
+ state:{dailyGoalDays:{}},
+ currentDay:()=> '2026-11-14',cuiudoGoalsSave(){saveCount++},
+ window:{cuiudoGlobalGoals:{change(...args){changes.push(args)}}},
+ render(){renderCount++},Math,Date
+});
+runInContext(source.slice(submitStart,submitEnd),subCtx,{timeout:1500});
+const submit=events.find(([type])=>type==='submit')?.[1];
+assert.ok(submit,'Evento de cadastro registrado');
+function send(priority,text='Estudar'){
+ let prevented=false;
+ const form={id:'cuiudo-goal-form',querySelector(q){
+  if(q==='input[name=goal]')return {value:text};
+  if(q==='select[name=priority]')return {value:priority,reportValidity(){validationCount++;return false;}};
+  return null;
+ }};
+ submit({target:form,preventDefault(){prevented=true}});
+ assert.ok(prevented,'Evitar envio HTML não controlado');
+}
+send('');
+send('invalid');
+assert.equal(Object.keys(subCtx.state.dailyGoalDays).length,0,'Sem nível explícito, não registra meta');
+assert.equal(saveCount,0,'Sem nível explícito, não grava no navegador');
+assert.equal(changes.length,0,'Sem nível explícito, não publica no D1');
+assert.equal(validationCount,2,'Pede ao navegador seleção válida');
+for(const level of ['high','medium','low'])send(level,'Meta '+level);
+assert.equal(subCtx.state.dailyGoalDays['2026-11-14'].length,3);
+assert.deepEqual(subCtx.state.dailyGoalDays['2026-11-14'].map(g=>g.priority),['low','medium','high'],'Respeitar seleção de cada meta');
+assert.equal(saveCount,3);
+assert.equal(renderCount,3);
+assert.equal(changes.length,3);
 console.log('✓ Prioridades mantidas no D1; alarme pré-agendado e cancelado ao pausar');
