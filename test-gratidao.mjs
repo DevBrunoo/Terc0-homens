@@ -21,7 +21,7 @@ const nav={pt:{},en:{},es:{},la:{}},tabs=[{id:'inicio'}];
 let calls=0,confirmed=0;
 const context=createContext({
  state,app,combatTabs:tabs,cuiudoNav:nav,
- combatHome:()=>'<section class="cuiudo-punch-strip"></section><section class="today-goals"></section><section class="cuiudo-hero"></section><section class="cuiudo-grace-reflection"></section><section class="poster-grid"></section>',
+ combatHome:()=>'<section class="cuiudo-punch-strip"></section><section class="today-goals"></section><section class="benedict-hero"></section><section class="cuiudo-grace-reflection"></section><section class="poster-grid"></section>',
  render(){calls++;},renderShell:s=>s,
  setTheme(){},currentDay:()=> '2026-11-14',
  cuiudoLocale:()=>state.appLang,
@@ -43,9 +43,9 @@ assert.match(initialHome,/Minha moto, minha vida, o terço/);
 assert.doesNotMatch(initialHome,/class="grat-home-open"|class="grat-home-save"/,'Sem botões extras na inicial');
 assert.ok(initialHome.indexOf('cuiudo-punch-strip')<initialHome.indexOf('grat-home'),
  'Cartão aparece depois da faixa de abertura');
-assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('today-goals'),
- 'Cartão aparece antes do checklist');
-assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('cuiudo-hero'),
+assert.ok(initialHome.indexOf('today-goals')<initialHome.indexOf('grat-home'),
+ 'Cartão aparece abaixo do checklist de metas');
+assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('benedict-hero'),
  'Cartão aparece antes da imagem principal');
 assert.ok(initialHome.indexOf('grat-home')<initialHome.indexOf('cuiudo-grace-reflection'),
  'Cartão aparece antes do feed e das reflexões');
