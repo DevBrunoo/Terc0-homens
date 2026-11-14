@@ -28,7 +28,7 @@
    close:'Fechar mensagem',homeKicker:'UM MINUTO DE GRATIDÃO',homeTitle:'Agradeça. Confie. Faça a sua parte.',
    homeDesc:'Três graças, uma oração e uma decisão concreta. A fé não é uma técnica para controlar o futuro.',
    homeButton:'Escrever minha gratidão',todayDone:'Hoje já existe um registro. Você pode revisá-lo.',
-   homeMiniTitle:'Gratidão de hoje',homeMiniPrompt:'Pelo que você agradece hoje?',homeMiniSave:'Salvar',homeMiniOpen:'Diário',homeMiniSaved:'Salvo',
+   homeMiniTitle:'Hoje sou grato por...',homeMiniPrompt:'Minha moto, minha vida, o terço, minha família...',homeMiniSave:'Salvar',homeMiniOpen:'Diário',homeMiniSaved:'Salvo',
    prayerDefault:'Senhor, agradeço pelas graças deste dia. Dá-me serenidade para aceitar o que não controlo, coragem para agir onde posso e sabedoria para discernir a tua vontade. Amém.',
    reflection:'A gratidão não precisa negar a dor para ser sincera.'
   },
@@ -53,7 +53,7 @@
    close:'Dismiss',homeKicker:'A MINUTE OF GRATITUDE',homeTitle:'Give thanks. Trust. Do your part.',
    homeDesc:'Three gifts, one prayer and one practical decision. Faith is not a way to control the future.',
    homeButton:'Write my gratitude',todayDone:'You already have an entry for today. You can review it.',
-   homeMiniTitle:'Today’s gratitude',homeMiniPrompt:'What are you grateful for today?',homeMiniSave:'Save',homeMiniOpen:'Journal',homeMiniSaved:'Saved',
+   homeMiniTitle:'Today I’m grateful for...',homeMiniPrompt:'My life, my family, prayer, small blessings...',homeMiniSave:'Save',homeMiniOpen:'Journal',homeMiniSaved:'Saved',
    prayerDefault:'Lord, thank You for the gifts of this day. Grant me serenity, courage and wisdom to follow Your will. Amen.',
    reflection:'Gratitude does not need to deny pain to be sincere.'
   },
@@ -78,7 +78,7 @@
    close:'Cerrar',homeKicker:'UN MINUTO DE GRATITUD',homeTitle:'Agradece. Confía. Haz tu parte.',
    homeDesc:'Tres gracias, una oración y una decisión concreta. La fe no controla el futuro.',
    homeButton:'Escribir gratitud',todayDone:'Ya hay un registro de hoy. Puedes revisarlo.',
-   homeMiniTitle:'Gratitud de hoy',homeMiniPrompt:'¿Por qué das gracias hoy?',homeMiniSave:'Guardar',homeMiniOpen:'Diario',homeMiniSaved:'Guardado',
+   homeMiniTitle:'Hoy doy gracias por...',homeMiniPrompt:'Mi vida, mi familia, el rosario...',homeMiniSave:'Guardar',homeMiniOpen:'Diario',homeMiniSaved:'Guardado',
    prayerDefault:'Señor, te doy gracias por este día. Dame serenidad, valor y sabiduría para seguir tu voluntad. Amén.',
    reflection:'La gratitud sincera no niega el dolor.'
   },
@@ -103,7 +103,7 @@
    close:'Claudere',homeKicker:'MOMENTUM GRATITUDINIS',homeTitle:'Gratias age. Confide. Age.',
    homeDesc:'Dona, oratio et unum opus. Fides futurum non regit.',
    homeButton:'Gratitudinem scribere',todayDone:'Hodie iam scripsisti.',
-   homeMiniTitle:'Gratitudo hodie',homeMiniPrompt:'Pro quo gratias agis?',homeMiniSave:'Servare',homeMiniOpen:'Diarium',homeMiniSaved:'Servatum',
+   homeMiniTitle:'Hodie gratias ago pro...',homeMiniPrompt:'Vita mea, familia, rosario...',homeMiniSave:'Servare',homeMiniOpen:'Diarium',homeMiniSaved:'Servatum',
    prayerDefault:'Domine, gratias tibi ago. Da mihi serenitatem, fortitudinem et sapientiam. Fiat voluntas tua. Amen.',
    reflection:'Gratitudo dolorem non negat.'
   }
@@ -159,12 +159,10 @@
   return '<section class="grat-home" aria-label="'+esc(t.homeMiniTitle)+'">'+
    '<div class="grat-home-heading"><span class="grat-home-cross" aria-hidden="true">✝</span>'+
    '<strong>'+esc(t.homeMiniTitle)+'</strong>'+
-   '<span class="grat-home-status" data-grat-status role="status" aria-live="polite">'+esc(record?t.homeMiniSaved:'')+'</span></div>'+
+   '<span class="grat-home-status" data-grat-status role="status" aria-live="polite">'+esc(first?t.homeMiniSaved:'')+'</span></div>'+
    '<form id="grat-home-form" class="grat-home-inline">'+
-   '<input name="gratitude" type="text" maxlength="260" required autocomplete="off" value="'+esc(first)+'" '+
-    'aria-label="'+esc(t.homeMiniPrompt)+'" placeholder="'+esc(t.homeMiniPrompt)+'">'+
-   '<button type="submit" class="grat-home-save">'+esc(t.homeMiniSave)+'</button></form>'+
-   '<button type="button" class="grat-home-open" data-action="navigate" data-tab="gratidao">'+esc(t.homeMiniOpen)+' <span aria-hidden="true">↗</span></button></section>';
+   '<textarea id="grat-home-text" name="gratitude" maxlength="260" rows="2" '+
+    'aria-label="'+esc(t.homeMiniTitle)+'" placeholder="'+esc(t.homeMiniPrompt)+'">'+esc(first)+'</textarea></form></section>';
  }
  function page(){
   const t=tr(),days=read(),record=days[selected]||null,list=Object.keys(days).sort().reverse(),
@@ -221,18 +219,27 @@
   app.innerHTML=renderShell(page());
   document.title=tr().title+' | Terço';
  };
+ function saveQuick(form){
+  const field=form?.querySelector('[name="gratitude"]');
+  if(!field)return;
+  const value=cap(field.value,260),days=read(),current=days[today()];
+  if(!value&&!current)return;
+  const entry=current||normalize({});
+  entry.thanks[0]=value;
+  entry.updatedAt=new Date().toISOString();
+  days[today()]=entry;
+  const status=form.closest?.('.grat-home')?.querySelector('[data-grat-status]');
+  if(write(days)){
+   if(status)status.textContent=value?tr().homeMiniSaved:'';
+  }else if(status)status.textContent=tr().error;
+ }
+ app.addEventListener('input',e=>{
+  if(e.target?.id==='grat-home-text')saveQuick(e.target.form);
+ });
  app.addEventListener('submit',e=>{
   if(e.target?.id==='grat-home-form'){
    e.preventDefault();
-   const value=cap(e.target.querySelector('[name="gratitude"]')?.value,260);
-   if(!value)return;
-   const days=read(),entry=days[today()]||normalize({});
-   entry.thanks[0]=value;entry.updatedAt=new Date().toISOString();
-   days[today()]=entry;
-   const status=e.target.closest?.('.grat-home')?.querySelector('[data-grat-status]');
-   if(write(days)){
-    if(status)status.textContent=tr().homeMiniSaved;
-   }else if(status)status.textContent=tr().error;
+   saveQuick(e.target);
    return;
   }
   if(e.target?.id!=='cuiudo-gratidao-form')return;
