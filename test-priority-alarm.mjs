@@ -86,7 +86,7 @@ assert.equal(changes.length,0,'Sem nível explícito, não publica no D1');
 assert.equal(validationCount,2,'Pede ao navegador seleção válida');
 for(const level of ['high','medium','low'])send(level,'Meta '+level);
 assert.equal(subCtx.state.dailyGoalDays['2026-11-14'].length,3);
-assert.deepEqual(subCtx.state.dailyGoalDays['2026-11-14'].map(g=>g.priority),['low','medium','high'],'Respeitar seleção de cada meta');
+assert.deepEqual(Array.from(subCtx.state.dailyGoalDays['2026-11-14'],g=>g.priority),['low','medium','high'],'Respeitar seleção de cada meta');
 assert.equal(saveCount,3);
 assert.equal(renderCount,3);
 assert.equal(changes.length,3);
