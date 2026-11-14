@@ -435,7 +435,7 @@ function cuiudoChartRows(days=14,endDay=currentDay()){
   const goals=Array.isArray(goalsByDay[day])?goalsByDay[day]:[];
   const row={day,done:0,pending:0,missed:0,high:0,medium:0,low:0};
   for(const goal of goals){
-   if(!goal)continue;
+   if(!goal||goal.status==='deleted')continue;
    const status=['pending','done','missed'].includes(goal.status)?goal.status:'pending';
    row[status]++;
    if(status==='pending'){
@@ -475,7 +475,7 @@ function cuiudoGoalsLineChart(locale){
   }
   const tickIndices=new Set([0,rows.length-1]);
   const stride=rows.length<=7?2:rows.length<=14?3:7;
-  for(let i=0;i<rows.length;i+=stride)tickIndices.add(i);
+  for(let i=0;i<rows.length-2;i+=stride)tickIndices.add(i);
   for(const i of [...tickIndices].sort((a,b)=>a-b)){
    lines.push('<text class="cuiudo-chart-axis" x="'+x(i).toFixed(1)+'" y="239" text-anchor="middle">'+
     escapeHtml(rows[i].day.slice(8,10)+'/'+rows[i].day.slice(5,7))+'</text>');
