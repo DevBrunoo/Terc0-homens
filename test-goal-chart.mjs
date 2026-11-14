@@ -6,7 +6,7 @@ const read=p=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 const run=spawnSync(process.execPath,['--check',new URL('./daily-goals.js',import.meta.url).pathname]);
 assert.equal(run.status,0,'daily-goals.js: '+run.stderr);
 const source=read('daily-goals.js');
-const from=source.indexOf("let cuiudoChartMode='status';");
+const from=source.indexOf("const cuiudoChartPrefs=");
 const to=source.indexOf('function cuiudoGoalChecklist(){',from);
 assert.ok(from>=0&&to>from,'Bloco do gráfico encontrado');
 const vm=createContext({
@@ -68,7 +68,7 @@ assert.match(runInContext("cuiudoGoalsBarChart('en')",vm),/There are no goals re
 for(const locale of ['pt','en','es','la'])assert.match(
  runInContext('cuiudoGoalsBarChart('+JSON.stringify(locale)+')',vm),/cuiudo-goals-chart/
 );
-assert.match(read('sw.js'),/terco-grafico-compacto-v62/);
+assert.match(read('sw.js'),/terco-premium-foco-lectio-v63/);
 assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-fill/);
 assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion/);
 console.log('✓ Barras percentuais: 0% real, sem dados, prioridades, datas, 7/14/30 dias e quatro idiomas');

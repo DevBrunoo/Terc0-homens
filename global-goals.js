@@ -9,6 +9,7 @@
  const QUEUE_KEY='cuiudo-public-goals-queue-v1';
  const IMPORT_KEY='cuiudo-public-goals-imported-v1';
  let pending=[],inFlight=false,pulling=false,connected=false;
+ let deletedRows=[];
  let timer=null,status='Carregando metas da nuvem…';
  const supported=typeof window.fetch==='function' && location.protocol!=='file:';
  const timerFields=['duration_sec','remaining_sec','timer_started_at','timer_state'];
@@ -91,6 +92,7 @@
   const end=focused?input.selectionEnd:null;
   state.dailyGoalDays=grouped;
   saveLocal();
+  window.cuiudoPremium?.backup?.();
   window.cuiudoTimerReconcileAudio?.();
   render();
   const nextInput=document.getElementById('cuiudo-goal-text');
@@ -176,6 +178,7 @@
    if(!imported)writeLocal(IMPORT_KEY,true);
    connected=true;
    updateStatus(pending.length?'Enviando metas locais…':'Sincronizado automaticamente com o D1.',true);
+   deletedRows=rows.filter(row=>row.status==='deleted'&&typeof row.text==='string'&&row.text.trim().length>0).sort((a,b)=>b.updated_at-a.updated_at);
    replaceGoals(rows);
    if(pending.length)schedule();
   }catch(e){
@@ -189,7 +192,19 @@
   },
   refresh(){return pull();},
   isConnected(){return connected;},
-  getStatus(){return status;}
+  getStatus(){return status;},
+  getTrash(){return deletedRows.slice(0,50).map(row=>({day:row.day,...copyGoal(row)}));},
+  restore(id){
+   const row=deletedRows.find(x=>x.id===id);
+   if(!row)return false;
+   const goal={...copyGoal(row),status:'pending',timer_state:'none',timer_started_at:null,duration_sec:0,remaining_sec:0};
+   const items=state.dailyGoalDays?.[row.day]||[];
+   if(items.length>=30)return false;
+   state.dailyGoalDays??={};
+   state.dailyGoalDays[row.day]=[goal,...items.filter(x=>x.id!==row.id)];
+   deletedRows=deletedRows.filter(x=>x.id!==id);
+   saveLocal();queueOperation({action:'upsert',day:row.day,...goal});render();return true;
+  }
  };
  if(supported){
   window.addEventListener('online',()=>{if(pending.length)flush();pull();});
