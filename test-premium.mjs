@@ -48,7 +48,7 @@ assert.ok(data.find(x=>x.day==='2026-11-13').completed===0,'Não atribuir conclu
 assert.match(read('index.html'),/cuiudo-premium\.css/);
 assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\.css/);
 assert.match(read('scripts/build-cloudflare.mjs'),/goal-history\.js/);
-assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\\.js/);
+assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\.js/);
 
 assert.match(read('index.html'),/cuiudo-premium\.js/);
 assert.match(read('sw.js'),/goal-history\.js/);
