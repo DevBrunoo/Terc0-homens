@@ -110,3 +110,56 @@ img{border-radius:var(--r-md)}
   .main>*{animation:none}
   *{transition-duration:.01ms!important}
 }
+
+/* Parábola dos talentos — reflexão bíblica na página inicial. */
+.talentos-passage{
+  margin:clamp(18px,2.6vw,30px) 0 4px;
+  padding:clamp(20px,3vw,30px);
+  background:linear-gradient(125deg,color-mix(in srgb,var(--gold) 9%,var(--surface)),var(--surface) 65%);
+  border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line));
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-1);
+}
+.talentos-passage-top{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  gap:8px 18px;margin-bottom:18px;
+}
+.talentos-passage-top .card-meta{color:var(--dim)}
+.talentos-passage-tag{
+  font-size:10px;font-weight:700;letter-spacing:.06em;
+  color:var(--gold);text-transform:uppercase;
+}
+.talentos-passage-grid{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(18px,3vw,38px);align-items:center;
+}
+.talentos-passage h2{
+  margin:0 0 14px;max-width:16ch;
+  font-size:clamp(23px,3vw,34px);line-height:1.12;
+  color:var(--ink);letter-spacing:-.04em;
+}
+.talentos-passage-warning{
+  margin:0;font-size:clamp(13px,1.45vw,15px);font-weight:700;color:var(--ink);
+}
+.talentos-passage-warning span{font-weight:500;color:var(--dim)}
+.talentos-passage blockquote{
+  margin:0;padding:0 0 0 18px;border-left:3px solid var(--gold);
+  color:var(--ink);font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(15px,1.8vw,19px);line-height:1.55;
+}
+.talentos-passage blockquote cite{
+  display:block;margin-top:10px;color:var(--dim);font:600 11px/1.4 Arial,sans-serif;
+  font-style:normal;letter-spacing:.02em;
+}
+.talentos-passage-reflection{
+  margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line);
+  color:var(--subink);font-size:13px;line-height:1.65;
+}
+.talentos-passage-reflection strong{color:var(--ink)}
+@media(max-width:680px){
+  .talentos-passage{padding:20px 17px;margin-top:18px}
+  .talentos-passage-grid{grid-template-columns:1fr;gap:16px}
+  .talentos-passage h2{font-size:26px;max-width:none}
+  .talentos-passage blockquote{font-size:16px}
+  .talentos-passage-reflection{margin-top:18px}
+}
