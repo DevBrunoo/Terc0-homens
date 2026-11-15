@@ -133,6 +133,19 @@ function home(){
    <div class="fist-palm" aria-label="Animação simbólica de punho batendo na palma, representando determinação"><span class="palm" aria-hidden="true">✋</span><span class="fist" aria-hidden="true">👊</span><span class="impact" aria-hidden="true">✦</span><strong>VAI PRA CIMA.</strong><small>Sem teatrinho. Com atitude.</small></div>
  </section>
 
+
+ <section class="talentos-passage" aria-labelledby="talentos-title">
+   <div class="talentos-passage-top"><span class="card-meta">PALAVRA DE DEUS · MATEUS 25,14–30</span><span class="talentos-passage-tag">PARÁBOLA DOS TALENTOS</span></div>
+   <div class="talentos-passage-grid">
+     <div class="talentos-passage-intro">
+       <h2 id="talentos-title">Não enterre o que Deus te deu.</h2>
+       <p class="talentos-passage-warning">“Servo mau e preguiçoso!” <span>— Mt 25,26</span></p>
+     </div>
+     <blockquote>“Porque a todo aquele que tem, será dado mais, e terá em abundância, mas daquele que não tem, até o que tem lhe será tirado.” <cite>— Mateus 25,29</cite></blockquote>
+   </div>
+   <p class="talentos-passage-reflection"><strong>A lição:</strong> não desperdice por preguiça ou medo o que foi confiado a você. Jesus fala de responsabilidade e fidelidade aos dons recebidos — não de desprezar quem tem pouco.</p>
+ </section>
+
  <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Um próximo passo. Depois outro.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
  <section class="home-dashboard">
    <article class="card rosary-feature">
