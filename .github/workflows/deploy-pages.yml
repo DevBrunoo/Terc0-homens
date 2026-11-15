@@ -41,6 +41,7 @@ jobs:
           cp -R dist/. _site/
           test -f _site/gratidao-catolica.js
           test -f _site/gratidao-catolica.css
+          test -f _site/cuiudo-v17.css
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
       - name: Enviar site

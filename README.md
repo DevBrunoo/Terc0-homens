@@ -213,3 +213,14 @@ Um fluxo de implantação oficial `.github/workflows/deploy-pages.yml` publica o
 - **Áudio sem YouTube:** o cântico templário usa `assets/audio/cantico-medieval.mp3` já licenciado, toca pelo player interno, sem navegador externo ou iframe. Não é a gravação específica do vídeo anterior. As faixas `Pange Lingua` (Gareth Hughes, CC BY-SA 3.0), `Tantum Ergo` (Gareth Hughes / Richardprins, CC BY-SA 3.0), `Pater Noster` (Schola Gregoriana de Ołtarzew, CC BY-SA 3.0) e `Rorate Caeli` (Inritter, CC BY-SA 4.0) foram adicionadas em MP3 ao repositório, com origem na Wikimedia Commons. Juntas com Ave Maria, Cum Angelis e instrumental original, são **sete opções**. As gravações foram transcodificadas de OGG com ffmpeg; autor e licença aparecem no player.
 - **Contador físico por dezena:** rosário visual com **uma conta Pai-Nosso, dez contas Ave-Maria e uma conta Glória ao Pai**. Cada oração é marcada individualmente, com sequência, estado local, botões de voltar, reiniciar, mudar de mistério e textos de oração disponíveis. A dezena só é considerada terminada após as três partes.
 - **Metas e Confissão:** ao marcar uma meta como não concluída, aparece o aviso solicitado e o convite ao exame sobre preguiça e omissão. A omissão voluntária de dever real pode ser pecado; falhar toda e qualquer meta não define automaticamente pecado mortal (CIC 1853, 1857–1860). Para pecado mortal, é necessária Confissão sacramental antes de comungar (CIC 1457).
+
+## CUIÚDO v17 — "Ouro Velho": novo visual solene e premium
+
+Nova camada visual `cuiudo-v17.css`, carregada por último e **sem remover nenhuma função**: todas as telas, o terço em contas, os 20 mistérios, o feed, as metas e o diário continuam iguais.
+
+- **Identidade:** pergaminho e ouro envelhecido no tema **Claro**; ébano e ouro no tema **Escuro**. O azul genérico saiu; o dourado passou a ser o acento do app (botões, rótulos, contas concluídas, foco).
+- **Tipografia:** títulos serifados (Iowan Old Style / Palatino / Georgia, fontes do sistema, funciona offline) com texto de leitura em sans-serif. Sem Google Fonts e sem CDN.
+- **Componentes:** cabeçalho em vidro com filete dourado, barra inferior flutuante no celular, botões primários com relevo, cartões com sombra suave, campos com foco dourado, rosário com contas em ouro/vinho, medalha de São Bento com brilho dourado.
+- **Movimento:** entrada suave das seções e elevação dos cartões, desativados automaticamente com `prefers-reduced-motion`.
+- **Acessibilidade:** contraste mínimo AA (4,5:1) para texto e botões nos dois temas, validado em `test-v17.mjs`; foco visível em dourado.
+- **Publicação:** `cuiudo-v17.css` entra no cache offline (`sw.js`), em `scripts/build-cloudflare.mjs` e na verificação do deploy no GitHub Pages.

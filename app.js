@@ -65,7 +65,7 @@ function icon(name,extra=''){
 }
 function scriptureText(v){return v[state.verseLang]||v.pt;}
 function resolvedTheme(){return state.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):state.theme;}
-function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#0f1012':'#f5f5f7';}
+function setTheme(){const current=resolvedTheme();document.documentElement.dataset.theme=current;document.documentElement.style.colorScheme=current;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=current==='dark'?'#0c0b09':'#f4eee1';}
 function dateDisplay(){return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());}
 function stats(){
   const all=Object.values(state.progress||{}).filter(x=>Array.isArray(x));
