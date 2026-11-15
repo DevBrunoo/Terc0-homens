@@ -1,0 +1,112 @@
+/* CUIÚDO — camada de polimento visual.
+ * Carrega por último; usa só as variáveis já existentes (--bg, --surface, --ink, --line, --accent).
+ * Para desfazer: remova a linha <link> desta folha no index.html.
+ */
+:root{
+  --r-sm:10px; --r-md:16px; --r-lg:22px;
+  --ease:cubic-bezier(.22,.8,.26,1);
+  --shadow-1:0 1px 2px rgba(15,18,25,.05),0 4px 14px rgba(15,18,25,.05);
+  --shadow-2:0 2px 4px rgba(15,18,25,.06),0 14px 36px rgba(15,18,25,.10);
+  --gold:#b8934a;
+}
+:root[data-theme="dark"]{
+  --shadow-1:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+  --shadow-2:0 2px 4px rgba(0,0,0,.45),0 16px 40px rgba(0,0,0,.45);
+  --gold:#d6b46a;
+}
+
+/* Base */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(900px 420px at 50% -120px,color-mix(in srgb,var(--gold) 12%,transparent),transparent 70%),
+    var(--bg);
+  background-attachment:fixed;
+}
+::selection{background:color-mix(in srgb,var(--gold) 35%,transparent)}
+h1,h2,h3{text-wrap:balance;letter-spacing:-.025em}
+p,li{text-wrap:pretty}
+
+/* Barra superior e navegação móvel em vidro */
+.site-header{
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  background:color-mix(in srgb,var(--bg) 78%,transparent)!important;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);
+}
+.mobile-nav{
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  background:color-mix(in srgb,var(--surface) 82%,transparent)!important;
+  border-top:1px solid var(--line);
+  box-shadow:0 -8px 30px rgba(15,18,25,.07);
+}
+
+/* Cartões: profundidade suave e elevação ao passar o mouse */
+.card,.cuiudo-premium-card,.cuiudo-devotional,.cuiudo-lectio-verse,.cuiudo-lectio-steps article,
+#cuiudo-lectio-form,.cuiudo-devotional-body section{
+  border-radius:var(--r-md);
+  box-shadow:var(--shadow-1);
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .25s;
+}
+@media (hover:hover){
+  .card:hover,.cuiudo-premium-card:hover,.cuiudo-lectio-steps article:hover{
+    transform:translateY(-2px);box-shadow:var(--shadow-2);
+    border-color:color-mix(in srgb,var(--gold) 45%,var(--line));
+  }
+}
+.cuiudo-devotional{border-left-color:var(--gold)}
+.cuiudo-devotional-eyebrow{color:var(--gold)}
+
+/* Botões */
+.btn,button.btn,.cuiudo-premium-actions button,.cuiudo-prayer-toolbar button,
+.cuiudo-devotional-footer button,#cuiudo-lectio-form button{
+  border-radius:999px;
+  transition:transform .2s var(--ease),box-shadow .25s,filter .2s,background .2s;
+}
+.btn:hover,.cuiudo-devotional-footer button:hover,#cuiudo-lectio-form button:hover{
+  transform:translateY(-1px);box-shadow:var(--shadow-1);
+}
+.btn:active,button:active{transform:scale(.97)}
+
+/* Campos */
+input,textarea,select{
+  border-radius:var(--r-sm);
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus,textarea:focus,select:focus{
+  outline:none;
+  border-color:var(--gold)!important;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 20%,transparent);
+}
+
+/* Citações e leitura */
+blockquote{
+  border-left:3px solid var(--gold);
+  padding-left:1rem;
+  font-family:Georgia,"Times New Roman",serif;
+  line-height:1.7;
+}
+img{border-radius:var(--r-md)}
+.cuiudo-focus-dialog{border-radius:var(--r-lg);box-shadow:var(--shadow-2)}
+.cuiudo-focus-scrim{backdrop-filter:blur(14px)}
+.cuiudo-chart-bar-fill{border-radius:8px 8px 3px 3px}
+
+/* Entrada suave de seções */
+@keyframes cuiudoRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.main>*{animation:cuiudoRise .55s var(--ease) both}
+.main>*:nth-child(2){animation-delay:.05s}
+.main>*:nth-child(3){animation-delay:.1s}
+.main>*:nth-child(4){animation-delay:.15s}
+.main>*:nth-child(n+5){animation-delay:.2s}
+
+/* Rolagem elegante */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink) 25%,transparent) transparent}
+
+/* Acessibilidade */
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .main>*{animation:none}
+  *{transition-duration:.01ms!important}
+}
