@@ -356,6 +356,12 @@ const cuiudoTimerLabels={
  es:{label:'Temporizador',minutes:'Minutos',start:'Iniciar',pause:'Pausar',resume:'Continuar',reset:'Reiniciar',running:'Contando',paused:'Pausado',done:'Tiempo agotado',ready:'Listo'},
  la:{label:'Temporarium',minutes:'Minuta',start:'Incipe',pause:'Siste',resume:'Perge',reset:'Renova',running:'Currit',paused:'Intermissum',done:'Tempus finitum',ready:'Paratum'}
 };
+const cuiudoGoalDurationLabels={
+ pt:{label:'Tempo',unit:'min',required:'Informe um tempo de 1 a 1440 minutos.'},
+ en:{label:'Time',unit:'min',required:'Set a duration of 1 to 1440 minutes.'},
+ es:{label:'Tiempo',unit:'min',required:'Indica un tiempo de 1 a 1440 minutos.'},
+ la:{label:'Tempus',unit:'min',required:'Elige tempus inter 1 et 1440 minuta.'}
+};
 function cuiudoTimerSeconds(goal,now=Date.now()){
  const total=Number.isSafeInteger(goal?.duration_sec)?Math.max(0,goal.duration_sec):0;
  const left=Number.isSafeInteger(goal?.remaining_sec)?Math.max(0,Math.min(total,goal.remaining_sec)):total;
@@ -659,6 +665,9 @@ function cuiudoGoalChecklist(){
   '<option value="" selected disabled>'+escapeHtml(cuiudoCreatePriorityText[l].choose)+'</option>'+
   ['high','medium','low'].map((p,i)=>'<option value="'+p+'">'+escapeHtml(cuiudoPriorityLabels[l][i])+'</option>').join('')+
   '</select></label>'+
+  '<label class="goal-create-duration" for="cuiudo-goal-duration">'+escapeHtml(cuiudoGoalDurationLabels[l].label)+
+  ' <input id="cuiudo-goal-duration" name="duration_minutes" type="number" min="1" max="1440" step="1" required aria-required="true" inputmode="numeric" placeholder="25" aria-label="'+escapeHtml(cuiudoGoalDurationLabels[l].required)+'">'+
+  '<span aria-hidden="true">'+escapeHtml(cuiudoGoalDurationLabels[l].unit)+'</span></label>'+
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
   '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
   '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
@@ -687,7 +696,7 @@ function cuiudoGoalChecklist(){
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
    '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>'+
-    '<button class="goal-action goal-timer-button" type="button" data-action="cuiudo-goal-timer-toggle" data-id="'+escapeHtml(goal.id)+'" aria-expanded="'+(cuiudoTimerOpened===goal.id?'true':'false')+'">⏱ '+escapeHtml(cuiudoTimerLabels[l].label)+'</button>'+
+    '<button class="goal-action goal-timer-button" type="button" data-action="cuiudo-goal-timer-toggle" data-id="'+escapeHtml(goal.id)+'" aria-expanded="'+(cuiudoTimerOpened===goal.id?'true':'false')+'" aria-label="'+escapeHtml(cuiudoTimerLabels[l].label+(Number.isSafeInteger(goal.duration_sec)&&goal.duration_sec>0?' · '+Math.round(goal.duration_sec/60)+' '+cuiudoGoalDurationLabels[l].unit:''))+'">⏱ '+escapeHtml(Number.isSafeInteger(goal.duration_sec)&&goal.duration_sec>0?Math.round(goal.duration_sec/60)+' '+cuiudoGoalDurationLabels[l].unit:cuiudoTimerLabels[l].label)+'</button>'+
     '<button class="goal-action cuiudo-focus-launch" type="button" data-action="cuiudo-focus-open" data-id="'+escapeHtml(goal.id)+'">◎ '+escapeHtml({pt:'Foco',en:'Focus',es:'Foco',la:'Intentio'}[l])+'</button>':
    '<button class="goal-action" type="button" data-action="cuiudo-goal-reopen" data-id="'+goal.id+'">'+escapeHtml(t.reopen)+'</button>')+
    '<button class="goal-delete" type="button" data-action="cuiudo-goal-delete" data-id="'+goal.id+'" aria-label="'+escapeHtml(t.remove)+'">×</button></div>'+
@@ -772,6 +781,9 @@ app.addEventListener('change',event=>{
  goal.priority=priority;cuiudoGoalsSave();window.cuiudoGlobalGoals?.change('upsert',day,goal);
  render(); // Atualiza imediatamente a posição da meta no checklist.
 });
+app.addEventListener('input',event=>{
+ if(event.target?.id==='cuiudo-goal-duration')event.target.setCustomValidity?.('');
+});
 app.addEventListener('submit',event=>{
  if(event.target?.id!=='cuiudo-goal-form')return;
  event.preventDefault();
@@ -779,17 +791,27 @@ app.addEventListener('submit',event=>{
  const text=String(input?.value||'').trim().slice(0,180);
  const select=event.target.querySelector('select[name=priority]');
  const priority=String(select?.value||'');
+ const durationField=event.target.querySelector('input[name=duration_minutes]');
+ const durationText=String(durationField?.value??'').trim();
+ const durationMinutes=Number(durationText);
  if(!text)return;
- // Sem seleção explícita de prioridade, a meta não pode ser criada nem enviada ao D1.
+ // Prioridade e tempo devem ser definidos explicitamente para cada NOVA meta.
  if(!['high','medium','low'].includes(priority)){
   select?.reportValidity?.();
   return;
  }
+ if(!durationText||!Number.isSafeInteger(durationMinutes)||durationMinutes<1||durationMinutes>1440){
+  durationField?.setCustomValidity?.(cuiudoGoalDurationLabels[cuiudoLocale()].required);
+  durationField?.reportValidity?.();
+  return;
+ }
+ durationField?.setCustomValidity?.('');
  state.dailyGoalDays??={};
  const day=currentDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
- const goal={id,text,status:'pending',priority};
+ const duration_sec=durationMinutes*60;
+ const goal={id,text,status:'pending',priority,duration_sec,remaining_sec:duration_sec,timer_started_at:null,timer_state:'none'};
  items.unshift(goal);
  cuiudoGoalsSave();
  window.cuiudoGlobalGoals?.change('upsert',day,goal);
