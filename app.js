@@ -134,18 +134,6 @@ function home(){
  </section>
 
 
- <section class="talentos-passage" aria-labelledby="talentos-title">
-   <div class="talentos-passage-top"><span class="card-meta">PALAVRA DE DEUS · MATEUS 25,14–30</span><span class="talentos-passage-tag">PARÁBOLA DOS TALENTOS</span></div>
-   <div class="talentos-passage-grid">
-     <div class="talentos-passage-intro">
-       <h2 id="talentos-title">Não enterre o que Deus te deu.</h2>
-       <p class="talentos-passage-warning">“Servo mau e preguiçoso!” <span>— Mt 25,26</span></p>
-     </div>
-     <blockquote>“Porque a todo aquele que tem, será dado mais, e terá em abundância, mas daquele que não tem, até o que tem lhe será tirado.” <cite>— Mateus 25,29</cite></blockquote>
-   </div>
-   <p class="talentos-passage-reflection"><strong>A lição:</strong> não desperdice por preguiça ou medo o que foi confiado a você. Jesus fala de responsabilidade e fidelidade aos dons recebidos — não de desprezar quem tem pouco.</p>
- </section>
-
  <section class="overview-heading"><div><span class="kicker">CONTINUE SUA JORNADA</span><h2>Um próximo passo. Depois outro.</h2></div><span class="overview-date">${escapeHtml(dateDisplay())}</span></section>
  <section class="home-dashboard">
    <article class="card rosary-feature">
@@ -182,6 +170,16 @@ function home(){
      <button class="text-link" data-action="navigate" data-tab="diario">Abrir diário ${icon('arrow')}</button>
    </article>
  </section>
+
+ <aside class="talentos-passage" aria-labelledby="talentos-title">
+   <div class="talentos-passage-heading">
+     <span class="talentos-passage-mark" aria-hidden="true">“</span>
+     <div><span class="card-meta">PALAVRA DE DEUS · MATEUS 25,14–30</span><h2 id="talentos-title">Não enterre o que Deus te confiou.</h2></div>
+   </div>
+   <blockquote>“Porque a todo aquele que tem será dado mais, e terá em abundância, mas daquele que não tem, até o que tem lhe será tirado.” <cite>— Mateus 25,29</cite></blockquote>
+   <p class="talentos-passage-reflection"><strong>“Servo mau e preguiçoso!” (Mt 25,26).</strong> Não enterre seus talentos por medo ou preguiça. Mesmo no pouco, seja fiel e faça frutificar o que recebeu.</p>
+ </aside>
+
  <section class="prayer-cta"><div><span class="card-meta">ORE COM A IGREJA</span><h2>Santos, anjos e orações.</h2><p>Intercessão, perseverança e um coração voltado para Cristo.</p></div><button class="btn btn-secondary" data-action="navigate" data-tab="devocionario">Explorar orações ${icon('arrow')}</button></section>`;
 }
 function rosary(){
