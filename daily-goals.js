@@ -691,7 +691,6 @@ function cuiudoGoalChecklist(){
     })():
    failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p>'+
     cuiudoGoalMissedTime(goal,l)+
-    (window.cuiudoConsequences?.card(goal,l)||'')+
     '<p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div><div class="today-goal-actions">'+
@@ -704,7 +703,10 @@ function cuiudoGoalChecklist(){
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
   cuiudoGodMomentBox(l)+
+  '<div class="goals-reflection-grid">'+
   cuiudoObstacleBox(l)+
+  (window.cuiudoConsequences?.panel(goals,l)||'')+
+  '</div>'+
   cuiudoGoalsBarChart(l)+
   (window.cuiudoPremium?.goalExtras?.(l)||'')+
   '</section>';
