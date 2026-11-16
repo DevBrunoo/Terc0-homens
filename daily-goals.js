@@ -691,6 +691,7 @@ function cuiudoGoalChecklist(){
     })():
    failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p>'+
     cuiudoGoalMissedTime(goal,l)+
+    (window.cuiudoConsequences?.card(goal,l)||'')+
     '<p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
     '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
    '</div></div><div class="today-goal-actions">'+
@@ -880,17 +881,20 @@ app.addEventListener('click',event=>{
   delete goal.missed_at;
  }
  if(action==='cuiudo-goal-missed'){
+  window.cuiudoConsequences?.reset(id);
   goal.status='missed';
   goal.missed_at=Date.now();
   delete goal.completed_at;
  }
  if(action==='cuiudo-goal-reopen'){
+  window.cuiudoConsequences?.reset(id);
   goal.status='pending';
   delete goal.completed_at;
   delete goal.missed_at;
  }
  const before={...goal};
  if(action==='cuiudo-goal-delete'){
+  window.cuiudoConsequences?.reset(id);
   cuiudoTimerCancelAudio(id);
   items.splice(index,1);
  }
