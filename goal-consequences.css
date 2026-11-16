@@ -16,3 +16,28 @@
 .goal-consequence-note{font-size:.74rem;line-height:1.48;opacity:.75}
 @media(max-width:480px){.goal-consequence{padding:11px;gap:8px;border-radius:12px}.goal-consequence-call{font-size:.88rem}.goal-consequence-footer{align-items:stretch;flex-direction:column}.goal-consequence-confirm{width:100%}}
 @media(prefers-reduced-motion:no-preference){.goal-consequence-confirm{transition:background-color .18s ease,transform .18s ease}.goal-consequence-confirm:active{transform:scale(.99)}}
+
+/* v84 — Quadro de consequências à direita de "O que atrapalhou seu dia?". */
+.goals-reflection-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:8px 0 18px;width:100%;min-width:0}
+.goals-reflection-grid>.goals-obstacle-box{margin:0;min-height:100%}
+.goals-consequence-panel{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:100%;padding:15px 17px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);color:var(--ink)}
+.goals-consequence-heading{display:flex;align-items:flex-start;gap:11px;min-width:0}
+.goals-consequence-symbol{display:grid;place-items:center;flex:0 0 31px;width:31px;height:31px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:#ae6931;font-size:21px;font-weight:700}
+.goals-consequence-heading>div{min-width:0}
+.goals-consequence-heading strong{display:block;margin-bottom:3px;font:750 clamp(13px,1.4vw,15px)/1.4 var(--font);color:var(--ink)}
+.goals-consequence-heading p{margin:0;color:var(--subink);font:480 12px/1.55 var(--font)}
+.goals-consequence-count{align-self:flex-start;color:#99551d;font:700 11px/1.4 var(--font)}
+.goals-consequence-list{min-width:0;max-height:450px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.goals-consequence-empty{margin:3px 0 0;color:var(--subink);font:500 12px/1.6 var(--font)}
+.goals-consequence-entry{min-width:0}
+.goals-consequence-entry+.goals-consequence-entry{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+.goals-consequence-goal{display:block;min-width:0;overflow-wrap:anywhere;font:750 12px/1.45 var(--font);color:var(--ink)}
+.goals-consequence-panel .goal-consequence{margin:7px 0 0;padding:10px;gap:7px;background:var(--surface);border-radius:10px}
+.goals-consequence-panel .goal-consequence-eyebrow{font-size:10px}
+.goals-consequence-panel .goal-consequence-state{font-size:10px}
+.goals-consequence-panel .goal-consequence-call{font-size:12px}
+.goals-consequence-panel .goal-consequence-task{font-size:12px}
+.goals-consequence-panel .goal-consequence-note{font-size:11px}
+.goals-consequence-panel .goal-consequence-confirm{font-size:12px}
+.goals-consequence-panel .goal-consequence textarea{min-height:55px;background:var(--surface-2);color:var(--ink);font-size:13px}
+@media(max-width:760px){.goals-reflection-grid{grid-template-columns:minmax(0,1fr);gap:10px}.goals-consequence-panel{padding:13px 12px;border-radius:12px;min-height:0}.goals-reflection-grid>.goals-obstacle-box{min-height:0;margin:0}.goals-consequence-list{max-height:none}}
