@@ -1,43 +1,133 @@
-/* Consequência restaurativa: cabe no cartão, discreta e responsiva. */
-.goal-consequence{margin:12px 0 8px;padding:14px;border:1px solid rgba(185,108,32,.32);border-radius:14px;background:rgba(173,106,36,.055);display:flex;flex-direction:column;gap:9px;min-width:0}
-.goal-consequence.is-repaired{border-color:rgba(39,133,91,.3);background:rgba(39,133,91,.045)}
-.goal-consequence-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
-.goal-consequence-eyebrow{font-size:.68rem;font-weight:800;letter-spacing:.065em;color:#a35e21}
-.goal-consequence-state{font-size:.69rem;font-weight:700;color:inherit;opacity:.78}
-.goal-consequence-call{font-size:.95rem;line-height:1.35}
-.goal-consequence-task{margin:0;font-size:.84rem;line-height:1.55;opacity:.9}
-.goal-consequence-label{font-size:.8rem;font-weight:700}
-.goal-consequence textarea{width:100%;box-sizing:border-box;min-height:55px;max-height:130px;padding:10px 11px;border-radius:9px;border:1px solid rgba(128,128,128,.36);background:var(--surface,#fff);color:var(--text,#212121);font:inherit;font-size:.83rem;line-height:1.5;resize:vertical}
-.goal-consequence textarea:focus-visible,.goal-consequence-confirm:focus-visible{outline:2px solid #3877b7;outline-offset:2px}
-.goal-consequence-footer{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
-.goal-consequence-confirm{font:inherit;font-size:.78rem;font-weight:750;min-height:38px;padding:8px 12px;border-radius:9px;border:1px solid #a66a31;background:#894e1f;color:white;cursor:pointer;max-width:100%}
-.goal-consequence.is-repaired .goal-consequence-confirm{background:#226d4d;border-color:#226d4d}
-.goal-consequence-time{font-size:.72rem;opacity:.75}
-.goal-consequence-note{font-size:.74rem;line-height:1.48;opacity:.75}
-@media(max-width:480px){.goal-consequence{padding:11px;gap:8px;border-radius:12px}.goal-consequence-call{font-size:.88rem}.goal-consequence-footer{align-items:stretch;flex-direction:column}.goal-consequence-confirm{width:100%}}
-@media(prefers-reduced-motion:no-preference){.goal-consequence-confirm{transition:background-color .18s ease,transform .18s ease}.goal-consequence-confirm:active{transform:scale(.99)}}
-
-/* v84 — Quadro de consequências à direita de "O que atrapalhou seu dia?". */
-.goals-reflection-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:8px 0 18px;width:100%;min-width:0}
-.goals-reflection-grid>.goals-obstacle-box{margin:0;min-height:100%}
-.goals-consequence-panel{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:100%;padding:15px 17px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);color:var(--ink)}
-.goals-consequence-heading{display:flex;align-items:flex-start;gap:11px;min-width:0}
-.goals-consequence-symbol{display:grid;place-items:center;flex:0 0 31px;width:31px;height:31px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:#ae6931;font-size:21px;font-weight:700}
-.goals-consequence-heading>div{min-width:0}
-.goals-consequence-heading strong{display:block;margin-bottom:3px;font:750 clamp(13px,1.4vw,15px)/1.4 var(--font);color:var(--ink)}
-.goals-consequence-heading p{margin:0;color:var(--subink);font:480 12px/1.55 var(--font)}
-.goals-consequence-count{align-self:flex-start;color:#99551d;font:700 11px/1.4 var(--font)}
-.goals-consequence-list{min-width:0;max-height:450px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-.goals-consequence-empty{margin:3px 0 0;color:var(--subink);font:500 12px/1.6 var(--font)}
-.goals-consequence-entry{min-width:0}
-.goals-consequence-entry+.goals-consequence-entry{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
-.goals-consequence-goal{display:block;min-width:0;overflow-wrap:anywhere;font:750 12px/1.45 var(--font);color:var(--ink)}
-.goals-consequence-panel .goal-consequence{margin:7px 0 0;padding:10px;gap:7px;background:var(--surface);border-radius:10px}
-.goals-consequence-panel .goal-consequence-eyebrow{font-size:10px}
-.goals-consequence-panel .goal-consequence-state{font-size:10px}
-.goals-consequence-panel .goal-consequence-call{font-size:12px}
-.goals-consequence-panel .goal-consequence-task{font-size:12px}
-.goals-consequence-panel .goal-consequence-note{font-size:11px}
-.goals-consequence-panel .goal-consequence-confirm{font-size:12px}
-.goals-consequence-panel .goal-consequence textarea{min-height:55px;background:var(--surface-2);color:var(--ink);font-size:13px}
-@media(max-width:760px){.goals-reflection-grid{grid-template-columns:minmax(0,1fr);gap:10px}.goals-consequence-panel{padding:13px 12px;border-radius:12px;min-height:0}.goals-reflection-grid>.goals-obstacle-box{min-height:0;margin:0}.goals-consequence-list{max-height:none}}
+/* CUIÚDO — quadro de consequências minimalista, responsivo e acessível. */
+.goals-reflection-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ align-items:stretch;gap:12px;width:100%;min-width:0;margin:10px 0 18px
+}
+.goals-reflection-grid>.goals-obstacle-box{
+ box-sizing:border-box;min-width:0;min-height:100%;margin:0
+}
+.goals-consequence-panel{
+ box-sizing:border-box;display:flex;flex-direction:column;gap:13px;
+ min-width:0;min-height:100%;padding:15px 16px;
+ border:1px solid var(--line);border-radius:13px;
+ background:var(--surface-2);color:var(--ink)
+}
+.goals-consequence-heading{
+ display:flex;gap:10px;align-items:flex-start;min-width:0
+}
+.goals-consequence-symbol{
+ box-sizing:border-box;display:grid;place-items:center;flex:0 0 31px;
+ width:31px;height:31px;border:1px solid var(--line);
+ border-radius:9px;background:var(--surface);color:var(--subink);
+ font:600 21px/1 var(--font)
+}
+.goals-consequence-heading-text{flex:1 1 auto;min-width:0}
+.goals-consequence-heading-text>strong{
+ display:block;margin:0 0 3px;color:var(--ink);
+ font:750 clamp(13px,1.4vw,15px)/1.4 var(--font)
+}
+.goals-consequence-heading-text>p{
+ margin:0;color:var(--subink);font:480 12px/1.55 var(--font)
+}
+.goals-consequence-count{
+ display:grid;place-items:center;flex:none;min-width:25px;height:25px;
+ padding:0 6px;border-radius:8px;background:var(--surface);border:1px solid var(--line);
+ font:750 12px/1 var(--font);color:var(--ink)
+}
+.goals-consequence-count.is-clear{color:#277c55}
+.goals-consequence-list{
+ display:flex;flex-direction:column;gap:8px;min-width:0;
+ max-height:450px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin
+}
+.goals-consequence-entry{
+ min-width:0;overflow:hidden;border:1px solid var(--line);
+ background:var(--surface);border-radius:11px
+}
+.goals-consequence-entry[open]{border-color:var(--line)}
+.goals-consequence-summary{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:10px;min-width:0;min-height:49px;box-sizing:border-box;
+ padding:10px 11px;list-style:none;cursor:pointer;
+ -webkit-tap-highlight-color:transparent
+}
+.goals-consequence-summary::-webkit-details-marker{display:none}
+.goals-consequence-summary::marker{content:''}
+.goals-consequence-summary:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.goals-consequence-summary:focus-visible,
+.goal-consequence-confirm:focus-visible,
+.goal-consequence textarea:focus-visible{
+ outline:2px solid var(--accent);outline-offset:-2px
+}
+.goals-consequence-name{
+ flex:1 1 auto;min-width:0;overflow-wrap:anywhere;
+ font:700 12px/1.45 var(--font);color:var(--ink)
+}
+.goals-consequence-summary-meta{display:flex;flex:none;align-items:center;gap:7px}
+.goals-consequence-duration{
+ border:1px solid var(--line);border-radius:7px;
+ padding:4px 6px;white-space:nowrap;color:var(--subink);
+ background:var(--surface-2);font:650 10px/1.25 var(--font)
+}
+.goals-consequence-status{
+ display:grid;place-items:center;width:18px;height:18px;
+ color:#a56833;font:800 14px/1 var(--font)
+}
+.goals-consequence-entry.is-repaired .goals-consequence-status{color:#278056}
+.goals-consequence-chevron{color:var(--subink);font:750 18px/1 var(--font);transform:rotate(0)}
+.goals-consequence-entry[open] .goals-consequence-chevron{transform:rotate(180deg)}
+.goals-consequence-entry[open] .goals-consequence-summary{border-bottom:1px solid var(--line)}
+.goal-consequence{display:grid;gap:8px;padding:11px;min-width:0}
+.goal-consequence-label{font:680 11px/1.5 var(--font);color:var(--ink)}
+.goal-consequence textarea{
+ box-sizing:border-box;display:block;width:100%;min-width:0;max-width:100%;
+ min-height:66px;max-height:170px;resize:vertical;padding:10px 11px;
+ border:1px solid var(--line);border-radius:9px;
+ background:var(--surface-2);color:var(--ink);
+ font:480 14px/1.5 var(--font)
+}
+.goal-consequence textarea::placeholder{color:var(--subink);opacity:.83}
+.goal-consequence-footer{
+ display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0
+}
+.goal-consequence-confirm{
+ display:inline-flex;justify-content:center;align-items:center;gap:5px;
+ box-sizing:border-box;min-height:42px;max-width:100%;padding:10px 12px;
+ border:1px solid var(--accent);border-radius:9px;
+ background:var(--accent);color:#fff;cursor:pointer;
+ font:750 12px/1.3 var(--font);text-align:center;
+ transition:filter .15s ease
+}
+.goal-consequence-confirm:hover:not(:disabled){filter:brightness(.91)}
+.goal-consequence-confirm:disabled{
+ background:var(--surface-2);border-color:var(--line);
+ color:var(--subink);cursor:default;opacity:1
+}
+.goal-consequence-time{font:500 10px/1.4 var(--font);color:var(--subink)}
+.goals-consequence-empty{
+ display:flex;align-items:center;gap:9px;min-height:64px;
+ padding:12px;border:1px dashed var(--line);border-radius:11px;
+ background:var(--surface);color:var(--subink)
+}
+.goals-consequence-empty>span{
+ flex:none;display:grid;place-items:center;width:27px;height:27px;
+ border-radius:9px;background:var(--surface-2);color:#278056;
+ font:750 15px/1 var(--font)
+}
+.goals-consequence-empty p{margin:0;font:540 12px/1.5 var(--font)}
+@media(max-width:760px){
+ .goals-reflection-grid{grid-template-columns:minmax(0,1fr);gap:10px}
+ .goals-reflection-grid>.goals-obstacle-box{min-height:0}
+ .goals-consequence-panel{min-height:0;padding:13px 12px;border-radius:12px}
+ .goals-consequence-list{max-height:none;overflow:visible}
+ .goal-consequence textarea{font-size:16px;min-height:76px}
+}
+@media(max-width:420px){
+ .goals-consequence-summary{gap:6px;padding:10px 9px}
+ .goals-consequence-summary-meta{gap:4px}
+ .goals-consequence-duration{font-size:10px;padding:3px 5px}
+ .goal-consequence{padding:10px}
+ .goal-consequence-confirm{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+ .goal-consequence-confirm{transition:none}
+}
