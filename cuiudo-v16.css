@@ -3232,41 +3232,57 @@
 @media(prefers-reduced-motion:reduce){.cuiudo-chart-bar-fill{transition:none!important}}
 
 
-/* Criar meta exige importância — seleção explícita, pequena e responsiva. */
+/* Nova meta: descrição, prioridade e temporizador são obrigatórios. */
 .today-goals-form{
- grid-template-columns:minmax(0,1fr) minmax(205px,238px) 104px;
- grid-template-areas:"goal priority add";
+ grid-template-columns:minmax(0,1fr) minmax(173px,207px) minmax(122px,143px) 104px;
+ grid-template-areas:"goal priority duration add";
+ align-items:stretch;
+ gap:9px;
 }
-.today-goals-form>.goal-create-priority{
- grid-area:priority;display:flex;align-items:center;gap:7px;min-width:0;
- padding:5px 8px 5px 11px;min-height:46px;border:1px solid var(--line);
- border-radius:11px;background:var(--surface-2);
- color:var(--ink);font:700 11px/1.35 var(--font);white-space:nowrap;
+.today-goals-form>.goal-create-priority,
+.today-goals-form>.goal-create-duration{
+ display:flex;align-items:center;gap:6px;min-width:0;min-height:46px;
+ padding:5px 8px 5px 10px;
+ border:1px solid var(--line);border-radius:11px;
+ background:var(--surface-2);color:var(--ink);
+ font:700 11px/1.3 var(--font);white-space:nowrap;
+ box-sizing:border-box;
 }
+.today-goals-form>.goal-create-priority{grid-area:priority}
+.today-goals-form>.goal-create-duration{grid-area:duration}
 .today-goals-form>.goal-create-priority select{
- flex:1;min-width:0;width:100%;min-height:33px;max-width:100%;
+ flex:1;min-width:0;width:100%;max-width:100%;min-height:33px;
  padding:5px 7px;border:1px solid var(--line);border-radius:7px;
- background:var(--surface);color:var(--ink);font:600 11px/1.4 var(--font);
- cursor:pointer;
+ background:var(--surface);color:var(--ink);font:600 11px/1.4 var(--font);cursor:pointer;
 }
 .today-goals-form>.goal-create-priority select:invalid{color:var(--subink)}
-.today-goals-form>.goal-create-priority select:focus-visible{
+.today-goals-form>.goal-create-priority select:focus-visible,
+.today-goals-form>.goal-create-duration input:focus-visible{
  outline:2px solid var(--accent);outline-offset:2px;
 }
-@media(max-width:750px){
+.today-goals-form>.goal-create-duration input{
+ box-sizing:border-box;flex:1;min-width:0;width:100%;max-width:68px;
+ min-height:33px;height:33px;padding:4px 5px;
+ border:1px solid var(--line);border-radius:7px;
+ background:var(--surface);color:var(--ink);
+ font:650 13px/1.3 var(--font);text-align:center;
+}
+.today-goals-form>.goal-create-duration input::placeholder{color:var(--dim)}
+.today-goals-form>.goal-create-duration span{font-size:10px;color:var(--subink)}
+@media(max-width:900px){
  .today-goals-form{
-  grid-template-columns:minmax(0,1fr) 115px;
-  grid-template-areas:"goal goal" "priority add";
-  gap:7px;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"goal goal" "priority duration" "add add";
+  gap:8px;
  }
- .today-goals-form>.goal-create-priority{min-width:0;min-height:43px}
- .today-goals-form>.goal-create-priority select{min-width:0;font-size:11px}
+ .today-goals-form>.goal-create-priority,
+ .today-goals-form>.goal-create-duration{min-height:43px}
  .today-goals-form>.btn{grid-area:add;min-height:43px;height:auto}
 }
 @media(max-width:365px){
- .today-goals-form{
-  grid-template-columns:minmax(0,1fr);
-  grid-template-areas:"goal" "priority" "add";
- }
- .today-goals-form>.goal-create-priority select{flex:1}
+ .today-goals-form{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .today-goals-form>.goal-create-priority,
+ .today-goals-form>.goal-create-duration{padding:5px 7px;font-size:10px}
+ .today-goals-form>.goal-create-priority select{font-size:10px;padding:5px 4px}
+ .today-goals-form>.goal-create-duration input{max-width:47px;font-size:12px}
 }
