@@ -91,7 +91,33 @@
    (time?'<time class="goal-consequence-time" datetime="'+new Date(r.done_at).toISOString()+'">'+safe(time)+'</time>':'')+
    '</div><small class="goal-consequence-note">'+safe(t.note)+'</small></section>';
  }
- window.cuiudoConsequences={card,reset,isComplete};
+ function panel(goals,locale){
+  const t=texts[locale]||texts.pt;
+  const labels={
+   pt:{heading:'Consequências',description:'Meta não cumprida? Assuma e repare.',
+    none:'Nenhuma meta não cumprida. Continue firme.',pending:'pendente',plural:'pendentes',
+    goal:'Meta'},
+   en:{heading:'Consequences',description:'Missed a goal? Own it and make amends.',
+    none:'No missed goals. Keep going.',pending:'pending',plural:'pending',goal:'Goal'},
+   es:{heading:'Consecuencias',description:'¿No cumpliste? Asume y repara.',
+    none:'Ninguna meta incumplida. Sigue adelante.',pending:'pendiente',plural:'pendientes',goal:'Meta'},
+   la:{heading:'Consequentiae',description:'Metam omisisti? Agnosce et emenda.',
+    none:'Nulla meta omissa. Perge.',pending:'pendens',plural:'pendentes',goal:'Meta'}
+  }[locale]||{heading:'Consequências',description:'Meta não cumprida? Assuma e repare.',none:'Nenhuma meta não cumprida. Continue firme.',pending:'pendente',plural:'pendentes',goal:'Meta'};
+  const failed=(Array.isArray(goals)?goals:[]).filter(g=>g?.status==='missed');
+  failed.sort((a,b)=>Number(isComplete(a.id))-Number(isComplete(b.id)));
+  const open=failed.filter(g=>!isComplete(g.id)).length;
+  return '<aside class="goals-consequence-panel" aria-label="'+safe(labels.heading)+'">'+
+   '<div class="goals-consequence-heading"><span class="goals-consequence-symbol" aria-hidden="true">↻</span>'+
+   '<div><strong>'+safe(labels.heading)+'</strong><p>'+safe(labels.description)+'</p></div></div>'+
+   (open?'<span class="goals-consequence-count">'+open+' '+safe(open===1?labels.pending:labels.plural)+'</span>':'')+
+   '<div class="goals-consequence-list">'+
+   (failed.length?failed.map(goal=>'<div class="goals-consequence-entry"><strong class="goals-consequence-goal">'+
+    safe(labels.goal)+': '+safe(goal.text)+'</strong>'+card(goal,locale)+'</div>').join(''):
+    '<p class="goals-consequence-empty">'+safe(labels.none)+'</p>')+
+   '</div></aside>';
+ }
+ window.cuiudoConsequences={card,panel,reset,isComplete};
  app.addEventListener('input',event=>{
   const field=event.target?.closest?.('[data-cuiudo-consequence-reason]');
   if(!field)return;
