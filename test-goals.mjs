@@ -12,7 +12,8 @@ for(const p of ['assets/audio/cantico-catolico.mp3','assets/audio/cantico-mediev
 for(const p of ['assets/medalha-sao-bento-real.webp','assets/feed/ajudar-companheiro.webp','assets/feed/vai-pra-cima.webp','assets/feed/foco-estrada.webp']){
  const b=readFileSync(new URL('./'+p,import.meta.url));assert.equal(b.toString('ascii',0,4),'RIFF');assert.equal(b.toString('ascii',8,12),'WEBP');
 }
-const root={innerHTML:'',addEventListener(){},querySelectorAll(){return []},querySelector(){return null}};
+const listeners={};
+const root={innerHTML:'',addEventListener(type,fn){(listeners[type]??=[]).push(fn)},querySelectorAll(){return []},querySelector(){return null}};
 const meta={content:'',setAttribute(){}};
 const doc={documentElement:{dataset:{},style:{}},getElementById(){return root},querySelector(){return meta},addEventListener(){}};
 const memory=new Map();
@@ -227,6 +228,41 @@ assert.doesNotMatch(read('global-goals.js'),/terco-obstaculos-diarios-v1/);
 assert.match(read('cuiudo-v16.css'),/goals-obstacle-box/);
 assert.match(read('cuiudo-v16.css'),/goals-essential-footer/);
 console.log('✓ Metas v42: conquista firme e sem emojis; compromisso no topo e obstáculos embaixo');
+
+/* Tempo e prioridade obrigatórios na criação, sem interferir em metas antigas. */
+runInContext("state.tab='inicio';state.appLang='pt';state.dailyGoalDays={};render()",vm);
+assert.match(root.innerHTML,/id="cuiudo-goal-duration"[^>]*name="duration_minutes"[^>]*required/);
+assert.match(root.innerHTML,/id="cuiudo-goal-priority"[^>]*required/);
+assert.match(read('cuiudo-v16.css'),/grid-template-areas:"goal priority duration add"/);
+let durationError='';
+const formFields={
+ "input[name=goal]":{value:'Estudar matemática'},
+ "select[name=priority]":{value:'high',reportValidity(){}},
+ "input[name=duration_minutes]":{value:'',reportValidity(){durationError='reported'},setCustomValidity(s){durationError=s}}
+};
+const goalForm={id:'cuiudo-goal-form',querySelector(q){return formFields[q]||null}};
+const submitGoal=()=>listeners.submit.forEach(fn=>fn({target:goalForm,preventDefault(){}}));
+submitGoal();
+assert.equal(runInContext('cuiudoGoalsToday().length',vm),0,'Meta sem duração é rejeitada');
+assert.match(durationError,/1 a 1440/);
+formFields["input[name=duration_minutes]"].value='0';
+submitGoal();assert.equal(runInContext('cuiudoGoalsToday().length',vm),0,'Tempo zero é inválido');
+formFields["input[name=duration_minutes]"].value='1.5';
+submitGoal();assert.equal(runInContext('cuiudoGoalsToday().length',vm),0,'Tempo fracionado é inválido');
+formFields["input[name=duration_minutes]"].value='1441';
+submitGoal();assert.equal(runInContext('cuiudoGoalsToday().length',vm),0,'Tempo acima do limite é inválido');
+formFields["input[name=duration_minutes]"].value='25';
+formFields["select[name=priority]"].value='';
+submitGoal();assert.equal(runInContext('cuiudoGoalsToday().length',vm),0,'Prioridade continua obrigatória');
+formFields["select[name=priority]"].value='high';
+submitGoal();
+const created=runInContext('cuiudoGoalsToday()[0]',vm);
+assert.equal(created.duration_sec,1500,'Tempo escolhido persiste na meta em segundos');
+assert.equal(created.remaining_sec,1500,'Contagem inicia cheia');
+assert.equal(created.timer_state,'none','Temporizador não inicia sozinho');
+assert.equal(created.priority,'high');
+assert.match(root.innerHTML,/⏱ 25 min/,'Duração aparece no cartão da meta');
+assert.ok(memory.get('cuiudo-v1')?.includes('"duration_sec":1500'),'Duração salva com a meta');
 
 /* Checa o término de temporizadores com o painel fechado; não repetir o aviso. */
 const timeup=runInContext(`(()=>{
