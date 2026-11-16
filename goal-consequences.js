@@ -7,30 +7,18 @@
  const KEY='terco-consequencias-metas-v1';
  const minutes={high:20,medium:10,low:5};
  const texts={
-  pt:{title:'CONSEQUÊNCIA · REPARAÇÃO',call:'Falhou? Assuma, corrija e volte ao combate.',
-   action:'Faça {n} minutos de retomada focada ou, se houver impedimento real, planeje o menor próximo passo.',
-   reason:'O que impediu esta meta?',hint:'Seja concreto: distração, imprevisto, cansaço, falta de planejamento…',
-   confirm:'Cumpri a reparação',done:'Reparação cumprida',pending:'Reparação pendente',
-   required:'Registre primeiro o motivo ou impedimento.',
-   note:'Não se trata de castigo físico nem de culpa automática. A consequência é corrigir a rota.'},
-  en:{title:'CONSEQUENCE · MAKE AMENDS',call:'Missed it? Own it, correct course, start again.',
-   action:'Spend {n} focused minutes restarting, or plan the smallest next step if truly prevented.',
-   reason:'What prevented this goal?',hint:'Be specific: distraction, unexpected event, exhaustion, poor planning…',
-   confirm:'I completed the recovery step',done:'Recovery completed',pending:'Recovery pending',
-   required:'First note the reason or obstacle.',
-   note:'No physical punishment or automatic guilt. The consequence is to correct your course.'},
-  es:{title:'CONSECUENCIA · REPARACIÓN',call:'¿Fallaste? Reconócelo, corrige y vuelve a empezar.',
-   action:'Dedica {n} minutos a retomar la tarea o, ante un impedimento real, planifica el siguiente paso mínimo.',
-   reason:'¿Qué impidió esta meta?',hint:'Sé concreto: distracciones, imprevistos, cansancio, falta de planificación…',
-   confirm:'Cumplí la reparación',done:'Reparación cumplida',pending:'Reparación pendiente',
-   required:'Primero registra el motivo o impedimento.',
-   note:'Sin castigos físicos ni culpa automática. La consecuencia es corregir el rumbo.'},
-  la:{title:'CONSEQUENTIA · EMENDATIO',call:'Defecisti? Agnosce, emenda, iterum incipe.',
-   action:'Per {n} minuta intentus opus repete, aut proximum gradum parvum dispone, si impeditus es.',
-   reason:'Quid te impedivit?',hint:'Causam concrete scribe…',
-   confirm:'Emendationem complevi',done:'Emendatio completa',pending:'Emendatio pendet',
-   required:'Primum causam scribe.',
-   note:'Non poena corporalis nec culpa automatica: iter corrige.'}
+  pt:{title:'Consequências',reason:'O que impediu esta meta?',hint:'Ex.: distração, imprevisto ou falta de planejamento',
+   confirm:'Cumpri a reparação',done:'Reparação concluída',pending:'Pendente',
+   required:'Registre primeiro o que impediu esta meta.',minutes:'Tempo sugerido'},
+  en:{title:'Consequences',reason:'What prevented this goal?',hint:'E.g. distraction, unexpected events or lack of planning',
+   confirm:'I completed the recovery step',done:'Recovery completed',pending:'Pending',
+   required:'First note what prevented this goal.',minutes:'Suggested time'},
+  es:{title:'Consecuencias',reason:'¿Qué impidió esta meta?',hint:'Ej.: distracción, imprevistos o falta de planificación',
+   confirm:'Cumplí la reparación',done:'Reparación completada',pending:'Pendiente',
+   required:'Primero anota qué impidió esta meta.',minutes:'Tiempo sugerido'},
+  la:{title:'Consequentiae',reason:'Quid te impedivit?',hint:'Causam breviter scribe',
+   confirm:'Emendationem complevi',done:'Emendatio completa',pending:'Pendet',
+   required:'Primum causam scribe.',minutes:'Tempus propositum'}
  };
  let records={};
  try{
@@ -77,44 +65,58 @@
   if(!goal||goal.status!=='missed')return '';
   const t=texts[locale]||texts.pt,r=get(goal.id),done=isComplete(goal.id);
   const time=done?completedTime(r.done_at,locale):'';
-  const n=minutes[goal.priority]||10;
-  return '<section class="goal-consequence'+(done?' is-repaired':'')+'" aria-label="'+safe(t.title)+'">'+
-   '<div class="goal-consequence-top"><span class="goal-consequence-eyebrow">'+safe(t.title)+'</span>'+
-   '<span class="goal-consequence-state">'+safe(done?t.done:t.pending)+'</span></div>'+
-   '<strong class="goal-consequence-call">'+safe(t.call)+'</strong>'+
-   '<p class="goal-consequence-task">'+safe(t.action.replace('{n}',String(n)))+'</p>'+
+  return '<div class="goal-consequence'+(done?' is-repaired':'')+'">'+
    '<label class="goal-consequence-label" for="goal-consequence-'+safe(goal.id)+'">'+safe(t.reason)+'</label>'+
    '<textarea id="goal-consequence-'+safe(goal.id)+'" data-cuiudo-consequence-reason="'+safe(goal.id)+
    '" rows="2" maxlength="240" placeholder="'+safe(t.hint)+'">'+safe(r.reason)+'</textarea>'+
-   '<div class="goal-consequence-footer"><button type="button" class="goal-consequence-confirm" data-action="cuiudo-consequence-complete" data-id="'+safe(goal.id)+'">'+
-   (done?'✓ ':'□ ')+safe(done?t.done:t.confirm)+'</button>'+
+   '<div class="goal-consequence-footer"><button type="button" class="goal-consequence-confirm" data-action="cuiudo-consequence-complete" data-id="'+safe(goal.id)+'"'+
+   (done?' disabled aria-disabled="true"':'')+'>'+
+   '<span aria-hidden="true">'+(done?'✓':'□')+'</span> '+safe(done?t.done:t.confirm)+'</button>'+
    (time?'<time class="goal-consequence-time" datetime="'+new Date(r.done_at).toISOString()+'">'+safe(time)+'</time>':'')+
-   '</div><small class="goal-consequence-note">'+safe(t.note)+'</small></section>';
+   '</div></div>';
  }
  function panel(goals,locale){
   const t=texts[locale]||texts.pt;
   const labels={
-   pt:{heading:'Consequências',description:'Meta não cumprida? Assuma e repare.',
-    none:'Nenhuma meta não cumprida. Continue firme.',pending:'pendente',plural:'pendentes',
-    goal:'Meta'},
-   en:{heading:'Consequences',description:'Missed a goal? Own it and make amends.',
-    none:'No missed goals. Keep going.',pending:'pending',plural:'pending',goal:'Goal'},
-   es:{heading:'Consecuencias',description:'¿No cumpliste? Asume y repara.',
-    none:'Ninguna meta incumplida. Sigue adelante.',pending:'pendiente',plural:'pendientes',goal:'Meta'},
-   la:{heading:'Consequentiae',description:'Metam omisisti? Agnosce et emenda.',
-    none:'Nulla meta omissa. Perge.',pending:'pendens',plural:'pendentes',goal:'Meta'}
-  }[locale]||{heading:'Consequências',description:'Meta não cumprida? Assuma e repare.',none:'Nenhuma meta não cumprida. Continue firme.',pending:'pendente',plural:'pendentes',goal:'Meta'};
+   pt:{heading:'Consequências',description:'Reconheça, ajuste e siga em frente.',
+    none:'Nenhuma meta não cumprida.',pending:'pendente',plural:'pendentes',allDone:'Tudo reparado'},
+   en:{heading:'Consequences',description:'Reflect, adjust and move forward.',
+    none:'No missed goals.',pending:'pending',plural:'pending',allDone:'All resolved'},
+   es:{heading:'Consecuencias',description:'Reconoce, ajusta y sigue adelante.',
+    none:'Ninguna meta incumplida.',pending:'pendiente',plural:'pendientes',allDone:'Todo reparado'},
+   la:{heading:'Consequentiae',description:'Agnosce, emenda et perge.',
+    none:'Nulla meta omissa.',pending:'pendet',plural:'pendent',allDone:'Omnia emendata'}
+  }[locale]||{heading:'Consequências',description:'Reconheça, ajuste e siga em frente.',none:'Nenhuma meta não cumprida.',pending:'pendente',plural:'pendentes',allDone:'Tudo reparado'};
   const failed=(Array.isArray(goals)?goals:[]).filter(g=>g?.status==='missed');
   failed.sort((a,b)=>Number(isComplete(a.id))-Number(isComplete(b.id)));
   const open=failed.filter(g=>!isComplete(g.id)).length;
+  const firstPending=failed.find(g=>!isComplete(g.id))?.id;
+  const statusText=open?open+' '+(open===1?labels.pending:labels.plural):labels.allDone;
+  const entries=failed.map(goal=>{
+   const done=isComplete(goal.id);
+   const n=minutes[goal.priority]||10;
+   const duration=String(n)+' min';
+   return '<details class="goals-consequence-entry'+(done?' is-repaired':'')+'"'+
+    (goal.id===firstPending?' open':'')+'>'+
+    '<summary class="goals-consequence-summary">'+
+    '<span class="goals-consequence-name">'+safe(goal.text)+'</span>'+
+    '<span class="goals-consequence-summary-meta">'+
+    '<span class="goals-consequence-duration" title="'+safe(t.minutes)+'" aria-label="'+safe(t.minutes+': '+n+' min')+'">'+safe(duration)+'</span>'+
+    '<span class="goals-consequence-status" aria-label="'+safe(done?t.done:t.pending)+'">'+
+    (done?'✓':'•')+'</span>'+
+    '<span class="goals-consequence-chevron" aria-hidden="true">⌄</span>'+
+    '</span></summary>'+card(goal,locale)+'</details>';
+  }).join('');
   return '<aside class="goals-consequence-panel" aria-label="'+safe(labels.heading)+'">'+
-   '<div class="goals-consequence-heading"><span class="goals-consequence-symbol" aria-hidden="true">↻</span>'+
-   '<div><strong>'+safe(labels.heading)+'</strong><p>'+safe(labels.description)+'</p></div></div>'+
-   (open?'<span class="goals-consequence-count">'+open+' '+safe(open===1?labels.pending:labels.plural)+'</span>':'')+
+   '<div class="goals-consequence-heading">'+
+   '<span class="goals-consequence-symbol" aria-hidden="true">↻</span>'+
+   '<div class="goals-consequence-heading-text"><strong>'+safe(labels.heading)+'</strong>'+
+   '<p>'+safe(labels.description)+'</p></div>'+
+   (failed.length?'<span class="goals-consequence-count'+(open?'':' is-clear')+
+    '" aria-label="'+safe(statusText)+'">'+safe(open?String(open):'✓')+'</span>':'')+
+   '</div>'+
    '<div class="goals-consequence-list">'+
-   (failed.length?failed.map(goal=>'<div class="goals-consequence-entry"><strong class="goals-consequence-goal">'+
-    safe(labels.goal)+': '+safe(goal.text)+'</strong>'+card(goal,locale)+'</div>').join(''):
-    '<p class="goals-consequence-empty">'+safe(labels.none)+'</p>')+
+   (failed.length?entries:'<div class="goals-consequence-empty"><span aria-hidden="true">✓</span><p>'+safe(labels.none)+'</p></div>')+
    '</div></aside>';
  }
  window.cuiudoConsequences={card,panel,reset,isComplete};
