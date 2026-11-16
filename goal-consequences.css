@@ -1,0 +1,18 @@
+/* Consequência restaurativa: cabe no cartão, discreta e responsiva. */
+.goal-consequence{margin:12px 0 8px;padding:14px;border:1px solid rgba(185,108,32,.32);border-radius:14px;background:rgba(173,106,36,.055);display:flex;flex-direction:column;gap:9px;min-width:0}
+.goal-consequence.is-repaired{border-color:rgba(39,133,91,.3);background:rgba(39,133,91,.045)}
+.goal-consequence-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.goal-consequence-eyebrow{font-size:.68rem;font-weight:800;letter-spacing:.065em;color:#a35e21}
+.goal-consequence-state{font-size:.69rem;font-weight:700;color:inherit;opacity:.78}
+.goal-consequence-call{font-size:.95rem;line-height:1.35}
+.goal-consequence-task{margin:0;font-size:.84rem;line-height:1.55;opacity:.9}
+.goal-consequence-label{font-size:.8rem;font-weight:700}
+.goal-consequence textarea{width:100%;box-sizing:border-box;min-height:55px;max-height:130px;padding:10px 11px;border-radius:9px;border:1px solid rgba(128,128,128,.36);background:var(--surface,#fff);color:var(--text,#212121);font:inherit;font-size:.83rem;line-height:1.5;resize:vertical}
+.goal-consequence textarea:focus-visible,.goal-consequence-confirm:focus-visible{outline:2px solid #3877b7;outline-offset:2px}
+.goal-consequence-footer{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.goal-consequence-confirm{font:inherit;font-size:.78rem;font-weight:750;min-height:38px;padding:8px 12px;border-radius:9px;border:1px solid #a66a31;background:#894e1f;color:white;cursor:pointer;max-width:100%}
+.goal-consequence.is-repaired .goal-consequence-confirm{background:#226d4d;border-color:#226d4d}
+.goal-consequence-time{font-size:.72rem;opacity:.75}
+.goal-consequence-note{font-size:.74rem;line-height:1.48;opacity:.75}
+@media(max-width:480px){.goal-consequence{padding:11px;gap:8px;border-radius:12px}.goal-consequence-call{font-size:.88rem}.goal-consequence-footer{align-items:stretch;flex-direction:column}.goal-consequence-confirm{width:100%}}
+@media(prefers-reduced-motion:no-preference){.goal-consequence-confirm{transition:background-color .18s ease,transform .18s ease}.goal-consequence-confirm:active{transform:scale(.99)}}
