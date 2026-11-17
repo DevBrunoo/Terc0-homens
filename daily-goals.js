@@ -285,7 +285,7 @@ function cuiudoTimerPanel(goal,locale){
   '<strong data-cuiudo-clock="'+id+'">'+cuiudoTimerFormat(left)+'</strong>'+
   '<small data-cuiudo-clock-status>'+escapeHtml(status)+'</small></div>'+
   '<div class="cuiudo-countdown-options"><label>'+escapeHtml(t.minutes)+
-  ' <input data-timer-minutes type="number" min="1" max="1440" step="1" inputmode="numeric" value="'+Math.round(total/60)+'"></label>'+
+  ' <input data-timer-minutes type="number" min="1" step="1" inputmode="numeric" value="'+Math.round(total/60)+'"></label>'+
   (phase==='finished'?'':'<button type="button" data-action="cuiudo-goal-timer-'+action+'" data-id="'+id+'">'+escapeHtml(caption)+'</button>')+
   '<button type="button" data-action="cuiudo-goal-timer-reset" data-id="'+id+'">'+escapeHtml(t.reset)+'</button>'+
   '<button type="button" data-action="cuiudo-goal-timer-test" data-id="'+id+'">'+escapeHtml({pt:'Testar som',en:'Test sound',es:'Probar sonido',la:'Sonum tempta'}[locale]||'Testar som')+'</button>'+
@@ -340,8 +340,9 @@ function cuiudoTimerArmAudio(goal){
  cuiudoTimerCancelAudio(goal.id);
  if(goal.timer_state!=='running'||!Number.isSafeInteger(goal.timer_started_at))return;
  const when=goal.timer_started_at+goal.remaining_sec*1000;
- if(cuiudoGoalDay(when)!==cuiudoGoalDay())return;
  cuiudoTimerUnlockAudio();
+ // Schedule audio near expiry; very distant Web Audio events are unreliable.
+ if(when-Date.now()>86400000)return;
  const ctx=cuiudoTimerAudioContext;
  if(!ctx)return;
  const at=ctx.currentTime+Math.max(0,(when-Date.now())/1000)+0.02;
@@ -368,8 +369,21 @@ function cuiudoTimerNotify(goal){
   }else new Notification(title,opts);
  }catch{}
 }
+function cuiudoRunningTimerEntries(day=cuiudoGoalDay()){
+ const running=[];
+ for(const [key,items] of Object.entries(state.dailyGoalDays||{})){
+  if(key>day||!Array.isArray(items))continue;
+  for(const goal of items){
+   if(goal?.status!=='pending'||goal.timer_state!=='running')continue;
+   const end=goal.timer_started_at+goal.remaining_sec*1000;
+   // Preserve the closing-day rule for overdue old timers; keep sessions that actually span the boundary.
+   if(key===day||(Number.isFinite(end)&&cuiudoGoalDay(end)!==key))running.push({day:key,goal});
+  }
+ }
+ return running;
+}
 function cuiudoTimerReconcileAudio(){
- const goals=cuiudoGoalsToday();
+ const goals=cuiudoRunningTimerEntries().map(x=>x.goal);
  for(const [id,job] of cuiudoTimerAudioJobs){
   const goal=goals.find(g=>g.id===id);
   const when=goal?.timer_state==='running'?goal.timer_started_at+goal.remaining_sec*1000:null;
@@ -784,8 +798,8 @@ app.addEventListener('click',event=>{
   if(action==='cuiudo-goal-timer-start'||action==='cuiudo-goal-timer-reset'){
    const field=target.closest('.today-goal')?.querySelector('[data-timer-minutes]');
    const minutes=Number(field?.value||25);
-   if(!Number.isSafeInteger(minutes)||minutes<1||minutes>1440){
-    field?.setCustomValidity?.('Escolha um valor de 1 a 1440 minutos.');
+   if(!Number.isSafeInteger(minutes)||minutes<1||!Number.isSafeInteger(minutes*60000)||minutes*60000>8640000000000000-Date.now()-60000){
+    field?.setCustomValidity?.('Escolha uma duração válida maior que zero.');
     field?.reportValidity?.();return;
    }
    cuiudoTimerCancelAudio(goal.id);
@@ -841,14 +855,17 @@ function cuiudoRefreshGoalDay(day=cuiudoGoalDay()){
 /* Atualiza os temporizadores do dia, mesmo com os cartões fechados. */
 function cuiudoTimerTick(){
  const day=cuiudoGoalDay(),changedDay=cuiudoRefreshGoalDay(day);
- const goals=cuiudoGoalsToday(day);
+ const entries=cuiudoRunningTimerEntries(day);
+ const goals=[...cuiudoGoalsToday(day),...entries.filter(x=>x.day!==day).map(x=>x.goal)];
  let finished=0;
- for(const goal of goals){
-  if(goal.status!=='pending'||goal.timer_state!=='running')continue;
-  if(cuiudoTimerSeconds(goal)>0)continue;
+ for(const {day:goalDay,goal} of entries){
+  if(cuiudoTimerSeconds(goal)>0){
+   if(cuiudoTimerAudioContext&&!cuiudoTimerAudioJobs.has(goal.id)&&cuiudoTimerSeconds(goal)<=86400)cuiudoTimerArmAudio(goal);
+   continue;
+  }
   cuiudoTimerStop(goal);
   cuiudoGoalsSave();
-  window.cuiudoGlobalGoals?.change('upsert',day,goal);
+  window.cuiudoGlobalGoals?.change('upsert',goalDay,goal);
   const armed=cuiudoTimerAudioJobs.get(goal.id);
   if(!armed||armed.ctx.state!=='running')cuiudoTimerSound();
   cuiudoTimerAudioJobs.delete(goal.id);
