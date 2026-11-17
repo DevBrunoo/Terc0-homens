@@ -10,7 +10,7 @@ const timerStates=new Set(['none','running','paused','finished']);
 const validTimer=body=>{
  const duration=body.duration_sec??0,remaining=body.remaining_sec??0,
   started=body.timer_started_at??null,phase=body.timer_state??'none';
- return Number.isSafeInteger(duration)&&duration>=0&&duration<=86400&&
+ return Number.isSafeInteger(duration)&&duration>=0&&Number.isSafeInteger(duration*1000)&&duration*1000<=8640000000000000-Date.now()-60000&&
   Number.isSafeInteger(remaining)&&remaining>=0&&remaining<=duration&&
   timerStates.has(phase)&&
   (started===null||(Number.isSafeInteger(started)&&started>0&&started<=Date.now()+60000))&&
