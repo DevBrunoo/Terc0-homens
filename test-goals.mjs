@@ -99,6 +99,8 @@ assert.equal(runInContext('cuiudoEssentialDone()',vm),false);
 assert.ok(!memory.has('terco-obstaculos-diarios-v1:2026-11-17'));
 assert.ok(!memory.has('terco-presenca-de-deus-v1:2026-11-17'));
 assert.match(root.innerHTML,/Histórico de metas/);
+assert.match(root.innerHTML,/cuiudo-chart-barplot/);
+assert.match(root.innerHTML,/cuiudo-chart-bar-fill/);
 assert.match(root.innerHTML,/Meta que terminei[^]*Concluída em 18\/11\/2026, 01:30/);
 assert.match(root.innerHTML,/Meta sem marcação[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
 assert.match(root.innerHTML,/Meta legada sem estado[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
@@ -193,8 +195,7 @@ assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-cuiudo-clock=/,'Pain
 assert.match(read('daily-goals.js'),/function cuiudoTimerSeconds/);
 runInContext("state.dailyGoalDays={[cuiudoGoalDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
-assert.match(root.innerHTML,/cuiudo-chart-barplot/);
-assert.match(root.innerHTML,/cuiudo-chart-bar-fill/);
+assert.match(root.innerHTML,/0 de 0 metas concluídas/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-timer-toggle"/);
 assert.match(root.innerHTML,/is-success">Concluída/);
 assert.match(root.innerHTML,/is-missed">Não concluída/);

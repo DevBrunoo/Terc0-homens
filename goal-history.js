@@ -26,7 +26,7 @@
     if(!data.hasMore||!data.events.length)break;
     offset+=data.events.length;
    }
-   const updated=JSON.stringify(next)!==JSON.stringify(events);
+   const updated=!loaded||JSON.stringify(next)!==JSON.stringify(events);
    events=next;loaded=true;error='';lastFetch=Date.now();
    if(updated&&typeof render==='function'&&['inicio','desafios'].includes(state.tab))render();
   }catch(e){error=String(e?.message||e).slice(0,100)}
@@ -36,12 +36,12 @@
   get events(){return events;},
   get loaded(){return loaded;},
   get error(){return error;},
-  byDay(days=14,endDay=cuiudoGoalDay()){
+  byDay(days=14,endDay=cuiudoGoalDay(),since=0){
    const end=Date.parse(endDay+'T12:00:00Z');
    if(!Number.isFinite(end))return [];
    const dates=Array.from({length:days},(_,i)=>new Date(end-(days-1-i)*86400000).toISOString().slice(0,10));
    return dates.map(day=>{
-    const dayEvents=events.filter(e=>cuiudoGoalDay(e.occurred_at)===day);
+    const dayEvents=events.filter(e=>e.occurred_at>=since&&cuiudoGoalDay(e.occurred_at)===day);
     const count=type=>dayEvents.filter(e=>e.event_type===type).length;
     return {day,completed:count('completed'),missed:count('missed'),created:count('created'),
      resolved:count('completed')+count('missed')};
