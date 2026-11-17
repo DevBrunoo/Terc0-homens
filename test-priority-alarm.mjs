@@ -40,7 +40,7 @@ assert.equal(goal.timer_state,'paused');
 assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Pausar cancela o alarme');
 assert.ok(stopped.length>=28,'Nós agendados cancelados');
 sandbox.cuiudoTimerArmAudio({...goal,timer_state:'running',timer_started_at:now,remaining_sec:120});
-assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Alarme da sessão anterior não toca às 02h');
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),1,'Sessão que atravessa as 02h mantém o alarme');
 const html=read('daily-goals.js');
 assert.match(html,/data-goal-priority/);
 assert.match(html,/data-priority=/);
