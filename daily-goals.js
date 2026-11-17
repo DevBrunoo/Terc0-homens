@@ -855,8 +855,8 @@ function cuiudoTimerTick(){
   cuiudoTimerNotify(goal);
   finished++;
  }
- if(finished||(changedDay&&['inicio','desafios'].includes(state.tab)))render();
- else if(typeof document.querySelectorAll==='function'){
+ if((finished||changedDay)&&['inicio','desafios'].includes(state.tab))cuiudoRenderBackground();
+ if(typeof document.querySelectorAll==='function'){
   document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
    const id=node.getAttribute('data-cuiudo-clock');
    const goal=goals.find(g=>g.id===id);
