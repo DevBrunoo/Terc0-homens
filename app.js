@@ -202,7 +202,11 @@ function examine(){const arr=getExamine();const selected=arr.filter(Boolean).len
  <p>Ele morreu na cruz por você, sofreu chicotadas e enfrentou a violência. <strong>Sfd o problema, vai para cima!</strong></p>
  </section>
  <h1 class="page-title">Exame de consciência</h1><p class="page-desc">Não é um tribunal para esmagar você. É um encontro honesto com a verdade diante de Deus. Marque os pontos que precisam de revisão, reze e planeje um passo de conversão.</p>
- <div class="card" style="margin-bottom:18px"><div class="card-meta">Pelo amor à verdade</div><h2 class="card-title">“Senhor, mostra-me o que preciso mudar.”</h2><p>Faça silêncio. Examine atitudes, omissões e intenções. Diferencie tentações de escolhas conscientes; procure o sacramento da Reconciliação quando necessário.</p></div>
+ <div class="card" style="margin-bottom:18px">
+  <div class="card-meta">Pelo amor à verdade</div><h2 class="card-title">“Senhor, mostra-me o que preciso mudar.”</h2>
+  <p><strong>O pecado mortal rompe a amizade com Deus.</strong></p>
+  <p>Faça silêncio. Examine atitudes, omissões e intenções. Diferencie tentações de escolhas conscientes; procure o sacramento da Reconciliação quando necessário.</p>
+ </div>
  <section class="checklist">${examineItems.map((x,i)=>`<label class="checkrow"><input type="checkbox" data-kind="examine" data-index="${i}" ${arr[i]?'checked':''}/><span>${escapeHtml(x)}</span></label>`).join('')}</section>
  <div class="completion-row"><span>${selected} ponto(s) selecionado(s) para refletir</span><span>Privado • salvo somente neste navegador</span></div>
  <div class="card"><div class="card-meta">Oração de arrependimento</div><blockquote class="confront" style="font-size:21px">Meu Deus, reconheço minhas faltas. Dai-me humildade para pedir perdão, coragem para reparar o mal e força para recomeçar na vossa graça. Amém.</blockquote><p>Se você reconheceu um pecado grave, procure a Confissão sacramental. Nenhum checklist substitui a conversa com um sacerdote.</p><button class="btn btn-ghost" data-action="navigate" data-tab="diario">Registrar meu propósito ${icon('arrow')}</button></div>`;}
