@@ -26,6 +26,8 @@ assert.equal(evaluate({status:'pending',priority:'medium'},'upsert','pending','h
 assert.equal(evaluate({status:'pending',priority:'medium'},'upsert','pending','medium'),null,'Timer não deve criar evento falso');
 
 const events=[
+ {event_id:4,goal_id:'night',goal_day:'2026-11-13',event_type:'missed',priority:'high',
+  occurred_at:Date.parse('2026-11-14T04:30:00Z')},
  {event_id:3,goal_id:'third',goal_day:'2026-11-13',event_type:'completed',priority:'high',
   occurred_at:Date.parse('2026-11-14T12:30:00Z')},
  {event_id:2,goal_id:'second',goal_day:'2026-11-14',event_type:'missed',priority:'medium',
@@ -38,13 +40,16 @@ const vm=createContext({window:{fetch:()=>{},addEventListener(){},setInterval(){
  fetch:async()=>({ok:true,json:async()=>({events,hasMore:false})}),
  state:{tab:'lectio'},currentDay:()=> '2026-11-14',
  render(){throw Error('Não redesenhar durante Lectio')},console});
-runInContext(read('goal-history.js'),vm);
+const goalsSource=read('daily-goals.js');
+const goalDay=goalsSource.slice(goalsSource.indexOf('const cuiudoGoalDayFormat='),goalsSource.indexOf('/* Horário real'));
+runInContext(goalDay+read('goal-history.js'),vm);
 await new Promise(resolve=>setTimeout(resolve,5));
 const data=JSON.parse(JSON.stringify(runInContext("window.cuiudoGoalHistory.byDay(7,'2026-11-14')",vm)));
 assert.equal(data.find(x=>x.day==='2026-11-14').completed,1);
 assert.equal(data.find(x=>x.day==='2026-11-14').missed,1);
 assert.equal(data.find(x=>x.day==='2026-11-14').created,1);
 assert.ok(data.find(x=>x.day==='2026-11-13').completed===0,'Não atribuir conclusão à data da criação');
+assert.equal(data.find(x=>x.day==='2026-11-13').missed,1,'Uma marcação às 01:30 conta para o dia anterior');
 assert.match(read('index.html'),/cuiudo-premium\.css/);
 assert.match(read('scripts/build-cloudflare.mjs'),/cuiudo-premium\.css/);
 assert.match(read('scripts/build-cloudflare.mjs'),/goal-history\.js/);

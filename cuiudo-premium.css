@@ -25,6 +25,23 @@
 .cuiudo-premium-card>summary:focus-visible,.cuiudo-premium-inside :focus-visible{outline:2px solid #2776b9;outline-offset:2px}
 .cuiudo-premium-inside{display:grid;gap:12px;border-top:1px solid var(--line);padding:14px}
 .cuiudo-premium-inside p{margin:0;color:var(--subink);font-size:11px;line-height:1.55}
+.goal-archive{margin:12px 0}
+.goal-archive>summary::after{
+ content:'';width:7px;height:7px;margin-inline-start:auto;border:solid var(--subink);
+ border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.goal-archive[open]>summary::after{transform:rotate(225deg)}
+.goal-archive .cuiudo-chart-period{justify-self:start}
+.goal-archive-list{list-style:none;margin:0;padding:0}
+.goal-archive-row{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:6px 12px;
+ padding:10px 0;border-top:1px solid var(--line);
+}
+.goal-archive-row strong{font-size:13px;overflow-wrap:anywhere}
+@media(max-width:420px){
+ .goal-archive-row{grid-template-columns:minmax(0,1fr)}
+ .goal-archive-row .goal-card-status{justify-self:start}
+}
 .cuiudo-premium-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .cuiudo-premium-actions button,.cuiudo-premium-file,.cuiudo-premium-restore button,.cuiudo-trash-item button{
  display:inline-flex;align-items:center;justify-content:center;min-height:40px;gap:6px;padding:8px 12px;

@@ -19,6 +19,7 @@ const html=[];
 const ctx=createContext({
  state,groups:{gozosos:group},groupNames:['gozosos','dolorosos','gloriosos','luminosos'],
  dayGroup:()=> 'gozosos',currentDay:()=>now,versiculosPorMisterio:verses,
+ cuiudoGoalDay:()=>now,cuiudoGoalsToday:day=>state.dailyGoalDays[day]||[],cuiudoGoalStatus:goal=>goal.status,
  cuiudoLocale:()=> 'pt',escapeHtml:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;'),
  app,window:{addEventListener(){},setInterval(){},cuiudoGlobalGoals:{getTrash:()=>[],change(...a){changes.push(a)}}},
  document:{documentElement:{classList:{toggle(name,on){if(on)classSet.add(name);else classSet.delete(name)}},lang:'pt'},

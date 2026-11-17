@@ -2,43 +2,37 @@
  * Metas públicas compartilhadas automaticamente pelo D1; diário e intenções são locais.
  */
 const cuiudoGoalsText={
- pt:{heading:'Metas de hoje',sub:'Escreva o que precisa fazer. Depois assuma o resultado.',
+ pt:{heading:'Metas de hoje',sub:'O dia das metas fecha às 02h, no horário de Brasília.',
   label:'Nova meta',placeholder:'Ex.: estudar 40 minutos, rezar o terço, resolver uma pendência',
   add:'Adicionar',done:'Concluí',missed:'Não concluí',reopen:'Reabrir',remove:'Excluir',
-  complete:'Concluídas',remaining:'Pendente',gift:'Missão cumprida',empty:'Sua primeira meta começa aqui.',
-  comeback:'Você é muito macio! Reorganize-se, levante e faça acontecer.',
-  confession:'Preguiça é pecado, omissão é pecado, não fazer o que cumpre é coisa de macio frango, você vai ter que se confessar.',
-  confessionButton:'Examinar e corrigir',
-  undone:'Não concluída',earned:['Medalha da Coragem','Selo da Disciplina','Estrela da Perseverança','Troféu da Palavra Cumprida'],
-  rewardText:'Você fez o que prometeu. O presente é uma conquista virtual: continue firme.'},
- en:{heading:"Today's goals",sub:'Write down what needs doing. Then own the result.',
+  complete:'Concluídas',completed:'Concluída',remaining:'Pendente',undone:'Não concluída',
+  empty:'Adicione uma meta para começar.',archive:'Histórico de metas',day:'Dia'},
+ en:{heading:"Today's goals",sub:'The goal day ends at 2 a.m. Brasília time.',
   label:'New goal',placeholder:'E.g. study for 40 minutes, pray the Rosary',add:'Add',
   done:'Completed',missed:'Not completed',reopen:'Reopen',remove:'Delete',
-  complete:'Completed',remaining:'Pending',gift:'Mission accomplished',empty:'Your first goal starts here.',
-  comeback:'You have gone soft! Stand up, regroup and get it done.',
-  confession:'Deliberate neglect of real duties may be sinful. Examine your conscience and bring culpable failures to Confession; not every missed personal goal is a mortal sin.',
-  confessionButton:'Examine and act',
-  undone:'Not completed',earned:['Medal of Courage','Discipline Badge','Star of Perseverance','Promise Kept Trophy'],
-  rewardText:'You followed through. Your gift is a virtual achievement: keep going.'},
- es:{heading:'Metas de hoy',sub:'Escribe lo que debes hacer y asume el resultado.',
+  complete:'Completed',completed:'Completed',remaining:'Pending',undone:'Not completed',
+  empty:'Add a goal to get started.',archive:'Goal history',day:'Day'},
+ es:{heading:'Metas de hoy',sub:'El día de metas termina a las 02:00, hora de Brasilia.',
   label:'Nueva meta',placeholder:'Ej.: estudiar 40 minutos, rezar el Rosario',add:'Añadir',
   done:'Cumplí',missed:'No cumplí',reopen:'Reabrir',remove:'Eliminar',
-  complete:'Cumplidas',remaining:'Pendientes',gift:'Misión cumplida',empty:'Tu primera meta empieza aquí.',
-  comeback:'¡Estás demasiado blando! Levántate, reorganízate y hazlo.',
-  confession:'La pereza y la omisión deliberada de deberes reales pueden ser pecado. Examina tu conciencia y lleva a la Confesión las faltas culpables; no toda meta incumplida es pecado mortal.',
-  confessionButton:'Examinar y actuar',
-  undone:'No cumplida',earned:['Medalla del Valor','Sello de la Disciplina','Estrella de Perseverancia','Trofeo de la Palabra Cumplida'],
-  rewardText:'Cumpliste lo prometido. Tu regalo es una recompensa virtual.'},
- la:{heading:'Metas hodiernae',sub:'Scribe quod hodie agere debes et opus exple.',
+  complete:'Cumplidas',completed:'Cumplida',remaining:'Pendiente',undone:'No cumplida',
+  empty:'Añade una meta para empezar.',archive:'Historial de metas',day:'Día'},
+ la:{heading:'Metas hodiernae',sub:'Dies propositi hora secunda Brasiliae finitur.',
   label:'Meta nova',placeholder:'Ex.: quadraginta minuta studere, Rosarium orare',add:'Adde',
   done:'Complevi',missed:'Non complevi',reopen:'Reclude',remove:'Dele',
-  complete:'Completae',remaining:'Pendentes',gift:'Donum tuum',empty:'Prima meta hic incipit.',
-  comeback:'Nimis mollis es! Surge, te para et opus fac.',
-  confession:'Neglegentia et omissio officiorum deliberata peccata esse possunt. Conscientiam examina et culpabiles culpas in Confessione affer; non omnis meta irrita peccatum mortale est.',
-  confessionButton:'Conscientiam examina',
-  undone:'Non completa',earned:['Medalia Fortitudinis','Signum Disciplinae','Stella Constantiae','Praemium Promissi Servati'],
-  rewardText:'Promissum servasti. Donum tuum honor virtualis est.'}
+  complete:'Completae',completed:'Completa',remaining:'Pendens',undone:'Non completa',
+  empty:'Propositum novum adde.',archive:'Historia propositorum',day:'Dies'}
 };
+const cuiudoGoalDayFormat=new Intl.DateTimeFormat('en-CA',{
+ timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',
+ hour:'2-digit',hourCycle:'h23'
+});
+function cuiudoGoalDay(now=Date.now()){
+ const {year,month,day,hour}=Object.fromEntries(cuiudoGoalDayFormat.formatToParts(now)
+  .map(({type,value})=>[type,value]));
+ if(Number(hour)>=2)return year+'-'+month+'-'+day;
+ return new Date(Date.UTC(Number(year),Number(month)-1,Number(day)-1)).toISOString().slice(0,10);
+}
 /* Horário real da conclusão, persistido junto à meta e apresentado sempre
  * no fuso de Brasília, mesmo que o visitante esteja em outro fuso. */
 const cuiudoCompletedAtLabels={
@@ -66,10 +60,13 @@ function cuiudoGoalMissedTime(goal,locale){
  return cuiudoGoalMarkedTime(goal?.missed_at,locale,
   cuiudoMissedAtLabels[locale]||cuiudoMissedAtLabels.pt,'goal-reality-time');
 }
-/* Metas continuam visíveis depois da meia-noite. */
-function cuiudoGoalsToday(){
- state.dailyGoalDays??={};
- return Object.values(state.dailyGoalDays).flatMap(items=>Array.isArray(items)?items:[]);
+function cuiudoGoalsToday(day=cuiudoGoalDay()){
+ const items=state.dailyGoalDays?.[day];
+ return Array.isArray(items)?items.filter(goal=>goal&&goal.status!=='deleted'):[];
+}
+function cuiudoGoalStatus(goal,day,activeDay=cuiudoGoalDay()){
+ if(goal.status==='done'||goal.status==='missed')return goal.status;
+ return day<activeDay?'missed':'pending';
 }
 // Pendentes primeiro. Em cada grupo: Alta → Média → Baixa.
 // Empates: mais recente primeiro. Concluídas e não concluídas ficam no fim.
@@ -85,78 +82,6 @@ function cuiudoGoalsNewestFirst(goals){
  return goals.slice().sort((a,b)=>
   finished(a)-finished(b)||importance(a)-importance(b)||createdAt(b)-createdAt(a));
 }
-function cuiudoGoalCount(){
- const items=cuiudoGoalsToday();
- return {total:items.length,done:items.filter(x=>x.status==='done').length,failed:items.filter(x=>x.status==='missed').length};
-}
-function cuiudoGoalGift(id){
- const list=cuiudoGoalsText[cuiudoLocale()].earned;
- let sum=0;
- for(const c of String(id))sum=(sum*31+c.charCodeAt(0))>>>0;
- return list[sum%list.length];
-}
-
-/* Celebrações autorais: uma escolha estável por ID da meta, sem mensagens
- * aleatórias mudando a cada sincronização. Referências são inspirações,
- * não transcrições literais de uma tradução bíblica. */
-const cuiudoBlessings={
- pt:[
- ['Fé que não vira atitude é discurso. Hoje você fez a sua parte. Amanhã, de novo.','Tg 2,17'],
- ['Não despreze o dever pequeno. A disciplina se constrói quando ninguém está olhando.','Lc 16,10'],
- ['Você enfrentou a tarefa e venceu a resistência. Coragem se prova com ação.','Js 1,9'],
- ['Combate vencido. Não afrouxe: continue firme na luta pelo que é certo.','2Tm 4,7'],
- ['Você entregou trabalho, não desculpas. Faça tudo com dedicação e propósito.','Cl 3,23'],
- ['Você não fugiu do esforço. Perseverou. É assim que se forja o caráter.','Rm 5,3–4'],
- ['Hoje a preguiça não deu as ordens. Você assumiu o controle do seu dever.','Pr 6,6'],
- ['Tarefa cumprida. Não se acomode na vitória: amanhã há mais bem a fazer.','Gl 6,9'],
- ['Sem plateia e sem aplausos: você fez o que precisava. Deus vê o que é sincero.','Mt 6,4'],
- ['Você parou de adiar e entrou em ação. Disciplina vence conversa fiada.','1Cor 9,24'],
- ['Passo dado. Continue a corrida com firmeza, sem abandonar o que começou.','Hb 12,1'],
- ['Missão cumprida. Agradeça a Deus, endireite a postura e siga em frente.','Sl 118(117),24']
- ],
- en:[
- ['Faith without action is just talk. You acted today. Do it again tomorrow.','Jas 2:17'],
- ['Do not dismiss a small duty. Discipline grows when nobody is watching.','Lk 16:10'],
- ['You faced the task instead of running from it. Courage is action.','Jos 1:9'],
- ['Battle won. Do not back down: keep fighting for what is right.','2 Tim 4:7'],
- ['You delivered work, not excuses. Do everything with purpose.','Col 3:23'],
- ['You did not run from effort. You persevered. That builds character.','Rom 5:3–4'],
- ['Laziness did not give the orders today. You fulfilled your duty.','Prov 6:6'],
- ['Task completed. Do not settle: more good work lies ahead.','Gal 6:9'],
- ['No audience, no applause: you did what needed doing. God sees sincerity.','Mt 6:4'],
- ['You stopped delaying and took action. Discipline beats empty talk.','1 Cor 9:24'],
- ['One step taken. Keep running with resolve; do not abandon the path.','Heb 12:1'],
- ['Mission accomplished. Thank God, stand tall and move forward.','Ps 118:24']
- ],
- es:[
- ['La fe sin acción es solo discurso. Hoy actuaste. Mañana, otra vez.','St 2,17'],
- ['No desprecies un deber pequeño. La disciplina crece sin espectadores.','Lc 16,10'],
- ['Enfrentaste la tarea. El valor se demuestra con hechos.','Jos 1,9'],
- ['Combate ganado. No retrocedas: sigue luchando por el bien.','2 Tim 4,7'],
- ['Entregaste trabajo, no excusas. Haz todo con propósito.','Col 3,23'],
- ['No huiste del esfuerzo. Perseveraste. Así se forja el carácter.','Rom 5,3–4'],
- ['Hoy la pereza no mandó. Cumpliste tu deber.','Prov 6,6'],
- ['Tarea cumplida. No te acomodes: queda mucho bien por hacer.','Gal 6,9'],
- ['Sin público ni aplausos: cumpliste. Dios ve lo que es sincero.','Mt 6,4'],
- ['Dejaste de posponer y actuaste. La disciplina vence las palabras vacías.','1 Cor 9,24'],
- ['Un paso más. Sigue con firmeza; no abandones el camino.','Heb 12,1'],
- ['Misión cumplida. Da gracias a Dios y sigue adelante.','Sal 118,24']
- ],
- la:[
- ['Fides sine operibus inanis est. Hodie egisti; cras iterum age.','Iac 2,17'],
- ['Officium parvum ne spernas. Disciplina in occulto crescit.','Lc 16,10'],
- ['Opus aggressus es, non fugisti. Fortitudo operibus probatur.','Ios 1,9'],
- ['Certamen confectum. Persta in pugna pro bono.','2 Tim 4,7'],
- ['Opus, non excusationes, obtulisti. Omnia diligenter age.','Col 3,23'],
- ['Laborem non fugisti. Perseverantia animum confirmat.','Rom 5,3–4'],
- ['Pigritia hodie non imperavit. Officium perfecisti.','Prov 6,6'],
- ['Opus completum. Noli consistere: alia bona facienda sunt.','Gal 6,9'],
- ['Sine plausu opus perfecisti. Deus sinceritatem videt.','Mt 6,4'],
- ['Moras vicisti et egisti. Disciplina verba vana superat.','1 Cor 9,24'],
- ['Unum iter confecisti. Constanter ad metam procede.','Heb 12,1'],
- ['Missio completa. Deo gratias age et fortiter procede.','Ps 117,24']
- ]
-};
 const cuiudoPermanentNotes={
  pt:'Rezar terço e se cuidar espiritualmente e esteticamente',
  en:'Pray the Rosary and care for yourself spiritually and aesthetically',
@@ -169,56 +94,54 @@ const cuiudoPinnedLabels={
  es:['COMPROMISO ESENCIAL','Fe, disciplina y cuidado de uno mismo — cada día.'],
  la:['PROPOSITUM COTIDIANUM','Fides, disciplina et cura sui — cotidie.']
 };
-function cuiudoGoalBlessing(id){
- let hash=0;
- for(const c of String(id))hash=(Math.imul(hash,33)+c.charCodeAt(0))>>>0;
- const list=cuiudoBlessings[cuiudoLocale()]||cuiudoBlessings.pt;
- const [message,reference]=list[hash%list.length];
- return {message,reference};
-}
-
-/* Anotação diária local e privada: não incluir no estado sincronizado pelo D1. */
+/* Anotações temporárias do quadro, guardadas somente neste navegador. */
 const cuiudoObstacleKey='terco-obstaculos-diarios-v1';
+const cuiudoGodMomentKey='terco-presenca-de-deus-v1';
+function cuiudoDailyNoteRead(key){
+ try{return (localStorage.getItem(key+':'+cuiudoGoalDay())||'').slice(0,650);}
+ catch{return '';}
+}
+function cuiudoDailyNoteSave(key,value){
+ try{
+  const dayKey=key+':'+cuiudoGoalDay(),text=String(value||'').slice(0,650);
+  if(text.trim())localStorage.setItem(dayKey,text);
+  else localStorage.removeItem(dayKey);
+  return true;
+ }catch{return false;}
+}
+function cuiudoClearOldDailyNotes(day){
+ for(const key of [cuiudoObstacleKey,cuiudoGodMomentKey]){
+  try{
+   const prefix=key+':',dayKey=prefix+day;
+   const legacy=localStorage.getItem(key);
+   if(legacy!==null){
+    // As versões anteriores não registravam a data da última edição.
+    let entries={};
+    try{entries=JSON.parse(legacy)||{};}catch{}
+    const last=Object.keys(entries).sort().reverse()
+     .find(date=>/^\d{4}-\d{2}-\d{2}$/.test(date)&&typeof entries[date]==='string'&&entries[date].trim());
+    if(last&&localStorage.getItem(dayKey)===null)
+     localStorage.setItem(dayKey,entries[last].slice(0,650));
+    localStorage.removeItem(key);
+   }
+   for(let i=localStorage.length-1;i>=0;i--){
+    const stored=localStorage.key(i);
+    if(stored?.startsWith(prefix)&&stored<dayKey)localStorage.removeItem(stored);
+   }
+  }catch{}
+ }
+}
+let cuiudoActiveGoalDay=cuiudoGoalDay();
+cuiudoClearOldDailyNotes(cuiudoActiveGoalDay);
+
 const cuiudoObstacleLabels={
  pt:['O que atrapalhou seu dia?','Anote o que dificultou suas metas. Reconheça, aprenda e recomece.','Ex.: distrações, cansaço, imprevistos ou falta de organização…','Salvo só neste aparelho · privado','Erro ao salvar neste aparelho'],
  en:['What got in your way today?','Note the obstacles, learn and begin again.','E.g. distractions, tiredness, unexpected events…','Saved only on this device · private','Unable to save on this device'],
  es:['¿Qué dificultó tu día?','Anota los obstáculos, aprende y vuelve a empezar.','Ej.: distracciones, cansancio, imprevistos…','Guardado solo en este dispositivo · privado','No se pudo guardar'],
  la:['Quid hodie impedivit?','Impedimenta nota, disce et rursus incipe.','Ex.: distractio, lassitudo, difficultates…','In hoc tantum instrumento servatum','Servari non potuit']
 };
-function cuiudoObstacleEntries(){
- try{
-  const value=JSON.parse(localStorage.getItem(cuiudoObstacleKey)||'{}');
-  return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
- }catch{return {};}
-}
-function cuiudoObstacleLastDay(){
- const entries=cuiudoObstacleEntries();
- return Object.keys(entries).filter(day=>typeof entries[day]==='string'&&entries[day].trim()).sort().at(-1)||null;
-}
-function cuiudoObstacleRead(){
- const day=cuiudoObstacleLastDay();
- return day?cuiudoObstacleEntries()[day].slice(0,650):'';
-}
-function cuiudoObstacleSave(value){
- try{
-  const entries=cuiudoObstacleEntries();
-  // Editar a anotação existente, sem zerá-la depois da meia-noite.
-  const day=cuiudoObstacleLastDay()||currentDay();
-  const text=String(value||'').slice(0,650);
-  if(text.trim())entries[day]=text;
-  else delete entries[day]; // Ação explícita de apagar o texto.
-  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(entries));return true;
- }catch{return false;}
-}
-function cuiudoObstacleDelete(){
- try{
-  const day=cuiudoObstacleLastDay();
-  if(!day)return true;
-  const entries=cuiudoObstacleEntries();
-  delete entries[day];
-  localStorage.setItem(cuiudoObstacleKey,JSON.stringify(entries));return true;
- }catch{return false;}
-}
+function cuiudoObstacleRead(){return cuiudoDailyNoteRead(cuiudoObstacleKey);}
+function cuiudoObstacleSave(value){return cuiudoDailyNoteSave(cuiudoObstacleKey,value);}
 function cuiudoObstacleBox(locale){
  const t=cuiudoObstacleLabels[locale]||cuiudoObstacleLabels.pt;
  return '<aside class="goals-obstacle-box" aria-labelledby="goals-obstacle-title">'+
@@ -232,39 +155,14 @@ function cuiudoObstacleBox(locale){
   '</button></div></aside>';
 }
 
-/* Pequena reflexão privada da presença de Deus, preservada até a pessoa apagar. */
-const cuiudoGodMomentKey='terco-presenca-de-deus-v1';
 const cuiudoGodMomentLabels={
  pt:['Onde vejo Deus no meu dia?','Reconheça uma graça, um gesto de amor ou um momento de oração.','Ex.: na minha vida, no terço, no cuidado recebido…','Salvo só neste aparelho · privado','Erro ao salvar neste aparelho','Excluir anotação'],
  en:['Where did I see God today?','Recall a grace, a kind gesture or a moment of prayer.','E.g. in my life, during the Rosary, in someone’s kindness…','Saved only on this device · private','Unable to save on this device','Delete note'],
  es:['¿Dónde veo a Dios en mi día?','Reconoce una gracia, un gesto de amor o un momento de oración.','Ej.: en mi vida, en el rosario, en la ayuda recibida…','Guardado solo en este dispositivo · privado','No se pudo guardar','Eliminar nota'],
  la:['Ubi Deum hodie conspexi?','Gratiam vel caritatem vel orationis momentum memorare.','Ex.: in vita, rosario, auxilio accepto…','In hoc instrumento servatum · privatum','Servari non potuit','Delere']
 };
-function cuiudoGodMomentEntries(){
- try{
-  const value=JSON.parse(localStorage.getItem(cuiudoGodMomentKey)||'{}');
-  return value&&typeof value==='object'&&!Array.isArray(value)?value:{};
- }catch{return {};}
-}
-function cuiudoGodMomentLastDay(){
- const entries=cuiudoGodMomentEntries();
- return Object.keys(entries).filter(day=>typeof entries[day]==='string'&&entries[day].trim()).sort().at(-1)||null;
-}
-function cuiudoGodMomentRead(){
- const day=cuiudoGodMomentLastDay();
- return day?cuiudoGodMomentEntries()[day].slice(0,650):'';
-}
-function cuiudoGodMomentSave(value){
- try{
-  const entries=cuiudoGodMomentEntries();
-  const day=cuiudoGodMomentLastDay()||currentDay();
-  const note=String(value||'').slice(0,650);
-  if(note.trim())entries[day]=note;
-  else delete entries[day]; // Apenas uma ação da pessoa pode apagar a anotação.
-  localStorage.setItem(cuiudoGodMomentKey,JSON.stringify(entries));
-  return true;
- }catch{return false;}
-}
+function cuiudoGodMomentRead(){return cuiudoDailyNoteRead(cuiudoGodMomentKey);}
+function cuiudoGodMomentSave(value){return cuiudoDailyNoteSave(cuiudoGodMomentKey,value);}
 function cuiudoGodMomentBox(locale){
  const t=cuiudoGodMomentLabels[locale]||cuiudoGodMomentLabels.pt;
  return '<aside class="goals-obstacle-box goals-god-moment-box" aria-labelledby="goals-god-moment-title">'+
@@ -284,7 +182,7 @@ const cuiudoEssentialLabels={
  es:['Completado hoy','Marcar compromiso como completado hoy'],
  la:['Hodie completum','Hodie complevi']
 };
-function cuiudoEssentialDone(day=currentDay()){
+function cuiudoEssentialDone(day=cuiudoGoalDay()){
  try{
   const all=JSON.parse(localStorage.getItem(cuiudoEssentialKey)||'{}');
   return !!(all&&typeof all==='object'&&!Array.isArray(all)&&all[day]===true);
@@ -294,7 +192,7 @@ function cuiudoEssentialSave(done){
  try{
   const data=JSON.parse(localStorage.getItem(cuiudoEssentialKey)||'{}');
   const all=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
-  const day=currentDay();
+  const day=cuiudoGoalDay();
   if(done)all[day]=true;else delete all[day];
   // Histórico do compromisso não é apagado automaticamente.
   localStorage.setItem(cuiudoEssentialKey,JSON.stringify(all));return true;
@@ -441,10 +339,11 @@ function cuiudoTimerCancelAudio(id){
 function cuiudoTimerArmAudio(goal){
  cuiudoTimerCancelAudio(goal.id);
  if(goal.timer_state!=='running'||!Number.isSafeInteger(goal.timer_started_at))return;
+ const when=goal.timer_started_at+goal.remaining_sec*1000;
+ if(cuiudoGoalDay(when)!==cuiudoGoalDay())return;
  cuiudoTimerUnlockAudio();
  const ctx=cuiudoTimerAudioContext;
  if(!ctx)return;
- const when=goal.timer_started_at+goal.remaining_sec*1000;
  const at=ctx.currentTime+Math.max(0,(when-Date.now())/1000)+0.02;
  const nodes=cuiudoTimerScheduleTone(ctx,at);
  cuiudoTimerAudioJobs.set(goal.id,{when,nodes,ctx});
@@ -470,8 +369,9 @@ function cuiudoTimerNotify(goal){
  }catch{}
 }
 function cuiudoTimerReconcileAudio(){
+ const goals=cuiudoGoalsToday();
  for(const [id,job] of cuiudoTimerAudioJobs){
-  const goal=Object.values(state.dailyGoalDays||{}).flatMap(x=>Array.isArray(x)?x:[]).find(g=>g.id===id);
+  const goal=goals.find(g=>g.id===id);
   const when=goal?.timer_state==='running'?goal.timer_started_at+goal.remaining_sec*1000:null;
   if(goal?.status==='pending'&&when===job.when)continue;
   cuiudoTimerCancelAudio(id);
@@ -520,18 +420,19 @@ const cuiudoChartLabels={
   axis:'Proportio completa',note:'Computatio ex die creationis et statu praesenti, non ex die completionis.',
   priorityNote:'Singula prioritas rationem completorum ostendit. Proposita antiqua sine prioritate Media habentur.',noteLabel:'Ratio computationis'}
 };
-function cuiudoChartRows(days=14,endDay=currentDay()){
+function cuiudoChartRows(days=14,endDay=cuiudoGoalDay()){
  const count=[7,14,30].includes(Number(days))?Number(days):14;
  const end=Date.parse(String(endDay)+'T12:00:00Z');
  if(!Number.isFinite(end))return [];
  const goalsByDay=state.dailyGoalDays||{};
+ const activeDay=cuiudoGoalDay();
  return Array.from({length:count},(_,i)=>{
   const day=new Date(end-(count-1-i)*86400000).toISOString().slice(0,10);
   const goals=Array.isArray(goalsByDay[day])?goalsByDay[day]:[];
   const row={day,done:0,pending:0,missed:0,high:0,medium:0,low:0};
   for(const goal of goals){
    if(!goal||goal.status==='deleted')continue;
-   const status=['pending','done','missed'].includes(goal.status)?goal.status:'pending';
+   const status=cuiudoGoalStatus(goal,day,activeDay);
    row[status]++;
    if(status==='pending'){
     const priority=['high','medium','low'].includes(goal.priority)?goal.priority:'medium';
@@ -585,10 +486,7 @@ function cuiudoGoalsBarChart(locale){
    const days=new Set(historicRows.map(x=>x.day));
    bars=['high','medium','low'].map(priority=>{
     const relevant=history.events.filter(e=>e.priority===priority&&
-     ['completed','missed'].includes(e.event_type)&&days.has((()=>{
-      const d=new Date(e.occurred_at);
-      return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-     })()));
+     ['completed','missed'].includes(e.event_type)&&days.has(cuiudoGoalDay(e.occurred_at)));
     const d=relevant.filter(e=>e.event_type==='completed').length;
     return {key:priority,label:t[priority],done:d,total:relevant.length,
      percent:relevant.length?Math.round(d/relevant.length*100):null};
@@ -647,14 +545,36 @@ function cuiudoGoalsBarChart(locale){
   '<details class="cuiudo-chart-footnote"><summary>'+escapeHtml(t.noteLabel)+'</summary><p>'+escapeHtml(note)+' '+(cuiudoChartMode==='priority'?escapeHtml(t.priorityNote):'')+'</p></details></section>';
 }
 
+let cuiudoArchiveDay='';
+function cuiudoGoalArchiveRows(day,locale){
+ const t=cuiudoGoalsText[locale];
+ return cuiudoGoalsToday(day).map(goal=>{
+  const completed=cuiudoGoalStatus(goal,day)==='done';
+  const time=completed?cuiudoGoalCompletedTime(goal,locale):cuiudoGoalMissedTime(goal,locale);
+  return '<li class="goal-archive-row"><div><strong>'+escapeHtml(goal.text)+'</strong>'+time+'</div>'+
+   '<span class="goal-card-status '+(completed?'is-success':'is-missed')+'">'+
+   escapeHtml(completed?t.completed:t.undone)+'</span></li>';
+ }).join('');
+}
+function cuiudoGoalArchive(locale,activeDay){
+ const t=cuiudoGoalsText[locale];
+ const days=Object.keys(state.dailyGoalDays||{}).filter(day=>day<activeDay&&cuiudoGoalsToday(day).length)
+  .sort().reverse();
+ if(!days.length)return '';
+ const day=days.includes(cuiudoArchiveDay)?cuiudoArchiveDay:days[0];
+ return '<details class="cuiudo-premium-card goal-archive"><summary><strong>'+escapeHtml(t.archive)+'</strong></summary>'+
+  '<div class="cuiudo-premium-inside"><label class="cuiudo-chart-period">'+escapeHtml(t.day)+
+  ' <select id="cuiudo-goal-archive-day">'+days.map(date=>'<option value="'+escapeHtml(date)+'"'+
+  (date===day?' selected':'')+'>'+escapeHtml(date.split('-').reverse().join('/'))+'</option>').join('')+'</select></label>'+
+  '<ul class="goal-archive-list">'+cuiudoGoalArchiveRows(day,locale)+'</ul></div></details>';
+}
 function cuiudoGoalChecklist(){
- const l=cuiudoLocale(),t=cuiudoGoalsText[l],goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday());
- const metrics=cuiudoGoalCount();
- const pending=Math.max(0,metrics.total-metrics.done-metrics.failed);
+ const l=cuiudoLocale(),t=cuiudoGoalsText[l],day=cuiudoGoalDay();
+ const goals=cuiudoGoalsNewestFirst(cuiudoGoalsToday(day));
+ const done=goals.filter(goal=>goal.status==='done').length;
  return '<section class="today-goals" aria-label="'+escapeHtml(t.heading)+'">'+
-  '<div class="today-goals-top"><div><span class="eyebrow">✓ '+escapeHtml(t.heading)+'</span>'+
-  '<h2>'+escapeHtml(t.heading)+'</h2><p class="goals-kick">'+escapeHtml(t.comeback)+'</p><p>'+escapeHtml(t.sub)+'</p></div>'+
-  '<div class="today-goals-status"><strong>'+metrics.done+' / '+metrics.total+'</strong>'+
+  '<div class="today-goals-top"><div><h2>'+escapeHtml(t.heading)+'</h2><p>'+escapeHtml(t.sub)+'</p></div>'+
+  '<div class="today-goals-status"><strong>'+done+' / '+goals.length+'</strong>'+
   '<span>'+escapeHtml(t.complete)+'</span></div></div>'+
   cuiudoAlternatingQuotes(l)+
   cuiudoEssentialCard(l)+
@@ -669,30 +589,17 @@ function cuiudoGoalChecklist(){
   ' <input id="cuiudo-goal-duration" name="duration_minutes" type="number" min="1" max="1440" step="1" required aria-required="true" inputmode="numeric" placeholder="25" aria-label="'+escapeHtml(cuiudoGoalDurationLabels[l].required)+'">'+
   '<span aria-hidden="true">'+escapeHtml(cuiudoGoalDurationLabels[l].unit)+'</span></label>'+
   '<button class="btn btn-primary" type="submit">'+escapeHtml(t.add)+' +</button></form>'+
-  '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+metrics.done+
-  '" aria-valuemin="0" aria-valuemax="'+Math.max(1,metrics.total)+'"><span style="width:'+
-   (metrics.total?Math.round(metrics.done/metrics.total*100):0)+'%"></span></div>'+
+  '<div class="today-goals-progress" role="progressbar" aria-label="'+escapeHtml(t.complete)+'" aria-valuenow="'+done+
+  '" aria-valuemin="0" aria-valuemax="'+Math.max(1,goals.length)+'"><span style="width:'+
+   (goals.length?Math.round(done/goals.length*100):0)+'%"></span></div>'+
   '<div class="today-goals-list">'+(goals.length?goals.map((goal,i)=>{
    const status=goal.status||'pending',completed=status==='done',failed=status==='missed';
    return '<article class="today-goal '+(completed?'goal-completed':failed?'goal-missed':'goal-pending')+'" data-priority="'+(['high','medium','low'].includes(goal.priority)?goal.priority:'medium')+'">'+
    '<div class="today-goal-main"><span class="today-goal-icon" aria-hidden="true">'+(completed?'✓':failed?'!':String(i+1).padStart(2,'0'))+'</span>'+
    '<div class="today-goal-content"><div class="goal-card-heading"><strong class="goal-card-title">'+escapeHtml(goal.text)+'</strong>'+
    '<label class="goal-priority-label">'+escapeHtml(cuiudoPriorityLabels[l][3])+' <select class="goal-priority-select" data-goal-priority="'+escapeHtml(goal.id)+'" aria-label="'+escapeHtml(cuiudoPriorityLabels[l][3])+'">'+['high','medium','low'].map((p,j)=>'<option value="'+p+'" '+((goal.priority||'medium')===p?'selected':'')+'>'+escapeHtml(cuiudoPriorityLabels[l][j])+'</option>').join('')+'</select></label>'+
-   '<span class="goal-card-status '+(completed?'is-success':failed?'is-missed':'is-pending')+'">'+escapeHtml(completed?t.done:failed?t.undone:t.remaining)+'</span></div>'+
-   (completed?(()=>{
-      const blessing=cuiudoGoalBlessing(goal.id);
-      const inspiration={pt:'Inspirado em',en:'Inspired by',es:'Inspirado en',la:'Ex'}[l];
-      return '<div class="goal-gift goal-victory" role="status">'+
-       '<div class="goal-victory-copy"><span class="goal-victory-kicker">'+escapeHtml(t.gift)+' · '+escapeHtml(cuiudoGoalGift(goal.id))+'</span>'+
-       '<b>'+escapeHtml(blessing.message)+'</b>'+ 
-        cuiudoGoalCompletedTime(goal,l)+
-       '<small>'+escapeHtml(inspiration)+' '+escapeHtml(blessing.reference)+'</small></div>'+
-       '</div>';
-    })():
-   failed?'<p class="goal-reality" role="status">'+escapeHtml(t.comeback)+'</p>'+
-    cuiudoGoalMissedTime(goal,l)+
-    '<p class="goal-confession">'+escapeHtml(t.confession)+'</p>'+
-    '<button class="goal-confession-link" type="button" data-action="navigate" data-tab="exame">'+escapeHtml(t.confessionButton)+' ↗</button>':'')+
+   '<span class="goal-card-status '+(completed?'is-success':failed?'is-missed':'is-pending')+'">'+escapeHtml(completed?t.completed:failed?t.undone:t.remaining)+'</span></div>'+
+   (completed?cuiudoGoalCompletedTime(goal,l):failed?cuiudoGoalMissedTime(goal,l):'')+
    '</div></div><div class="today-goal-actions">'+
    (status==='pending'?'<button class="goal-action positive" type="button" data-action="cuiudo-goal-done" data-id="'+goal.id+'">✓ '+escapeHtml(t.done)+'</button>'+
    '<button class="goal-action" type="button" data-action="cuiudo-goal-missed" data-id="'+goal.id+'">✕ '+escapeHtml(t.missed)+'</button>'+
@@ -703,11 +610,9 @@ function cuiudoGoalChecklist(){
    (status==='pending'&&cuiudoTimerOpened===goal.id?cuiudoTimerPanel(goal,l):'')+'</article>';
   }).join(''):'<p class="today-goals-empty">'+escapeHtml(t.empty)+'</p>')+'</div>'+
   cuiudoGodMomentBox(l)+
-  '<div class="goals-reflection-grid">'+
   cuiudoObstacleBox(l)+
-  (window.cuiudoConsequences?.panel(goals,l)||'')+
-  '</div>'+
   cuiudoGoalsBarChart(l)+
+  cuiudoGoalArchive(l,day)+
   (window.cuiudoPremium?.goalExtras?.(l)||'')+
   '</section>';
 }
@@ -722,7 +627,6 @@ combatHome=function(){
 const cuiudoPreviousChallengesGoals=challenges;
 challenges=function(){return cuiudoGoalChecklist()+cuiudoPreviousChallengesGoals();};
 function cuiudoGoalsSave(){
- // Somente a pessoa pode excluir metas.
  save();
  window.cuiudoPremium?.backup?.();
 }
@@ -743,9 +647,17 @@ app.addEventListener('change',event=>{
  cuiudoSaveChartPrefs();
  render();
 });
+app.addEventListener('change',event=>{
+ const select=event.target;
+ if(select?.id!=='cuiudo-goal-archive-day')return;
+ cuiudoArchiveDay=select.value;
+ const list=select.closest('details')?.querySelector('.goal-archive-list');
+ if(list)list.innerHTML=cuiudoGoalArchiveRows(cuiudoArchiveDay,cuiudoLocale());
+});
 
 app.addEventListener('input',event=>{
  if(event.target?.id!=='cuiudo-god-moment-text')return;
+ if(cuiudoRefreshGoalDay()){render();return;}
  const saved=cuiudoGodMomentSave(event.target.value);
  const status=event.target.closest('.goals-god-moment-box')?.querySelector('.goals-obstacle-status');
  if(status){
@@ -761,6 +673,7 @@ app.addEventListener('click',event=>{
 });
 app.addEventListener('input',event=>{
  if(event.target?.id!=='cuiudo-obstacle-text')return;
+ if(cuiudoRefreshGoalDay()){render();return;}
  const saved=cuiudoObstacleSave(event.target.value);
  const status=event.target.closest('.goals-obstacle-box')?.querySelector('.goals-obstacle-status');
  if(status){
@@ -778,9 +691,8 @@ app.addEventListener('change',event=>{
  const select=event.target?.closest?.('[data-goal-priority]');if(!select)return;
  const id=select.dataset.goalPriority,priority=select.value;
  if(!['high','medium','low'].includes(priority))return;
- const found=Object.entries(state.dailyGoalDays||{}).find(([,items])=>Array.isArray(items)&&items.some(g=>g.id===id));
- if(!found)return;
- const [day,items]=found,goal=items.find(g=>g.id===id);
+ const day=cuiudoGoalDay(),goal=cuiudoGoalsToday(day).find(g=>g.id===id);
+ if(!goal)return;
  goal.priority=priority;cuiudoGoalsSave();window.cuiudoGlobalGoals?.change('upsert',day,goal);
  render(); // Atualiza imediatamente a posição da meta no checklist.
 });
@@ -810,7 +722,7 @@ app.addEventListener('submit',event=>{
  }
  durationField?.setCustomValidity?.('');
  state.dailyGoalDays??={};
- const day=currentDay(),items=state.dailyGoalDays[day]??=[];
+ const day=cuiudoGoalDay(),items=state.dailyGoalDays[day]??=[];
  if(items.length>=30)return;
  const id=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
  const duration_sec=durationMinutes*60;
@@ -827,13 +739,13 @@ app.addEventListener('click',event=>{
  if(action==='cuiudo-obstacle-delete'){
   if(!cuiudoObstacleRead())return;
   if(typeof confirm==='function'&&!confirm('Excluir esta anotação?'))return;
-  if(cuiudoObstacleDelete())render();
+  if(cuiudoObstacleSave(''))render();
   return;
  }
- // Localizar a data original para editar/excluir uma meta antiga no D1.
- const found=Object.entries(state.dailyGoalDays||{}).find(([,arr])=>Array.isArray(arr)&&arr.some(item=>item.id===id));
- if(!found)return;
- const [day,items]=found,index=items.findIndex(x=>x.id===id);
+ const day=cuiudoGoalDay(),items=state.dailyGoalDays?.[day];
+ if(!Array.isArray(items))return;
+ const index=items.findIndex(goal=>goal?.id===id&&goal.status!=='deleted');
+ if(index<0)return;
  const goal=items[index];
  if(action==='cuiudo-goal-timer-toggle'){
   cuiudoTimerOpened=cuiudoTimerOpened===id?null:id;
@@ -883,20 +795,17 @@ app.addEventListener('click',event=>{
   delete goal.missed_at;
  }
  if(action==='cuiudo-goal-missed'){
-  window.cuiudoConsequences?.reset(id);
   goal.status='missed';
   goal.missed_at=Date.now();
   delete goal.completed_at;
  }
  if(action==='cuiudo-goal-reopen'){
-  window.cuiudoConsequences?.reset(id);
   goal.status='pending';
   delete goal.completed_at;
   delete goal.missed_at;
  }
  const before={...goal};
  if(action==='cuiudo-goal-delete'){
-  window.cuiudoConsequences?.reset(id);
   cuiudoTimerCancelAudio(id);
   items.splice(index,1);
  }
@@ -907,29 +816,36 @@ app.addEventListener('click',event=>{
 });
 render();
 
-/* Atualiza todos os temporizadores, mesmo fechados; alarme apenas na transição. */
+function cuiudoRefreshGoalDay(day=cuiudoGoalDay()){
+ if(day===cuiudoActiveGoalDay)return false;
+ cuiudoActiveGoalDay=day;
+ cuiudoClearOldDailyNotes(day);
+ cuiudoTimerOpened=null;
+ cuiudoTimerReconcileAudio();
+ return true;
+}
+/* Atualiza os temporizadores do dia, mesmo com os cartões fechados. */
 function cuiudoTimerTick(){
+ const day=cuiudoGoalDay(),changedDay=cuiudoRefreshGoalDay(day);
+ const goals=cuiudoGoalsToday(day);
  let finished=0;
- for(const [day,items] of Object.entries(state.dailyGoalDays||{})){
-  if(!Array.isArray(items))continue;
-  for(const goal of items){
-   if(!goal||goal.status!=='pending'||goal.timer_state!=='running')continue;
-   if(cuiudoTimerSeconds(goal)>0)continue;
-   cuiudoTimerStop(goal);
-   cuiudoGoalsSave();
-   window.cuiudoGlobalGoals?.change('upsert',day,goal);
-   const armed=cuiudoTimerAudioJobs.get(goal.id);
-   if(!armed||armed.ctx.state!=='running')cuiudoTimerSound();
-   cuiudoTimerAudioJobs.delete(goal.id);
-   cuiudoTimerNotify(goal);
-   finished++;
-  }
+ for(const goal of goals){
+  if(goal.status!=='pending'||goal.timer_state!=='running')continue;
+  if(cuiudoTimerSeconds(goal)>0)continue;
+  cuiudoTimerStop(goal);
+  cuiudoGoalsSave();
+  window.cuiudoGlobalGoals?.change('upsert',day,goal);
+  const armed=cuiudoTimerAudioJobs.get(goal.id);
+  if(!armed||armed.ctx.state!=='running')cuiudoTimerSound();
+  cuiudoTimerAudioJobs.delete(goal.id);
+  cuiudoTimerNotify(goal);
+  finished++;
  }
- if(finished)render();
+ if(finished||(changedDay&&['inicio','desafios'].includes(state.tab)))render();
  else if(typeof document.querySelectorAll==='function'){
   document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
    const id=node.getAttribute('data-cuiudo-clock');
-   const goal=Object.values(state.dailyGoalDays||{}).flatMap(x=>Array.isArray(x)?x:[]).find(g=>g.id===id);
+   const goal=goals.find(g=>g.id===id);
    if(goal)node.textContent=cuiudoTimerFormat(cuiudoTimerSeconds(goal));
   });
  }

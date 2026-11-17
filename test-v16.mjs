@@ -25,7 +25,7 @@ assert.match(mount.innerHTML,/medalha-sao-bento-hd\.svg/);
 assert.match(mount.innerHTML,/benedict-medal-single/);
 assert.match(mount.innerHTML,/Saint_Benedict_Medal_icon\.svg/);
 assert.doesNotMatch(mount.innerHTML,/St_Benedict_Medal_icon\.svg/);
-assert.match(mount.innerHTML,/Você é muito macio!/);
+assert.match(mount.innerHTML,/O dia das metas fecha às 02h/);
 assert.match(mount.innerHTML,/cuiudo-grace-reflection/);
 assert.match(mount.innerHTML,/COMUNHÃO • GRAÇA • SANTIDADE/);
 assert.match(mount.innerHTML,/Sfd o problema, vai para cima!/);

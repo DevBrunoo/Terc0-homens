@@ -16,8 +16,23 @@ const listeners={};
 const root={innerHTML:'',addEventListener(type,fn){(listeners[type]??=[]).push(fn)},querySelectorAll(){return []},querySelector(){return null}};
 const meta={content:'',setAttribute(){}};
 const doc={documentElement:{dataset:{},style:{}},getElementById(){return root},querySelector(){return meta},addEventListener(){}};
-const memory=new Map();
-const vm=createContext({document:doc,window:{scrollTo(){},location:{hash:''},matchMedia(){return {matches:false,addEventListener(){}}}},navigator:{},location:{protocol:'file:'},localStorage:{getItem(k){return memory.get(k)||null},setItem(k,v){memory.set(k,v)}},confirm(){return true},console});
+let now=Date.parse('2026-11-18T04:59:59Z');
+class TestDate extends Date{
+ constructor(...args){super(...(args.length?args:[now]));}
+ static now(){return now;}
+}
+const memory=new Map([
+ ['terco-obstaculos-diarios-v1',JSON.stringify({'2026-11-01':'Anotação anterior à atualização'})],
+ ['terco-presenca-de-deus-v1:2026-11-15','Anotação de um dia já encerrado']
+]);
+const storage={
+ getItem(key){return memory.get(key)??null;},
+ setItem(key,value){memory.set(key,String(value));},
+ removeItem(key){memory.delete(key);},
+ key(index){return [...memory.keys()][index]??null;},
+ get length(){return memory.size;}
+};
+const vm=createContext({document:doc,window:{scrollTo(){},location:{hash:''},matchMedia(){return {matches:false,addEventListener(){}}}},navigator:{},location:{protocol:'file:'},localStorage:storage,Date:TestDate,confirm(){return true},console});
 runInContext(files.map(read).join('\n'),vm,{timeout:6000});
 assert.match(root.innerHTML,/benedict-medal-premium/);
 assert.match(root.innerHTML,/today-goals/);
@@ -52,24 +67,49 @@ assert.equal(runInContext("cuiudoGodMomentRead()",vm),'Encontrei Deus na oraçã
 runInContext('render()',vm);
 assert.match(root.innerHTML,/Encontrei Deus na oração do terço/,'Mantém a anotação ao renderizar');
 assert.doesNotMatch(read('app.js'),/state\.notes=state\.notes\.slice\(0,100\)/);
-const rollover=runInContext(`(()=>{
- const original=currentDay;
- try{
-  currentDay=()=> '2026-11-09';
-  state.dailyGoalDays={'2026-11-09':[{id:'1762700000000-old',text:'Meta anterior',status:'pending'}]};
-  cuiudoObstacleSave('Anotação da véspera');
-  currentDay=()=> '2026-11-10';
-  render();
-  return {
-   goal:cuiudoGoalsToday().some(goal=>goal.text==='Meta anterior'),
-   note:cuiudoObstacleRead()==='Anotação da véspera',
-   html:app.innerHTML.includes('Meta anterior')&&app.innerHTML.includes('Anotação da véspera')
-  };
- }finally{currentDay=original;}
-})()`,vm);
-assert.deepEqual({...rollover},{goal:true,note:true,html:true});
-assert.match(read('daily-goals.js'),/Object\.entries\(state\.dailyGoalDays\|\|{}\)/);
-assert.doesNotMatch(read('daily-goals.js'),/keys\.slice\(0,Math\.max\(0,keys\.length-120\)\)/);
+assert.equal(runInContext('cuiudoGoalDay()',vm),'2026-11-17','01:59 em Brasília ainda pertence ao dia anterior');
+assert.equal(runInContext('cuiudoObstacleRead()',vm),'Anotação anterior à atualização');
+assert.ok(!memory.has('terco-obstaculos-diarios-v1'),'Migra a anotação legada na primeira abertura');
+assert.ok(!memory.has('terco-presenca-de-deus-v1:2026-11-15'),'Limpa anotações vencidas na abertura');
+runInContext(`
+ state.dailyGoalDays={
+  '2026-11-16':[{id:'older',text:'Meta de outro dia',status:'done'}],
+  '2026-11-17':[
+   {id:'goal-completed',text:'Meta que terminei',status:'done',completed_at:Date.UTC(2026,10,18,4,30)},
+   {id:'goal-unmarked',text:'Meta sem marcação',status:'pending',duration_sec:60,remaining_sec:1,
+    timer_started_at:Date.now()-5000,timer_state:'running'},
+   {id:'goal-legacy',text:'Meta legada sem estado'}
+  ]
+ };
+ cuiudoObstacleSave('Anotação de obstáculos');
+ cuiudoGodMomentSave('Anotação da presença de Deus');
+ cuiudoEssentialSave(true);
+ render();
+`,vm);
+assert.equal(runInContext('cuiudoGoalsToday().length',vm),3);
+assert.match(root.innerHTML,/Anotação de obstáculos/);
+assert.match(root.innerHTML,/Anotação da presença de Deus/);
+assert.match(root.innerHTML,/id="cuiudo-essential-done" checked/);
+now=Date.parse('2026-11-18T05:00:00Z');
+assert.equal(runInContext('cuiudoTimerTick()',vm),0,'O temporizador do dia encerrado não toca');
+assert.equal(runInContext('cuiudoGoalsToday().length',vm),0);
+assert.equal(runInContext('cuiudoObstacleRead()',vm),'');
+assert.equal(runInContext('cuiudoGodMomentRead()',vm),'');
+assert.equal(runInContext('cuiudoEssentialDone()',vm),false);
+assert.ok(!memory.has('terco-obstaculos-diarios-v1:2026-11-17'));
+assert.ok(!memory.has('terco-presenca-de-deus-v1:2026-11-17'));
+assert.match(root.innerHTML,/Histórico de metas/);
+assert.match(root.innerHTML,/Meta que terminei[^]*Concluída em 18\/11\/2026, 01:30/);
+assert.match(root.innerHTML,/Meta sem marcação[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
+assert.match(root.innerHTML,/Meta legada sem estado[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
+assert.equal(runInContext("state.dailyGoalDays['2026-11-17'][1].status",vm),'pending','O arquivamento preserva a linha sincronizada');
+assert.equal(runInContext("cuiudoChartRows(7).find(row=>row.day==='2026-11-17').missed",vm),2);
+const archiveList={innerHTML:''};
+const archiveSelect={id:'cuiudo-goal-archive-day',value:'2026-11-16',dataset:{},
+ closest(selector){return selector==='details'?{querySelector(){return archiveList;}}:null;}};
+for(const fn of listeners.change)fn({target:archiveSelect});
+assert.match(archiveList.innerHTML,/Meta de outro dia/);
+runInContext("state.dailyGoalDays={};render()",vm);
 assert.match(read('daily-goals.js'),/items\.unshift\(goal\)/,'Novas metas entram no início da fila');
 const ordering = runInContext("cuiudoGoalsNewestFirst([{id:'1700000000000-old',text:'Antiga'},{id:'1762800000000-new',text:'Nova'},{id:'1705000000000-mid',text:'Intermediária'}]).map(x=>x.text).join('|')",vm);
 assert.equal(ordering,'Nova|Intermediária|Antiga');
@@ -96,7 +136,7 @@ const statusBeforeImportance=runInContext(`cuiudoGoalsNewestFirst([
 ]).map(g=>g.text).join('|')`,vm);
 assert.equal(statusBeforeImportance,'Média pendente|Baixa pendente|Alta concluída|Alta não concluída',
  'Concluídas e não concluídas devem ficar depois de todas as pendentes');
-runInContext(`state.dailyGoalDays={[currentDay()]:[
+runInContext(`state.dailyGoalDays={[cuiudoGoalDay()]:[
  {id:'1762800000002-low',text:'Estudar assunto leve',status:'pending',priority:'low'},
  {id:'1762800000001-high',text:'Resolver obrigação urgente',status:'pending',priority:'high'},
  {id:'1762800000003-mid',text:'Responder mensagens',status:'pending',priority:'medium'}
@@ -104,20 +144,20 @@ runInContext(`state.dailyGoalDays={[currentDay()]:[
 const titles=['Resolver obrigação urgente','Responder mensagens','Estudar assunto leve'];
 assert.ok(titles.every((title,i)=>i===0||root.innerHTML.indexOf(titles[i-1])<root.innerHTML.indexOf(title)),
  'A lista renderizada segue Alta → Média → Baixa');
-runInContext("state.dailyGoalDays[currentDay()][0].priority='high';render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][0].priority='high';render()",vm);
 assert.ok(root.innerHTML.indexOf('Estudar assunto leve')<root.innerHTML.indexOf('Responder mensagens'),
  'Mudar importância reorganiza a lista ao renderizar');
 assert.match(read('daily-goals.js'),/goal\.priority=priority;cuiudoGoalsSave\(\);window\.cuiudoGlobalGoals\?\.change\('upsert',day,goal\);\s*render\(\)/,
  'Alterar a prioridade de uma meta deve reorganizar imediatamente o checklist');
 assert.equal(runInContext("cuiudoGoalsNewestFirst([{id:'antiga-a'},{id:'antiga-b'}]).map(x=>x.id).join('|')",vm),'antiga-a|antiga-b',
  'Metas legadas mantêm a ordem entre si');
-runInContext("state.dailyGoalDays={[currentDay()]:[{id:'1700000000000-a',text:'Meta antiga',status:'pending'},{id:'1762800000000-b',text:'Meta recente',status:'pending'}]};render()",vm);
+runInContext("state.dailyGoalDays={[cuiudoGoalDay()]:[{id:'1700000000000-a',text:'Meta antiga',status:'pending'},{id:'1762800000000-b',text:'Meta recente',status:'pending'}]};render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Meta nova aparece acima da antiga');
-runInContext("state.dailyGoalDays[currentDay()][1].status='missed';render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][1].status='missed';render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta antiga')<root.innerHTML.indexOf('Meta recente'),'Marcar não concluída move a meta para baixo');
-runInContext("state.dailyGoalDays[currentDay()][1].status='pending';render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][1].status='pending';render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Reabrir move a meta para o grupo pendente');
-runInContext("state.dailyGoalDays[currentDay()][0].status='done';render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][0].status='done';render()",vm);
 assert.ok(root.innerHTML.indexOf('Meta recente')<root.innerHTML.indexOf('Meta antiga'),'Concluir uma meta não muda a ordem');
 
 assert.match(root.innerHTML,/O que atrapalhou seu dia\?/);
@@ -125,7 +165,7 @@ assert.match(root.innerHTML,/id="cuiudo-obstacle-text"/);
 assert.match(root.innerHTML,/Salvo só neste aparelho/);
 assert.ok(runInContext('cuiudoObstacleSave("Distrações e cansaço")',vm));
 assert.equal(runInContext('cuiudoObstacleRead()',vm),'Distrações e cansaço');
-assert.ok(memory.get('terco-obstaculos-diarios-v1').includes('Distrações e cansaço'));
+assert.ok(memory.get('terco-obstaculos-diarios-v1:2026-11-18').includes('Distrações e cansaço'));
 assert.ok(!memory.get('cuiudo-v1')?.includes('Distrações e cansaço'));
 runInContext('render()',vm);
 assert.match(root.innerHTML,/Distrações e cansaço/);
@@ -151,53 +191,37 @@ assert.equal(runInContext('cuiudoEssentialDone()',vm),false);
 assert.match(root.innerHTML,/Rezar terço e se cuidar espiritualmente e esteticamente/);
 assert.doesNotMatch(root.innerHTML,/data-timer-minutes|data-cuiudo-clock=/,'Painel expansível só aparece ao abrir o timer');
 assert.match(read('daily-goals.js'),/function cuiudoTimerSeconds/);
-runInContext("state.dailyGoalDays={[currentDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
+runInContext("state.dailyGoalDays={[cuiudoGoalDay()]:[{id:'pending',text:'Estudar e rezar',status:'pending'},{id:'success',text:'Concluída',status:'done'},{id:'failed',text:'Pendente',status:'missed'}]};render()",vm);
 assert.match(root.innerHTML,/Estudar e rezar/);
 assert.match(root.innerHTML,/cuiudo-chart-barplot/);
 assert.match(root.innerHTML,/cuiudo-chart-bar-fill/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-timer-toggle"/);
-assert.match(root.innerHTML,/Missão cumprida/);
-assert.match(root.innerHTML,/Você é muito macio/);
-assert.match(root.innerHTML,/goal-gift/);
-assert.match(root.innerHTML,/goal-victory/);
-// O selo mostra o instante real, com data e horário fixos de Brasília.
+assert.match(root.innerHTML,/is-success">Concluída/);
+assert.match(root.innerHTML,/is-missed">Não concluída/);
+assert.doesNotMatch(root.innerHTML,/Selo da Disciplina|goal-gift|goals-consequence-panel/);
+// Mostra o instante real com data e horário de Brasília.
 assert.doesNotMatch(root.innerHTML,/goal-victory-time/,'Sem registro real, não inventar horário');
-runInContext("state.dailyGoalDays[currentDay()].find(g=>g.id==='success').completed_at=Date.UTC(2026,10,14,14,59);render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()].find(g=>g.id==='success').completed_at=Date.UTC(2026,10,14,14,59);render()",vm);
 assert.match(root.innerHTML,/Concluída em 14\/11\/2026, 11:59 \(Brasília\)/);
 assert.match(root.innerHTML,/datetime="2026-11-14T14:59:00.000Z"/);
-runInContext("delete state.dailyGoalDays[currentDay()].find(g=>g.id==='success').completed_at;render()",vm);
+runInContext("delete state.dailyGoalDays[cuiudoGoalDay()].find(g=>g.id==='success').completed_at;render()",vm);
 assert.doesNotMatch(root.innerHTML,/goal-victory-time/);
 // Não inventar um instante para metas antigas; exibir o real quando disponível.
 assert.doesNotMatch(root.innerHTML,/goal-reality-time/);
-runInContext("state.dailyGoalDays[currentDay()].find(g=>g.id==='failed').missed_at=Date.UTC(2026,10,14,19,12);render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()].find(g=>g.id==='failed').missed_at=Date.UTC(2026,10,14,19,12);render()",vm);
 assert.match(root.innerHTML,/Não concluída em 14\/11\/2026, 16:12 \(Brasília\)/);
 assert.match(root.innerHTML,/datetime="2026-11-14T19:12:00.000Z"/);
-runInContext("delete state.dailyGoalDays[currentDay()].find(g=>g.id==='failed').missed_at;render()",vm);
+runInContext("delete state.dailyGoalDays[cuiudoGoalDay()].find(g=>g.id==='failed').missed_at;render()",vm);
 assert.doesNotMatch(root.innerHTML,/goal-reality-time/);
-assert.match(root.innerHTML,/Inspirado em/);
-assert.doesNotMatch(root.innerHTML,/goal-victory-emoji|goal-victory-spark|goal-gift-icon/);
-const victoryMessages=read('daily-goals.js').split('const cuiudoBlessings=')[1].split('const cuiudoPermanentNotes=')[0];
-assert.doesNotMatch(victoryMessages,/\p{Extended_Pictographic}/u,'Mensagens de conclusão não devem ter emojis');
-assert.equal((root.innerHTML.match(/class="goal-gift goal-victory"/g)||[]).length,1,
- 'A celebração bíblica deve existir apenas na tarefa concluída');
-const completion=runInContext('cuiudoGoalBlessing("success")',vm);
-assert.ok(completion.message&&completion.reference);
-assert.equal(Object.hasOwn(completion,'emoji'),false);
-assert.match(completion.message,/\S/);
-assert.equal(completion.message,runInContext('cuiudoGoalBlessing("success").message',vm),
- 'A frase deve ser estável entre atualizações de dispositivos');
-const pendingCard=root.innerHTML.split('class="today-goal goal-pending"')[1].split('</article>')[0];
-assert.doesNotMatch(pendingCard,/goal-victory/);
-assert.match(root.innerHTML,/goal-reality/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-done"/);
 assert.match(root.innerHTML,/data-action="cuiudo-goal-missed"/);
-runInContext("state.dailyGoalDays[currentDay()][0].status='done';cuiudoGoalsSave();render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][0].status='done';cuiudoGoalsSave();render()",vm);
 assert.ok(memory.get('cuiudo-v1').includes('Estudar e rezar'));
-runInContext("state.dailyGoalDays[currentDay()][0].text='<script>alert(1)</script>';render()",vm);
+runInContext("state.dailyGoalDays[cuiudoGoalDay()][0].text='<script>alert(1)</script>';render()",vm);
 assert.ok(!root.innerHTML.includes('<script>alert(1)</script>'));
 assert.ok(root.innerHTML.includes('&lt;script&gt;'));
 // O compromisso permanente existe mesmo em uma lista vazia.
-runInContext('state.dailyGoalDays={[currentDay()]:[]};render()',vm);
+runInContext('state.dailyGoalDays={[cuiudoGoalDay()]:[]};render()',vm);
 assert.match(root.innerHTML,/Rezar terço e se cuidar espiritualmente e esteticamente/);
 assert.match(root.innerHTML,/goals-permanent-note/);
 // Também existe na aba de desafios e em outros idiomas sem depender do banco.
@@ -227,7 +251,7 @@ assert.match(read('cuiudo-v16.css'),/\.main > \.today-goals/);
 assert.doesNotMatch(read('global-goals.js'),/terco-obstaculos-diarios-v1/);
 assert.match(read('cuiudo-v16.css'),/goals-obstacle-box/);
 assert.match(read('cuiudo-v16.css'),/goals-essential-footer/);
-console.log('✓ Metas v42: conquista firme e sem emojis; compromisso no topo e obstáculos embaixo');
+console.log('✓ Metas: virada às 02h, histórico, anotações privadas e horários reais');
 
 /* Tempo e prioridade obrigatórios na criação, sem interferir em metas antigas. */
 runInContext("state.tab='inicio';state.appLang='pt';state.dailyGoalDays={};render()",vm);
@@ -238,7 +262,7 @@ let durationError='';
 const formFields={
  "input[name=goal]":{value:'Estudar matemática'},
  "select[name=priority]":{value:'high',reportValidity(){}},
- "input[name=duration_minutes]":{value:'',reportValidity(){durationError='reported'},setCustomValidity(s){durationError=s}}
+ "input[name=duration_minutes]":{value:'',reportValidity(){assert.ok(durationError);},setCustomValidity(s){durationError=s}}
 };
 const goalForm={id:'cuiudo-goal-form',querySelector(q){return formFields[q]||null}};
 const submitGoal=()=>listeners.submit.forEach(fn=>fn({target:goalForm,preventDefault(){}}));
@@ -266,7 +290,7 @@ assert.ok(memory.get('cuiudo-v1')?.includes('"duration_sec":1500'),'Duração sa
 
 /* Checa o término de temporizadores com o painel fechado; não repetir o aviso. */
 const timeup=runInContext(`(()=>{
- const day=currentDay(),g={id:'timer-test',text:'Foco',status:'pending',duration_sec:60,remaining_sec:1,timer_started_at:Date.now()-4000,timer_state:'running'};
+ const day=cuiudoGoalDay(),g={id:'timer-test',text:'Foco',status:'pending',duration_sec:60,remaining_sec:1,timer_started_at:Date.now()-4000,timer_state:'running'};
  state.dailyGoalDays={[day]:[g]};
  const first=cuiudoTimerTick(),second=cuiudoTimerTick();
  return {first,second,status:g.timer_state,remaining:g.remaining_sec};

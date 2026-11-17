@@ -4,11 +4,6 @@
  'use strict';
  const MAX_PAGES=20;
  let events=[],loaded=false,loading=false,lastFetch=0,error='';
- function dayOf(timestamp){
-  const date=new Date(Number(timestamp));
-  if(!Number.isFinite(date.getTime()))return '';
-  return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
- }
  function valid(e){
   return e&&Number.isSafeInteger(e.event_id)&&Number.isSafeInteger(e.occurred_at)&&
    e.occurred_at>0&&typeof e.goal_id==='string'&&
@@ -41,15 +36,12 @@
   get events(){return events;},
   get loaded(){return loaded;},
   get error(){return error;},
-  byDay(days=14,endDay=currentDay()){
-   const end=Date.parse(endDay+'T12:00:00');
+  byDay(days=14,endDay=cuiudoGoalDay()){
+   const end=Date.parse(endDay+'T12:00:00Z');
    if(!Number.isFinite(end))return [];
-   const dates=Array.from({length:days},(_,i)=>{
-    const d=new Date(end-(days-1-i)*86400000);
-    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-   });
+   const dates=Array.from({length:days},(_,i)=>new Date(end-(days-1-i)*86400000).toISOString().slice(0,10));
    return dates.map(day=>{
-    const dayEvents=events.filter(e=>dayOf(e.occurred_at)===day);
+    const dayEvents=events.filter(e=>cuiudoGoalDay(e.occurred_at)===day);
     const count=type=>dayEvents.filter(e=>e.event_type===type).length;
     return {day,completed:count('completed'),missed:count('missed'),created:count('created'),
      resolved:count('completed')+count('missed')};

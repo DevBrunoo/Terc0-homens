@@ -41,11 +41,12 @@
  if(!Array.isArray(snapshots))snapshots=[];
  function snapshotData(){
   const goals=[];
+  const activeDay=cuiudoGoalDay();
   for(const [day,items] of Object.entries(state.dailyGoalDays||{})){
    if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!Array.isArray(items))continue;
    for(const g of items){
     if(typeof g.id!=='string'||typeof g.text!=='string'||!g.text.trim())continue;
-    goals.push({day,id:g.id,text:g.text,status:g.status||'pending',
+    goals.push({day,id:g.id,text:g.text,status:cuiudoGoalStatus(g,day,activeDay),
      priority:['high','medium','low'].includes(g.priority)?g.priority:'medium'});
    }
   }
@@ -85,11 +86,8 @@
   return added;
  }
  function foundGoal(id){
-  for(const [day,items] of Object.entries(state.dailyGoalDays||{})){
-   const goal=Array.isArray(items)?items.find(x=>x.id===id):null;
-   if(goal)return {day,goal};
-  }
-  return null;
+  const day=cuiudoGoalDay(),goal=cuiudoGoalsToday(day).find(x=>x.id===id);
+  return goal?{day,goal}:null;
  }
  function focusPanel(){
   if(!activeFocus)return '';

@@ -21,14 +21,15 @@ const vm=createContext({
   '2026-11-14':[{id:'f',text:'Baixa pendente',status:'pending',priority:'low'}],
   '2026-10-20':[{id:'old',text:'Histórico preservado',status:'done'}]
  }},
- currentDay:()=> '2026-11-14',
+ cuiudoGoalDay:()=> '2026-11-14',
  escapeHtml:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 });
-runInContext(source.slice(from,to),vm);
+const goalStatus=source.slice(source.indexOf('function cuiudoGoalStatus('),source.indexOf('// Pendentes primeiro.'));
+runInContext(goalStatus+source.slice(from,to),vm);
 const rows=JSON.parse(JSON.stringify(runInContext('cuiudoChartRows(7,"2026-11-14")',vm)));
 assert.equal(rows.length,7);
 const yesterday=rows.find(r=>r.day==='2026-11-13');
-assert.deepEqual(yesterday,{day:'2026-11-13',done:1,pending:2,missed:1,high:1,medium:1,low:0});
+assert.deepEqual(yesterday,{day:'2026-11-13',done:1,pending:0,missed:3,high:0,medium:0,low:0});
 assert.equal(rows.reduce((s,r)=>s+r.done+r.pending+r.missed,0),5,'Não contar metas excluídas');
 const bars=JSON.parse(JSON.stringify(runInContext("cuiudoChartBars(cuiudoChartRows(7,'2026-11-14'),'status')",vm)));
 assert.equal(bars.length,7);

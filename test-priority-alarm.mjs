@@ -22,21 +22,25 @@ class TestAudioContext {
 }
 const ctx={window:{AudioContext:TestAudioContext},state:{dailyGoalDays:{}},
  cuiudoLocale:()=>'pt',Notification:undefined,document:{hidden:false},navigator:{}};
-const sandbox=createContext(ctx);
-runInContext(slice,sandbox);
-const now=Date.now();
+const now=Date.parse('2026-11-18T04:58:00Z');
+class TestDate extends Date {static now(){return now;}}
+const sandbox=createContext({...ctx,Date:TestDate});
+const goalDay=source.slice(source.indexOf('const cuiudoGoalDayFormat='),source.indexOf('/* Horário real'));
+runInContext(goalDay+slice,sandbox);
 const goal={id:'test-timer',text:'Estudar',status:'pending',duration_sec:60,
  remaining_sec:60,timer_started_at:now,timer_state:'running'};
 ctx.state.dailyGoalDays={'2026-11-14':[goal]};
-ctx.cuiudoTimerArmAudio(goal);
+sandbox.cuiudoTimerArmAudio(goal);
 const job=runInContext('cuiudoTimerAudioJobs.get("test-timer")',sandbox);
 assert.ok(job,'Alarme armado após o clique');
 assert.equal(job.nodes.length,28,'14 avisos em duas frequências');
 assert.ok(started[0]>=100+58&&started[0]<=100+62,'Áudio pré-agendado para o fim do tempo');
-ctx.cuiudoTimerStop(goal);
+sandbox.cuiudoTimerStop(goal);
 assert.equal(goal.timer_state,'paused');
 assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Pausar cancela o alarme');
 assert.ok(stopped.length>=28,'Nós agendados cancelados');
+sandbox.cuiudoTimerArmAudio({...goal,timer_state:'running',timer_started_at:now,remaining_sec:120});
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Alarme da sessão anterior não toca às 02h');
 const html=read('daily-goals.js');
 assert.match(html,/data-goal-priority/);
 assert.match(html,/data-priority=/);
@@ -52,7 +56,7 @@ assert.match(source,/id="cuiudo-goal-priority"/);
 assert.match(source,/name="priority" required aria-required="true"/);
 assert.match(source,/option value="" selected disabled/);
 assert.match(source,/goal-create-priority/);
-assert.match(read('cuiudo-v16.css'),/grid-template-areas:"goal priority add"/);
+assert.match(read('cuiudo-v16.css'),/grid-template-areas:"goal priority duration add"/);
 const submitStart=source.indexOf("app.addEventListener('submit',event=>{\n if(event.target?.id!=='cuiudo-goal-form')return;");
 const submitEnd=source.indexOf("app.addEventListener('click',event=>{",submitStart);
 assert.ok(submitStart>=0&&submitEnd>submitStart,'Localizar envio de novas metas');
@@ -61,7 +65,7 @@ let saveCount=0,renderCount=0,validationCount=0;
 const subCtx=createContext({
  app:{addEventListener(type,fn){events.push([type,fn])}},
  state:{dailyGoalDays:{}},
- currentDay:()=> '2026-11-14',cuiudoGoalsSave(){saveCount++},
+ cuiudoGoalDay:()=> '2026-11-14',cuiudoGoalsSave(){saveCount++},
  window:{cuiudoGlobalGoals:{change(...args){changes.push(args)}}},
  render(){renderCount++},Math,Date
 });
@@ -73,6 +77,7 @@ function send(priority,text='Estudar'){
  const form={id:'cuiudo-goal-form',querySelector(q){
   if(q==='input[name=goal]')return {value:text};
   if(q==='select[name=priority]')return {value:priority,reportValidity(){validationCount++;return false;}};
+  if(q==='input[name=duration_minutes]')return {value:'25',setCustomValidity(){}};
   return null;
  }};
  submit({target:form,preventDefault(){prevented=true}});
