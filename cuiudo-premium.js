@@ -86,27 +86,56 @@
   return added;
  }
  function foundGoal(id){
-  const day=cuiudoGoalDay(),goal=cuiudoGoalsToday(day).find(x=>x.id===id);
-  return goal?{day,goal}:null;
+  for(const day of Object.keys(state.dailyGoalDays||{})){
+   const goal=cuiudoGoalsToday(day).find(x=>x.id===id);
+   if(goal)return {day,goal};
+  }
+  return null;
+ }
+ function focusMinutes(goal){
+  const stored=Math.ceil(Number(goal.duration_sec)/60);
+  return Number.isSafeInteger(stored)&&stored>0?stored:Math.max(1,Number(prefs.focusMinutes)||25);
+ }
+ function readFocusDuration(){
+  const hours=document.getElementById('cuiudo-focus-hours'),minutes=document.getElementById('cuiudo-focus-minutes');
+  const h=Number(hours?.value||0),m=Number(minutes?.value||0),total=h*60+m;
+  return Number.isSafeInteger(h)&&h>=0&&Number.isSafeInteger(m)&&m>=0&&m<60&&
+   Number.isSafeInteger(total)&&total>0&&Number.isSafeInteger(total*60000)&&
+   total*60000<=8640000000000000-Date.now()-60000?total:null;
+ }
+ function carryoverFocus(){
+  const today=cuiudoGoalDay(),t=lang(),items=[];
+  for(const [day,goals] of Object.entries(state.dailyGoalDays||{})){
+   if(day>=today||!Array.isArray(goals))continue;
+   for(const g of goals){
+    if(g.status!=='pending')continue;
+    if(g.id!==prefs.focusGoalId&&!(g.timer_state==='running'&&cuiudoGoalDay(g.timer_started_at+g.remaining_sec*1000)!==day))continue;
+    items.push('<button type="button" class="goal-action cuiudo-focus-launch" data-action="cuiudo-focus-open" data-id="'+escapeHtml(g.id)+'">'+escapeHtml(g.text)+' · '+cuiudoTimerFormat(cuiudoTimerSeconds(g))+'</button>');
+   }
+  }
+  return items.length?'<div class="cuiudo-focus-carryover"><strong>'+escapeHtml(cuiudoLocale()==='en'?'Previous focus sessions':'Foco de dias anteriores')+'</strong>'+items.join('')+'</div>':'';
  }
  function focusPanel(){
   if(!activeFocus)return '';
   const found=foundGoal(activeFocus);
   if(!found||found.goal.status!=='pending'){activeFocus=null;return ''}
   const {goal}=found,t=lang();
-  const seconds=goal.duration_sec?cuiudoTimerSeconds(goal):Math.max(1,Number(prefs.focusMinutes)||25)*60;
   const running=goal.timer_state==='running',paused=goal.timer_state==='paused';
+  const total=focusMinutes(goal),seconds=running||paused||goal.timer_state==='finished'?cuiudoTimerSeconds(goal):total*60;
+  const en=cuiudoLocale()==='en';
   const status=running?'Sessão em andamento':paused?'Sessão pausada':seconds===0?'Sessão encerrada':'Escolha o tempo e comece';
   return '<div class="cuiudo-focus-backdrop"><button type="button" class="cuiudo-focus-scrim" data-action="cuiudo-focus-close" aria-label="'+escapeHtml(t.exit)+'"></button>'+
    '<section class="cuiudo-focus-dialog" role="dialog" aria-modal="true" aria-labelledby="cuiudo-focus-heading">'+
    '<div class="cuiudo-focus-top"><span>✝ DISCIPLINA E PRESENÇA</span><button type="button" data-action="cuiudo-focus-close" aria-label="'+escapeHtml(t.exit)+'">×</button></div>'+
    '<h2 id="cuiudo-focus-heading">'+escapeHtml(goal.text)+'</h2>'+
    '<p class="cuiudo-focus-status">'+escapeHtml(status)+'</p>'+
-   '<strong class="cuiudo-focus-clock" data-cuiudo-clock="'+escapeHtml(goal.id)+'">'+cuiudoTimerFormat(seconds)+'</strong>'+
-   '<div class="cuiudo-focus-actions"><label>Minutos <input id="cuiudo-focus-minutes" type="number" min="1" max="120" step="1" value="'+
-    Math.max(1,Math.min(120,Number(prefs.focusMinutes)||25))+'" '+(running?'disabled':'')+'></label>'+
+   '<strong class="cuiudo-focus-clock"'+(running?' data-cuiudo-clock="'+escapeHtml(goal.id)+'"':'')+'>'+cuiudoTimerFormat(seconds)+'</strong>'+
+   '<div class="cuiudo-focus-actions"><div class="cuiudo-focus-duration"><label>'+ (en?'Hours':'Horas')+
+    '<input id="cuiudo-focus-hours" type="number" min="0" step="1" inputmode="numeric" value="'+Math.floor(total/60)+'" '+(running?'disabled':'')+'></label>'+
+    '<label>'+ (en?'Minutes':'Minutos')+'<input id="cuiudo-focus-minutes" type="number" min="0" max="59" step="1" inputmode="numeric" value="'+total%60+'" '+(running?'disabled':'')+'></label></div>'+
     '<button type="button" class="btn btn-primary" data-action="cuiudo-focus-'+(running?'pause':paused?'resume':'start')+'">'+
     escapeHtml(running?t.pause:paused?t.resume:t.start)+'</button>'+
+    (paused?'<button type="button" class="btn btn-secondary" data-action="cuiudo-focus-start">'+(en?'Restart':'Reiniciar com novo tempo')+'</button>':'')+
     '<button type="button" class="btn btn-secondary" data-action="cuiudo-focus-done">'+escapeHtml(t.complete)+'</button></div>'+
    '<p class="cuiudo-focus-verse">“Tudo o que fizerdes, fazei-o de coração.” — Cl 3,23</p>'+
    '</section></div>';
@@ -136,7 +165,7 @@
    '<button type="button" data-action="cuiudo-premium-save-reminder">'+escapeHtml(t.schedule)+'</button>'+
    '<button type="button" data-action="cuiudo-premium-permit">'+escapeHtml(t.permit)+'</button></div></div></details></div>';
  }
- function goalExtras(){return toolsPanel()+focusPanel()}
+ function goalExtras(){return carryoverFocus()+toolsPanel()+focusPanel()}
  function lectioRead(){const v=read(LECTIO_KEY,{});return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}
  function lectioPage(){
   const t=lang(),g=groups[dayGroup()],index=Math.max(0,Math.min(4,Number(prefs.lectioIndex)||0)),m=g.mysteries[index];
@@ -211,22 +240,34 @@
   const found=foundGoal(activeFocus);if(!found)return;
   const g=found.goal;
   if(action==='start'){
-   const minutes=Number(document.getElementById('cuiudo-focus-minutes')?.value||prefs.focusMinutes||25);
-   if(!Number.isInteger(minutes)||minutes<1||minutes>120)return;
-   prefs.focusMinutes=minutes;write(PREF_KEY,prefs);
+   const minutes=readFocusDuration();
+   if(minutes===null){
+    const field=document.getElementById('cuiudo-focus-minutes');
+    field?.setCustomValidity?.(cuiudoLocale()==='en'?'Enter a valid positive duration.':'Informe uma duração válida maior que zero.');
+    field?.reportValidity?.();return;
+   }
+   prefs.focusMinutes=minutes;prefs.focusGoalId=g.id;write(PREF_KEY,prefs);
    cuiudoTimerCancelAudio(g.id);
    g.duration_sec=minutes*60;g.remaining_sec=g.duration_sec;
    g.timer_started_at=Date.now();g.timer_state='running';cuiudoTimerArmAudio(g);
   }
   if(action==='pause')cuiudoTimerStop(g);
   if(action==='resume'&&g.timer_state==='paused'&&g.remaining_sec>0){
+   prefs.focusGoalId=g.id;write(PREF_KEY,prefs);
    g.timer_started_at=Date.now();g.timer_state='running';cuiudoTimerArmAudio(g);
   }
   if(action==='done'){
+   if(prefs.focusGoalId===g.id){delete prefs.focusGoalId;write(PREF_KEY,prefs);}
    cuiudoTimerCancelAudio(g.id);cuiudoTimerStop(g);g.status='done';g.completed_at=Date.now();delete g.missed_at;activeFocus=null;
   }
   syncGoal(found);render();
  }
+ app.addEventListener('input',e=>{
+  if(!['cuiudo-focus-hours','cuiudo-focus-minutes'].includes(e.target?.id))return;
+  document.getElementById('cuiudo-focus-minutes')?.setCustomValidity?.('');
+  const minutes=readFocusDuration(),clock=document.querySelector('.cuiudo-focus-clock');
+  if(minutes!==null&&clock)clock.textContent=cuiudoTimerFormat(minutes*60);
+ });
  app.addEventListener('click',e=>{
   const b=e.target.closest?.('[data-action]');if(!b)return;
   const a=b.dataset.action;
