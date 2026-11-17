@@ -377,7 +377,7 @@ function cuiudoRunningTimerEntries(day=cuiudoGoalDay()){
    if(goal?.status!=='pending'||goal.timer_state!=='running')continue;
    const end=goal.timer_started_at+goal.remaining_sec*1000;
    // Preserve the closing-day rule for overdue old timers; keep sessions that actually span the boundary.
-   if(key===day||(Number.isFinite(end)&&cuiudoGoalDay(end)!==key))running.push({day:key,goal});
+   if(key===day||(Number.isSafeInteger(goal.timer_started_at)&&Number.isFinite(end)&&Math.abs(end)<=8640000000000000&&cuiudoGoalDay(end)!==key))running.push({day:key,goal});
   }
  }
  return running;
