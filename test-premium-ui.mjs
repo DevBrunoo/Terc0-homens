@@ -5,6 +5,7 @@ const src=readFileSync(new URL('./cuiudo-premium.js',import.meta.url),'utf8');
 const devotionalSrc=readFileSync(new URL('./cuiudo-lectio-devotional.js',import.meta.url),'utf8');
 const callbacks={click:[],change:[],submit:[]},memory=new Map();
 const classSet=new Set(),changes=[];
+const focusFields={'cuiudo-focus-hours':{value:'0'},'cuiudo-focus-minutes':{value:'5'}};
 const app={innerHTML:'',addEventListener(type,fn){(callbacks[type]??=[]).push(fn)}};
 const now='2026-11-14';
 const ids=['anunciacao','visitacao','nascimento','apresentacao','encontro'];
@@ -23,7 +24,7 @@ const ctx=createContext({
  cuiudoLocale:()=> 'pt',escapeHtml:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;'),
  app,window:{addEventListener(){},setInterval(){},cuiudoGlobalGoals:{getTrash:()=>[],change(...a){changes.push(a)}}},
  document:{documentElement:{classList:{toggle(name,on){if(on)classSet.add(name);else classSet.delete(name)}},lang:'pt'},
-  body:{},querySelector(){return null},getElementById(id){if(id==='cuiudo-focus-minutes')return {value:'5'};return null},
+  body:{},querySelector(){return null},getElementById(id){return focusFields[id]||null},
   addEventListener(){}},
  localStorage:{getItem(k){return memory.get(k)||null},setItem(k,v){memory.set(k,String(v))}},
  save(){},render(){html.push('base')},renderShell:s=>s,setTheme(){},
@@ -67,10 +68,16 @@ for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-start'
 assert.equal(ctx.state.dailyGoalDays[now][0].duration_sec,300,'Iniciar foco de 5 min');
 assert.equal(ctx.state.dailyGoalDays[now][0].timer_state,'running');
 assert.equal(changes.length,1,'Alteração sincronizada');
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-pause'},closest(){return this}}});
+focusFields['cuiudo-focus-hours'].value='48';focusFields['cuiudo-focus-minutes'].value='35';
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-start'},closest(){return this}}});
+assert.equal(ctx.state.dailyGoalDays[now][0].duration_sec,(48*60+35)*60,'Aceita horas acima de 24h');
+assert.match(ctx.window.cuiudoPremium.goalExtras('pt'),/id="cuiudo-focus-hours"[^>]*value="48"/);
+assert.equal(ctx.state.dailyGoalDays[now][0].timer_state,'running');
 for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-done'},
  closest(){return this}}});
 assert.equal(ctx.state.dailyGoalDays[now][0].status,'done');
 assert.ok(Number.isSafeInteger(ctx.state.dailyGoalDays[now][0].completed_at),'Conclusão em modo foco também deve registrar o horário');
-assert.equal(changes.length,2,'Conclusão sincronizada');
+assert.equal(changes.length,4,'Conclusão sincronizada');
 assert.ok(!ctx.window.cuiudoPremium.goalExtras('pt').includes('cuiudo-focus-dialog'));
 console.log('✓ Interface premium: Lectio, navegação, backup, foco, timer e conclusão');
