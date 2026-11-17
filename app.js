@@ -10,6 +10,71 @@ const navItems = [
   {id:'diario',label:'Meu diário',mobile:'Diário',icon:'book'}
 ];
 const app = document.getElementById('app');
+
+// Background updates must never recreate a form while the user is editing it.
+// Keep unsent values on blur, but leave explicit saves/navigation and daily
+// note expiry to their existing handlers. Drafts stay in this browser's DOM.
+const cuiudoDraftSelector='textarea, select, input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"])';
+const cuiudoDirtyDrafts=new WeakSet();
+let cuiudoBackgroundTab=null,cuiudoBackgroundTimer=null,cuiudoBackgroundPointer=false;
+function cuiudoDraftKey(field){
+ if(field.type==='file'||['cuiudo-obstacle-text','cuiudo-god-moment-text','grat-home-text','feed-search','rosary-volume'].includes(field.id))return null;
+ if(field.id)return 'id:'+field.id;
+ if(field.hasAttribute('data-timer-minutes')){
+  const goal=field.closest('.today-goal')?.querySelector('[data-goal-priority]')?.dataset.goalPriority;
+  return goal?'timer:'+goal:null;
+ }
+ return field.form?.id&&field.name?'form:'+field.form.id+':'+field.name:null;
+}
+function cuiudoEditingField(){
+ const field=document.activeElement;
+ return Boolean(field&&app.contains(field)&&(field.matches?.(cuiudoDraftSelector)||field.isContentEditable));
+}
+function cuiudoFlushBackgroundRender(){
+ if(cuiudoBackgroundTab===null)return;
+ if(cuiudoBackgroundTab!==state.tab){cuiudoBackgroundTab=null;return;}
+ if(cuiudoEditingField()||cuiudoBackgroundPointer)return;
+ cuiudoBackgroundTab=null;
+ const drafts=new Map();
+ for(const field of app.querySelectorAll(cuiudoDraftSelector)){
+  const key=cuiudoDraftKey(field);
+  if(key&&cuiudoDirtyDrafts.has(field))drafts.set(key,field.value);
+ }
+ render();
+ for(const field of app.querySelectorAll(cuiudoDraftSelector)){
+  const key=cuiudoDraftKey(field);
+  if(!drafts.has(key))continue;
+  const value=drafts.get(key);
+  if(field.tagName==='SELECT'&&!Array.from(field.options).some(option=>option.value===value))continue;
+  field.value=value;
+  cuiudoDirtyDrafts.add(field);
+ }
+}
+function cuiudoRenderBackground(){
+ cuiudoBackgroundTab=state.tab;
+ cuiudoFlushBackgroundRender();
+}
+function cuiudoScheduleBackgroundRender(){
+ if(cuiudoBackgroundTab===null||cuiudoBackgroundTimer!==null)return;
+ cuiudoBackgroundTimer=setTimeout(()=>{
+  cuiudoBackgroundTimer=null;
+  cuiudoFlushBackgroundRender();
+ },0);
+}
+for(const event of ['input','change']){
+ app.addEventListener(event,e=>{
+  if(e.target?.matches?.(cuiudoDraftSelector))cuiudoDirtyDrafts.add(e.target);
+ },true);
+}
+app.addEventListener('focusout',cuiudoScheduleBackgroundRender);
+app.addEventListener('pointerdown',()=>{cuiudoBackgroundPointer=true;},true);
+for(const event of ['pointerup','pointercancel','blur']){
+ window.addEventListener?.(event,()=>{
+  cuiudoBackgroundPointer=false;
+  cuiudoScheduleBackgroundRender();
+ });
+}
+
 function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function currentDay(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function dayGroup(){return ['gloriosos','gozosos','dolorosos','gloriosos','luminosos','dolorosos','gozosos'][new Date().getDay()];}
@@ -233,7 +298,7 @@ function render(){
 app.addEventListener('click',evt=>{
  const target=evt.target.closest('[data-action]');if(!target)return;
  const a=target.dataset.action;
- if(a.startsWith('combat-'))return; // ações pertencem ao módulo visual v9
+ if(a.startsWith('combat-')||a.startsWith('cuiudo-focus-')||a.startsWith('cuiudo-goal-timer-'))return; // ações pertencem ao módulo visual v9
  if(a==='navigate') {evt.preventDefault();state.tab=target.dataset.tab;state.mobileMore=false;window.scrollTo({top:0,behavior:'instant'});}
  if(a==='group') {state.group=target.dataset.id;state.mystery=0;save();}
  if(a==='dev-filter'){state.devFilter=target.dataset.filter;save();}
@@ -279,6 +344,6 @@ app.addEventListener('submit',evt=>{
  save();render();
 });
 render();
-if(window.matchMedia){const query=window.matchMedia('(prefers-color-scheme: dark)');if(query.addEventListener)query.addEventListener('change',()=>{if(state.theme==='system')render();});}
+if(window.matchMedia){const query=window.matchMedia('(prefers-color-scheme: dark)');if(query.addEventListener)query.addEventListener('change',()=>{if(state.theme==='system')cuiudoRenderBackground();});}
 if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 

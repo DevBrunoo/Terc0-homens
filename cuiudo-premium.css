@@ -168,3 +168,11 @@
  .cuiudo-devotional-body section{padding:12px}
  .cuiudo-devotional-footer button{width:100%}
 }
+
+/* Custom focus durations: hours and minutes, responsive even on small screens. */
+.cuiudo-focus-duration{display:flex;flex:1 0 100%;justify-content:center;gap:10px}
+.cuiudo-focus-duration label{min-width:0;width:clamp(82px,27%,120px)}
+.cuiudo-focus-duration input{width:100%;font-variant-numeric:tabular-nums}
+.cuiudo-focus-clock{max-width:100%;overflow-wrap:anywhere;font-size:clamp(36px,11vw,72px)}
+.cuiudo-focus-carryover{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0;color:var(--ink)}
+.cuiudo-focus-carryover strong{flex-basis:100%;font-size:12px}

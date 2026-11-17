@@ -83,26 +83,18 @@
    else goals.push(copyGoal(op));
    grouped[op.day]=goals;
   }
-  const old=state.dailyGoalDays||{};
-  // A atualização automática não deve apagar o que a pessoa está digitando
-  // no campo de metas. Só redesenhar quando houver mudança real dos dados.
-  if(JSON.stringify(grouped)===JSON.stringify(old))return;
-  const input=document.getElementById('cuiudo-goal-text');
-  const draft=input?.value||'';
-  const focused=Boolean(input&&document.activeElement===input);
-  const start=focused?input.selectionStart:null;
-  const end=focused?input.selectionEnd:null;
+  const canonical=days=>JSON.stringify(Object.keys(days).sort().flatMap(day=>{
+   const goals=(Array.isArray(days[day])?days[day]:[]).filter(validGoal)
+    .map(copyGoal).sort((a,b)=>a.id.localeCompare(b.id));
+   return goals.length?[[day,goals]]:[];
+  }));
+  if(canonical(grouped)===canonical(state.dailyGoalDays||{}))return;
   state.dailyGoalDays=grouped;
   saveLocal();
   window.cuiudoPremium?.backup?.();
   window.cuiudoTimerReconcileAudio?.();
-  render();
-  const nextInput=document.getElementById('cuiudo-goal-text');
-  if(nextInput&&draft){
-   nextInput.value=draft;
-   if(focused){nextInput.focus({preventScroll:true});
-    if(start!==null&&end!==null)nextInput.setSelectionRange(start,end);}
-  }
+  // Other tabs do not show the public checklist; do not repaint them.
+  if(['inicio','desafios'].includes(state.tab))cuiudoRenderBackground();
  }
  function queueOperation(op){
   const normalized=normalize(op);

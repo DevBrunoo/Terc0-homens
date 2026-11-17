@@ -28,7 +28,7 @@
    }
    const updated=!loaded||JSON.stringify(next)!==JSON.stringify(events);
    events=next;loaded=true;error='';lastFetch=Date.now();
-   if(updated&&typeof render==='function'&&['inicio','desafios'].includes(state.tab))render();
+   if(updated&&typeof cuiudoRenderBackground==='function'&&['inicio','desafios'].includes(state.tab))cuiudoRenderBackground();
   }catch(e){error=String(e?.message||e).slice(0,100)}
   finally{loading=false}
  }
