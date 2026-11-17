@@ -104,13 +104,13 @@
    total*60000<=8640000000000000-Date.now()-60000?total:null;
  }
  function carryoverFocus(){
-  const today=cuiudoGoalDay(),t=lang(),items=[];
+  const today=cuiudoGoalDay(),items=[];
   for(const [day,goals] of Object.entries(state.dailyGoalDays||{})){
    if(day>=today||!Array.isArray(goals))continue;
    for(const g of goals){
     if(g.status!=='pending')continue;
-    if(g.id!==prefs.focusGoalId&&!(g.timer_state==='running'&&cuiudoGoalDay(g.timer_started_at+g.remaining_sec*1000)!==day))continue;
-    items.push('<button type="button" class="goal-action cuiudo-focus-launch" data-action="cuiudo-focus-open" data-id="'+escapeHtml(g.id)+'">'+escapeHtml(g.text)+' · '+cuiudoTimerFormat(cuiudoTimerSeconds(g))+'</button>');
+    if(g.id!==prefs.focusGoalId&&!(g.timer_state==='running'&&Number.isSafeInteger(g.timer_started_at)&&Number.isFinite(g.remaining_sec)&&Math.abs(g.timer_started_at+g.remaining_sec*1000)<=8640000000000000&&cuiudoGoalDay(g.timer_started_at+g.remaining_sec*1000)!==day))continue;
+    items.push('<button type="button" class="goal-action cuiudo-focus-launch" data-action="cuiudo-focus-open" data-id="'+escapeHtml(g.id)+'">'+escapeHtml(g.text)+' · <span'+(g.timer_state==='running'?' data-cuiudo-clock="'+escapeHtml(g.id)+'"':'')+'>'+cuiudoTimerFormat(cuiudoTimerSeconds(g))+'</span></button>');
    }
   }
   return items.length?'<div class="cuiudo-focus-carryover"><strong>'+escapeHtml(cuiudoLocale()==='en'?'Previous focus sessions':'Foco de dias anteriores')+'</strong>'+items.join('')+'</div>':'';
