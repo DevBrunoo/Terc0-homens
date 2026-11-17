@@ -69,7 +69,7 @@ for(const event of ['input','change']){
 app.addEventListener('focusout',cuiudoScheduleBackgroundRender);
 app.addEventListener('pointerdown',()=>{cuiudoBackgroundPointer=true;},true);
 for(const event of ['pointerup','pointercancel','blur']){
- window.addEventListener(event,()=>{
+ window.addEventListener?.(event,()=>{
   cuiudoBackgroundPointer=false;
   cuiudoScheduleBackgroundRender();
  });
