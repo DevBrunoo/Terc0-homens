@@ -16,7 +16,7 @@ const listeners={};
 const root={innerHTML:'',addEventListener(type,fn){(listeners[type]??=[]).push(fn)},querySelectorAll(){return []},querySelector(){return null}};
 const meta={content:'',setAttribute(){}};
 const doc={documentElement:{dataset:{},style:{}},getElementById(){return root},querySelector(){return meta},addEventListener(){}};
-let now=Date.parse('2026-11-18T04:59:59Z');
+let now=Date.parse('2026-11-18T02:59:59Z');
 class TestDate extends Date{
  constructor(...args){super(...(args.length?args:[now]));}
  static now(){return now;}
@@ -67,7 +67,7 @@ assert.equal(runInContext("cuiudoGodMomentRead()",vm),'Encontrei Deus na oraçã
 runInContext('render()',vm);
 assert.match(root.innerHTML,/Encontrei Deus na oração do terço/,'Mantém a anotação ao renderizar');
 assert.doesNotMatch(read('app.js'),/state\.notes=state\.notes\.slice\(0,100\)/);
-assert.equal(runInContext('cuiudoGoalDay()',vm),'2026-11-17','01:59 em Brasília ainda pertence ao dia anterior');
+assert.equal(runInContext('cuiudoGoalDay()',vm),'2026-11-17','23:59 em Brasília ainda pertence ao dia 17');
 assert.equal(runInContext('cuiudoObstacleRead()',vm),'Anotação anterior à atualização');
 assert.ok(!memory.has('terco-obstaculos-diarios-v1'),'Migra a anotação legada na primeira abertura');
 assert.ok(!memory.has('terco-presenca-de-deus-v1:2026-11-15'),'Limpa anotações vencidas na abertura');
@@ -75,7 +75,7 @@ runInContext(`
  state.dailyGoalDays={
   '2026-11-16':[{id:'older',text:'Meta de outro dia',status:'done'}],
   '2026-11-17':[
-   {id:'goal-completed',text:'Meta que terminei',status:'done',completed_at:Date.UTC(2026,10,18,4,30)},
+   {id:'goal-completed',text:'Meta que terminei',status:'done',completed_at:Date.UTC(2026,10,18,2,30)},
    {id:'goal-unmarked',text:'Meta sem marcação',status:'pending',duration_sec:60,remaining_sec:1,
     timer_started_at:Date.now()-5000,timer_state:'running'},
    {id:'goal-legacy',text:'Meta legada sem estado'}
@@ -90,9 +90,15 @@ assert.equal(runInContext('cuiudoGoalsToday().length',vm),3);
 assert.match(root.innerHTML,/Anotação de obstáculos/);
 assert.match(root.innerHTML,/Anotação da presença de Deus/);
 assert.match(root.innerHTML,/id="cuiudo-essential-done" checked/);
-now=Date.parse('2026-11-18T05:00:00Z');
+now=Date.parse('2026-11-18T03:00:00Z');
 assert.equal(runInContext('cuiudoTimerTick()',vm),0,'O temporizador do dia encerrado não toca');
 assert.equal(runInContext('cuiudoGoalsToday().length',vm),0);
+assert.equal(runInContext('cuiudoGoalDay()',vm),'2026-11-18','00:00 inicia o novo dia');
+const overdueButton={dataset:{action:'cuiudo-goal-done',id:'goal-unmarked'},
+ closest(){return this;}};
+for(const fn of listeners.click)fn({target:overdueButton,preventDefault(){}});
+assert.equal(runInContext("state.dailyGoalDays['2026-11-17'][1].status",vm),'pending','Clique após o prazo não conclui a meta anterior');
+
 assert.equal(runInContext('cuiudoObstacleRead()',vm),'');
 assert.equal(runInContext('cuiudoGodMomentRead()',vm),'');
 assert.equal(runInContext('cuiudoEssentialDone()',vm),false);
@@ -101,7 +107,7 @@ assert.ok(!memory.has('terco-presenca-de-deus-v1:2026-11-17'));
 assert.match(root.innerHTML,/Histórico de metas/);
 assert.match(root.innerHTML,/cuiudo-chart-barplot/);
 assert.match(root.innerHTML,/cuiudo-chart-bar-fill/);
-assert.match(root.innerHTML,/Meta que terminei[^]*Concluída em 18\/11\/2026, 01:30/);
+assert.match(root.innerHTML,/Meta que terminei[^]*Concluída em 17\/11\/2026, 23:30/);
 assert.match(root.innerHTML,/Meta sem marcação[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
 assert.match(root.innerHTML,/Meta legada sem estado[^<]*<\/strong><\/div><span class="goal-card-status is-missed">Não concluída/);
 assert.equal(runInContext("state.dailyGoalDays['2026-11-17'][1].status",vm),'pending','O arquivamento preserva a linha sincronizada');
@@ -252,7 +258,7 @@ assert.match(read('cuiudo-v16.css'),/\.main > \.today-goals/);
 assert.doesNotMatch(read('global-goals.js'),/terco-obstaculos-diarios-v1/);
 assert.match(read('cuiudo-v16.css'),/goals-obstacle-box/);
 assert.match(read('cuiudo-v16.css'),/goals-essential-footer/);
-console.log('✓ Metas: virada às 02h, histórico, anotações privadas e horários reais');
+console.log('✓ Metas: virada à meia-noite, histórico, anotações privadas e horários reais');
 
 /* Tempo e prioridade obrigatórios na criação, sem interferir em metas antigas. */
 runInContext("state.tab='inicio';state.appLang='pt';state.dailyGoalDays={};render()",vm);

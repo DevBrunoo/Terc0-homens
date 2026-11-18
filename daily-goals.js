@@ -2,36 +2,34 @@
  * Metas públicas compartilhadas automaticamente pelo D1; diário e intenções são locais.
  */
 const cuiudoGoalsText={
- pt:{heading:'Metas de hoje',sub:'O dia das metas fecha às 02h, no horário de Brasília.',
+ pt:{heading:'Metas de hoje',sub:'Prazo para concluir as metas até meia-noite, no horário de Brasília.',
   label:'Nova meta',placeholder:'Ex.: estudar 40 minutos, rezar o terço, resolver uma pendência',
   add:'Adicionar',done:'Concluí',missed:'Não concluí',reopen:'Reabrir',remove:'Excluir',
   complete:'Concluídas',completed:'Concluída',remaining:'Pendente',undone:'Não concluída',
   empty:'Adicione uma meta para começar.',archive:'Histórico de metas',day:'Dia'},
- en:{heading:"Today's goals",sub:'The goal day ends at 2 a.m. Brasília time.',
+ en:{heading:"Today's goals",sub:'Complete your goals by midnight, Brasília time.',
   label:'New goal',placeholder:'E.g. study for 40 minutes, pray the Rosary',add:'Add',
   done:'Completed',missed:'Not completed',reopen:'Reopen',remove:'Delete',
   complete:'Completed',completed:'Completed',remaining:'Pending',undone:'Not completed',
   empty:'Add a goal to get started.',archive:'Goal history',day:'Day'},
- es:{heading:'Metas de hoy',sub:'El día de metas termina a las 02:00, hora de Brasilia.',
+ es:{heading:'Metas de hoy',sub:'Completa tus metas antes de medianoche, hora de Brasilia.',
   label:'Nueva meta',placeholder:'Ej.: estudiar 40 minutos, rezar el Rosario',add:'Añadir',
   done:'Cumplí',missed:'No cumplí',reopen:'Reabrir',remove:'Eliminar',
   complete:'Cumplidas',completed:'Cumplida',remaining:'Pendiente',undone:'No cumplida',
   empty:'Añade una meta para empezar.',archive:'Historial de metas',day:'Día'},
- la:{heading:'Metas hodiernae',sub:'Dies propositi hora secunda Brasiliae finitur.',
+ la:{heading:'Metas hodiernae',sub:'Proposita ante mediam noctem Brasiliae perfice.',
   label:'Meta nova',placeholder:'Ex.: quadraginta minuta studere, Rosarium orare',add:'Adde',
   done:'Complevi',missed:'Non complevi',reopen:'Reclude',remove:'Dele',
   complete:'Completae',completed:'Completa',remaining:'Pendens',undone:'Non completa',
   empty:'Propositum novum adde.',archive:'Historia propositorum',day:'Dies'}
 };
 const cuiudoGoalDayFormat=new Intl.DateTimeFormat('en-CA',{
- timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',
- hour:'2-digit',hourCycle:'h23'
+ timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'
 });
 function cuiudoGoalDay(now=Date.now()){
- const {year,month,day,hour}=Object.fromEntries(cuiudoGoalDayFormat.formatToParts(now)
+ const {year,month,day}=Object.fromEntries(cuiudoGoalDayFormat.formatToParts(now)
   .map(({type,value})=>[type,value]));
- if(Number(hour)>=2)return year+'-'+month+'-'+day;
- return new Date(Date.UTC(Number(year),Number(month)-1,Number(day)-1)).toISOString().slice(0,10);
+ return year+'-'+month+'-'+day;
 }
 /* Horário real da conclusão, persistido junto à meta e apresentado sempre
  * no fuso de Brasília, mesmo que o visitante esteja em outro fuso. */
@@ -340,6 +338,7 @@ function cuiudoTimerArmAudio(goal){
  cuiudoTimerCancelAudio(goal.id);
  if(goal.timer_state!=='running'||!Number.isSafeInteger(goal.timer_started_at))return;
  const when=goal.timer_started_at+goal.remaining_sec*1000;
+ if(cuiudoGoalDay(when)!==cuiudoGoalDay())return;
  cuiudoTimerUnlockAudio();
  // Schedule audio near expiry; very distant Web Audio events are unreliable.
  if(when-Date.now()>86400000)return;
@@ -370,17 +369,8 @@ function cuiudoTimerNotify(goal){
  }catch{}
 }
 function cuiudoRunningTimerEntries(day=cuiudoGoalDay()){
- const running=[];
- for(const [key,items] of Object.entries(state.dailyGoalDays||{})){
-  if(key>day||!Array.isArray(items))continue;
-  for(const goal of items){
-   if(goal?.status!=='pending'||goal.timer_state!=='running')continue;
-   const end=goal.timer_started_at+goal.remaining_sec*1000;
-   // Preserve the closing-day rule for overdue old timers; keep sessions that actually span the boundary.
-   if(key===day||(Number.isSafeInteger(goal.timer_started_at)&&Number.isFinite(end)&&Math.abs(end)<=8640000000000000&&cuiudoGoalDay(end)!==key))running.push({day:key,goal});
-  }
- }
- return running;
+ return cuiudoGoalsToday(day).filter(goal=>goal.status==='pending'&&goal.timer_state==='running')
+  .map(goal=>({day,goal}));
 }
 function cuiudoTimerReconcileAudio(){
  const goals=cuiudoRunningTimerEntries().map(x=>x.goal);
@@ -872,7 +862,8 @@ function cuiudoTimerTick(){
   cuiudoTimerNotify(goal);
   finished++;
  }
- if((finished||changedDay)&&['inicio','desafios'].includes(state.tab))cuiudoRenderBackground();
+ if(changedDay&&['inicio','desafios'].includes(state.tab))render();
+ else if(finished&&['inicio','desafios'].includes(state.tab))cuiudoRenderBackground();
  if(typeof document.querySelectorAll==='function'){
   document.querySelectorAll('[data-cuiudo-clock]').forEach(node=>{
    const id=node.getAttribute('data-cuiudo-clock');

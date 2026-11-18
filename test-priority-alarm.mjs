@@ -22,11 +22,12 @@ class TestAudioContext {
 }
 const ctx={window:{AudioContext:TestAudioContext},state:{dailyGoalDays:{}},
  cuiudoLocale:()=>'pt',Notification:undefined,document:{hidden:false},navigator:{}};
-const now=Date.parse('2026-11-18T04:58:00Z');
+let now=Date.parse('2026-11-18T02:58:00Z');
 class TestDate extends Date {static now(){return now;}}
 const sandbox=createContext({...ctx,Date:TestDate});
 const goalDay=source.slice(source.indexOf('const cuiudoGoalDayFormat='),source.indexOf('/* Horário real'));
-runInContext(goalDay+slice,sandbox);
+const goalsToday=source.slice(source.indexOf('function cuiudoGoalsToday('),source.indexOf('function cuiudoGoalStatus('));
+runInContext(goalDay+goalsToday+slice,sandbox);
 const goal={id:'test-timer',text:'Estudar',status:'pending',duration_sec:60,
  remaining_sec:60,timer_started_at:now,timer_state:'running'};
 ctx.state.dailyGoalDays={'2026-11-14':[goal]};
@@ -40,7 +41,13 @@ assert.equal(goal.timer_state,'paused');
 assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Pausar cancela o alarme');
 assert.ok(stopped.length>=28,'Nós agendados cancelados');
 sandbox.cuiudoTimerArmAudio({...goal,timer_state:'running',timer_started_at:now,remaining_sec:120});
-assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),1,'Sessão que atravessa as 02h mantém o alarme');
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'O alarme respeita o prazo da meia-noite');
+ctx.state.dailyGoalDays={'2026-11-17':[goal]};
+sandbox.cuiudoTimerArmAudio({...goal,timer_state:'running',timer_started_at:now,remaining_sec:60});
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),1);
+now=Date.parse('2026-11-18T03:00:00Z');
+sandbox.cuiudoTimerReconcileAudio();
+assert.equal(runInContext('cuiudoTimerAudioJobs.size',sandbox),0,'Cancela o áudio quando o prazo vence');
 const html=read('daily-goals.js');
 assert.match(html,/data-goal-priority/);
 assert.match(html,/data-priority=/);

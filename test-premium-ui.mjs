@@ -8,6 +8,7 @@ const classSet=new Set(),changes=[];
 const focusFields={'cuiudo-focus-hours':{value:'0'},'cuiudo-focus-minutes':{value:'5'}};
 const app={innerHTML:'',addEventListener(type,fn){(callbacks[type]??=[]).push(fn)}};
 const now='2026-11-14';
+let activeDay=now;
 const ids=['anunciacao','visitacao','nascimento','apresentacao','encontro'];
 const group={mysteries:ids.map((id,i)=>({id,title:'Mistério '+i,ref:'Lc 1,1',question:'O que mudou?',action:'Pratique a caridade.'}))};
 const verses=Object.fromEntries(group.mysteries.map(m=>[m.id,{
@@ -20,7 +21,7 @@ const html=[];
 const ctx=createContext({
  state,groups:{gozosos:group},groupNames:['gozosos','dolorosos','gloriosos','luminosos'],
  dayGroup:()=> 'gozosos',currentDay:()=>now,versiculosPorMisterio:verses,
- cuiudoGoalDay:()=>now,cuiudoGoalsToday:day=>state.dailyGoalDays[day]||[],cuiudoGoalStatus:goal=>goal.status,
+ cuiudoGoalDay:()=>activeDay,cuiudoGoalsToday:day=>state.dailyGoalDays[day]||[],cuiudoGoalStatus:goal=>goal.status,
  cuiudoLocale:()=> 'pt',escapeHtml:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;'),
  app,window:{addEventListener(){},setInterval(){},cuiudoGlobalGoals:{getTrash:()=>[],change(...a){changes.push(a)}}},
  document:{documentElement:{classList:{toggle(name,on){if(on)classSet.add(name);else classSet.delete(name)}},lang:'pt'},
@@ -80,4 +81,12 @@ assert.equal(ctx.state.dailyGoalDays[now][0].status,'done');
 assert.ok(Number.isSafeInteger(ctx.state.dailyGoalDays[now][0].completed_at),'Conclusão em modo foco também deve registrar o horário');
 assert.equal(changes.length,4,'Conclusão sincronizada');
 assert.ok(!ctx.window.cuiudoPremium.goalExtras('pt').includes('cuiudo-focus-dialog'));
+const lateGoal={id:'expired-focus',text:'Prazo encerrado',status:'pending',duration_sec:3600,remaining_sec:3600,timer_state:'running',timer_started_at:Date.now()};
+ctx.state.dailyGoalDays[now].push(lateGoal);
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-open',id:lateGoal.id},closest(){return this}}});
+assert.match(ctx.window.cuiudoPremium.goalExtras('pt'),/cuiudo-focus-dialog/);
+activeDay='2026-11-15';
+for(const fn of callbacks.click)fn({target:{dataset:{action:'cuiudo-focus-done'},closest(){return this}}});
+assert.equal(lateGoal.status,'pending','Foco de um dia encerrado não pode concluir a meta');
+assert.doesNotMatch(ctx.window.cuiudoPremium.goalExtras('pt'),/cuiudo-focus-dialog|Foco de dias anteriores/);
 console.log('✓ Interface premium: Lectio, navegação, backup, foco, timer e conclusão');

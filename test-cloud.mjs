@@ -15,7 +15,7 @@ assert.match(read('sw.js'),/api/);
 assert.match(read('global-goals.js'),/cuiudo-public-goals-queue-v1/);
 assert.doesNotMatch(read('global-goals.js'),/cuiudo-global-notice|data-global-goals-refresh|Metas universais — sem conta ou código/);
 assert.match(read('global-goals.js'),/setInterval\(\(\)=>/);
-assert.match(read('global-goals.js'),/JSON\.stringify\(grouped\)===JSON\.stringify\(old\)/);
+assert.match(read('global-goals.js'),/canonical\(grouped\)===canonical\(state\.dailyGoalDays\|\|\{\}\)/);
 assert.match(read('cuiudo-v16.css'),/font-size:16px; \/\* Evita zoom/);
 assert.match(read('global-goals.js'),/Sem cadastro|sem conta ou código/);
 assert.match(read('global-goals.js'),/qualquer visitante/i);

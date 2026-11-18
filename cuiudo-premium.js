@@ -86,11 +86,8 @@
   return added;
  }
  function foundGoal(id){
-  for(const day of Object.keys(state.dailyGoalDays||{})){
-   const goal=cuiudoGoalsToday(day).find(x=>x.id===id);
-   if(goal)return {day,goal};
-  }
-  return null;
+  const day=cuiudoGoalDay(),goal=cuiudoGoalsToday(day).find(x=>x.id===id);
+  return goal?{day,goal}:null;
  }
  function focusMinutes(goal){
   const stored=Math.ceil(Number(goal.duration_sec)/60);
@@ -102,18 +99,6 @@
   return Number.isSafeInteger(h)&&h>=0&&Number.isSafeInteger(m)&&m>=0&&m<60&&
    Number.isSafeInteger(total)&&total>0&&Number.isSafeInteger(total*60000)&&
    total*60000<=8640000000000000-Date.now()-60000?total:null;
- }
- function carryoverFocus(){
-  const today=cuiudoGoalDay(),items=[];
-  for(const [day,goals] of Object.entries(state.dailyGoalDays||{})){
-   if(day>=today||!Array.isArray(goals))continue;
-   for(const g of goals){
-    if(g.status!=='pending')continue;
-    if(g.id!==prefs.focusGoalId&&!(g.timer_state==='running'&&Number.isSafeInteger(g.timer_started_at)&&Number.isFinite(g.remaining_sec)&&Math.abs(g.timer_started_at+g.remaining_sec*1000)<=8640000000000000&&cuiudoGoalDay(g.timer_started_at+g.remaining_sec*1000)!==day))continue;
-    items.push('<button type="button" class="goal-action cuiudo-focus-launch" data-action="cuiudo-focus-open" data-id="'+escapeHtml(g.id)+'">'+escapeHtml(g.text)+' · <span'+(g.timer_state==='running'?' data-cuiudo-clock="'+escapeHtml(g.id)+'"':'')+'>'+cuiudoTimerFormat(cuiudoTimerSeconds(g))+'</span></button>');
-   }
-  }
-  return items.length?'<div class="cuiudo-focus-carryover"><strong>'+escapeHtml(cuiudoLocale()==='en'?'Previous focus sessions':'Foco de dias anteriores')+'</strong>'+items.join('')+'</div>':'';
  }
  function focusPanel(){
   if(!activeFocus)return '';
@@ -165,7 +150,7 @@
    '<button type="button" data-action="cuiudo-premium-save-reminder">'+escapeHtml(t.schedule)+'</button>'+
    '<button type="button" data-action="cuiudo-premium-permit">'+escapeHtml(t.permit)+'</button></div></div></details></div>';
  }
- function goalExtras(){return carryoverFocus()+toolsPanel()+focusPanel()}
+ function goalExtras(){return toolsPanel()+focusPanel()}
  function lectioRead(){const v=read(LECTIO_KEY,{});return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}
  function lectioPage(){
   const t=lang(),g=groups[dayGroup()],index=Math.max(0,Math.min(4,Number(prefs.lectioIndex)||0)),m=g.mysteries[index];
