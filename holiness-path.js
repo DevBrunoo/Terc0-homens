@@ -25,7 +25,7 @@
    return {...remaining.splice(index,1)[0],text:item.text};
   });
   const unique=remaining.filter(x=>!requested.some(y=>y.text===x.text));
-  return [...requested,...unique].slice(0,Math.max(150,current.length));
+  return [...requested,...unique];
  }
  function read(){
   const defaults=initialLists();
