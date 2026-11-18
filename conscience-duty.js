@@ -53,7 +53,7 @@ function cuiudoDutyHero(){
   '<h2>O bem que você deixou de fazer também importa.</h2>'+
   '<p>Preguiça. Omissão. Deveres abandonados. A fé pede oração, responsabilidade e coragem para agir.</p>'+
   '<div class="duty-hero-actions"><button class="btn btn-primary" type="button" data-action="navigate" data-tab="exame">'+
-  'Examinar minha consciência ↗</button></div></div>'+
+  'Responder ao exame sem fuga ↗</button></div></div>'+
   '<div class="duty-image-wrap"><img class="saint-benedict-hd" src="./assets/sao-bento-gravura-hd.webp" loading="lazy" decoding="async" width="620" height="900"'+
    ' alt="Gravura histórica de São Bento, Wellcome Collection · CC BY 4.0" '+
    'onerror="if(!this.dataset.failed){this.dataset.failed=1;this.src=\'./assets/sao-bento-arte-enviada.webp\';}">'+
@@ -82,9 +82,134 @@ function cuiudoDutyContent(){
    'Se tiver consciência de pecado mortal, confesse-se antes de comungar. Faça o que deve, peça ajuda e recomece com responsabilidade.</p>'+
    '<a href="'+cuiudoDutyReferences.sins+'" target="_blank" rel="noopener noreferrer">Catecismo da Igreja Católica, 1853–1860 ↗</a></div></section>';
 }
+const cuiudoHonestyKey='terco-exame-honesto-v1';
+const cuiudoHonestyQuestions=Object.freeze([
+ {id:'responsabilidade',title:'Qual dever você está empurrando com a barriga?',
+  help:'Dê nome à obrigação e diga há quanto tempo. “Preciso melhorar” ainda não identifica o que precisa ser feito.',
+  placeholder:'Estou adiando… há…'},
+ {id:'acoes',title:'O que você fez de verdade nos últimos sete dias?',
+  help:'Liste ações e entregas. Pesquisar e planejar têm valor; registre também o que virou execução.',
+  placeholder:'Nesta semana eu fiz… e concluí…'},
+ {id:'comeco',title:'Na hora de começar, o que você faz?',
+  help:'Descreva o que acontece: celular, pesquisa sem fim, outra tarefa, medo ou falta de energia. Trocar pelo mais confortável também pode ser fuga.',
+  placeholder:'Quando chega a hora, eu…'},
+ {id:'obstaculos',title:'O que realmente impede você de agir?',
+  help:'Dinheiro, barulho, saúde, sono ou excesso de deveres: explique o impacto. Diga qual parte continua possível e onde precisa de ajuda.',
+  placeholder:'O obstáculo concreto é… Ainda consigo… Preciso de ajuda com…'},
+ {id:'tempo',title:'Quanto tempo você teve — e como o gastou?',
+  help:'Use um dia real. Considere trabalho, descanso e cuidados; depois, conte o tempo gasto em distrações que poderiam esperar.',
+  placeholder:'Ontem tive… de tempo disponível. Usei… para…'},
+ {id:'pressao',title:'O que muda quando o prazo aperta ou alguém cobra?',
+  help:'Conte um caso recente. Se você age sob pressão, examine o que pode organizar antes de chegar ao limite.',
+  placeholder:'Quando houve cobrança ou prazo, aconteceu…'},
+ {id:'limites',title:'A dificuldade também atinge o que você gosta e os cuidados básicos?',
+  help:'Observe sono, alimentação, higiene, convívio e lazer. Uma dificuldade ampla pede atenção e ajuda. Reconhecer um limite real também exige honestidade.',
+  placeholder:'A dificuldade aparece em… e afeta meu dia assim…'},
+ {id:'cobranca',title:'Depois de se cobrar, o que você faz?',
+  help:'Mais culpa não é uma entrega. Descreva a ação que veio depois da cobrança — ou reconheça que continuou parado.',
+  placeholder:'Depois de me cobrar, eu…'}
+]);
+function cuiudoHonestyRead(){
+ try{
+  const value=JSON.parse(localStorage.getItem(cuiudoHonestyKey)||'null');
+  if(!value||value.version!==1||typeof value!=='object')return {};
+  const result={};
+  for(const question of cuiudoHonestyQuestions){
+   if(typeof value[question.id]==='string')result[question.id]=value[question.id].slice(0,1200);
+  }
+  for(const [field,max] of [['entrega',600],['prazo',16],['confirmedAt',40]]){
+   if(typeof value[field]==='string')result[field]=value[field].slice(0,max);
+  }
+  return result;
+ }catch{return {}}
+}
+const cuiudoHonestyDraft=cuiudoHonestyRead();
+let cuiudoHonestySaved=true;
+function cuiudoHonestyCount(){
+ return cuiudoHonestyQuestions.filter(q=>String(cuiudoHonestyDraft[q.id]||'').trim()).length;
+}
+function cuiudoHonestySave(){
+ try{
+  localStorage.setItem(cuiudoHonestyKey,JSON.stringify({...cuiudoHonestyDraft,version:1,updatedAt:new Date().toISOString()}));
+  cuiudoHonestySaved=true;
+ }catch{cuiudoHonestySaved=false}
+ return cuiudoHonestySaved;
+}
+function cuiudoHonestyStatus(){
+ if(!cuiudoHonestySaved)return 'Não foi possível salvar neste aparelho. Copie suas respostas antes de sair.';
+ if(cuiudoHonestyDraft.confirmedAt)return 'Compromisso registrado. Escrever não conclui a tarefa. Cumpra o que assumiu.';
+ return 'Respostas salvas automaticamente neste navegador.';
+}
+function cuiudoHonestyUpdate(){
+ const count=cuiudoHonestyCount();
+ const counter=app.querySelector('#honesty-count');
+ const progress=app.querySelector('#honesty-progress');
+ const status=app.querySelector('#honesty-status');
+ if(counter)counter.textContent=count+' de 8 respondidas';
+ if(progress)progress.value=count;
+ if(status)status.textContent=cuiudoHonestyStatus();
+}
+function cuiudoHonestyContent(){
+ const count=cuiudoHonestyCount();
+ return '<section class="honesty-section" aria-labelledby="honesty-heading">'+
+  '<div class="honesty-heading"><span class="eyebrow">EXAME HONESTO · ÚLTIMOS 7 DIAS</span>'+
+  '<h2 id="honesty-heading">O que você fez com o que recebeu?</h2>'+
+  '<p><strong>Boa intenção não cumpre dever adiado.</strong> Responda com fatos. Admita a omissão onde houve escolha e reconheça os limites reais.</p></div>'+
+  '<details class="honesty-context"><summary>A cobrança da parábola dos talentos</summary>'+
+  '<div><p>O servo devolveu o que recebeu, mas foi repreendido por tê-lo enterrado. O medo que apresentou não eliminou a responsabilidade pela providência que estava ao seu alcance. Jesus fala de fidelidade, caridade e prestação de contas diante de Deus (Mt 25,14–46).</p>'+
+  '<p><strong>Você também responde pelo bem que escolhe deixar de fazer.</strong> Examine sua liberdade, seus deveres e as condições reais. Uma tentativa sincera que fracassou é diferente de uma omissão escolhida. A passagem não permite tratar cada perda da sua vida como castigo de Deus.</p>'+
+  '<a href="https://www.vatican.va/content/francesco/pt/angelus/2023/documents/20231119-angelus.html" target="_blank" rel="noopener noreferrer">Ler a explicação da parábola ↗</a></div></details>'+
+  '<div class="honesty-progress"><span id="honesty-count">'+count+' de 8 respondidas</span><span>Preenchimento do exame</span>'+
+  '<progress id="honesty-progress" max="8" value="'+count+'" aria-labelledby="honesty-count"></progress></div>'+
+  '<form id="honesty-form"><div class="honesty-grid">'+cuiudoHonestyQuestions.map((q,i)=>
+   '<div class="honesty-question"><label for="honesty-'+q.id+'"><span class="honesty-number" aria-hidden="true">'+String(i+1).padStart(2,'0')+'</span>'+escapeHtml(q.title)+'</label>'+
+   '<p id="honesty-help-'+q.id+'">'+escapeHtml(q.help)+'</p>'+
+   '<textarea id="honesty-'+q.id+'" name="'+q.id+'" data-honesty-field="'+q.id+'" rows="3" maxlength="1200" aria-describedby="honesty-help-'+q.id+'" placeholder="'+escapeHtml(q.placeholder)+'">'+escapeHtml(cuiudoHonestyDraft[q.id]||'')+'</textarea></div>'
+  ).join('')+'</div>'+
+  '<fieldset class="honesty-commitment"><legend>Chega de promessa vaga. Assuma uma entrega.</legend>'+
+  '<p>Escolha uma ação possível e verificável. Inclua o bem que você deve a alguém. “Vou me esforçar” ainda não diz o que você vai fazer.</p>'+
+  '<div class="honesty-commitment-fields"><div><label for="honesty-entrega">O que você vai entregar?</label>'+
+  '<textarea id="honesty-entrega" name="entrega" data-honesty-field="entrega" rows="2" maxlength="600" required placeholder="Enviar uma candidatura completa; resolver cinco exercícios; cumprir uma ajuda que prometi…">'+escapeHtml(cuiudoHonestyDraft.entrega||'')+'</textarea></div>'+
+  '<div><label for="honesty-prazo">Até quando?</label><input id="honesty-prazo" name="prazo" data-honesty-field="prazo" type="datetime-local" required value="'+escapeHtml(cuiudoHonestyDraft.prazo||'')+'"></div></div>'+
+  '<button class="btn btn-primary" type="submit">Registrar meu compromisso</button>'+
+  '<p class="honesty-action-line"><strong>Antes de procurar outra frase que dê vontade de mudar, cumpra uma decisão que você já tomou.</strong></p></fieldset>'+
+  '<p id="honesty-status" class="honesty-status" role="status" aria-live="polite">'+cuiudoHonestyStatus()+'</p>'+
+  '<p class="honesty-privacy">Privado neste navegador. As respostas permanecem ao sair e voltar; limpar os dados do navegador pode apagá-las. Este exame ajuda a refletir e não substitui a Confissão.</p>'+
+  '</form></section>';
+}
+app.addEventListener('input',event=>{
+ const field=event.target;
+ const key=field?.dataset?.honestyField;
+ if(!key||!['entrega','prazo',...cuiudoHonestyQuestions.map(q=>q.id)].includes(key))return;
+ cuiudoHonestyDraft[key]=String(field.value||'').slice(0,key==='entrega'?600:key==='prazo'?16:1200);
+ if(key==='entrega'||key==='prazo'){
+  delete cuiudoHonestyDraft.confirmedAt;
+  field.setCustomValidity?.('');
+ }
+ cuiudoHonestySave();
+ // Atualizar apenas os indicadores: recriar o formulário aqui apagaria a seleção e o foco.
+ cuiudoHonestyUpdate();
+});
+app.addEventListener('submit',event=>{
+ if(event.target?.id!=='honesty-form')return;
+ event.preventDefault();
+ const form=event.target;
+ const delivery=form.querySelector('[name="entrega"]');
+ const deadline=form.querySelector('[name="prazo"]');
+ if(!delivery||!deadline)return;
+ delivery.setCustomValidity(delivery.value.trim()?'':'Escreva uma entrega concreta.');
+ const deadlineTime=new Date(deadline.value).getTime();
+ deadline.setCustomValidity(Number.isFinite(deadlineTime)&&deadlineTime>Date.now()?'':'Escolha uma data e um horário futuros.');
+ if(!form.reportValidity())return;
+ cuiudoHonestyDraft.entrega=delivery.value.trim().slice(0,600);
+ cuiudoHonestyDraft.prazo=deadline.value.slice(0,16);
+ cuiudoHonestyDraft.confirmedAt=new Date().toISOString();
+ cuiudoHonestySave();
+ cuiudoHonestyUpdate();
+});
 const cuiudoDutyOldExamine=examine;
 examine=function(){
- return cuiudoDutyHero()+cuiudoDutyContent()+cuiudoDutyOldExamine();
+ return cuiudoDutyHero()+cuiudoHonestyContent()+cuiudoDutyContent()+cuiudoDutyOldExamine();
 };
 const cuiudoDutyOldHome=combatHome;
 combatHome=function(){
