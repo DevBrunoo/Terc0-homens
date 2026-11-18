@@ -58,6 +58,12 @@
   '</section>';
  }
 
+ // Reutiliza as mesmas listas e o mesmo armazenamento na página de ação.
+ window.renderHolinessChoices=function(){
+  const lang=cuiudoLocale(),t=[...(labels[lang]||labels.pt)];
+  if(lang==='pt'){t[1]='O que dá sorte';t[2]='O que dá azar';}
+  return '<section class="holiness-page" aria-label="'+escapeHtml(t[0])+'"><div class="holiness-grid">'+section('good',t)+section('bad',t)+'</div><p class="holiness-bible">'+escapeHtml(t[9])+'</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p></section>';
+ };
  function page(){
   const t=labels[cuiudoLocale()]||labels.pt;
   return '<section class="holiness-page"><header class="holiness-header"><span class="eyebrow">✝ '+escapeHtml(t[0])+'</span>'+
