@@ -10,18 +10,43 @@
   es:['Caminos de Santidad','Lo que me acerca a Dios','Lo que me aleja de Dios','Añadir','Eliminar','Añade una práctica buena','Añade un hábito para superar','Empieza tu lista.','Anota lo que deseas cambiar.','No es suerte ni mala suerte: son elecciones que nos acercan o alejan de Dios. La gracia es un don; respondemos con amor.','Guardado solo en este dispositivo; no se borra automáticamente.'],
   la:['Viae Sanctitatis','Quae me Deo appropinquant','Quae me a Deo avertunt','Adde','Dele','Bonum opus adde','Vitium superandum adde','Hic incipe.','Quod mutare velis scribe.','Non fortuna, sed electiones nos ad Deum ducunt vel ab eo avertunt. Gratia donum est; amore respondeamus.','In hoc instrumento tantum servatur; non deletur sponte.']
  };
- const examples=['Rezar o terço','Pedir ajuda a Nossa Senhora e a Deus','Amar a Deus e ao próximo','Escutar louvores','Estudar com disciplina','Trabalhar com honestidade'];
+ const examples=['Rezar o terço','Pedir ajuda a Nossa Senhora e Deus','Amar a Deus','Escutar louvor','Estudar','Trabalhar','Faça tudo rapido mesmo que desleixado'];
+ const hindrances=['Celular','Ficar pensando'];
  const valid=x=>x&&typeof x.id==='string'&&typeof x.text==='string'&&x.text.length>0&&x.text.length<=180;
+ const aliases=['Rezar o terço','Pedir ajuda a Nossa Senhora e a Deus','Amar a Deus e ao próximo','Escutar louvores','Estudar com disciplina','Trabalhar com honestidade'];
+ function initialLists(){
+  return {version:2,good:examples.map((text,n)=>({id:'initial-'+n,text})),bad:hindrances.map((text,n)=>({id:'hindrance-'+n,text}))};
+ }
+ function mergeExamples(current,defaults,oldNames){
+  const remaining=current.slice();
+  const requested=defaults.map((item,i)=>{
+   const index=remaining.findIndex(x=>x.text===item.text||(oldNames[i]&&x.text===oldNames[i]));
+   if(index<0)return {...item,id:'seed-v2-'+item.id};
+   return {...remaining.splice(index,1)[0],text:item.text};
+  });
+  const unique=remaining.filter(x=>!requested.some(y=>y.text===x.text));
+  return [...requested,...unique];
+ }
  function read(){
-  try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&Array.isArray(v.good)&&Array.isArray(v.bad))return {good:v.good.filter(valid).slice(0,150),bad:v.bad.filter(valid).slice(0,150)};}catch{}
-  return {good:examples.map((text,n)=>({id:'initial-'+n,text})),bad:[]};
+  const defaults=initialLists();
+  try{
+   const v=JSON.parse(localStorage.getItem(KEY)||'null');
+   if(v&&Array.isArray(v.good)&&Array.isArray(v.bad)){
+    const good=v.good.filter(valid),bad=v.bad.filter(valid);
+    if(v.version===2)return {version:2,good,bad};
+    const migrated={version:2,good:mergeExamples(good,defaults.good,aliases),bad:mergeExamples(bad,defaults.bad,[])};
+    try{localStorage.setItem(KEY,JSON.stringify(migrated));}catch{}
+    return migrated;
+   }
+  }catch{}
+  return defaults;
  }
  let lists=read();
  function persist(){try{localStorage.setItem(KEY,JSON.stringify(lists));return true}catch{return false}}
- function section(type,t){
+ function section(type,t,showSymbol=true){
   const good=type==='good',title=t[good?1:2],items=lists[type];
   return '<section class="holiness-side '+(good?'holiness-good':'holiness-bad')+'"><div class="holiness-side-title">'+
-   '<span aria-hidden="true">'+(good?'✦':'✝')+'</span><h2>'+escapeHtml(title)+'</h2></div>'+
+   (showSymbol?'<span aria-hidden="true">'+(good?'✦':'✝')+'</span>':'')+'<h2>'+escapeHtml(title)+'</h2></div>'+
    '<ul class="holiness-items">'+(items.length?items.map(item=>
     '<li><span>'+escapeHtml(item.text)+'</span><button type="button" data-action="holiness-remove" data-type="'+type+'" data-id="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(t[4]+': '+item.text)+'">×</button></li>'
    ).join(''):'<li class="holiness-empty">'+escapeHtml(t[good?7:8])+'</li>')+'</ul>'+
@@ -61,8 +86,8 @@
  // Reutiliza as mesmas listas e o mesmo armazenamento na página de ação.
  window.renderHolinessChoices=function(){
   const lang=cuiudoLocale(),t=[...(labels[lang]||labels.pt)];
-  if(lang==='pt'){t[1]='O que dá sorte';t[2]='O que dá azar';}
-  return '<section class="holiness-page" aria-label="'+escapeHtml(t[0])+'"><div class="holiness-grid">'+section('good',t)+section('bad',t)+'</div><p class="holiness-bible">'+escapeHtml(t[9])+'</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p></section>';
+  if(lang==='pt'){t[1]='Da sorte 🍀';t[2]='Atrapalha 👎';}
+  return '<section class="holiness-page" aria-label="'+escapeHtml(t[0])+'"><div class="holiness-grid">'+section('good',t,false)+section('bad',t,false)+'</div><p class="holiness-bible">'+escapeHtml(t[9])+'</p><p class="holiness-privacy">'+escapeHtml(t[10])+'</p></section>';
  };
  function page(){
   const t=labels[cuiudoLocale()]||labels.pt;
