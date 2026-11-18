@@ -84,6 +84,11 @@ function combatHome(){
   <h2 id="cuiudo-grace-title">Ansiedade, mente acelerada, medo e tristeza é falta de Deus.</h2>
   <p>Ele morreu na cruz por você e sofreu chicotadas e tudo de mal. <strong>Sfd o problema, vai para cima!</strong></p>
  </section>
+ <section class="cuiudo-grace-reflection" aria-labelledby="lembrete-pessoal">
+  <h2 id="lembrete-pessoal">Vai para cima.</h2>
+  <p>Você perdeu a Eloah por continuar vivendo essa vida, nessa casa.</p>
+  <p>Sua procrastinação faz você perder a Eloah. Enquanto continuar morando nessa casa, você nunca vai ter nada aí.</p>
+ </section>
  <section class="cuiudo-feed-toolbar"><div><h2>CONFRONTO DO DIA.</h2><p>Arte, fé, trabalho e coragem. Sem passar a mão na cabeça.</p></div><label class="feed-searchbar"><span aria-hidden="true">⌕</span><input type="search" id="feed-search" placeholder="Buscar fé, São Miguel, trabalho..." autocomplete="off" value="${escapeHtml(state.feedTerm)}" aria-label="Pesquisar reflexões"></label></section>
  <div class="feed-filters" role="group" aria-label="Escolher tema do feed">${feedFilters.map(([id,label])=>`<button type="button" class="feed-filter" data-action="combat-filter" data-filter="${id}" aria-pressed="${state.feedFilter===id}">${escapeHtml(label)}</button>`).join('')}</div>
  <div class="feed-results" aria-live="polite"><span id="feed-result-count">${picks.length}</span> reflexões • conteúdo autoral • imagens licenciadas</div>
