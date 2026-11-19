@@ -176,3 +176,27 @@
 .cuiudo-focus-clock{max-width:100%;overflow-wrap:anywhere;font-size:clamp(36px,11vw,72px)}
 .cuiudo-focus-carryover{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0;color:var(--ink)}
 .cuiudo-focus-carryover strong{flex-basis:100%;font-size:12px}
+
+/* Desempenho: total por dia/prioridade, separado por status. */
+.cuiudo-chart-bar-stack{
+ display:flex;width:100%;min-height:0;flex-direction:column-reverse;
+ overflow:hidden;border-radius:3px 3px 0 0;
+ transition:height .35s ease
+}
+.cuiudo-chart-stack-done{display:block;flex:0 0 auto;background:#2f9c62}
+.cuiudo-chart-stack-missed{display:block;flex:0 0 auto;background:#e34b47}
+.cuiudo-chart-stack-pending{display:block;flex:0 0 auto;background:#9ca5b1}
+.cuiudo-chart-legend{
+ display:flex;align-items:center;justify-content:flex-start;gap:8px 15px;
+ flex-wrap:wrap;margin:8px 0 4px;color:var(--subink);
+ font:650 10px/1.4 var(--font)
+}
+.cuiudo-chart-legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.cuiudo-chart-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;flex:none}
+.cuiudo-chart-key-done{background:#2f9c62}
+.cuiudo-chart-key-missed{background:#e34b47}
+.cuiudo-chart-key-pending{background:#9ca5b1}
+:root[data-theme="dark"] .cuiudo-chart-stack-done{background:#53c488}
+:root[data-theme="dark"] .cuiudo-chart-stack-missed{background:#ff7d75}
+:root[data-theme="dark"] .cuiudo-chart-stack-pending{background:#8794a5}
+@media(prefers-reduced-motion:reduce){.cuiudo-chart-bar-stack{transition:none}}

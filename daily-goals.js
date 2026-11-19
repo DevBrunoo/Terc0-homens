@@ -405,23 +405,23 @@ const cuiudoChartLabels={
  pt:{title:'Seu desempenho',subtitle:'Contagem desde',status:'Por dia',priority:'Por prioridade',period:'Período',days:'dias',
   done:'Concluídas',pending:'Pendentes',missed:'Não concluídas',high:'Alta',medium:'Média',low:'Baixa',
   empty:'Nenhum resultado registrado neste período.',noData:'Sem resultados',summary:'metas concluídas',of:'de',
-  axis:'Percentual concluído',note:'As barras mostram quantas metas foram concluídas. A linha mostra o percentual de conclusão entre as metas avaliadas.',
-  priorityNote:'As barras mostram o número de metas concluídas por prioridade. Os percentuais usam as metas avaliadas em cada nível.',noteLabel:'Como calculamos'},
+  axis:'Percentual concluído',note:'As barras somam as concluídas (verde), não concluídas (vermelho) e pendentes (cinza). Pendências de dias anteriores contam como não concluídas. A linha mostra concluídas sobre o total.',
+  priorityNote:'Por prioridade, as barras mostram concluídas (verde), não concluídas (vermelho) e pendentes (cinza). As vencidas contam como não concluídas. Cada meta só é contada uma vez.',noteLabel:'Como calculamos'},
  en:{title:'Your progress',subtitle:'Tracking since',status:'By day',priority:'By priority',period:'Period',days:'days',
   done:'Completed',pending:'Pending',missed:'Not completed',high:'High',medium:'Medium',low:'Low',
   empty:'No results recorded in this period.',noData:'No results',summary:'goals completed',of:'of',
-  axis:'Completion rate',note:'Bars show how many goals were completed. The line shows the completion rate among assessed goals.',
-  priorityNote:'Bars show how many goals were completed at each priority. Percentages use the assessed goals at each level.',noteLabel:'How it is calculated'},
+  axis:'Completion rate',note:'Bars include completed (green), missed (red), and pending (gray) goals. Overdue pending goals count as missed. Each goal counts once.',
+  priorityNote:'Bars group completed, missed, and pending goals by priority. Overdue pending goals count as missed.',noteLabel:'How it is calculated'},
  es:{title:'Tu progreso',subtitle:'Recuento desde',status:'Por día',priority:'Por prioridad',period:'Período',days:'días',
   done:'Cumplidas',pending:'Pendientes',missed:'No cumplidas',high:'Alta',medium:'Media',low:'Baja',
   empty:'No hay resultados registrados en este período.',noData:'Sin resultados',summary:'metas cumplidas',of:'de',
-  axis:'Porcentaje cumplido',note:'Las barras muestran cuántas metas se cumplieron. La línea muestra el porcentaje de cumplimiento entre las metas evaluadas.',
-  priorityNote:'Las barras muestran cuántas metas se cumplieron por prioridad. Los porcentajes usan las metas evaluadas en cada nivel.',noteLabel:'Cómo se calcula'},
+  axis:'Porcentaje cumplido',note:'Las barras muestran metas cumplidas (verde), no cumplidas (rojo) y pendientes (gris). Las vencidas cuentan como no cumplidas.',
+  priorityNote:'Las barras agrupan metas cumplidas, no cumplidas y pendientes por prioridad. Las vencidas cuentan como no cumplidas.',noteLabel:'Cómo se calcula'},
  la:{title:'Progressus tuus',subtitle:'Computatio ab',status:'Per diem',priority:'Per prioritatem',period:'Tempus',days:'dies',
   done:'Completae',pending:'Pendentes',missed:'Non completae',high:'Alta',medium:'Media',low:'Humilis',
   empty:'Nulla proposita hoc tempore reperta.',noData:'Nulla proposita',summary:'proposita completa',of:'ex',
-  axis:'Proportio completa',note:'Columnae numerum propositorum completorum ostendunt. Linea proportionem completorum indicat.',
-  priorityNote:'Singula prioritas rationem completorum ostendit.',noteLabel:'Ratio computationis'}
+  axis:'Proportio completa',note:'Columnae proposita completa, non completa et pendentia indicant. Praeterita pendentia pro non completis numerantur.',
+  priorityNote:'Singula prioritas proposita completa, non completa et pendentia ostendit.',noteLabel:'Ratio computationis'}
 };
 function cuiudoPerformanceLocalGoals(){
  const results={};
@@ -481,35 +481,67 @@ function cuiudoChartBars(rows,mode='status',goalsByDay=state.dailyGoalDays||{}){
    done:row.done,total,percent:total?Math.round(row.done/total*100):null};
  });
 }
+/* A mesma meta só contribui para uma categoria no gráfico.
+ * Pendências de dias encerrados entram como não concluídas. */
+function cuiudoChartGoalRecords(events=[],goalsByDay=state.dailyGoalDays||{},since=cuiudoPerformanceSince,activeDay=cuiudoGoalDay()){
+ const records=new Map();
+ const ordered=(Array.isArray(events)?events:[]).filter(e=>e&&Number.isSafeInteger(e.occurred_at)
+  &&e.occurred_at>=since&&typeof e.goal_id==='string').slice()
+  .sort((a,b)=>a.occurred_at-b.occurred_at||(a.event_id||0)-(b.event_id||0));
+ for(const e of ordered){
+  const day=/^\d{4}-\d{2}-\d{2}$/.test(e.goal_day||'')?e.goal_day:cuiudoGoalDay(e.occurred_at);
+  const r=records.get(e.goal_id)||{id:e.goal_id,day,status:'pending',priority:'medium'};
+  r.day=day;
+  if(['high','medium','low'].includes(e.priority))r.priority=e.priority;
+  if(e.event_type==='completed')r.status='done';
+  else if(e.event_type==='missed')r.status='missed';
+  else if(['created','reopened','restored'].includes(e.event_type))r.status='pending';
+  else if(e.event_type==='deleted')r.status='deleted';
+  records.set(e.goal_id,r);
+ }
+ for(const [day,goals] of Object.entries(goalsByDay||{})){
+  if(!Array.isArray(goals))continue;
+  for(const goal of goals){
+   if(!goal||typeof goal.id!=='string'||goal.status==='deleted')continue;
+   const existing=records.get(goal.id);
+   if(existing?.status==='deleted')continue;
+   const stamp=goal.status==='done'?goal.completed_at:goal.status==='missed'?goal.missed_at:null;
+   const match=/^(\d{13})(?:-|$)/.exec(goal.id);
+   const created=match?Number(match[1]):null;
+   if(!existing&&!(Number.isSafeInteger(stamp)&&stamp>=since)&&
+    !(Number.isSafeInteger(created)&&created>=since&&created<=Date.now()+60000))continue;
+   records.set(goal.id,{id:goal.id,day,status:goal.status||'pending',
+    priority:['high','medium','low'].includes(goal.priority)?goal.priority:'medium'});
+  }
+ }
+ return [...records.values()].filter(r=>r.status!=='deleted')
+  .map(r=>({...r,status:r.status==='pending'&&r.day<activeDay?'missed':r.status}));
+}
+function cuiudoChartOutcomeBars(records,days=7,mode='status',endDay=cuiudoGoalDay()){
+ const end=Date.parse(String(endDay)+'T12:00:00Z');
+ if(!Number.isFinite(end))return [];
+ const dates=Array.from({length:days},(_,i)=>new Date(end-(days-1-i)*86400000).toISOString().slice(0,10));
+ const visibleDays=new Set(dates);
+ const visible=records.filter(r=>visibleDays.has(r.day));
+ return (mode==='status'?dates:['high','medium','low']).map(key=>{
+  const group=visible.filter(r=>mode==='status'?r.day===key:r.priority===key);
+  const done=group.filter(r=>r.status==='done').length;
+  const missed=group.filter(r=>r.status==='missed').length;
+  const pending=group.filter(r=>r.status==='pending').length;
+  const total=done+missed+pending;
+  return {key,label:mode==='status'?key.slice(8,10)+'/'+key.slice(5,7):key,
+   done,missed,pending,total,percent:total?Math.round(done/total*100):null};
+ });
+}
 function cuiudoGoalsBarChart(locale){
  const t=cuiudoChartLabels[locale]||cuiudoChartLabels.pt;
  const history=typeof window!=='undefined'?window.cuiudoGoalHistory:null;
- let bars;
- if(history?.loaded){
-  const historicRows=history.byDay(cuiudoChartRange,cuiudoGoalDay(),cuiudoPerformanceSince);
-  if(cuiudoChartMode==='status'){
-   bars=historicRows.map(row=>({
-    key:row.day,label:row.day.slice(8,10)+'/'+row.day.slice(5,7),
-    done:row.completed,total:row.resolved,
-    percent:row.resolved?Math.round(row.completed/row.resolved*100):null
-   }));
-  }else{
-   const days=new Set(historicRows.map(x=>x.day));
-   bars=['high','medium','low'].map(priority=>{
-    const relevant=history.events.filter(e=>e.occurred_at>=cuiudoPerformanceSince&&e.priority===priority&&
-     ['completed','missed'].includes(e.event_type)&&days.has(cuiudoGoalDay(e.occurred_at)));
-    const d=relevant.filter(e=>e.event_type==='completed').length;
-    return {key:priority,label:t[priority],done:d,total:relevant.length,
-     percent:relevant.length?Math.round(d/relevant.length*100):null};
-   });
-  }
- }else{
-  const goals=cuiudoPerformanceLocalGoals();
-  const rows=cuiudoChartRows(cuiudoChartRange,cuiudoGoalDay(),goals);
-  bars=cuiudoChartBars(rows,cuiudoChartMode,goals);
- }
+ const records=cuiudoChartGoalRecords(history?.loaded?history.events:[]);
+ const bars=cuiudoChartOutcomeBars(records,cuiudoChartRange,cuiudoChartMode);
  const done=bars.reduce((sum,bar)=>sum+bar.done,0);
- const count=bars.reduce((sum,bar)=>sum+bar.total,0);
+ const missed=bars.reduce((sum,bar)=>sum+bar.missed,0);
+ const pending=bars.reduce((sum,bar)=>sum+bar.pending,0);
+ const count=done+missed+pending;
  const rate=count?Math.round(done/count*100):null;
  const controls='<div class="cuiudo-chart-controls">'+
   '<div class="cuiudo-chart-modes" role="group" aria-label="'+escapeHtml(t.title)+'">'+
@@ -518,7 +550,7 @@ function cuiudoGoalsBarChart(locale){
   [7,14,30].map(days=>'<option value="'+days+'"'+(cuiudoChartRange===days?' selected':'')+'>'+days+' '+escapeHtml(t.days)+'</option>').join('')+
   '</select></label></div>';
  const summary='<div class="cuiudo-chart-summary"><strong>'+(rate===null?'—':rate+'%')+'</strong>'+
-  '<span>'+done+' '+escapeHtml(t.of)+' '+count+' '+escapeHtml(t.summary)+'</span></div>';
+  '<span>'+done+' '+escapeHtml(t.done)+' · '+missed+' '+escapeHtml(t.missed)+' · '+pending+' '+escapeHtml(t.pending)+'</span></div>';
  const start=new Intl.DateTimeFormat(({pt:'pt-BR',en:'en-US',es:'es-ES',la:'pt-BR'})[locale]||'pt-BR',{
   timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'
  }).format(cuiudoPerformanceSince);
@@ -526,22 +558,24 @@ function cuiudoGoalsBarChart(locale){
   '<h3>'+escapeHtml(t.title)+'</h3><p>'+escapeHtml(t.subtitle+' '+start)+'</p></div>'+summary+'</header>';
  let content='<p class="cuiudo-chart-empty">'+escapeHtml(t.empty)+'</p>';
  if(bars.some(x=>x.total>0)){
-  const maxDone=Math.max(1,...bars.map(bar=>bar.done));
+  const maxTotal=Math.max(1,...bars.map(bar=>bar.total));
   const tiles=bars.map(bar=>{
    const label=cuiudoChartMode==='priority'?t[bar.key]:bar.label;
-   const detail=label+': '+bar.done+' '+t.of+' '+bar.total+' '+t.summary+
-    (bar.percent===null?'':' ('+bar.percent+'%)');
-   const green=bar.percent!==null&&bar.percent>=50;
-   const height=Math.round(bar.done/maxDone*100);
-   return '<div class="cuiudo-chart-bar-item'+(bar.percent===null?' is-empty':green?' is-success':' is-warning')+
-    '" role="img" aria-label="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'" title="'+escapeHtml(bar.percent===null?label+': '+t.noData:detail)+'">'+
+   const detail=label+': '+bar.done+' '+t.done+', '+bar.missed+' '+t.missed+
+    ', '+bar.pending+' '+t.pending+(bar.percent===null?'':' ('+bar.percent+'%)');
+   const height=Math.round(bar.total/maxTotal*100);
+   const segment=(kind,n)=>n?'<span class="cuiudo-chart-stack-'+kind+'" style="height:'+
+    (n/bar.total*100)+'%" aria-hidden="true"></span>':'';
+   return '<div class="cuiudo-chart-bar-item'+(bar.percent===null?' is-empty':'')+
+    '" role="img" aria-label="'+escapeHtml(bar.total?detail:label+': '+t.noData)+'" title="'+escapeHtml(bar.total?detail:label+': '+t.noData)+'">'+
     '<div class="cuiudo-chart-bar-stage"><div class="cuiudo-chart-bar-track">'+
-    (bar.percent===null?'<span class="cuiudo-chart-bar-nodata" aria-hidden="true"></span>':
-     '<span class="cuiudo-chart-bar-fill" style="height:'+height+'%" aria-hidden="true"></span>')+
+    (bar.total?'<span class="cuiudo-chart-bar-stack" style="height:'+height+'%" aria-hidden="true">'+
+     segment('done',bar.done)+segment('missed',bar.missed)+segment('pending',bar.pending)+'</span>':
+     '<span class="cuiudo-chart-bar-nodata" aria-hidden="true"></span>')+
     '</div></div><strong class="cuiudo-chart-percent">'+(bar.percent===null?'—':bar.percent+'%')+'</strong>'+
     '<span class="cuiudo-chart-bar-label">'+escapeHtml(label)+'</span></div>';
   }).join('');
-  // O traço azul indica percentual de conclusões entre metas resolvidas.
+  // A linha azul indica a parcela de metas concluídas entre todas as metas do período.
   // Pontos sem dados interrompem a linha para não inventar observações.
   const segments=[];let seg=[];
   bars.forEach((bar,i)=>{
@@ -559,7 +593,11 @@ function cuiudoGoalsBarChart(locale){
    '<div class="cuiudo-chart-barplot">'+tiles+'</div>'+overlay+'</div></div>';
  }
  const note=cuiudoChartMode==='priority'?t.priorityNote:t.note;
- return '<section class="cuiudo-goals-chart" aria-label="'+escapeHtml(t.title)+'">'+head+controls+content+
+ const legend='<div class="cuiudo-chart-legend" aria-label="'+escapeHtml(t.title)+'">'+
+  '<span><i class="cuiudo-chart-key-done" aria-hidden="true"></i>'+escapeHtml(t.done)+' ('+done+')</span>'+
+  '<span><i class="cuiudo-chart-key-missed" aria-hidden="true"></i>'+escapeHtml(t.missed)+' ('+missed+')</span>'+
+  '<span><i class="cuiudo-chart-key-pending" aria-hidden="true"></i>'+escapeHtml(t.pending)+' ('+pending+')</span></div>';
+ return '<section class="cuiudo-goals-chart" aria-label="'+escapeHtml(t.title)+'">'+head+controls+content+legend+
   '<details class="cuiudo-chart-footnote"><summary>'+escapeHtml(t.noteLabel)+'</summary><p>'+escapeHtml(note)+'</p></details></section>';
 }
 

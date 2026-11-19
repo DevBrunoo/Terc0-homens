@@ -61,7 +61,7 @@ function emptyInEveryMode(){
   for(const range of [7,14,30]){
    runInContext(`cuiudoChartMode='${mode}';cuiudoChartRange=${range}`,vm);
    const html=renderChart();
-   assert.match(html,/0 de 0 metas concluídas/);
+   assert.match(html,/0 Concluídas · 0 Não concluídas · 0 Pendentes/);
    assert.doesNotMatch(html,/cuiudo-chart-barplot/);
   }
  }
@@ -80,24 +80,24 @@ goals['2026-11-17'].push(
  {id:'completed-medium',status:'done',completed_at:since+2000,priority:'medium'}
 );
 goals['2026-11-18']=[{id:'missed-low',status:'missed',missed_at:now,priority:'low'}];
-function verifyNewCounts(){
+function verifyNewCounts(extraExpired=0){
  runInContext("cuiudoChartMode='status';cuiudoChartRange=7",vm);
  const html=renderChart();
- assert.match(html,/2 de 4 metas concluídas/);
- assert.match(html,/17\/11: 2 de 3 metas concluídas/);
- assert.match(html,/18\/11: 0 de 1 metas concluídas/);
+ assert.match(html,new RegExp('2 Concluídas · '+(2+extraExpired)+' Não concluídas · 0 Pendentes'));
+ assert.match(html,new RegExp('17/11: 2 Concluídas, '+(1+extraExpired)+' Não concluídas, 0 Pendentes'));
+ assert.match(html,/18\/11: 0 Concluídas, 1 Não concluídas, 0 Pendentes/);
  assert.match(html,/cuiudo-chart-barplot/);
- assert.match(html,/cuiudo-chart-bar-fill/);
+ assert.match(html,/cuiudo-chart-bar-stack/);
  assert.match(html,/cuiudo-chart-bar-nodata/);
  assert.match(html,/<details class="cuiudo-chart-footnote"><summary>Como calculamos<\/summary>/);
  assert.match(html,/data-mode="priority"/);
  assert.match(html,/id="cuiudo-chart-range"/);
  runInContext("cuiudoChartMode='priority';cuiudoChartRange=30",vm);
  const priority=renderChart();
- assert.match(priority,/2 de 4 metas concluídas/);
- assert.match(priority,/Alta: 1 de 2 metas concluídas/);
- assert.match(priority,/Média: 1 de 1 metas concluídas/);
- assert.match(priority,/Baixa: 0 de 1 metas concluídas/);
+ assert.match(priority,new RegExp('2 Concluídas · '+(2+extraExpired)+' Não concluídas · 0 Pendentes'));
+ assert.match(priority,/Alta: 1 Concluídas, 1 Não concluídas, 0 Pendentes/);
+ assert.match(priority,/Média: 1 Concluídas, 0 Não concluídas, 0 Pendentes/);
+ assert.match(priority,new RegExp('Baixa: 0 Concluídas, '+(1+extraExpired)+' Não concluídas, 0 Pendentes'));
  assert.match(priority,/<option value="30" selected>/);
 }
 verifyNewCounts();
@@ -124,13 +124,24 @@ events.push(
  {event_id:7,goal_id:'new-pending',occurred_at:since+3000,event_type:'created',priority:'low'}
 );
 await vm.window.cuiudoGoalHistory.refresh();
-verifyNewCounts();
+verifyNewCounts(1);
+
+// Metas sem clique no dia anterior não desaparecem: viram não concluídas.
+const due=Date.parse('2026-11-18T11:30:00Z');
+goals['2026-11-17'].push({id:String(due)+'-overdue',status:'pending',priority:'low'});
+const expired=JSON.parse(JSON.stringify(runInContext(
+ 'cuiudoChartGoalRecords(window.cuiudoGoalHistory.events)',vm)));
+assert.equal(expired.find(g=>g.id===String(due)+'-overdue')?.status,'missed');
+assert.equal(expired.filter(g=>g.id===String(due)+'-overdue').length,1);
+runInContext("cuiudoChartMode='status';cuiudoChartRange=7",vm);
+assert.match(renderChart(),/cuiudo-chart-stack-missed/);
+goals['2026-11-17'].pop();
 assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-stage\s*\{\s*height:76px/);
 assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-stage\s*\{\s*height:58px/);
 for(const locale of ['pt','en','es','la'])assert.match(
  runInContext('cuiudoGoalsBarChart('+JSON.stringify(locale)+')',vm),/cuiudo-goals-chart/
 );
 assert.match(read('sw.js'),/const VERSION='terco-[a-z0-9-]+-v\d+'/);
-assert.match(read('cuiudo-v16.css'),/\.cuiudo-chart-bar-fill/);
+assert.match(read('cuiudo-premium.css'),/\.cuiudo-chart-bar-stack/);
 assert.match(read('cuiudo-v16.css'),/prefers-reduced-motion/);
-console.log('✓ Desempenho: reinício nos dois modos e retomada com resultados novos, online e offline');
+console.log('✓ Desempenho: concluídas, vencidas, pendentes e prioridades sem duplicidade');
