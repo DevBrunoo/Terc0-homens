@@ -521,8 +521,10 @@ function cuiudoChartOutcomeBars(records,days=7,mode='status',endDay=cuiudoGoalDa
  const end=Date.parse(String(endDay)+'T12:00:00Z');
  if(!Number.isFinite(end))return [];
  const dates=Array.from({length:days},(_,i)=>new Date(end-(days-1-i)*86400000).toISOString().slice(0,10));
+ const visibleDays=new Set(dates);
+ const visible=records.filter(r=>visibleDays.has(r.day));
  return (mode==='status'?dates:['high','medium','low']).map(key=>{
-  const group=records.filter(r=>mode==='status'?r.day===key:r.priority===key);
+  const group=visible.filter(r=>mode==='status'?r.day===key:r.priority===key);
   const done=group.filter(r=>r.status==='done').length;
   const missed=group.filter(r=>r.status==='missed').length;
   const pending=group.filter(r=>r.status==='pending').length;
@@ -573,7 +575,7 @@ function cuiudoGoalsBarChart(locale){
     '</div></div><strong class="cuiudo-chart-percent">'+(bar.percent===null?'—':bar.percent+'%')+'</strong>'+
     '<span class="cuiudo-chart-bar-label">'+escapeHtml(label)+'</span></div>';
   }).join('');
-  // O traço azul indica percentual de conclusões entre metas resolvidas.
+  // A linha azul indica a parcela de metas concluídas entre todas as metas do período.
   // Pontos sem dados interrompem a linha para não inventar observações.
   const segments=[];let seg=[];
   bars.forEach((bar,i)=>{
